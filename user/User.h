@@ -9,20 +9,17 @@
 
 class User {
 public:
-    User(const std::string& name, const int& id);
+    User(const std::string& name, const std::string& id);
+    // User(const std::string& name, const std::string& id, const Game& currentGame);
 
-    void SetCurrentGame(const std::string& gameName, const int& gameId);
+    // void SetCurrentGame(const Game& game);
 
     std::string GetName();
-    int GetId();
-
-    std::string GetCurrentGameName();
-    int GetCurrentGameId();
+    std::string GetId();
+    // Game GetCurrentGame();
 
 private:
     std::string _name;
-    int _id;
-
-    std::string _currentGameName;
-    int _currentGameId;
+    std::string _id;
+    // Game _currentGame = nullptr;
 };

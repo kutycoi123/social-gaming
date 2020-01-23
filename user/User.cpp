@@ -1,37 +1,28 @@
 #include "User.h"
 
-User::User(const std::string& name, const int& id) {
+User::User(const std::string& name, const std::string& id) {
     _name = name;
     _id = id;
 }
 
-void User::SetCurrentGame(const std::string& gameName, const int& gameId) {
-    _currentGameName = gameName;
-    _currentGameId = gameId;
-}
+// User::User(const std::string& name, const std::string& id, const Game& currentGame) {
+//     _name = name;
+//     _id = id;
+//     _currentGame = currentGame;
+// }
+
+// void User::SetCurrentGame(const Game& game); {
+//     _currentGame = game;
+// }
 
 std::string User::GetName() {
     return _name;
 }
 
-int User::GetId() {
+std::string User::GetId() {
     return _id;
 }
 
-std::string User::GetCurrentGameName() {
-    if (!_currentGameName.empty())
-    {
-        return _currentGameName;
-    }
-
-    return std::string();
-}
-
-int User::GetCurrentGameId() {
-    if (!GetCurrentGameName().empty)
-    {
-        return _currentGameId;
-    }
-
-    return -1;
-}
+// Game User::GetCurrentGame() {
+//     return _currentGame;
+// }
