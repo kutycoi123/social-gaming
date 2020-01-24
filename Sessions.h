@@ -18,7 +18,7 @@ private:
     int gameID;
     int OwnerID;
     string JSONSetting;
-
+    
 public:
 
     void setOwner(int ownderid);

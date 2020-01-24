@@ -5,35 +5,29 @@
 
 using namespace std; 
 
-class Sessions { 
+class SessionsInfo { 
 private:
     vector<int> UsersInSessions;
-    string currentGame;
+    string currentGameName;
     int InvideCode;
     int sessionID;
     int gameID;
     int OwnerID;
+    int numberOfPlayers;
     string JSONSetting;
-
+    
 public:
 
-    void setOwner(int ownderid){
-        this->OwnerID = ownderid;
-    }
-    void setCurrentGame(string name) {
-        this->currentGame = name;
-    }
-    
-    void addUserToSession( int Userid) {
-        UsersInSessions.push_back(Userid);
-    }
-    void removeAllUserfromSession(){
-        UsersInSessions.clear();
-    }
-
-    void sessionConfigureSettings(string jsonSettings) {
+    void setOwner(int ownerid){this->OwnerID = ownerid;}
+    void setCurrentGame(string name) { this->currentGameName = name; }
+    void addUserToSession( int Userid) { UsersInSessions.push_back(Userid);}
+    void removeAllUserfromSession(){ UsersInSessions.clear();}
+    int sessionConfigureSettings(string jsonSettings) { 
         this->JSONSetting = jsonSettings;
+        return 123;
     }
-
 };
     
+
+
+

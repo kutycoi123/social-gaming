@@ -5,15 +5,30 @@
 #include <vector>
 #include "Sessions.h"
 
-class Lobby {
+#include <unordered_map>
+
+class LobbyInfo {
     private:
         list<Sessions> SessionsList;
-        list<int> inviteCodes;
-        
+        vector<int> inviteCodes;
+        list<int> CurrentUsers; 
+        unordered_map<int, string> UserIdToGame;
+        unordered_map<int, string> SessionToInviteCode;
+         
     public:
+        int GeneratePlayerId(string gameName, string playerName) {
+            int id = rand() % 10000; 
+            return id;     
+        }
+
+        int AddusersToSessions(int playerId, string game) {
+            UserIdToGame.insert(std::make_pair(playerId,game));
+        }
+
         bool SessionExists(int inviteCode) {
-            bool found = (std::find(inviteCodes.begin(), inviteCodes.end(), inviteCode) != inviteCodes.end());
-            return found;
+            if ( SessionToInviteCode.find(inviteCode) == SessionToInviteCode.end()) { 
+                return true; 
+            }
         }
         int createSession() {
             Sessions newSession;
@@ -24,4 +39,6 @@ class Lobby {
         int generateSessionID(Sessions session) {
             return 123;
         }
+
+
 };
