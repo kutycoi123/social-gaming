@@ -5,7 +5,6 @@
 // for 1 session the info for it to work. 
 // infor on each session of a game, 
 //
-using namespace std; 
 
 class SessionsInfo { 
     
