@@ -21,7 +21,7 @@ time_t Invitation::GetInvitationCreationDate() const {
 }
 
 std::string Invitation::GetGameName() const {
-    return this->IsInvitationValid() ? INVALID_INVITATION : "";
+    if (this->IsInvitationValid()){
         return INVALID_INVITATION;
     }
     // TODO: Replace this logic with specific session logic once it is implemented
