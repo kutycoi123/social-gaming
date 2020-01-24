@@ -1,3 +1,6 @@
+#ifndef USER_H
+#define USER_H
+
 #include <string>
 
 // TODO MZEGAR: Things to consider in the future
@@ -13,13 +16,19 @@ public:
     // User(const std::string& name, const std::string& id, const Game& currentGame);
 
     // void SetCurrentGame(const Game& game);
-
-    std::string GetName();
-    std::string GetId();
+	//Getters
+    std::string GetName() const;
+    std::string GetId() const;
     // Game GetCurrentGame();
 
+	//Setters
+	void SetName(const std::string&);
+	void SetId(const std::string&); 
 private:
     std::string _name;
     std::string _id;
     // Game _currentGame = nullptr;
 };
+
+
+#endif
