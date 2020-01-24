@@ -1,9 +1,6 @@
-
 #include "SessionsInfo.h"
 // for 1 session the info for it to work. 
 // infor on each session of a game, 
-
-using namespace std; 
 
 void SessionsInfo::setOwner(int ownerID) {
     this->ownerID = ownerid;
