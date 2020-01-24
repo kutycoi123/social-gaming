@@ -9,7 +9,7 @@ public:
 
 
 private:
-	std::string _ruleText;
+	std::string _rule;
 
 };
 

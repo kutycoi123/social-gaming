@@ -1,16 +1,16 @@
 #include "Rule.h"
 
 
-Rule::Rule() : _ruleText(""){
+Rule::Rule() : _rule(""){
 }
 
-inline std::string Rule::getRule() const{
-	return _ruleText;
+inline std::string Rule::GetRule() const{
+	return _rule;
 }
 
 
 void Rule::SetRule(const std::string& rule){
-	_ruleText = rule;
+	_rule = rule;
 }
 
 
