@@ -1,36 +1,33 @@
 #include "ChatRoom.h"
-# include <list>
+#include <list>
 
 
-class ChatRoomInfo{
-
-  public:
   ChatRoom::ChatRoom(const std::string& name, const std::string& id){
     _roomName = name;
     _id = id;
   }
 
   void ChatRoom::increasePlayerCount() {
-    playerCount++;
+    _playerCount++;
   }
   void ChatRoom::decreasePlayerCount() {
-    playerCount--;
+    _playerCount--;
   }
 
-  std::string ChatRoom::getName() const{
-    return roomName;
+  std::string ChatRoom::getRoomName() const{
+    return _roomName;
   }
 
   void ChatRoom::addPlayers(string name){
-    players.push_back(name);
+    _players.push_back(name);
   }
 
   int ChatRoom::getPlayerCount(){
-    return players.size();
+    return _players.size();
   }
 
   void ChatRoom::removeAllPlayer(){
-    players.clear();
+    _players.clear();
   }
 
   std::string ChatRoom::getId(){
