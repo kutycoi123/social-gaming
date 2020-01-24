@@ -3,12 +3,12 @@
 class Invitation {
 public:
     Invitation(const int& sessionID);
-    int GetSessionId() const;
-    time_t GetInvitationCreationDate() const;
-    std::string GetInvitationCode() const;
-    std::string GetSessionName() const;
-    std::string GetGameName() const;
-    bool IsInvitationValid() const;
+    int getSessionId() const;
+    time_t getInvitationCreationDate() const;
+    std::string getInvitationCode() const;
+    std::string getSessionName() const;
+    std::string getGameName() const;
+    bool isInvitationValid() const;
 private:
     // TODO: replace session id with appropriate class once it is complete
     // Session session;
@@ -17,5 +17,5 @@ private:
     const std::string INVALID_INVITATION = "Invitation is not valid!";
     time_t _invitationCreationDate;
     std::string _invitationCode;
-    std::string GenerateInvitationCode();
+    std::string generateInvitationCode();
 };

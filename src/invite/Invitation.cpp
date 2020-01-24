@@ -4,44 +4,44 @@
 
 Invitation::Invitation(const int& sessionID){
     _sessionID = sessionID;
-    _invitationCode = GenerateInvitationCode();
+    _invitationCode = generateInvitationCode();
     _invitationCreationDate = time(0);
 }
 
-int Invitation::GetSessionId() const {
+int Invitation::getSessionId() const {
     return _sessionID;
 }
 
-std::string Invitation::GetInvitationCode() const {
+std::string Invitation::getInvitationCode() const {
     return _invitationCode;
 }
 
-time_t Invitation::GetInvitationCreationDate() const {
+time_t Invitation::getInvitationCreationDate() const {
     return _invitationCreationDate;
 }
 
-std::string Invitation::GetGameName() const {
-    if (this->IsInvitationValid()){
+std::string Invitation::getGameName() const {
+    if (this->isInvitationValid()){
         return INVALID_INVITATION;
     }
     // TODO: Replace this logic with specific session logic once it is implemented
     return "";
 }
 
-std::string Invitation::GetSessionName() const {
-    if (this->IsInvitationValid()){
+std::string Invitation::getSessionName() const {
+    if (this->isInvitationValid()){
         return INVALID_INVITATION;
     }
     // TODO: Replace this logic with specific session logic once it is implemented
     return "";
 }
 
-bool Invitation::IsInvitationValid() const {
+bool Invitation::isInvitationValid() const {
     // TODO: Replace this logic with actual session logic once it is implemented.
     return true;
 }
 
-std::string Invitation::GenerateInvitationCode(){
+std::string Invitation::generateInvitationCode(){
     // Returns a random number (as a string) with INVITATION_CODE_LENGTH digits for the invitation code
     std::random_device rd;
     std::mt19937 gen(rd());
