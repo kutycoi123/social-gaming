@@ -11,12 +11,11 @@ class GameConfig{
 public:
 	GameConfig();
 	GameConfig(const std::string&);
-	std::vector<Rule> GetRules() const;
-	std::vector<State> GetStates() const;
-	std::getConfigFilePath GetConfigFilePath() const;	
-	void AddRule(Rule);
-	void AddState(State);
-	void SetConfigFilePath(const std::string&);
+	std::vector<Rule> getRules() const;
+	std::getConfigFilePath getConfigFilePath() const;	
+	void addRule(Rule);
+	void addState(State);
+	void setConfigFilePath(const std::string&);
 private:
 	std::vector<Rule> _rules; 
 	std::string _configFilePath;

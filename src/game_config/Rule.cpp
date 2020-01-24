@@ -4,12 +4,12 @@
 Rule::Rule() : _rule(""){
 }
 
-inline std::string Rule::GetRule() const{
+inline std::string Rule::getRule() const{
 	return _rule;
 }
 
 
-void Rule::SetRule(const std::string& rule){
+void Rule::setRule(const std::string& rule){
 	_rule = rule;
 }
 
