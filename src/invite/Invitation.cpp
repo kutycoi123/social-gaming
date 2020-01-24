@@ -4,7 +4,6 @@
 
 Invitation::Invitation(const int& sessionID){
     _sessionID = sessionID;
-    // TODO: replace placeholder invitation stub with actual code
     _invitationCode = GenerateInvitationCode();
 }
 
@@ -17,6 +16,7 @@ std::string Invitation::GetInvitationCode(){
 }
 
 std::string Invitation::GenerateInvitationCode(){
+    // Returns a random number (as a string) with INVITATION_CODE_LENGTH digits for the invitation code
     std::random_device rd;
     std::mt19937 gen(rd());
     long min = pow(10, INVITATION_CODE_LENGTH - 1);
