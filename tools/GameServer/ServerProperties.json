@@ -1,4 +1,4 @@
 {
-  "DefaultPort": "4000",
-  "HTML Location": "somewhere"
+  "DefaultPort": 4000,
+  "HTML Location": "webchat.html"
 }

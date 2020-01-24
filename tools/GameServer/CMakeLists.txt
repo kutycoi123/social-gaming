@@ -18,9 +18,15 @@ target_link_libraries(GameServer
 )
 
 add_custom_command(TARGET GameServer POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                   COMMAND ${CMAKE_COMMAND} -E copy
                        ${CMAKE_CURRENT_SOURCE_DIR}/ServerProperties.json
                        ${PROJECT_BINARY_DIR}/config/ServerProperties.json
+                   )
+
+add_custom_command(TARGET GameServer POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       ${CMAKE_CURRENT_SOURCE_DIR}/webchat.html
+                       ${PROJECT_BINARY_DIR}/webchat.html
                    )
 
 install(FILES ServerProperties.json DESTINATION config)
