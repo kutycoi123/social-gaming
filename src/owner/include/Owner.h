@@ -3,13 +3,13 @@
 using namespace std;
 
 class Owner { 
-public:
-    void createSession();
-    void configureSession(Session& session);
-    list<Session> getSessionsOwned();
-    void kickPlayer(Session& session, int playerId);
-    void changeOwner(Session& session, int newOwnerId);
+    public:
+        Session * createSession();
+        void configureSession(Session& session);
+        list<Session> getSessionsOwned();
+        void kickPlayer(Session& session, int playerId);
+        void changeOwner(Session& session, int newOwnerId);
 
-private:
-    list<Sessions> _listOfOwnedSessions;
+    private:
+        list<Sessions> _listOfOwnedSessions;
 }
