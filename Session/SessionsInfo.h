@@ -1,6 +1,4 @@
 #include <iostream> 
-#include <list> 
-#include <iterator> 
 #include <string>
 #include <vector>
 
@@ -18,7 +16,7 @@ public:
     void addUserToSession( int userID);
     void removeAllUserfromSession();
     void sessionConfigureSettings(string jsonSettings);
-    
+
 private:
 
     vector<int> usersInSessions;
