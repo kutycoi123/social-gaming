@@ -15,14 +15,23 @@ User::User(const std::string& name, const std::string& id) {
 //     _currentGame = game;
 // }
 
-std::string User::GetName() {
+std::string User::GetName() const{
     return _name;
 }
 
-std::string User::GetId() {
+std::string User::GetId() const{
     return _id;
 }
 
 // Game User::GetCurrentGame() {
 //     return _currentGame;
 // }
+
+
+void User::SetName(const std::string& name){
+	_name = name;
+}
+
+void User::SetId(const std::string& id){
+	_id = id;
+}
