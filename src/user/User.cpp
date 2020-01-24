@@ -11,7 +11,7 @@ User::User(const std::string& name, const std::string& id) {
      _currentGame = currentGame;
 }
 
-void User::setCurrentGame(const Game& game); {
+void User::setCurrentGame(const Game& game) {
      _currentGame = game;
 }
 
