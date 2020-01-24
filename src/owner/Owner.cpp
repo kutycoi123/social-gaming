@@ -3,20 +3,19 @@
 #include "include/Owner.h"
 #include "Session.h"
 
-// TODO: Incorporate JSON CPP library from https://github.com/nlohmann/json
-
-// #include <nlohmann/json.hpp>
-// using json = nlohmann::json
+// Incorporate JSON CPP library from https://github.com/nlohmann/json
+#include <nlohmann/json.hpp>
+using json = nlohmann::json
 
 Owner::Owner() {
     list<Session> _listOfOwnedSessions;
 }
 
-list<Session> GetOwnedSessions() {
+list<Session> getOwnedSessions() {
     return _listOfOwnedSessions;
 }
 
-void CreateSession(json sessionSettings) {
+void createSession(json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
     sessionSettings["GameId"] = 0;
@@ -25,34 +24,34 @@ void CreateSession(json sessionSettings) {
 
     for (auto& [key, value] : json.items()) {
         if (key.compare("Number Of Players")) {
-            newSession->numberOfPlayers = value;
+            (newSession->*setNumberOfPlayers(value));
         }
         if (key.compare("Game")) {
-            newSession->gameId = value;
+            (newSession->*setGameId(value));
         }
     }
 }
 
-void ConfigureSession(Session& session, json sessionSettings) {
+void configureSession(Session& session, json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
     sessionSettings["GameId"] = 0;
 
     for (auto& [key, value] : json.items()) {
         if (key.compare("Number Of Players")) {
-            session->numberOfPlayers = value;
+            (session->*setNumberOfPlayers(value));
         }
         if (key.compare("Game")) {
-            session->gameId = value;
+            (session->*setGameId(value));
         }
     }
 }
 
-void KickPlayer(Session& session, int playerId) {
+void kickPlayer(Session& session, int playerId) {
     // TODO: Implement remove player method in Session class
-    (session->*removePlayer)(playerId);
+    (session->*removePlayer(playerId));
 }
 
-void ChangeOwner(Session& session, int newOwnerId) {
-    session->ownerId = newOwnerId;
+void changeOwner(Session& session, int newOwnerId) {
+    (session->*setOwnerId(newOwnerId);
 }
