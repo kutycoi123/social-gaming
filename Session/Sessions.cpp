@@ -7,6 +7,7 @@ using namespace std;
 
 class SessionsInfo { 
 private:
+
     vector<int> UsersInSessions;
     string currentGameName;
     int InvideCode;
@@ -18,10 +19,19 @@ private:
     
 public:
 
-    void setOwner(int ownerid){this->OwnerID = ownerid;}
-    void setCurrentGame(string name) { this->currentGameName = name; }
-    void addUserToSession( int Userid) { UsersInSessions.push_back(Userid);}
-    void removeAllUserfromSession(){ UsersInSessions.clear();}
+    void setOwner(int ownerid) {
+        this->OwnerID = ownerid;
+    }
+
+    void setCurrentGame(string name) {
+        this->currentGameName = name;
+    }
+    void addUserToSession( int Userid) { 
+        UsersInSessions.push_back(Userid);
+    }
+    void removeAllUserfromSession(){ 
+        UsersInSessions.clear();
+    }
     int sessionConfigureSettings(string jsonSettings) { 
         this->JSONSetting = jsonSettings;
         return 123;

@@ -10,7 +10,9 @@
 using namespace std; 
 
 class Sessions { 
+    
 private:
+
     vector<int> UsersInSessions;
     string currentGame;
     int InvideCode;
