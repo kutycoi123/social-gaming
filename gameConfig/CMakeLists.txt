@@ -8,7 +8,8 @@ add_library(rule
 target_include_directories(rule 
 							PUBLIC
 							$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-							$<INSTALL_INTERFACE:include>)
+							$<INSTALL_INTERFACE:include>
+)
 add_library(gameConfig
 			GameConfig.cpp
 )
@@ -16,7 +17,8 @@ add_library(gameConfig
 target_include_directories(gameConfig 
 							PUBLIC
 							$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-							$<INSTALL_INTERFACE:include>)
+							$<INSTALL_INTERFACE:include>
+)
 
 target_link_libraries(gameConfig PUBLIC rule)
 
