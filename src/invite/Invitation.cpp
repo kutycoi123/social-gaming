@@ -5,7 +5,7 @@
 Invitation::Invitation(const int& sessionID){
     _sessionID = sessionID;
     _invitationCode = GenerateInvitationCode();
-    _invitation_creation_date = time(0);
+    _invitationCreationDate = time(0);
 }
 
 int Invitation::GetSessionId() const {
@@ -17,10 +17,26 @@ std::string Invitation::GetInvitationCode() const {
 }
 
 time_t Invitation::GetInvitationCreationDate() const {
-    return _invitation_creation_date;
+    return _invitationCreationDate;
 }
 
-bool Invitation::IsInvitationValid(){
+std::string Invitation::GetGameName() const {
+    if (this->IsInvitationValid()){
+        return INVALID_INVITATION;
+    }
+    // TODO: Replace this logic with specific session logic once it is implemented
+    return "";
+}
+
+std::string Invitation::GetSessionName() const {
+    if (this->IsInvitationValid()){
+        return INVALID_INVITATION;
+    }
+    // TODO: Replace this logic with specific session logic once it is implemented
+    return "";
+}
+
+bool Invitation::IsInvitationValid() const {
     // TODO: Replace this logic with actual session logic once it is implemented.
     return true;
 }
