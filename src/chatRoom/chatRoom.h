@@ -2,23 +2,24 @@
 #include <stdint.h>
 #include <string>
 
-using namespace std;
 
 class ChatRoom{
 public:
 
-  ChatRoom(const std::string& name);;
+  ChatRoom(const std::string& roomName, const std::string& id);
   void addPlayers(const std::string &name);
   string getRoomName() const;
+  void setName(const std::string& name);
+  void setId(const std::string& id);
   void increasePlayerCount();
   void decreasePlayerCount();
   int getPlayerCount();
   void removeAllPlayer();
-  void leaveChat(std::string &name);
 
 private:
   int _playerCount;
+  std::string _id;
   string _roomName;
   string _welcomeMessage;
-  list<string> players;
+  list<string> _players;
 }
