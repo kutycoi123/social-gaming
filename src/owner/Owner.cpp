@@ -53,5 +53,5 @@ void kickPlayer(Session& session, int playerId) {
 }
 
 void changeOwner(Session& session, int newOwnerId) {
-    (session->*setOwnerId(newOwnerId);
+    (session->*setOwnerId(newOwnerId));
 }
