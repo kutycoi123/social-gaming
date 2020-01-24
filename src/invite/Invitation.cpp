@@ -7,11 +7,11 @@ Invitation::Invitation(const int& sessionID){
     _invitationCode = GenerateInvitationCode();
 }
 
-int Invitation::GetSessionId(){
+int Invitation::GetSessionId() const {
     return _sessionID;
 }
 
-std::string Invitation::GetInvitationCode(){
+std::string Invitation::GetInvitationCode() const {
     return _invitationCode;
 }
 

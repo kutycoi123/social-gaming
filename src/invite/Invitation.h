@@ -3,8 +3,8 @@
 class Invitation {
 public:
     Invitation(const int& sessionID);
-    int GetSessionId();
-    std::string GetInvitationCode();
+    int GetSessionId() const;
+    std::string GetInvitationCode() const;
 
 private:
     // TODO: replace session id with appropriate class once it is complete
