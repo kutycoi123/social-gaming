@@ -4,14 +4,14 @@
 
 - Curly braces should start on the same line
 
-- Function names should be PascalCase (Ex. FooBar)
+- Function names should be CamelCase (Ex. fooBar)
 
   - Function names should typically be a verb
 
 - Parameters should be named using CamelCase (same as public variables)
 
   ```cpp
-  void DoSomething(int myParam, ) {
+  void doSomething(int myParam, ) {
       
   }
   ```
