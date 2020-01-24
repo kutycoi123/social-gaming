@@ -4,8 +4,8 @@
 class Rule{
 public:
 	Rule();
-	std::string GetRule() const;
-	void SetRule(const std::string&); 	
+	std::string getRule() const;
+	void setRule(const std::string&); 	
 
 
 private:
