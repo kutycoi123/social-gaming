@@ -20,6 +20,7 @@
 
   void ChatRoom::addPlayers(string name){
     _players.push_back(name);
+    increasePlayerCount();
   }
 
   int ChatRoom::getPlayerCount(){
@@ -28,6 +29,7 @@
 
   void ChatRoom::removeAllPlayer(){
     _players.clear();
+    _playerCount = _players.size();
   }
 
   std::string ChatRoom::getId(){
