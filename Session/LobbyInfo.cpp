@@ -5,7 +5,7 @@ int LobbyInfo:: GeneratePlayerId(std::string gameName, std::string playerName) {
     return id;     
 }
 
-int LobbyInfo:: AddusersToSessions(int playerId, string game) {
+int LobbyInfo:: AddusersToSessions(int playerId, std::string game) {
     UserIdToGame.insert(std::make_pair(playerId,game));
 }
 
