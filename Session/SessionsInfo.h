@@ -14,7 +14,7 @@ public:
     void setCurrentGame(std::string name);
     void addUserToSession(int userID);
     void removeAllUserfromSession();
-    void sessionConfigureSettings(std::string jsonSettings);
+    int sessionConfigureSettings(std::string jsonSettings);
 
 private:
 

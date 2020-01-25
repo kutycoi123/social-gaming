@@ -1,21 +1,21 @@
-#include "SessionsInfo.h"
+#include "include/SessionsInfo.h"
 // for 1 session the info for it to work. 
 // infor on each session of a game, 
 
 void SessionsInfo::setOwner(int ownerID) {
-    this->ownerID = ownerid;
+    this->ownerID = ownerID;
 }
 
 void SessionsInfo::setCurrentGame(std::string name) {
-    this->currentGameName = name;
+    this->currentGame = name;
 }
 
 void SessionsInfo::addUserToSession( int userID) { 
-    UsersInSessions.push_back(Userid);
+    usersInSessions.push_back(userID);
 }
 
 void SessionsInfo::removeAllUserfromSession(){ 
-    UsersInSessions.clear();
+    usersInSessions.clear();
 }
 
 int SessionsInfo::sessionConfigureSettings(std::string jsonSettings) { 
