@@ -11,11 +11,11 @@ Owner::Owner() {
     list<Session> _listOfOwnedSessions;
 }
 
-list<Session> getOwnedSessions() {
+list<Session> Owner::getOwnedSessions() {
     return _listOfOwnedSessions;
 }
 
-void createSession(json sessionSettings) {
+Session * Owner::createSession(json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
     sessionSettings["GameId"] = 0;
@@ -30,9 +30,11 @@ void createSession(json sessionSettings) {
             (newSession->*setGameId(value));
         }
     }
+
+    return newSession;
 }
 
-void configureSession(Session& session, json sessionSettings) {
+void Owner::configureSession(Session& session, json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
     sessionSettings["GameId"] = 0;
@@ -47,11 +49,11 @@ void configureSession(Session& session, json sessionSettings) {
     }
 }
 
-void kickPlayer(Session& session, int playerId) {
+void Owner::kickPlayer(Session& session, int playerId) {
     // TODO: Implement remove player method in Session class
     (session->*removePlayer(playerId));
 }
 
-void changeOwner(Session& session, int newOwnerId) {
+void Owner::changeOwner(Session& session, int newOwnerId) {
     (session->*setOwnerId(newOwnerId));
 }
