@@ -11,19 +11,19 @@ class SessionsInfo {
 public:
 
     void setOwner(int ownerID);
-    void setCurrentGame(string name);
-    void addUserToSession( int userID);
+    void setCurrentGame(std::string name);
+    void addUserToSession(int userID);
     void removeAllUserfromSession();
-    void sessionConfigureSettings(string jsonSettings);
+    void sessionConfigureSettings(std::string jsonSettings);
 
 private:
 
-    vector<int> usersInSessions;
-    string currentGame;
+    std::vector<int> usersInSessions;
+    std::string currentGame;
     int invideCode;
     int sessionID;
     int gameID;
     int ownerID;
-    string JSONSetting;
+    std::string JSONSetting;
 
 };
