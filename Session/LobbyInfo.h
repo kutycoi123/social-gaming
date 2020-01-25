@@ -11,7 +11,7 @@ class LobbyInfo {
   
     public:
 
-        int GeneratePlayerId(string gameName, string playerName);
+        int GeneratePlayerId(std::string gameName, std::string playerName);
         int AddusersToSessions(int playerId, string game);
         bool SessionExists(int inviteCode);
         int createSession();
@@ -19,9 +19,9 @@ class LobbyInfo {
 
     private:
     
-        list<SessionsInfo> SessionsList;
-        vector<int> inviteCodes;
-        list<int> CurrentUsers; 
-        unordered_map<int, string> UserIdToGame;
-        unordered_map<int, string> SessionToInviteCode;       
+        std::list<SessionsInfo> SessionsList;
+        std::vector<int> inviteCodes;
+        std::list<int> CurrentUsers; 
+        std::unordered_map<int, string> UserIdToGame;
+        std::unordered_map<int, string> SessionToInviteCode;       
 };
