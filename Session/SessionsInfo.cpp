@@ -6,7 +6,7 @@ void SessionsInfo::setOwner(int ownerID) {
     this->ownerID = ownerid;
 }
 
-void SessionsInfo::setCurrentGame(string name) {
+void SessionsInfo::setCurrentGame(std::string name) {
     this->currentGameName = name;
 }
 
@@ -18,7 +18,7 @@ void SessionsInfo::removeAllUserfromSession(){
     UsersInSessions.clear();
 }
 
-int SessionsInfo::sessionConfigureSettings(string jsonSettings) { 
+int SessionsInfo::sessionConfigureSettings(std::string jsonSettings) { 
     this->JSONSetting = jsonSettings;
     return 123;
 }
