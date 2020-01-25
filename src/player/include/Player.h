@@ -6,23 +6,24 @@
 #include "User.h"
 #include "Invitation.h"
 
+
 class Player : public User{
     public:
-        Player (const Invitation& invitation, const std::string& status);
-        void setInvitation(const Invitation& Invitation);
-        Invitation getInvitation() const;
+        Player (std::string _name, std::string _id, Invitation& invitation, const std::string& status);
+        void setInvitation(Invitation& Invitation);
+        Invitation& getInvitation() const;
         void setStatus(const std::string& status);
         std::string getStatus() const;
         void addFriend(const User& user);
         void unfriend(std::string id);
 
     private:
-        Invitation invitation;
+        Invitation* _invitation;
 
         //online, off line, away
-        std::string status;
+        std::string _status;
 
-        std::vector<User> friendlist;
+        std::vector<User> _friendlist;
 };
 
 #endif
