@@ -1,6 +1,6 @@
 #include "LobbyInfo.h"
 
-int LobbyInfo:: GeneratePlayerId(string gameName, string playerName) {
+int LobbyInfo:: GeneratePlayerId(std::string gameName, std::string playerName) {
     int id = rand() % 10000; 
     return id;     
 }
