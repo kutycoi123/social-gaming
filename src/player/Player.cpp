@@ -29,5 +29,6 @@ void Player::unfriend(std::string id){
     for (std::size_t i = 0; i < _friendlist.size(); i++){
         if(_friendlist[i].getId == id)
             _friendlist.erase(_friendlist.begin()+i);
+            break;
     }
 }
