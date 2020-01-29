@@ -9,11 +9,7 @@
 #include <string>
 #include <unistd.h>
 #include <thread>
-
-struct MessageResult {
-  std::string result;
-  bool shouldShutdown;
-};
+#include <ctime>
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
@@ -21,7 +17,7 @@ static std::vector<networking::Connection> clients;
 
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
-static MessageResult processMessages(networking::Server&, const std::deque<networking::Message>&);
+static std::string processMessages(networking::Server&, const std::deque<networking::Message>&);
 static std::deque<networking::Message> buildOutgoing(const std::string&);
 static std::string getConfigurationFilePath(int, char* []);
 static void checkValidConfigurationFile(const nlohmann::json&);
@@ -73,35 +69,6 @@ static void OnDisconnect(networking::Connection c) {
 	clients.erase(eraseBegin, std::end(clients));
 }
 
-//teacher provided functions
-static MessageResult processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
-	std::ostringstream result;
-	bool quit = false;
-
-	for (auto& message : incoming) {
-		if (message.text == "quit") {
-			server.disconnect(message.connection);
-		} 
-		else if (message.text == "shutdown") {
-			std::cout << "Shutting down.\n";
-			quit = true;
-		} 
-		else {
-			result << message.connection.id << "> " << message.text << "\n";
-		}
-	}
-	return MessageResult{result.str(), quit};
-}
-
-//teacher provided functions
-static std::deque<networking::Message> buildOutgoing(const std::string& log) {
-  std::deque<networking::Message> outgoing;
-  for (auto client : clients) {
-    outgoing.push_back({client, log});
-  }
-  return outgoing;
-}
-
 static std::string getConfigurationFilePath(int argc, char* argv[]){
 	if(argc <= 1){
 		return SERVER_CONFIGURATION_FILE_LOCATION;
@@ -147,14 +114,9 @@ static void handleMessages(networking::Server& server){
 		}
 
 		auto incoming = server.receive();
-		auto [log, shouldQuit] = processMessages(server, incoming);
+		std::string log = processMessages(server, incoming);
 		auto outgoing = buildOutgoing(log);
 		server.send(outgoing);
-		
-		//if should quit and is owner of a game and game is running, close the game
-		if(shouldQuit){
-			std::cout << "shutdown game\n";
-		}
 
 		if (errorWhileUpdating) {
 			break;
@@ -165,3 +127,42 @@ static void handleMessages(networking::Server& server){
 
 	return;
 }
+
+#pragma region ClientServerNetworkingThread
+
+static std::string processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::ostringstream result;
+
+	for (auto& message : incoming) {
+		std::cout << message.connection.id << "> " << message.text << "\n";
+
+		if (message.text == "quit") {
+			server.disconnect(message.connection);
+		} 
+		else if (message.text == "shutdown") {
+			std::cout << "shutdown game\n";
+			//kick all players
+		} 
+		else if (message.text == "start game"){
+			std::cout << "start game\n";
+		} 
+		else if (message.text == "create lobby"){
+			std::cout << "creating lobby\n";
+		}
+		else {
+			result << message.connection.id << "> " << message.text << "\n";
+		}
+	}
+	return result.str();
+}
+
+//teacher provided functions
+static std::deque<networking::Message> buildOutgoing(const std::string& log) {
+  std::deque<networking::Message> outgoing;
+  for (auto client : clients) {
+    outgoing.push_back({client, log});
+  }
+  return outgoing;
+}
+
+#pragma endregion
