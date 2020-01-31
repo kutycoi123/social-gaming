@@ -4,7 +4,7 @@
 #include <iostream> 
 #include <string>
 #include <list>
-#include "../../invitation/include/Invitation.h"
+#include "Invitation.h"
 
 class GameSession { 
     

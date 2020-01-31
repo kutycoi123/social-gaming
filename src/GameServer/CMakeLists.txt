@@ -13,6 +13,7 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(GameServer
   networking
+  session
   nlohmann_json::nlohmann_json
   ${CMAKE_THREAD_LIBS_INIT}
 )

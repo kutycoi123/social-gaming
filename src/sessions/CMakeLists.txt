@@ -1,5 +1,21 @@
-add_library(session GameSession.cpp GameSessionManager.cpp)
-target_include_directories(
-  session
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+add_library(session 
+  GameSession.cpp 
+)
+
+target_include_directories(session
+  PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+set_target_properties(session
+                      PROPERTIES
+                      LINKER_LANGUAGE CXX
+                      CXX_STANDARD 17
+)
+
+target_link_libraries(session
+  invitation
 )

@@ -1,5 +1,8 @@
+#include "GameSession.h"
 #include "Server.h"
 #include <nlohmann/json.hpp>
+
+#include "GameSessionManager.cpp"
 
 #include <atomic>
 #include <iostream>
@@ -9,6 +12,7 @@
 #include <unistd.h>
 #include <thread>
 #include <vector>
+
 
 struct MessageInfo{
 	networking::Message message;
@@ -30,10 +34,13 @@ static void handleMessages(networking::Server&);
 static std::vector<MessageInfo> processMessages(networking::Server&, const std::deque<networking::Message>&);
 static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>&);
 
-
-
 int main(int argc, char* argv[]){
-	
+	//testing linking ...
+	Invitation test;
+	GameSession test1(1);
+	GameSessionManager::createGameSession(1);
+	//end test
+
 	//Read Json
 	std::string configurationFilePath = getConfigurationFilePath(argc, argv);
 	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
