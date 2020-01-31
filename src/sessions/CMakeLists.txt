@@ -1,5 +1,5 @@
-add_library(lobby LobbyInfo.cpp SessionInfo.cpp)
+add_library(session GameSession.cpp GameSessionManager.cpp)
 target_include_directories(
-  lobby
+  session
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
