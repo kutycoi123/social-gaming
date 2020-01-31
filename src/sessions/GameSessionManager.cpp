@@ -1,5 +1,5 @@
-#include "include/GameSessionManager.h"
 #include "include/GameSession.h"
+#include "include/GameSessionManager.h"
 
 GameSession GameSessionManager::createGameSession(int ownerId){
     GameSession gameSession{ownerId};
@@ -8,13 +8,24 @@ GameSession GameSessionManager::createGameSession(int ownerId){
     return gameSession;
 }
 
-GameSession GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
-    auto gameSession = _invitationToGameSessionMap.at(invitation.getInvitationCode());
+std::optional<GameSession> GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
+    auto found = _invitationToGameSessionMap.find(invitation.getInvitationCode());
+    if (found == _invitationToGameSessionMap.end()){
+        return std::nullopt;
+    }
+    auto gameSession = found->second;
     gameSession.addUserToSession(playerId);
-    return gameSession;
+    return std::optional<GameSession>{gameSession};
 }
 
-bool GameSessionManager::sessionExists(const Invitation& invitation){
+size_t GameSessionManager::totalSessionCount(){
+    return _sessionsList.size();
+}
+
+std::optional<Invitation> GameSessionManager::sessionExists(const Invitation& invitation) {
     auto found = _invitationToGameSessionMap.find(invitation.getInvitationCode());
-    return found != _invitationToGameSessionMap.end();
+    if (found == _invitationToGameSessionMap.end()){
+        return std::nullopt;
+    }
+    return std::optional<Invitation>{invitation};
 }
