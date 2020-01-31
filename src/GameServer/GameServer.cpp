@@ -35,11 +35,6 @@ static std::vector<MessageInfo> processMessages(networking::Server&, const std::
 static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>&);
 
 int main(int argc, char* argv[]){
-	//testing linking ...
-	Invitation test;
-	GameSession test1(1);
-	GameSessionManager::createGameSession(1);
-	//end test
 
 	//Read Json
 	std::string configurationFilePath = getConfigurationFilePath(argc, argv);
@@ -155,6 +150,7 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 	for (networking::Message message : incoming) {
 		std::cout << message.connection.id << "> " << message.text << "\n";
 
+		//ad-hoc message processing
 		if (message.text == "quit") {
 			server.disconnect(message.connection);
 		} 
@@ -166,7 +162,11 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			std::cout << "creating lobby\n";
+			GameSession init = GameSessionManager::createGameSession(1);
+			Invitation code = init.getInvitationCode();
+			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
+
+			std::cout << "creating lobby " << code.toString() << '\n';
 		}
 		else if (message.text == "join lobby"){
 			std::cout << "joining lobby\n";
@@ -200,12 +200,12 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<MessageIn
 	//dummy code
 	std::ostringstream log;
 
-	for(MessageInfo message : returnMessage){
+	for(auto& message : returnMessage){
 		networking::Message rawMessage = message.message;
 		log << rawMessage.connection.id << "> " << rawMessage.text << '\n';
 	}
 
-	for (auto client : clients) {
+	for (auto& client : clients) {
 		outgoing.push_back({client, log.str()});
 	}
 
