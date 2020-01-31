@@ -8,13 +8,8 @@
 
 
 class LobbyInfo {
-  
     public:
-
         int generatePlayerId(std::string gameName, std::string playerName);
-        int createSession();
-        int generateSessionID(GameSession session);
-
     private:
         std::list<int> CurrentUsers; 
         std::unordered_map<int, std::string> UserIdToGame;      

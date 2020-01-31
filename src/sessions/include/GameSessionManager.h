@@ -7,12 +7,12 @@
 
 class GameSessionManager {
 public:
-    static GameSession joinGameSession(int playerId, Invitation invitationCode);
-    static GameSession createGameSession(int playerId);
-    static bool sessionExists(Invitation invitation);
+    static GameSession joinGameSession(int playerId, const Invitation& invitation);
+    static GameSession createGameSession(int ownerID);
+    static bool sessionExists(const Invitation& invitation);
 private:
-    static std::vector<GameSession> _sessionsList;
-    static std::vector<Invitation> _inviteCodes;
+    static std::list<GameSession> _sessionsList;
+    static std::list<Invitation> _inviteCodes;
     static std::unordered_map<std::string, GameSession> _invitationToGameSessionMap; 
 };
 

@@ -3,30 +3,26 @@
 
 #include <iostream> 
 #include <string>
-#include <vector>
+#include <list>
 #include "../../invitation/include/Invitation.h"
-
-// for 1 session the info for it to work. 
-// infor on each session of a game, 
-//
 
 class GameSession { 
     
 public:
-    GameSession();
+    GameSession(int ownerID);
     std::string getInvitationCode() const;
-    void setOwner(int ownerID);
+    std::string getSessionName() const;
     void setCurrentGame(std::string name);
     void addUserToSession(int userID);
-    void removeAllUserfromSession();
+    void removeUserFromSession(int userID);
+    void removeAllUsersfromSession();
     int sessionConfigureSettings(std::string jsonSettings);
 
 private:
-
-    std::vector<int> _playersInSession;
     std::string _currentGame;
+    std::list<int> _playersInSession;
+    std::string _sessionName;
     Invitation _invitationCode;
-    int _sessionID;
     int _gameID;
     int _ownerID;
     std::string _JSONSetting;
