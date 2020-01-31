@@ -1,5 +1,4 @@
 #include "Server.h"
-
 #include <nlohmann/json.hpp>
 
 #include <atomic>
