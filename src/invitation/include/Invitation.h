@@ -6,11 +6,10 @@
 class Invitation {
 public:
     Invitation();
-    std::string getInvitationCode() const;
-    bool isInvitationValid() const;
+    Invitation(std::string invitationCode);
+    std::string toString() const;
 private:
     const int INVITATION_CODE_LENGTH = 8;
-    const std::string INVALID_INVITATION = "Invitation is not valid!";
     std::string _invitationCode;
     std::string generateInvitationCode();
 };

@@ -10,12 +10,13 @@ class GameSession {
     
 public:
     GameSession(int ownerID);
-    std::string getInvitationCode() const;
+    Invitation getInvitationCode() const;
     std::string getSessionName() const;
     void setCurrentGame(std::string name);
     void addUserToSession(int userID);
     void removeUserFromSession(int userID);
     void removeAllUsersfromSession();
+    size_t totalPlayerCount();
     int sessionConfigureSettings(std::string jsonSettings);
 
 private:

@@ -10,6 +10,7 @@ class GameSessionManager {
 public:
     static std::optional<GameSession> joinGameSession(int playerId, const Invitation& invitation);
     static GameSession createGameSession(int ownerID);
+    static void endGameSession(const GameSession& gameSession);
     static std::optional<Invitation> sessionExists(const Invitation& invitation);
     static size_t totalSessionCount();
 private:

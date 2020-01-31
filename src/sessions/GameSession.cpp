@@ -4,8 +4,8 @@ GameSession::GameSession(int ownerID) :
     _invitationCode (Invitation()), 
     _ownerID (ownerID) {}
 
-std::string GameSession::getInvitationCode() const {
-    return _invitationCode.getInvitationCode();
+Invitation GameSession::getInvitationCode() const {
+    return _invitationCode;
 }
 
 void GameSession::setCurrentGame(std::string name) {
@@ -14,6 +14,10 @@ void GameSession::setCurrentGame(std::string name) {
 
 void GameSession::addUserToSession(int userID) { 
     _playersInSession.push_back(userID);
+}
+
+size_t GameSession::totalPlayerCount(){
+    return _playersInSession.size();
 }
 
 void GameSession::removeUserFromSession(int userID) { 
