@@ -2,26 +2,21 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Web Chat</title>
 
-  <style>
-    body, input, select, textarea {
-      background: #031e11;
-      color: #10fd60;
-    }
-
-    #messages {
-      width: 80em;
-      height: 40em;
-      border: solid 1px #cccccc;
-      margin-bottom: 5px;
-      overflow-y: hidden;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+  
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script>
     $(document).ready(function() {
+      $(".btn").mouseup(function(){
+        $(this).blur();
+      })
+
       function appendText(text) {
         $('#messages').append(text);
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
@@ -68,21 +63,28 @@
   </script>
 </head>
 
-<body>
+<div class="jumbotron text-center">
+  <h1>Social Gaming - Donair</h1>
+</div>
 
-  <h1>Web Chat</h1>
+<div class="container">
+  <body>
 
-  Chat Server: <input id="uri" size="40">
-  <button id="connect">Connect</button>
-  <button id="disconnect">Disconnect</button><br />
+    Social Gaming Server IP: <input id="uri" size="40">
+    <button type="button" class="btn btn-success" id="connect">Connect</button>
+    <button type="button" class="btn btn-danger" id="disconnect">Disconnect</button><br /> <br />
 
-  <pre id="messages"></pre>
+    <pre id="messages"></pre>
 
-  <div style="margin-bottom: 5px;">
-    Enter Message:<br />
-    <input id="sendMessage" size="80" value="" />
-    <button id="send">Send</button>
-  </div>
+    <div style="margin-bottom: 5px;">
+      Enter Message:<br />
+      <input id="sendMessage" size="80" value="" />
+      <button type="button" class="btn btn-primary" id="send">Send</button >
+    </div>
 
-</body>
+    <br />
+
+  </body>
+</div>
+
 </html>
