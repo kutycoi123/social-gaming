@@ -1,8 +1,7 @@
 #include "include/inparallel.h"
 
-Inparallel::Inparallel(std::vector<std::string> rules), Rule("inparallel") {
-    _rules = rules;
-}
+Inparallel::Inparallel(std::vector<std::string> rules) : Rule("inparallel"), _rules(rules) {}
+
 std::vector<std::string> Inparallel::getRules() const{
     return _rules;
 }

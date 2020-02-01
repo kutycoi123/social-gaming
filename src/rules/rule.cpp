@@ -1,7 +1,6 @@
 #include "include/rule.h"
 
-Rule::Rule(const std::string& rule){
-    _rule = rule;
+Rule::Rule(const std::string& rule) : _rule(rule){
 }
 
 std::string Rule::getRule() const{
