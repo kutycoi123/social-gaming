@@ -2,6 +2,50 @@
 
 Discord Invite: https://discord.gg/UnsuDv
 
+## How to build and use project
+- ## Prerequisites
+
+  - Boost 1.68
+  - Ncurses
+  - CMake
+  - C++17
+
+- ## Building
+
+  - Download the repository, extract the folder to a location you have access to
+
+  - Create a build folder
+
+    - ```
+      mkdir build
+      cd build
+      ```
+
+  - Cmake to the location of the repository folder
+
+    - ```
+      sudo cmake PATH_TO_REPOSITORY_FOLDER
+      
+      Ex.
+      sudo cmake /mnt/d/Dropbox/Dropbox/Courses/SPRING2020/CMPT373/social-gaming
+      ```
+
+  - Final step
+
+    - ```
+      sudo make GameServer
+      ```
+
+- ## Using
+
+  - Go to the directory of where you built the project
+
+    - ```
+      ./bin/GameServer
+      ```
+
+  - Open the .html file and connect using "localhost:4000" or "localhost:4000"
+
 ## Project Structure
 
 - ## src/
