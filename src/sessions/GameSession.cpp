@@ -33,6 +33,15 @@ int GameSession::sessionConfigureSettings(std::string jsonSettings) {
     return 123;
 }
 
+void  GameSession::SetTotalNumPlayers(int totalPlayers) { 
+    this->_totalNumPlayers = totalPlayers
+}
+void  GameSession::createInviteCode() { 
+    Invitation codeGenerator;
+    this->_invitationCode = codeGenerator.generateInvitationCode();
+}
 
-
+void  GameSession::setOwner(int ownerID) { 
+    this->_ownerID = ownerID;
+}
 

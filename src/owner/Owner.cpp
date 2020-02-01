@@ -1,8 +1,7 @@
-#include <strings>
 
 #include "include/Owner.h"
-#include "Session.h"
-
+#include "../sessions/include/GameSession.h"
+#include "../player/include/Player.h"
 // Incorporate JSON CPP library from https://github.com/nlohmann/json
 #include <nlohmann/json.hpp>
 using json = nlohmann::json
@@ -20,40 +19,47 @@ Session * Owner::createSession(json sessionSettings) {
     sessionSettings["Number Of Players"] = 4;
     sessionSettings["GameId"] = 0;
 
-    Session * newSession = new Session();
+    _listOfOwnedSessions.
 
     for (auto& [key, value] : json.items()) {
         if (key.compare("Number Of Players")) {
-            (newSession->*setNumberOfPlayers(value));
+            (newSession->setNumberOfPlayers(value));
         }
         if (key.compare("Game")) {
-            (newSession->*setGameId(value));
+            (newSession->setGameId(value));
         }
     }
 
     return newSession;
 }
 
-void Owner::configureSession(Session& session, json sessionSettings) {
+void Owner::configureSession(int sessionIndex, json sessionSettings) {
     // Mocking some JSON values
-    sessionSettings["Number Of Players"] = 4;
-    sessionSettings["GameId"] = 0;
+    sessionSettings["Player count"] = 4;
+    
+    GameSession newGameSession;
+    auto TotalPlayers = sessionSettings.find("Number Of Players");
 
-    for (auto& [key, value] : json.items()) {
-        if (key.compare("Number Of Players")) {
-            (session->*setNumberOfPlayers(value));
-        }
-        if (key.compare("Game")) {
-            (session->*setGameId(value));
-        }
+    std::list<GameSession>::iterator it = _listOfOwnedSessions.begin();
+ 
+    // Advance the iterator by 2 positions,
+    std::advance(it, 2);
+
+    newGameSession->setNumberOfPlayers(*TotalPlayers);
+
     }
 }
 
-void Owner::kickPlayer(Session& session, int playerId) {
+void Owner::kickPlayer(GameSession& session, int playerId) {
     // TODO: Implement remove player method in Session class
-    (session->*removePlayer(playerId));
+    GameSession->removeUserFromSession(playerId);
 }
 
-void Owner::changeOwner(Session& session, int newOwnerId) {
-    (session->*setOwnerId(newOwnerId));
+void Owner::changeOwner(GameSession& session, int newOwnerId) {
+    GameSession->setOwnerId(newOwnerId);
+}
+
+void Owner::SendInvideCode(int index, Player player) {
+
+    _listOfOwnedSessions
 }

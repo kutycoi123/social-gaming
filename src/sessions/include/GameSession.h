@@ -4,7 +4,7 @@
 #include <iostream> 
 #include <string>
 #include <list>
-#include "Invitation.h"
+#include "../invitation/include/Invitation.h"
 
 class GameSession { 
     
@@ -18,6 +18,7 @@ public:
     void removeAllUsersfromSession();
     size_t totalPlayerCount();
     int sessionConfigureSettings(std::string jsonSettings);
+    void createInviteCode()
 
 private:
     std::string _currentGame;
@@ -27,6 +28,7 @@ private:
     int _gameID;
     int _ownerID;
     std::string _JSONSetting;
+    int _totalNumPlayers;
 
 };
 
