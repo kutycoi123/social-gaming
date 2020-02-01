@@ -3,14 +3,15 @@
 
 #include <string>
 #include <vector>
-#include "User.h"
-#include "Invitation.h"
-
+#include "../../user/include/User.h"
+#include "../../invitation/include/Invitation.h"
+#include<bits/stdc++.h> 
 
 class Player : public User{
     public:
         Player (std::string _name, std::string _id, Invitation& invitation, const std::string& status);
         void setInvitation(Invitation& Invitation);
+        void setInvitationCode(std::string _invitaionCode);
         Invitation& getInvitation() const;
         void setStatus(const std::string& status);
         std::string getStatus() const;
@@ -18,8 +19,8 @@ class Player : public User{
         void unfriend(std::string id);
 
     private:
-        Invitation* _invitation;
-
+        Invitation *_invitation;
+        std::string _invitaionCode;
         //online, off line, away
         std::string _status;
 

@@ -1,14 +1,15 @@
 #include <list>
-
+#include <string>
+#include "../../sessions/include/GameSession.h"
 using namespace std;
 
 class Owner { 
     public:
-        Session * createSession();
-        void configureSession(Session& session);
-        list<Session> getSessionsOwned();
-        void kickPlayer(Session& session, int playerId);
-        void changeOwner(Session& session, int newOwnerId);
+        void createSession();
+        void configureSession(GameSession& session);
+        list<GameSession> getSessionsOwned();
+        void kickPlayer(GameSession& session, int playerId);
+        void changeOwner(GameSession& session, int newOwnerId);
 
     private:
         list<Sessions> _listOfOwnedSessions;
