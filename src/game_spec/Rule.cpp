@@ -15,4 +15,3 @@ void Rule::setRule(const std::string& rule){
 
 
 
-
