@@ -12,11 +12,8 @@ void GameSession::setCurrentGame(std::string name) {
     this->_currentGame = name;
 }
 
-void GameSession::addUserIDToSession(int userID) { 
-    _playersIDInSession.push_back(userID);
-}
-void GameSession::addUserToSession(Player player) { 
-    _playersList.push_back(player);
+void GameSession::addUserToSession(int userID) { 
+    _playersInSession.push_back(userID);
 }
 
 size_t GameSession::totalPlayerCount(){
@@ -33,6 +30,10 @@ void GameSession::removeAllUsersfromSession(){
 
 int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
     this->_JSONSetting = jsonSettings;
+<<<<<<< HEAD
+    return 123;
+}
+=======
 
 }
 
@@ -60,3 +61,4 @@ void GameSession::SetPlayerInviteCodes() {
         it->setInvitationCode(_invitationCode);
     }
 }
+>>>>>>> 934dd06a0ce8f58ef9b347462226443bea00c836

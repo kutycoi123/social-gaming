@@ -3,9 +3,15 @@
 
 #include <string>
 #include <vector>
+<<<<<<< HEAD
+#include "User.h"
+#include "Invitation.h"
+
+=======
 #include "../../user/include/User.h"
 #include "../../invitation/include/Invitation.h"
 #include<bits/stdc++.h> 
+>>>>>>> 934dd06a0ce8f58ef9b347462226443bea00c836
 
 class Player : public User{
     public:

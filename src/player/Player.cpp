@@ -19,13 +19,22 @@ void Player::setStatus(const std::string& status){
 }
 
 std::string Player::getStatus() const{
-    return this->_status;
+    return _status;
 }
 
 void Player::addFriend(const User& user){
+<<<<<<< HEAD
+    bool contain = false;
+    for (std::size_t i = 0; i < _friendlist.size(); i++){
+        if(_friendlist[i].getId == user.getId())
+            break;
+=======
     if (std::find(_friendlist.begin(), _friendlist.end(), user) == _friendlist.end()) {
         _friendlist.push_back(user);
+>>>>>>> 934dd06a0ce8f58ef9b347462226443bea00c836
     }
+    if (contain == false)
+        _friendlist.push_back(user);
 }
 
 void Player::unfriend(std::string id){
