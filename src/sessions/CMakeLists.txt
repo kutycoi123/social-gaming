@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+
+
 add_library(session 
   GameSession.cpp 
 )
@@ -6,6 +9,8 @@ target_include_directories(session
   PUBLIC
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:../invitation/include>
+    $<BUILD_INTERFACE:../player/include>
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
