@@ -1,6 +1,6 @@
 #include <list>
 #include <string>
-#include "../sessions/include/GameSession.h"
+#include "../../sessions/include/GameSession.h"
 using namespace std;
 
 class Owner { 

@@ -5,13 +5,14 @@ Player::Player (std::string _name, std::string _id, Invitation& invitation, cons
     _status = status;
 }
 
-void Player::setInvitation(Invitation invitation){
-    _invitation = invitation;
+void Player::setInvitation(Invitation &invitation){
+    _invitation = &invitation;
 }
 
 Invitation& Player::getInvitation() const{
-    return this->_invitation;
+    return *_invitation;
 }
+
 
 void Player::setStatus(const std::string& status){
     _status = status;
@@ -22,7 +23,7 @@ std::string Player::getStatus() const{
 }
 
 void Player::addFriend(const User& user){
-    if (std::find(_friendlist.begin(), _friendlist.end(), key) == _friendlist.end()) {
+    if (std::find(_friendlist.begin(), _friendlist.end(), user) == _friendlist.end()) {
         _friendlist.push_back(user);
     }
 }
