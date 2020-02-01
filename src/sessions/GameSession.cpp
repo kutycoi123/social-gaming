@@ -12,11 +12,8 @@ void GameSession::setCurrentGame(std::string name) {
     this->_currentGame = name;
 }
 
-void GameSession::addUserIDToSession(int userID) { 
-    _playersIDInSession.push_back(userID);
-}
-void GameSession::addUserToSession(Player player) { 
-    _playersList.push_back(player);
+void GameSession::addUserToSession(int userID) { 
+    _playersInSession.push_back(userID);
 }
 
 size_t GameSession::totalPlayerCount(){
@@ -33,37 +30,5 @@ void GameSession::removeAllUsersfromSession(){
 
 int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
     this->_JSONSetting = jsonSettings;
-    Json settings = {
-        "configuration": {
-            "name": "Zen Game",
-            "player count": {"min": 0, "max": 0},
-            "audience": false,
-            "setup": { }
-        },
-        "constants": {},
-        "variables": {},
-        "per-player": {},
-        "per-audience": {},
-        "rules": {}
-        };
-        this-> totalPlayers = settings["configuration"]["player count"]["max"];
-        this->_ListSettingVars = settings["variables"];
-        this->_ListPerAudience = settings["per-audience"];
-
+    return 123;
 }
-
-void  GameSession::SetTotalNumPlayers(int totalPlayers) { 
-    this->_totalNumPlayers = totalPlayers
-}
-
-void  GameSession::createInviteCode() { 
-    Invitation codeGenerator;
-    this->_invitationCode = codeGenerator.generateInvitationCode();
-}
-
-void  GameSession::setOwner(int ownerID) { 
-    this->_ownerID = ownerID;
-}
-
-void  GameSession::getPlayers(int ownerID) { 
-    return this->_playersList;

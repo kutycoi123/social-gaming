@@ -10,9 +10,9 @@ public:
 
 private:
 	std::string _rule;
-	
 
 };
+
 
 
 

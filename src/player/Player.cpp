@@ -10,7 +10,7 @@ void Player::setInvitation(Invitation& invitation){
 }
 
 Invitation& Player::getInvitation() const{
-    return this->_invitation;
+    return *_invitation;
 }
 
 void Player::setStatus(const std::string& status){
@@ -18,13 +18,17 @@ void Player::setStatus(const std::string& status){
 }
 
 std::string Player::getStatus() const{
-    return this->_status;
+    return _status;
 }
 
 void Player::addFriend(const User& user){
-    if (std::find(_friendlist.begin(), _friendlist.end(), key) == _friendlist.end()) {
-        _friendlist.push_back(user);
+    bool contain = false;
+    for (std::size_t i = 0; i < _friendlist.size(); i++){
+        if(_friendlist[i].getId == user.getId())
+            break;
     }
+    if (contain == false)
+        _friendlist.push_back(user);
 }
 
 void Player::unfriend(std::string id){

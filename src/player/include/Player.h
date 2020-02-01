@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "../user/include/User.h"
-#include "../invitation/include/Invitation.h"
+#include "User.h"
+#include "Invitation.h"
 
 
 class Player : public User{
