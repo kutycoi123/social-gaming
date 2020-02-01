@@ -5,8 +5,8 @@ Player::Player (std::string _name, std::string _id, Invitation& invitation, cons
     _status = status;
 }
 
-void Player::setInvitation(Invitation& invitation){
-    _invitation = &invitation;
+void Player::setInvitation(Invitation invitation){
+    _invitation = invitation;
 }
 
 Invitation& Player::getInvitation() const{

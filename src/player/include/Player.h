@@ -18,7 +18,7 @@ class Player : public User{
         void unfriend(std::string id);
 
     private:
-        Invitation* _invitation;
+        Invitation _invitation;
 
         //online, off line, away
         std::string _status;

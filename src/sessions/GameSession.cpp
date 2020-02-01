@@ -67,3 +67,12 @@ void  GameSession::setOwner(int ownerID) {
 
 void  GameSession::getPlayers(int ownerID) { 
     return this->_playersList;
+}
+
+void GameSession::SetPlayerInviteCodes() {
+    std::list<GameSession>::iterator it;
+
+    for (it = _playersList.begin(); it != _playersList.end(); it++) {
+        it->setInvitation(getInvitationCode);
+    }
+}

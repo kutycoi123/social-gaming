@@ -17,7 +17,6 @@ list<Session> Owner::getOwnedSessions() {
 void Owner::createSession(json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
-
     auto TotalPlayers = sessionSettings.find("Number Of Players");
     GameSession newSession;
     newSession.setNumberOfPlayers(*TotalPlayers);
@@ -31,8 +30,6 @@ void Owner::configureSession(int sessionIndex, json sessionSettings) {
         
     GameSession newGameSession;
     auto TotalPlayers = sessionSettings.find("Number Of Players");
-
-
     std::list<GameSession>::iterator it = _listOfOwnedSessions.begin();
     std::advance(it, sessionIndex);
     it->setNumberOfPlayers(TotalPlayers);

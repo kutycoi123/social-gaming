@@ -20,6 +20,7 @@ public:
     int sessionConfigureSettings(std::string jsonSettings);
     void createInviteCode()
     std::list<Player> GetPlayers();
+    void SetPlayerInviteCodes();
     
 
 private:
@@ -29,7 +30,6 @@ private:
     std::list<string> _ListRules;
     std::string _currentGame;
     std::list<int> _playersIDInSession;
-
     std::list<Player> _playersList;
 
     std::string _sessionName;
