@@ -1,4 +1,3 @@
-
 #include "include/Owner.h"
 #include "../sessions/include/GameSession.h"
 #include "../player/include/Player.h"
@@ -7,34 +6,47 @@
 using json = nlohmann::json
 
 Owner::Owner() {
-    list<Session> _listOfOwnedSessions;
+    _numberOfOwnedSessions = 0;
+    std::vector<GameSession> _ownedSessions;
 }
 
 list<Session> Owner::getOwnedSessions() {
-    return _listOfOwnedSessions;
+    return _ownedSessions;
+}
+
+int Owner::getNumberOfOwnedSessions() {
+    return _numberOfOwnedSessions;
 }
 
 void Owner::createSession(json sessionSettings) {
     // Mocking some JSON values
+    sessionSettings["Game"] = 6000;
     sessionSettings["Number Of Players"] = 4;
+    sessionSettings["Game Length"] = 6000;
 
-    auto TotalPlayers = sessionSettings.find("Number Of Players");
-    GameSession newSession;
-    newSession.setNumberOfPlayers(*TotalPlayers);
-    _listOfOwnedSessions.push_back(newSession);
- 
+    // Create game session and configure
+    GameSession gameSession = GameSession::GameSession(this->_id);
+    gameSession.sessionConfigureSettings(sessionSettings);
+
+    _numberOfOwnedSessions++;
+    _ownedSessions.push_back(newSession);
 }
 
-void Owner::configureSession(int sessionIndex, json sessionSettings) {
+void Owner::configureSession(int sessionId, json sessionSettings) {
     // Mocking some JSON values
-        sessionSettings["Player count"] = 4;
-        
-    GameSession newGameSession;
-    auto TotalPlayers = sessionSettings.find("Number Of Players");
-    std::list<GameSession>::iterator it = _listOfOwnedSessions.begin();
-    std::advance(it, sessionIndex);
-    it->setNumberOfPlayers(TotalPlayers);
+    sessionSettings["Game"] = 6000;
+    sessionSettings["Number Of Players"] = 4;
+    sessionSettings["Game Length"] = 6000;
 
+    // https://thispointer.com/using-stdfind-stdfind_if-with-user-defined-classes/
+    std::vector<GameSession> gameSessions = getOwnedSessions();
+    std::vector<GameSession>::iterator it;
+    it = std::find_if(gameSessions.begin(), gameSessions.end() [](GameSession const& session) {
+        return session.getId();
+    });
+    if (it != gameSessions.end) {
+        it->sessionConfigureSettings(sessionSettings);
+    }
 }
 
 void Owner::kickPlayer(GameSession& session, int playerId) {
@@ -42,8 +54,7 @@ void Owner::kickPlayer(GameSession& session, int playerId) {
     GameSession->removeUserFromSession(playerId);
 }
 
+// May not need this method
 void Owner::changeOwner(GameSession& session, int newOwnerId) {
     GameSession->setOwnerId(newOwnerId);
 }
-
- 
