@@ -31,8 +31,6 @@ void Owner::configureSession(int sessionIndex, json sessionSettings) {
         
     GameSession newGameSession;
     auto TotalPlayers = sessionSettings.find("Number Of Players");
-
-
     std::list<GameSession>::iterator it = _listOfOwnedSessions.begin();
     std::advance(it, sessionIndex);
     it->setNumberOfPlayers(TotalPlayers);
