@@ -33,7 +33,23 @@ void GameSession::removeAllUsersfromSession(){
 
 int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
     this->_JSONSetting = jsonSettings;
-    return 123;
+    Json settings = {
+        "configuration": {
+            "name": "Zen Game",
+            "player count": {"min": 0, "max": 0},
+            "audience": false,
+            "setup": { }
+        },
+        "constants": {},
+        "variables": {},
+        "per-player": {},
+        "per-audience": {},
+        "rules": {}
+        };
+        this-> totalPlayers = settings["configuration"]["player count"]["max"];
+        this->_ListSettingVars = settings["variables"];
+        this->_ListPerAudience = settings["per-audience"];
+
 }
 
 void  GameSession::SetTotalNumPlayers(int totalPlayers) { 

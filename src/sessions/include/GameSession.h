@@ -19,8 +19,14 @@ public:
     size_t totalPlayerCount();
     int sessionConfigureSettings(std::string jsonSettings);
     void createInviteCode()
+    std::list<Player> GetPlayers();
+    
 
 private:
+ 
+    std::list<string> _ListSettingVars;
+    std::list<string> _ListPerAudience;
+    std::list<string> _ListRules;
     std::string _currentGame;
     std::list<int> _playersIDInSession;
 
