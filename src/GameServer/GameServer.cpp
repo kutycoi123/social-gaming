@@ -129,28 +129,25 @@ static void handleMessages(networking::Server& server){
 
 #pragma region ClientServerNetworkingThread
 
-namespace Commands {
-    const std::string QUIT = "/quit";
-	const std::string SHUTDOWN_SEVER = "/shutdown";
-	const std::string START_GAME = "/startgame";
-};
-
 static std::string processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::ostringstream result;
 
 	for (auto& message : incoming) {
 		std::cout << message.connection.id << "> " << message.text << "\n";
 
-		if (message.text == Commands::QUIT) {
+		if (message.text == "quit") {
 			server.disconnect(message.connection);
 		} 
-		else if (message.text == Commands::SHUTDOWN_SEVER) {
-			std::cout << "Shutting down server\n";
+		else if (message.text == "shutdown") {
+			std::cout << "shutdown game\n";
 			//kick all players
 		} 
-		else if (message.text == Commands::START_GAME){
-			std::cout << "Starting game\n";
+		else if (message.text == "start game"){
+			std::cout << "start game\n";
 		} 
+		else if (message.text == "create lobby"){
+			std::cout << "creating lobby\n";
+		}
 		else {
 			result << message.connection.id << "> " << message.text << "\n";
 		}
