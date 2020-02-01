@@ -3,9 +3,7 @@
 
 class GameRoomUI{
     public:
-
-        std::string getInvitation(){};
-        
+        std::string playerInvitationCode(){};
         bool checkPlayerInput(){};
         bool playerValidity(){};
         void updateServer(){};
@@ -15,5 +13,5 @@ class GameRoomUI{
 
     private:
         bool _gameConfigValid = true;
-        bool _gameWon = true;
+        bool _gameStatus = true;
 };

@@ -3,7 +3,7 @@
 #include <string>
 
 
-std::string GameRoomUI::getInvitation(){
+std::string GameRoomUI::playerInvitationCode(){
     std::string invitationCode;
     std::cout << "Please Enter invitation code: \n";
     std:getline(std::cin, invitationCode);
@@ -11,7 +11,6 @@ std::string GameRoomUI::getInvitation(){
         std::cout << "Invitation Code empty, please try again:";
         std::getline(std::cin, invitationCode);
     }
-    //return to server
     return invitationCode;
 }
 
@@ -30,7 +29,7 @@ std::string GameRoomUI::gameStart(const std::string& input){
     return;
 }
 void GameRoomUI::gameWon(){
-    if (gameWon)
+    if (_gameStatus)
     {
         std::cout << "Game Over\n";
         std::cout << "Congratutlations you won\n";
@@ -45,7 +44,6 @@ std::string GameRoomUI::helpCommand(){
     std::string userInput;
     std::cout <<"Please type 'H' for Help or 'E' to leave the game";
     std::getline(std::cin, userInput);
-
     return userInput;
 }
 
