@@ -14,23 +14,15 @@ list<Session> Owner::getOwnedSessions() {
     return _listOfOwnedSessions;
 }
 
-Session * Owner::createSession(json sessionSettings) {
+void Owner::createSession(json sessionSettings) {
     // Mocking some JSON values
     sessionSettings["Number Of Players"] = 4;
-    sessionSettings["GameId"] = 0;
 
-    _listOfOwnedSessions.
-
-    for (auto& [key, value] : json.items()) {
-        if (key.compare("Number Of Players")) {
-            (newSession->setNumberOfPlayers(value));
-        }
-        if (key.compare("Game")) {
-            (newSession->setGameId(value));
-        }
-    }
-
-    return newSession;
+    auto TotalPlayers = sessionSettings.find("Number Of Players");
+    GameSession newSession;
+    newSession.setNumberOfPlayers(*TotalPlayers);
+    _listOfOwnedSessions.push_back(newSession);
+ 
 }
 
 void Owner::configureSession(int sessionIndex, json sessionSettings) {
@@ -39,15 +31,10 @@ void Owner::configureSession(int sessionIndex, json sessionSettings) {
     
     GameSession newGameSession;
     auto TotalPlayers = sessionSettings.find("Number Of Players");
-
     std::list<GameSession>::iterator it = _listOfOwnedSessions.begin();
- 
-    // Advance the iterator by 2 positions,
-    std::advance(it, 2);
+    std::advance(it, sessionIndex);
+    it->setNumberOfPlayers(TotalPlayers);
 
-    newGameSession->setNumberOfPlayers(*TotalPlayers);
-
-    }
 }
 
 void Owner::kickPlayer(GameSession& session, int playerId) {
@@ -59,7 +46,4 @@ void Owner::changeOwner(GameSession& session, int newOwnerId) {
     GameSession->setOwnerId(newOwnerId);
 }
 
-void Owner::SendInvideCode(int index, Player player) {
-
-    _listOfOwnedSessions
-}
+ 

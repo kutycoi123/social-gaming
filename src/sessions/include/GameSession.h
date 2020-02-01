@@ -5,7 +5,7 @@
 #include <string>
 #include <list>
 #include "../invitation/include/Invitation.h"
-
+#include "../player/include/Player.h"
 class GameSession { 
     
 public:
@@ -22,7 +22,10 @@ public:
 
 private:
     std::string _currentGame;
-    std::list<int> _playersInSession;
+    std::list<int> _playersIDInSession;
+
+    std::list<Player> _playersList;
+
     std::string _sessionName;
     Invitation _invitationCode;
     int _gameID;

@@ -5,7 +5,7 @@ using namespace std;
 
 class Owner { 
     public:
-        GameSession * createSession();
+        void createSession();
         void configureSession(GameSession& session);
         list<GameSession> getSessionsOwned();
         void kickPlayer(GameSession& session, int playerId);
