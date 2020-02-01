@@ -23,14 +23,14 @@ class GameGeneralConfig{
         bool hasAudience() const;
         Setup getSetup() const;
 
-        void setName(const std::string& name);
-        void setPlayerCount(const PlayerCount& cnt);
-        void setAudience(bool audience);
-        void setSetup(const Setup& setup);
+        void setName(const std::string& );
+        void setPlayerCount(const PlayerCount& );
+        void setAudience(bool );
+        void setSetup(const Setup& );
 
     private:
         std::string _name;
-        PlayerCount _playerCnt;
+        PlayerCount _playerCount;
         bool _audience;
         Setup _setup;
 

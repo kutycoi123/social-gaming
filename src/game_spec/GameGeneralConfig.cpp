@@ -2,7 +2,7 @@
 
 GameGeneralConfig::GameGeneralConfig()
     : _name(""),
-      _playerCnt({0, 0}), 
+      _playerCount({0, 0}), 
       _audience(false),
       _setup({1}){
 }
@@ -13,11 +13,11 @@ GameGeneralConfig::GameGeneralConfig(const std::string& name)
 }
 
 inline std::string GameGeneralConfig::getName() const{
-    return _namel
+    return _name;
 }
 
 inline PlayerCount GameGeneralConfig::getPlayerCount() const{
-    return _playerCnt;
+    return _playerCount;
 }
 
 inline bool GameGeneralConfig::hasAudience() const{
@@ -32,8 +32,8 @@ void GameGeneralConfig::setName(const std::string& name){
     _name = std::move(name);
 }
 
-void GameGeneralConfig::setPlayerCount(const PlayerCount& cnt){
-    _playerCnt = cnt;
+void GameGeneralConfig::setPlayerCount(const PlayerCount& playerCount){
+    _playerCount = playerCount;
 }
 
 void GameGeneralConfig::setAudience(bool audience){
