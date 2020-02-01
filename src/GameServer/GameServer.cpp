@@ -1,5 +1,8 @@
+#include "GameSession.h"
 #include "Server.h"
 #include <nlohmann/json.hpp>
+
+#include "GameSessionManager.cpp"
 
 #include <atomic>
 #include <iostream>
@@ -8,24 +11,34 @@
 #include <string>
 #include <unistd.h>
 #include <thread>
-#include <ctime>
+#include <vector>
+
+
+struct MessageInfo{
+	networking::Message message;
+	//information about which lobby to send message to
+};
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 static std::vector<networking::Connection> clients;
 
+//main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
-static std::string processMessages(networking::Server&, const std::deque<networking::Message>&);
-static std::deque<networking::Message> buildOutgoing(const std::string&);
 static std::string getConfigurationFilePath(int, char* []);
 static void checkValidConfigurationFile(const nlohmann::json&);
+
+//message thread
 static void handleMessages(networking::Server&);
+static std::vector<MessageInfo> processMessages(networking::Server&, const std::deque<networking::Message>&);
+static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>&);
 
 int main(int argc, char* argv[]){
-	
+
 	//Read Json
-	std::ifstream configurationFile(getConfigurationFilePath(argc, argv), std::ifstream::in);
+	std::string configurationFilePath = getConfigurationFilePath(argc, argv);
+	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
 
 	nlohmann::json configuration = nlohmann::json::parse(configurationFile);
 
@@ -97,6 +110,8 @@ static void checkValidConfigurationFile(const nlohmann::json &configurationFile)
 	
 }
 
+#pragma region ClientServerNetworkingThread
+
 static void handleMessages(networking::Server& server){
 	
 	while (exit_thread_flag == false) {
@@ -113,8 +128,10 @@ static void handleMessages(networking::Server& server){
 		}
 
 		auto incoming = server.receive();
-		std::string log = processMessages(server, incoming);
-		auto outgoing = buildOutgoing(log);
+		std::vector<MessageInfo> returnMessage = processMessages(server, incoming);
+
+		auto outgoing = buildOutgoing(returnMessage);
+
 		server.send(outgoing);
 
 		if (errorWhileUpdating) {
@@ -127,14 +144,13 @@ static void handleMessages(networking::Server& server){
 	return;
 }
 
-#pragma region ClientServerNetworkingThread
+static std::vector<MessageInfo> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::vector<MessageInfo> result;
 
-static std::string processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
-	std::ostringstream result;
-
-	for (auto& message : incoming) {
+	for (networking::Message message : incoming) {
 		std::cout << message.connection.id << "> " << message.text << "\n";
 
+		//ad-hoc message processing
 		if (message.text == "quit") {
 			server.disconnect(message.connection);
 		} 
@@ -146,22 +162,54 @@ static std::string processMessages(networking::Server& server, const std::deque<
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			std::cout << "creating lobby\n";
+			GameSession init = GameSessionManager::createGameSession(1);
+			Invitation code = init.getInvitationCode();
+			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
+
+			std::cout << "creating lobby " << code.toString() << '\n';
+		}
+		else if (message.text == "join lobby"){
+			std::cout << "joining lobby\n";
 		}
 		else {
-			result << message.connection.id << "> " << message.text << "\n";
+			//find session based on connection id
+			//send message into game
+
+			//for example something 
+			//game[connection].message = blahblahblah
+		
+			result.push_back(MessageInfo{networking::Message{message.connection, message.text}});
 		}
 	}
-	return result.str();
+
+	//update all games
+
+	//process messages based on game logic
+
+	//get reply of all games
+
+	return result;
 }
 
 //teacher provided functions
-static std::deque<networking::Message> buildOutgoing(const std::string& log) {
-  std::deque<networking::Message> outgoing;
-  for (auto client : clients) {
-    outgoing.push_back({client, log});
-  }
-  return outgoing;
+static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>& returnMessage) {
+	std::deque<networking::Message> outgoing;
+
+	//only push to clients if they are in the same lobby
+
+	//dummy code
+	std::ostringstream log;
+
+	for(auto& message : returnMessage){
+		networking::Message rawMessage = message.message;
+		log << rawMessage.connection.id << "> " << rawMessage.text << '\n';
+	}
+
+	for (auto& client : clients) {
+		outgoing.push_back({client, log.str()});
+	}
+
+	return outgoing;
 }
 
 #pragma endregion
