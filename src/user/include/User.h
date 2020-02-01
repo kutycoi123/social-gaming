@@ -11,21 +11,21 @@
 
 class User {
 public:
-    User(const std::string& name, const std::string& id);
-    User(const std::string& name, const std::string& id, const Game& currentGame);
+    User(const uintptr_t& id);
+    User(const std::string& name, const uintptr_t& id);
+    // User(const std::string& name, const std::string& id, const Game& currentGame);
 
-    Game getCurrentGame() const;
+    // Game getCurrentGame() const;
     std::string getName() const;
-    std::string getId() const;
+    uintptr_t getId() const;
 
 	void setName(const std::string& name);
-	void setId(const std::string& id); 
-    void setCurrentGame(const Game& game);
+    // void setCurrentGame(const Game& game);
 
 private:
     std::string _name;
-    std::string _id;
-    Game _currentGame = nullptr;
+    uintptr_t _id;
+    // Game _currentGame = nullptr;
 };
 
 
