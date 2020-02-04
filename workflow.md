@@ -1,9 +1,12 @@
 # Project Workflow Guide
 
-### General Workflow
+### Project Organization
+
+### Git Workflow
 * Never push directly into master. Always create a separate branch when making any chance, no matter how small
 * Consistently merge master branch into your working branch to reduce the size of merge conflicts.
 * Never delete any branches (as per the course rules)
+* Never squash any commits (as per the course rules)
 
 ### Build
 
