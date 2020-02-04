@@ -30,10 +30,6 @@ void GameSession::removeAllUsersfromSession(){
 
 int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
     this->_JSONSetting = jsonSettings;
-<<<<<<< HEAD
-    return 123;
-}
-=======
 
 }
 
@@ -61,4 +57,3 @@ void GameSession::SetPlayerInviteCodes() {
         it->setInvitationCode(_invitationCode);
     }
 }
->>>>>>> 934dd06a0ce8f58ef9b347462226443bea00c836
