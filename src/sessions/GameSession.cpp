@@ -12,15 +12,15 @@ void GameSession::setCurrentGame(std::string name) {
     this->_currentGame = name;
 }
 
-void GameSession::addUserToSession(int userID) { 
-    _playersInSession.push_back(userID);
+void GameSession::addUserToSession(uintptr_t userID) { 
+    _playersIDInSession.push_back(userID);
 }
 
 size_t GameSession::totalPlayerCount(){
     return _playersIDInSession.size();
 }
 
-void GameSession::removeUserFromSession(int userID) { 
+void GameSession::removeUserFromSession(uintptr_t userID) { 
     _playersIDInSession.remove(userID);
 }
 
@@ -30,11 +30,9 @@ void GameSession::removeAllUsersfromSession(){
 
 int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
     this->_JSONSetting = jsonSettings;
-<<<<<<< HEAD
-    return 123;
-}
-=======
 
+    //dummy value
+    return 0;
 }
 
 void  GameSession::SetTotalNumPlayers(int totalPlayers) { 
@@ -46,7 +44,7 @@ void  GameSession::createInviteCode() {
     this->_invitationCode = "123";
 }
 
-void  GameSession::setOwner(int ownerID) { 
+void  GameSession::setOwner(uintptr_t ownerID) { 
     this->_ownerID = ownerID;
 }
 
@@ -58,7 +56,6 @@ void GameSession::SetPlayerInviteCodes() {
     std::list<Player>::iterator it;
     
     for (it = _playersList.begin(); it != _playersList.end(); it++) {
-        it->setInvitationCode(_invitationCode);
+        //it->setInvitationCode(_invitationCode);
     }
 }
->>>>>>> 934dd06a0ce8f58ef9b347462226443bea00c836
