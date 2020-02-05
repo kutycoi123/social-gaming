@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(player 
-  Player.cpp 
+
+add_library(session 
+  GameSession.cpp 
 )
 
-target_include_directories(player
+target_include_directories(session
   PUBLIC
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -12,13 +13,12 @@ target_include_directories(player
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-set_target_properties(player
+set_target_properties(session
                       PROPERTIES
                       LINKER_LANGUAGE CXX
                       CXX_STANDARD 17
 )
 
-target_link_libraries(player
+target_link_libraries(session
   invitation
-  user
 )
