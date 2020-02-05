@@ -9,7 +9,7 @@ namespace GameSessionManager{
     static std::unordered_map<std::string, GameSession> _invitationToGameSessionMap; 
 
     GameSession createGameSession(const User&);
-    std::optional<GameSession> joinGameSession(const User& player, const Invitation& invitation);
+    bool joinGameSession(const User& player, const std::string& invitation);
     void endGameSession(const GameSession& gameSession);
     size_t totalSessionCount();
     std::optional<Invitation> sessionExists(const Invitation& invitation);
@@ -23,14 +23,15 @@ namespace GameSessionManager{
         return gameSession;
     }
 
-    std::optional<GameSession> joinGameSession(int playerId, const Invitation& invitation){
-        auto found = _invitationToGameSessionMap.find(invitation.toString());
+    bool joinGameSession(const User& player, const std::string& invitation){
+        auto found = _invitationToGameSessionMap.find(invitation);
         if (found == _invitationToGameSessionMap.end()){
-            return std::nullopt;
+            return false;
         }
+
         auto gameSession = found->second;
-        gameSession.addUserToSession(playerId);
-        return std::optional<GameSession>{gameSession};
+        gameSession.addUserToSession(player.getId());
+        return true;
     }
 
     void endGameSession(const GameSession& gameSession){
@@ -54,13 +55,16 @@ namespace GameSessionManager{
     }
 
     bool inSession(const User& user){
-
+        //Check if given user is in a game session
+        for(auto& session : _sessionsList){
+            //if session contains player return true
+        }
         //dummy code
         return false;
     }
 
     std::vector<networking::Message> constructGameSessionMessage(const User&, const std::string& message){
-
+        //Queries GameSession to get the results of the game
         //dummy code
         return {};
     }

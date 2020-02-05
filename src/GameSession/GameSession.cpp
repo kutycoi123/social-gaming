@@ -1,7 +1,7 @@
 #include "include/GameSession.h"
 
 GameSession::GameSession(uintptr_t ownerID) : 
-    //_invitationCode (Invitation()), 
+    _invitationCode (Invitation()), 
     _ownerID (ownerID) {}
 
 Invitation GameSession::getInvitationCode() const {
@@ -39,10 +39,10 @@ void  GameSession::SetTotalNumPlayers(int totalPlayers) {
     this->_totalNumPlayers = totalPlayers;
 }
 
-void  GameSession::createInviteCode() { 
-    Invitation codeGenerator;
-    this->_invitationCode = "123";
-}
+//void  GameSession::createInviteCode() { 
+//    Invitation codeGenerator;
+//    this->_invitationCode = 
+//}
 
 void  GameSession::setOwner(uintptr_t ownerID) { 
     this->_ownerID = ownerID;

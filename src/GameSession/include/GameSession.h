@@ -18,7 +18,7 @@ public:
     void removeAllUsersfromSession();
     size_t totalPlayerCount();
     int sessionConfigureSettings(std::string jsonSettings);
-    void createInviteCode();
+    //void createInviteCode();
     void setOwner(uintptr_t ownerID);
     // std::list<Player> GetPlayers(); // TODO: Link with the User class
     void SetPlayerInviteCodes();
@@ -37,7 +37,7 @@ private:
     // std::list<Player> _playersList;  // TODO: Link with the User class
 
     std::string _sessionName;
-    std::string _invitationCode;
+    Invitation _invitationCode;
     int _gameID;
     int _totalNumPlayers;
     uintptr_t _ownerID;

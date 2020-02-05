@@ -1,9 +1,10 @@
-#include "GameSession.h"
 #include "Server.h"
 #include <nlohmann/json.hpp>
 
-#include "GameSessionManager.cpp"
+#include "GameSession.h"
 #include "User.h"
+
+#include "GameSessionManager.cpp"
 
 #include <atomic>
 #include <iostream>
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]){
 	std::string message = "";
 	do{
 		globalMessage = message;
-		std::cin >> message;
+		std::getline(std::cin, message);
 	} while (message != "shutdown");
 
 	exit_thread_flag = true;
@@ -194,8 +195,17 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 
 			std::cout << "creating lobby " << code.toString() << '\n';
 		}
-		else if (message.text == "join lobby") {
-			std::cout << "joining lobby 1\n";
+		else if (message.text.find("join") != std::string::npos) {
+			std::string inviteCode = message.text.substr(5);
+
+			User player = connectionIdToUser(message.connection.id);
+
+			if(GameSessionManager::joinGameSession(player, inviteCode)){
+				std::cout << "joining lobby " << inviteCode << '\n';
+			}
+			else {
+				std::cout << "lobby does not exist\n";
+			}
 
 		} 
 		else if (message.text == "/username") {
@@ -239,20 +249,18 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 		User messageOwner = connectionIdToUser(message.connection.id);
 
 		if(GameSessionManager::inSession(messageOwner)) {
-			//send to everyone in session
+			//send to everyone in session or not depending on game logic
 		}
 		else {
 			//send only to them
-			log << message.connection.id << "> " << message.text << '\n';
-
-			//TODO: Add method to user for creating connection?
-			outgoing.push_back({networking::Connection{message.connection.id}, log.str()});
+			log << messageOwner.getId() << "> " << message.text << '\n';
+			outgoing.push_back({networking::Connection{messageOwner.getId()}, log.str()});
 		}
 	}
 
 	if(globalMessage != ""){
 		for(User user : users){
-			outgoing.push_back({networking::Connection{user.connection.id}, globalMessage});
+			outgoing.push_back({networking::Connection{user.getId()}, globalMessage});
 		}
 
 		globalMessage = "";
