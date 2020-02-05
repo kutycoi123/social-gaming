@@ -4,11 +4,6 @@ User::User(const uintptr_t& id) {
     _id = id;
 }
 
-User::User(const std::string& name, const uintptr_t& id) {
-    _name = name;
-    _id = id;
-}
-
 // User::User(const std::string& name, const std::string& id, const Game& currentGame) {
 //      _name = name;
 //      _id = id;

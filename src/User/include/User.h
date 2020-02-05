@@ -2,6 +2,7 @@
 #define USER_H
 
 #include <string>
+#include <unordered_map>
 
 // TODO MZEGAR: Things to consider in the future
 // 1. Some point system? "global information will be displayed to all players on the main game screen."
@@ -12,8 +13,6 @@
 class User {
 public:
     User(const uintptr_t& id);
-    User(const std::string& name, const uintptr_t& id);
-    // User(const std::string& name, const std::string& id, const Game& currentGame);
 
     // Game getCurrentGame() const;
     std::string getName() const;

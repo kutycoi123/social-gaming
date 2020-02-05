@@ -17,8 +17,7 @@
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-static std::vector<networking::Connection> clients;
-static std::vector<User> users;
+static std::unordered_map<std::uintptr_t, User> idToUserMap; 
 static std::string globalMessage = "";
 
 //main thread
@@ -31,7 +30,7 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 static void handleMessages(networking::Server&);
 static std::vector<networking::Message> processMessages(networking::Server&, const std::deque<networking::Message>&);
 static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>&);
-static User connectionIdToUser(uintptr_t);
+static User& getUserFromMap(std::unordered_map<std::uintptr_t, User>& map, std::uintptr_t id);
 
 int main(int argc, char* argv[]){
 
@@ -72,23 +71,14 @@ int main(int argc, char* argv[]){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	users.push_back(User(c.id));
+	idToUserMap.insert(std::make_pair(c.id, User(c.id)));
 }
 
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 
-	// TODO: Use std methods of iterating over this when refactor comes in
-	for (int i = 0; i < users.size(); i++)
-	{
-		if (users.at(i).getId() == c.id) {
-			users.erase(users.begin() + i);
-		}
-	}
-
-	auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-	clients.erase(eraseBegin, std::end(clients));
+	idToUserMap.erase(c.id);
 }
 
 static std::string getConfigurationFilePath(int argc, char* argv[]){
@@ -160,13 +150,14 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 
 	for (networking::Message message : incoming) {
 
-		// TODO Mzegar: Use profs iteration when refactor happens
-		// Figure out somewhere else to put this
+		// TODO Mzegar: Testing, this should go somewhere else
+		// Figure out somewhere else to put this and refactor
+		// Depending on our command structure in the future, we may only need to lookup the user once here 
+		// (we do same lookups at the bottom too) Ex. User owner = getUserFrom...
 		std::string name = std::string();
-		for (auto& user : users) {
-			if (message.connection.id == user.getId() && !user.getName().empty()) {
-				name = user.getName();
-			}
+		User user = getUserFromMap(idToUserMap, message.connection.id);
+		if (message.connection.id == user.getId() && !user.getName().empty()) {
+			name = user.getName();
 		}
 
 		if (!name.empty()) {
@@ -187,7 +178,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			User owner = connectionIdToUser(message.connection.id);
+			User owner = getUserFromMap(idToUserMap, message.connection.id);
 	
 			GameSession init = GameSessionManager::createGameSession(owner);
 			Invitation code = init.getInvitationCode();
@@ -198,7 +189,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		else if (message.text.find("join") != std::string::npos) {
 			std::string inviteCode = message.text.substr(5);
 
-			User player = connectionIdToUser(message.connection.id);
+			User player = getUserFromMap(idToUserMap, message.connection.id);
 
 			if(GameSessionManager::joinGameSession(player, inviteCode)){
 				std::cout << "joining lobby " << inviteCode << '\n';
@@ -210,13 +201,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		} 
 		else if (message.text == "/username") {
 			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
-			// Use profs iteration when refactor happens
-			for (auto& user : users) {
-				// TODO: Maybe a hash table makes sense for this in the future, regardless template code
-				if (message.connection.id == user.getId()) {
-					user.setName("Testing");
-				}
-			}
+			user.setName("TestName");
 		}
 		else {
 			//find session based on connection id
@@ -246,8 +231,7 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 	for(auto& message : returnMessage){
 		std::ostringstream log;
 
-		User messageOwner = connectionIdToUser(message.connection.id);
-
+		User messageOwner = getUserFromMap(idToUserMap, message.connection.id);
 		if(GameSessionManager::inSession(messageOwner)) {
 			//send to everyone in session or not depending on game logic
 		}
@@ -258,8 +242,10 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 		}
 	}
 
-	if(globalMessage != ""){
-		for(User user : users){
+	if(globalMessage != "") {
+		for(auto& entry : idToUserMap){
+			User user = entry.second;
+
 			outgoing.push_back({networking::Connection{user.getId()}, globalMessage});
 		}
 
@@ -269,14 +255,21 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 	return outgoing;
 }
 
-static User connectionIdToUser(uintptr_t connectionId){
-	for(auto& user : users){
-		if(user.getId() == connectionId){
-			return user;
-		}
-	}
+// I'm thinking of having some UserManager class
+// It will contain this method below alongside
+// transfering users between hashmaps. (if we decide to go that route)
+static User& getUserFromMap(std::unordered_map<std::uintptr_t, User>& map, std::uintptr_t id) {
+    std::unordered_map<std::uintptr_t, User>::iterator iterator = map.find(id);
 
-	throw std::runtime_error("no such user");
+    // Depending on the semantics of User, the copy this makes on returning might also be undesirable. 
+    //Types like std::optional are meant to encode these sorts of "maybe" situations (just as in Java and other languages).
+    // If the method is meant to be used internally, using find_if at each site is idiomatic.
+
+    if (iterator != map.end()) {
+        return iterator->second;
+    } else {
+        throw std::runtime_error("no such user");
+    }
 }
 
 #pragma endregion
