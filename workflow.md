@@ -1,7 +1,7 @@
 # Project Workflow Guide
 
 ### Project Organization
-*Are there any rules related to project organization (i.e. how folders/directories are organized)?*
+* Source (src) folders that contain cpp files must be named in PascalCase according to their primary class name.
 
 ### Git Workflow
 * NEVER push directly into master. Always create a separate branch when making any change, no matter how small.
