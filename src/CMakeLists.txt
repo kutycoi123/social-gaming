@@ -1,5 +1,4 @@
 add_subdirectory(GameServer)
-add_subdirectory(sessions)
-add_subdirectory(invitation)
-add_subdirectory(user)
-add_subdirectory(player)
+add_subdirectory(GameSession)
+add_subdirectory(Invitation)
+add_subdirectory(User)

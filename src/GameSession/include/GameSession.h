@@ -5,7 +5,6 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
-#include "Player.h"
 #include<bits/stdc++.h> 
 class GameSession { 
     
@@ -21,12 +20,12 @@ public:
     int sessionConfigureSettings(std::string jsonSettings);
     void createInviteCode();
     void setOwner(uintptr_t ownerID);
-    std::list<Player> GetPlayers();
+    // std::list<Player> GetPlayers(); // TODO: Link with the User class
     void SetPlayerInviteCodes();
     void SetTotalNumPlayers(int totalPlayers);
     void addUserIDToSession(int userID);
 
-    std::list<Player> getPlayers();
+    // std::list<Player> getPlayers();  // TODO: Link with the User class
 
 private:
  
@@ -35,7 +34,7 @@ private:
     std::list<std::string> _ListRules;
     std::string _currentGame;
     std::list<uintptr_t> _playersIDInSession;
-    std::list<Player> _playersList;
+    // std::list<Player> _playersList;  // TODO: Link with the User class
 
     std::string _sessionName;
     std::string _invitationCode;

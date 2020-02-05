@@ -48,14 +48,14 @@ void  GameSession::setOwner(uintptr_t ownerID) {
     this->_ownerID = ownerID;
 }
 
-std::list<Player> GameSession::getPlayers() { 
-    return this->_playersList;
-}
+// std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class
+//     return this->_playersList;
+// }
 
-void GameSession::SetPlayerInviteCodes() {
-    std::list<Player>::iterator it;
+// void GameSession::SetPlayerInviteCodes() {  // TODO: Link with the User class
+//     std::list<Player>::iterator it;
     
-    for (it = _playersList.begin(); it != _playersList.end(); it++) {
-        //it->setInvitationCode(_invitationCode);
-    }
-}
+//     for (it = _playersList.begin(); it != _playersList.end(); it++) {
+//         //it->setInvitationCode(_invitationCode);
+//     }
+// }
