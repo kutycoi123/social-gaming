@@ -31,12 +31,6 @@ add_custom_command(TARGET GameServer POST_BUILD
                        ${PROJECT_BINARY_DIR}/webchat.html
                    )
 
-add_custom_command(TARGET GameServer POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       ${CMAKE_CURRENT_SOURCE_DIR}/style.css
-                       ${PROJECT_BINARY_DIR}/style.css
-                   )
-
 install(FILES ServerProperties.json DESTINATION config)
 
 install(TARGETS GameServer
