@@ -3,7 +3,7 @@
 #include <nlohmann/json.hpp>
 
 #include "GameSessionManager.cpp"
-#include "../user/User.cpp"
+#include "User.h"
 
 #include <atomic>
 #include <iostream>
@@ -167,9 +167,9 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
 		std::string name = std::string();
-		for (int i = 0; i < users.size(); ++i) {
-			if (message.connection.id == users.at(i).getId() && !users.at(i).getName().empty()) {
-				name = users.at(i).getName();
+		for (auto& user : users) {
+			if (message.connection.id == user.getId() && !user.getName().empty()) {
+				name = user.getName();
 			}
 		}
 
@@ -199,13 +199,14 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 		}
 		else if (message.text == "join lobby") {
 			std::cout << "joining lobby\n";
-		} else if (message.text == "/username") {
+		} 
+		else if (message.text == "/username") {
 			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
 			// Use profs iteration when refactor happens
-			for (int i = 0; i < users.size(); ++i) {
+			for (auto& user : users) {
 				// TODO: Maybe a hash table makes sense for this in the future, regardless template code
-				if (message.connection.id == users.at(i).getId()) {
-					users.at(i).setName("Testing");
+				if (message.connection.id == user.getId()) {
+					user.setName("Testing");
 				}
 			}
 		}
