@@ -8,14 +8,16 @@ namespace GameSessionManager{
     static std::list<Invitation> _inviteCodes;
     static std::unordered_map<std::string, GameSession> _invitationToGameSessionMap; 
 
-    GameSession createGameSession(int ownerId);
-    std::optional<GameSession> joinGameSession(int playerId, const Invitation& invitation);
+    GameSession createGameSession(const User&);
+    std::optional<GameSession> joinGameSession(const User& player, const Invitation& invitation);
     void endGameSession(const GameSession& gameSession);
     size_t totalSessionCount();
     std::optional<Invitation> sessionExists(const Invitation& invitation);
+    bool inSession(const User&);
+    std::vector<networking::Message> constructGameSessionMessage(const User&, const std::string& message);
 
-    GameSession createGameSession(int ownerId){
-        GameSession gameSession{ownerId};
+    GameSession createGameSession(const User& owner){
+        GameSession gameSession{owner.getId()};
         _sessionsList.push_back(gameSession);
         _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode().toString(), gameSession));
         return gameSession;
@@ -49,5 +51,17 @@ namespace GameSessionManager{
             return std::nullopt;
         }
         return std::optional<Invitation>{invitation};
+    }
+
+    bool inSession(const User& user){
+
+        //dummy code
+        return false;
+    }
+
+    std::vector<networking::Message> constructGameSessionMessage(const User&, const std::string& message){
+
+        //dummy code
+        return {};
     }
 }

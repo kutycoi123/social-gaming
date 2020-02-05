@@ -9,7 +9,7 @@
 class GameSession { 
     
 public:
-    GameSession(int ownerID);
+    GameSession(uintptr_t ownerID);
     Invitation getInvitationCode() const;
     std::string getSessionName() const;
     void setCurrentGame(std::string name);
@@ -24,8 +24,8 @@ public:
     void SetPlayerInviteCodes();
     void SetTotalNumPlayers(int totalPlayers);
     void addUserIDToSession(int userID);
-
     // std::list<Player> getPlayers();  // TODO: Link with the User class
+
 
 private:
  

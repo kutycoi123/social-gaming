@@ -14,16 +14,11 @@
 #include <thread>
 #include <vector>
 
-
-struct MessageInfo{
-	networking::Message message;
-	//information about which lobby to send message to
-};
-
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 static std::vector<networking::Connection> clients;
 static std::vector<User> users;
+static std::string globalMessage = "";
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -33,8 +28,9 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 
 //message thread
 static void handleMessages(networking::Server&);
-static std::vector<MessageInfo> processMessages(networking::Server&, const std::deque<networking::Message>&);
-static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>&);
+static std::vector<networking::Message> processMessages(networking::Server&, const std::deque<networking::Message>&);
+static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>&);
+static User connectionIdToUser(uintptr_t);
 
 int main(int argc, char* argv[]){
 
@@ -61,6 +57,7 @@ int main(int argc, char* argv[]){
 	//while server up, process messages
 	std::string message = "";
 	do{
+		globalMessage = message;
 		std::cin >> message;
 	} while (message != "shutdown");
 
@@ -74,8 +71,6 @@ int main(int argc, char* argv[]){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	clients.push_back(c);
 	users.push_back(User(c.id));
 }
 
@@ -83,9 +78,8 @@ static void OnConnect(networking::Connection c) {
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	// Also use std methods of iterating over this when refactor comes in
-	for (int i = users.size(); i >= 0; --i)
+	// TODO: Use std methods of iterating over this when refactor comes in
+	for (int i = 0; i < users.size(); i++)
 	{
 		if (users.at(i).getId() == c.id) {
 			users.erase(users.begin() + i);
@@ -143,7 +137,8 @@ static void handleMessages(networking::Server& server){
 		}
 
 		auto incoming = server.receive();
-		std::vector<MessageInfo> returnMessage = processMessages(server, incoming);
+		
+		std::vector<networking::Message> returnMessage = processMessages(server, incoming);
 
 		auto outgoing = buildOutgoing(returnMessage);
 
@@ -159,8 +154,8 @@ static void handleMessages(networking::Server& server){
 	return;
 }
 
-static std::vector<MessageInfo> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
-	std::vector<MessageInfo> result;
+static std::vector<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::vector<networking::Message> result;
 
 	for (networking::Message message : incoming) {
 
@@ -191,14 +186,17 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			GameSession init = GameSessionManager::createGameSession(1);
+			User owner = connectionIdToUser(message.connection.id);
+	
+			GameSession init = GameSessionManager::createGameSession(owner);
 			Invitation code = init.getInvitationCode();
-			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
+			result.push_back(networking::Message{message.connection, "Your Invitation Code is: " + code.toString()});
 
 			std::cout << "creating lobby " << code.toString() << '\n';
 		}
 		else if (message.text == "join lobby") {
-			std::cout << "joining lobby\n";
+			std::cout << "joining lobby 1\n";
+
 		} 
 		else if (message.text == "/username") {
 			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
@@ -217,7 +215,7 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			//for example something 
 			//game[connection].message = blahblahblah
 		
-			result.push_back(MessageInfo{networking::Message{message.connection, message.text}});
+			result.push_back(networking::Message{message.connection, message.text});
 		}
 	}
 
@@ -231,24 +229,46 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 }
 
 //teacher provided functions
-static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>& returnMessage) {
+static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>& returnMessage) {
 	std::deque<networking::Message> outgoing;
 
-	//only push to clients if they are in the same lobby
-
 	//dummy code
-	std::ostringstream log;
-
 	for(auto& message : returnMessage){
-		networking::Message rawMessage = message.message;
-		log << rawMessage.connection.id << "> " << rawMessage.text << '\n';
+		std::ostringstream log;
+
+		User messageOwner = connectionIdToUser(message.connection.id);
+
+		if(GameSessionManager::inSession(messageOwner)) {
+			//send to everyone in session
+		}
+		else {
+			//send only to them
+			log << message.connection.id << "> " << message.text << '\n';
+
+			//TODO: Add method to user for creating connection?
+			outgoing.push_back({networking::Connection{message.connection.id}, log.str()});
+		}
 	}
 
-	for (auto& client : clients) {
-		outgoing.push_back({client, log.str()});
+	if(globalMessage != ""){
+		for(User user : users){
+			outgoing.push_back({networking::Connection{user.connection.id}, globalMessage});
+		}
+
+		globalMessage = "";
 	}
 
 	return outgoing;
+}
+
+static User connectionIdToUser(uintptr_t connectionId){
+	for(auto& user : users){
+		if(user.getId() == connectionId){
+			return user;
+		}
+	}
+
+	throw std::runtime_error("no such user");
 }
 
 #pragma endregion
