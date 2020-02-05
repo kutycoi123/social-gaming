@@ -5,7 +5,8 @@
 
 ### Git Workflow
 * NEVER push directly into master. Always create a separate branch when making any change, no matter how small.
-* Consistently merge master branch into your working branch to reduce the size of merge conflicts.
+* Consistently rebase (effectively a merge) master branch into your working branch to reduce the size of merge conflicts. 
+    * This is done with "git rebase master".
 * NEVER delete any branches (as per the course rules).
 * NEVER squash any commits (as per the course rules).
 
