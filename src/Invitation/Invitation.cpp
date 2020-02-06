@@ -21,7 +21,7 @@ std::string Invitation::generateInvitationCode(){
     long max = pow(10, INVITATION_CODE_LENGTH) - 1;
     std::uniform_int_distribution<long> dis(min, max);
     auto inviteCode = std::to_string(dis(gen));
-    // Checks for duplicates
+    // Checks to see if the generated inviteCode is duplicated
     while (GameSessionManager::sessionExists(inviteCode).has_value()){
         inviteCode = std::to_string(dis(gen));
     }
