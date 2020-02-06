@@ -1,17 +1,12 @@
-#include "Rule.h"
+#include "include/rule.h"
 
-
-Rule::Rule() : _rule(""){
+Rule::Rule(const std::string& rule) : _rule(rule){
 }
 
-inline std::string Rule::getRule() const{
-	return _rule;
+std::string Rule::getRule() const{
+    return _rule;
 }
-
 
 void Rule::setRule(const std::string& rule){
-	_rule = rule;
+    _rule = rule;
 }
-
-
-
