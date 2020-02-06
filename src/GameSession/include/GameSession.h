@@ -5,7 +5,8 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
-#include<bits/stdc++.h> 
+// #include<bits/stdc++.h> 
+
 class GameSession { 
     
 public:
@@ -18,7 +19,6 @@ public:
     void removeAllUsersfromSession();
     size_t totalPlayerCount();
     int sessionConfigureSettings(std::string jsonSettings);
-    void createInviteCode();
     void setOwner(uintptr_t ownerID);
     // std::list<Player> GetPlayers(); // TODO: Link with the User class
     void SetPlayerInviteCodes();
@@ -26,6 +26,10 @@ public:
     void addUserIDToSession(int userID);
 
     // std::list<Player> getPlayers();  // TODO: Link with the User class
+
+    bool operator==(const GameSession& gameSession ) const {
+        return _invitationCode == gameSession._invitationCode;
+    }
 
 private:
  
@@ -37,7 +41,7 @@ private:
     // std::list<Player> _playersList;  // TODO: Link with the User class
 
     std::string _sessionName;
-    std::string _invitationCode;
+    const Invitation _invitationCode;
     int _gameID;
     int _totalNumPlayers;
     uintptr_t _ownerID;
