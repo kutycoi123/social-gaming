@@ -1,8 +1,8 @@
-#include "include/extend.h"
+#include "Extend.h"
 
-Extend::Extend() : Rule("extend"), _target(""), _list(NULL){}
+Extend::Extend() : Rule("extend"), _target(""){}
 
-Extend::Extend(const std::string& target, const SpecValude& list) : Rule("extend"), _target(target), _list(list){}
+Extend::Extend(const std::string& target, const SpecValue& list) : Rule("extend"), _target(target), _list(list){}
 
 std::string Extend::getTarget() const{
     return _target;

@@ -1,8 +1,8 @@
-#include "include/deal.h"
+#include "Deal.h"
 
-Deal::Deal() : Rule("deal"), _from(""), _to(NULL), _count(0){}
+Deal::Deal() : Rule("deal"), _from(""), _count(0){}
 
-Deal::Deal(cosnt std::string& from, const SpecValue& to, const int count) : Rule("deal"), _from(from), _to(to), _count(cont){}
+Deal::Deal(const std::string& from, const SpecValue& to, const int count) : Rule("deal"), _from(from), _to(to), _count(count){}
 
 std::string Deal::getFrom() const{
     return _from;
@@ -13,7 +13,7 @@ SpecValue Deal::getTo() const{
 }
 
 int Deal::getCount() const{
-    return count;
+    return _count;
 }
 
 void Deal::setFrom(const std::string& from){

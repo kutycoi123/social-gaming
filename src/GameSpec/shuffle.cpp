@@ -1,4 +1,4 @@
-#include "include/shuffle.h"
+#include "Shuffle.h"
 
 Shuffle::Shuffle() : Rule("shuffle"), _list(""){}
 

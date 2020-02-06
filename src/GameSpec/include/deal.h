@@ -13,7 +13,7 @@ class Deal : public Rule{
         SpecValue getTo() const;
         int getCount() const;
         void setFrom(const std::string& from);
-        void setTo(cosnt SpecValue& to);
+        void setTo(const SpecValue& to);
         void setCount(const int count);
     private:
         std::string _from;
@@ -21,4 +21,4 @@ class Deal : public Rule{
         int _count;
 };
 
-#enif
+#endif

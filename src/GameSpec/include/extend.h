@@ -1,7 +1,7 @@
 #ifndef EXTEND.H
 #define EXTEND.H
 
-#include "rule.h"
+#include "Rule.h"
 #include "GameSpec.h"
 #include <string>
 

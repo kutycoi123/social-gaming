@@ -9,7 +9,7 @@ class Rule{
         std::string getRule() const;
         void setRule(const std::string& rule);
     private:
-        std::string Rule;
+        std::string _rule;
 };
 
 #endif

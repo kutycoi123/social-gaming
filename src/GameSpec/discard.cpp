@@ -1,4 +1,4 @@
-#include "include/discard.h"
+#include "Discard.h"
 
 Discard::Discard() : Rule("discard"), _from(""), _count(0){}
 

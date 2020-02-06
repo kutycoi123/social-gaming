@@ -1,4 +1,4 @@
-#include "include/rule.h"
+#include "Rule.h"
 
 Rule::Rule(const std::string& rule) : _rule(rule){
 }

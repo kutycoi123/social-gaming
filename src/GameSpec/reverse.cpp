@@ -1,4 +1,4 @@
-#include "include/reverse.h"
+#include "Reverse.h"
 
 Reverse::Reverse() : Rule("reverse"), _list(""){}
 

@@ -1,6 +1,6 @@
-#include "include/add.h"
+#include "Add.h"
 
-Add::Add() : Rule("add"), _to(""), _value(NULL){}
+Add::Add() : Rule("add"), _to(""){}
 
 Add::Add(const std::string& to, const SpecValue& value) : Rule("add"), _to(to), _value(value){}
 
@@ -16,5 +16,5 @@ void Add::setTo(const std::string& to){
 }
 
 void Add::setValue(const SpecValue& value){
-    _valude = value;
+    _value = value;
 }

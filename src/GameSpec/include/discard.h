@@ -10,7 +10,7 @@ class Discard : public Rule{
         Discard(const std::string& from, const int count);
         std::string getFrom() const;
         int getCount() const;
-        void setFrom(const std::string from);
+        void setFrom(const std::string& from);
         void setCount(const int count);
     private:
         std::string _from;
