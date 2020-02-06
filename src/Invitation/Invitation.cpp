@@ -1,5 +1,5 @@
 #include "include/Invitation.h"
-// #include "GameSessionManager.h"
+#include "GameSessionManager.h"
 #include <random>
 #include <math.h>
 
@@ -21,7 +21,8 @@ std::string Invitation::generateInvitationCode(){
     long max = pow(10, INVITATION_CODE_LENGTH) - 1;
     std::uniform_int_distribution<long> dis(min, max);
     auto inviteCode = std::to_string(dis(gen));
-    while (false){ // TODO : Replace this stub with GameSessionManager logic
+    // Checks for duplicates
+    while (GameSessionManager::sessionExists(inviteCode).has_value()){
         inviteCode = std::to_string(dis(gen));
     }
     return inviteCode;
