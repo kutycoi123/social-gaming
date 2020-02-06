@@ -2,22 +2,42 @@
 
 GameSession::GameSession(int ownerID) : 
     //_invitationCode (Invitation()), 
-    _ownerID (ownerID) {}
+    _ownerID (ownerID) {
+        _isGameStarted = false;
+    }
+
+// Accessors
+size_t GameSession::getTotalPlayerCount() const{
+    return _playersIDInSession.size();
+}
 
 Invitation GameSession::getInvitationCode() const {
     return _invitationCode;
 }
 
+std::string GameSession::getSessionName() const {
+    return _sessionName;
+}
+
+bool GameSession::isGameStarted() const {
+    return _isGameStarted;
+}
+
+// Mutators
 void GameSession::setCurrentGame(std::string name) {
-    this->_currentGame = name;
+    _currentGame = name;
+}
+
+void  GameSession::setOwner(uintptr_t ownerID) { 
+    _ownerID = ownerID;
+}
+
+void  GameSession::setTotalNumPlayers(int totalPlayers) { 
+    _totalNumPlayers = totalPlayers;
 }
 
 void GameSession::addUserToSession(uintptr_t userID) { 
     _playersIDInSession.push_back(userID);
-}
-
-size_t GameSession::totalPlayerCount(){
-    return _playersIDInSession.size();
 }
 
 void GameSession::removeUserFromSession(uintptr_t userID) { 
@@ -28,31 +48,25 @@ void GameSession::removeAllUsersfromSession(){
     _playersIDInSession.clear();
 }
 
-int GameSession::sessionConfigureSettings(std::string jsonSettings) { 
-    this->_JSONSetting = jsonSettings;
-
-    //dummy value
-    return 0;
+void GameSession::setConfigurationSettings(std::string jsonSettings) { 
+    _JSONSetting = jsonSettings;
 }
 
-void  GameSession::SetTotalNumPlayers(int totalPlayers) { 
-    this->_totalNumPlayers = totalPlayers;
-}
-
-void  GameSession::createInviteCode() { 
+void GameSession::createInviteCode() { 
+    // TODO: Replace with implementation of invite code
     Invitation codeGenerator;
-    this->_invitationCode = "123";
+    _invitationCode = "123";
 }
 
-void  GameSession::setOwner(uintptr_t ownerID) { 
-    this->_ownerID = ownerID;
+void GameSession::startGame() {
+    _isGameStarted = true;
 }
 
 // std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class
 //     return this->_playersList;
 // }
 
-// void GameSession::SetPlayerInviteCodes() {  // TODO: Link with the User class
+// void GameSession::setPlayerInviteCodes() {  // TODO: Link with the User class
 //     std::list<Player>::iterator it;
     
 //     for (it = _playersList.begin(); it != _playersList.end(); it++) {
