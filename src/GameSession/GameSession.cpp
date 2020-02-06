@@ -1,7 +1,7 @@
 #include "include/GameSession.h"
 
 GameSession::GameSession(int ownerID) : 
-    //_invitationCode (Invitation()), 
+    _invitationCode (Invitation()), 
     _ownerID (ownerID) {}
 
 Invitation GameSession::getInvitationCode() const {
@@ -37,11 +37,6 @@ int GameSession::sessionConfigureSettings(std::string jsonSettings) {
 
 void  GameSession::SetTotalNumPlayers(int totalPlayers) { 
     this->_totalNumPlayers = totalPlayers;
-}
-
-void  GameSession::createInviteCode() { 
-    Invitation codeGenerator;
-    this->_invitationCode = "123";
 }
 
 void  GameSession::setOwner(uintptr_t ownerID) { 
