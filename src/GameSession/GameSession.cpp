@@ -16,7 +16,7 @@ void GameSession::addUserToSession(uintptr_t userID) {
     _playersIDInSession.push_back(userID);
 }
 
-size_t GameSession::totalPlayerCount(){
+size_t GameSession::totalPlayerCount() const noexcept{
     return _playersIDInSession.size();
 }
 

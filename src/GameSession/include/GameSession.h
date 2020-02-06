@@ -17,7 +17,7 @@ public:
     void addUserToSession(uintptr_t userID);
     void removeUserFromSession(uintptr_t userID);
     void removeAllUsersfromSession();
-    size_t totalPlayerCount();
+    size_t totalPlayerCount() const noexcept;
     int sessionConfigureSettings(std::string jsonSettings);
     void setOwner(uintptr_t ownerID);
     // std::list<Player> GetPlayers(); // TODO: Link with the User class

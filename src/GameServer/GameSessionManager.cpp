@@ -9,12 +9,17 @@ namespace GameSessionManager{
     namespace {
         struct InvitationHash {
             std::size_t operator()(const Invitation& invitation) const {
-                std::hash<std::string> myHash;
-                return myHash(invitation.toString());
+                return std::hash<std::string>()(invitation.toString());
             }
         };
 
-        static std::list<GameSession> _sessionsList;
+        struct GameSessionHash {
+            std::size_t operator()(const GameSession& gameSession) const {
+                return std::hash<std::string>()(gameSession.getInvitationCode().toString());
+            }
+        };
+
+        static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
         static std::unordered_set<Invitation, InvitationHash> _inviteCodes;
         static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap; 
     }
@@ -27,9 +32,9 @@ namespace GameSessionManager{
 
     GameSession createGameSession(int ownerId){
         GameSession gameSession{ownerId};
-        _sessionsList.push_back(gameSession);
+        _sessionsList.insert(gameSession);
         _inviteCodes.insert(gameSession.getInvitationCode());
-        _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode().toString(), gameSession));
+        _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
         return gameSession;
     }
 
@@ -47,8 +52,8 @@ namespace GameSessionManager{
         auto invitationCode = gameSession.getInvitationCode();
         if (sessionExists(invitationCode)){
             _invitationToGameSessionMap.erase(invitationCode);
-            _inviteCodes.erase(gameSession.getInvitationCode());
-            _sessionsList.remove(gameSession);
+            _inviteCodes.erase(invitationCode);
+            _sessionsList.erase(gameSession);
         }
     }
 
