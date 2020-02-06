@@ -10,6 +10,16 @@
 // 4. Some icon system? country system?
 // 5. Consider storing some connection info here or having this User class be a child of the web-socket-client
 
+class UserId {
+public:
+    UserId(const uintptr_t& id);
+    uintptr_t getId() const;
+    bool operator==(const UserId& id) const;
+
+private:
+    uintptr_t _id;
+};
+
 class User {
 public:
     User(const uintptr_t& id);

@@ -1,5 +1,17 @@
 #include "include/User.h"
 
+UserId::UserId(const uintptr_t& id) {
+    _id = id;
+}
+
+std::uintptr_t UserId::getId() const {
+    return _id;
+}
+
+bool UserId::operator==(const UserId& id) const {
+    return _id == id.getId();
+}
+
 User::User(const uintptr_t& id) {
     _id = id;
 }

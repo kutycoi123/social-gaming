@@ -3,6 +3,7 @@
 
 #include "GameSession.h"
 #include "User.h"
+#include "UserList.h"
 
 #include "GameSessionManager.cpp"
 
@@ -17,7 +18,7 @@
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-static std::unordered_map<std::uintptr_t, User> idToUserMap; 
+static UserList usersInMainLobby;
 static std::string globalMessage = "";
 
 //main thread
@@ -30,7 +31,6 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 static void handleMessages(networking::Server&);
 static std::vector<networking::Message> processMessages(networking::Server&, const std::deque<networking::Message>&);
 static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>&);
-static User& getUserFromMap(std::unordered_map<std::uintptr_t, User>& map, std::uintptr_t id);
 
 int main(int argc, char* argv[]){
 
@@ -71,14 +71,16 @@ int main(int argc, char* argv[]){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	idToUserMap.insert(std::make_pair(c.id, User(c.id)));
+	UserId id(c.id);
+	usersInMainLobby.addUser(id);
 }
 
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 
-	idToUserMap.erase(c.id);
+	UserId id(c.id);
+	usersInMainLobby.removeUser(id);
 }
 
 static std::string getConfigurationFilePath(int argc, char* argv[]){
@@ -154,8 +156,9 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		// Figure out somewhere else to put this and refactor
 		// Depending on our command structure in the future, we may only need to lookup the user once here 
 		// (we do same lookups at the bottom too) Ex. User owner = getUserFrom...
+		UserId id(message.connection.id);
 		std::string name = std::string();
-		User user = getUserFromMap(idToUserMap, message.connection.id);
+		User user = usersInMainLobby.getUser(id);
 		if (message.connection.id == user.getId() && !user.getName().empty()) {
 			name = user.getName();
 		}
@@ -178,9 +181,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			User owner = getUserFromMap(idToUserMap, message.connection.id);
-	
-			GameSession init = GameSessionManager::createGameSession(owner);
+			GameSession init = GameSessionManager::createGameSession(user);
 			Invitation code = init.getInvitationCode();
 			result.push_back(networking::Message{message.connection, "Your Invitation Code is: " + code.toString()});
 
@@ -189,9 +190,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		else if (message.text.find("join") != std::string::npos) {
 			std::string inviteCode = message.text.substr(5);
 
-			User player = getUserFromMap(idToUserMap, message.connection.id);
-
-			if(GameSessionManager::joinGameSession(player, inviteCode)){
+			if(GameSessionManager::joinGameSession(user, inviteCode)){
 				std::cout << "joining lobby " << inviteCode << '\n';
 			}
 			else {
@@ -231,7 +230,7 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 	for(auto& message : returnMessage){
 		std::ostringstream log;
 
-		User messageOwner = getUserFromMap(idToUserMap, message.connection.id);
+		User messageOwner = usersInMainLobby.getUser(message.connection.id);
 		if(GameSessionManager::inSession(messageOwner)) {
 			//send to everyone in session or not depending on game logic
 		}
@@ -243,7 +242,7 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 	}
 
 	if(globalMessage != "") {
-		for(auto& entry : idToUserMap){
+		for(auto& entry : usersInMainLobby){
 			User user = entry.second;
 
 			outgoing.push_back({networking::Connection{user.getId()}, globalMessage});
@@ -254,22 +253,4 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<networkin
 
 	return outgoing;
 }
-
-// I'm thinking of having some UserManager class
-// It will contain this method below alongside
-// transfering users between hashmaps. (if we decide to go that route)
-static User& getUserFromMap(std::unordered_map<std::uintptr_t, User>& map, std::uintptr_t id) {
-    std::unordered_map<std::uintptr_t, User>::iterator iterator = map.find(id);
-
-    // Depending on the semantics of User, the copy this makes on returning might also be undesirable. 
-    //Types like std::optional are meant to encode these sorts of "maybe" situations (just as in Java and other languages).
-    // If the method is meant to be used internally, using find_if at each site is idiomatic.
-
-    if (iterator != map.end()) {
-        return iterator->second;
-    } else {
-        throw std::runtime_error("no such user");
-    }
-}
-
 #pragma endregion
