@@ -1,18 +1,16 @@
 #include "include/GameSession.h"
 
 GameSession::GameSession(int ownerID) : 
-    //_invitationCode (Invitation()), 
-    _ownerID (ownerID) {
-        _isGameStarted = false;
-    }
-
-// Accessors
-size_t GameSession::getTotalPlayerCount() const{
-    return _playersIDInSession.size();
-}
+    _invitationCode (Invitation()), 
+    _ownerID (ownerID),
+    _isGameStarted(false) {}
 
 Invitation GameSession::getInvitationCode() const {
     return _invitationCode;
+}
+
+size_t GameSession::getTotalPlayerCount() const noexcept{
+    return _playersIDInSession.size();
 }
 
 std::string GameSession::getSessionName() const {
@@ -23,16 +21,15 @@ bool GameSession::isGameStarted() const {
     return _isGameStarted;
 }
 
-// Mutators
 void GameSession::setCurrentGame(std::string name) {
     _currentGame = name;
 }
 
-void  GameSession::setOwner(uintptr_t ownerID) { 
+void GameSession::setOwner(uintptr_t ownerID) { 
     _ownerID = ownerID;
 }
 
-void  GameSession::setTotalNumPlayers(int totalPlayers) { 
+void GameSession::setTotalNumPlayers(int totalPlayers) { 
     _totalNumPlayers = totalPlayers;
 }
 
@@ -52,14 +49,12 @@ void GameSession::setConfigurationSettings(std::string jsonSettings) {
     _JSONSetting = jsonSettings;
 }
 
-void GameSession::createInviteCode() { 
-    // TODO: Replace with implementation of invite code
-    Invitation codeGenerator;
-    _invitationCode = "123";
-}
-
 void GameSession::startGame() {
     _isGameStarted = true;
+}
+
+void GameSession::setOwner(uintptr_t ownerID) { 
+    this->_ownerID = ownerID;
 }
 
 // std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class
