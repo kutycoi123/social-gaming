@@ -24,8 +24,9 @@ namespace GameSessionManager{
     }
 
     GameSession createGameSession(int ownerId);
+    std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(int playerId, const Invitation& invitation);
-    void endGameSession(const GameSession& gameSession);
+    void endGameSession(GameSession& gameSession);
     size_t totalSessionCount();
     std::optional<Invitation> sessionExists(const std::string& invitationString);
     std::optional<Invitation> sessionExists(const Invitation& invitation);

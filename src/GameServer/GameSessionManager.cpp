@@ -9,18 +9,26 @@ GameSession GameSessionManager::createGameSession(int ownerId){
 }
 
 std::optional<GameSession> GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession.has_value()){
+        gameSession.value().addUserToSession(playerId);
+    }
+    return gameSession;
+}
+
+std::optional<GameSession> GameSessionManager::findGameSession(const Invitation& invitation){
     auto found = _invitationToGameSessionMap.find(invitation);
     if (found == _invitationToGameSessionMap.end()){
         return std::nullopt;
     }
     auto gameSession = found->second;
-    gameSession.addUserToSession(playerId);
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::endGameSession(const GameSession& gameSession){
+void GameSessionManager::endGameSession(GameSession& gameSession){
     auto invitationCode = gameSession.getInvitationCode();
     if (sessionExists(invitationCode)){
+        gameSession.removeAllUsersfromSession();
         _invitationToGameSessionMap.erase(invitationCode);
         _inviteCodes.erase(invitationCode);
         _sessionsList.erase(gameSession);
