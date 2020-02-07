@@ -10,7 +10,9 @@ GameSession GameSessionManager::createGameSession(int ownerId){
 
 std::optional<GameSession> GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
-    if (gameSession.has_value()){
+
+    // TODO: Investigate why isGameStarted() is still returning false
+    if (gameSession.has_value() && !gameSession->isGameStarted()){
         gameSession.value().addUserToSession(playerId);
     }
     return gameSession;
@@ -23,6 +25,13 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     }
     auto gameSession = found->second;
     return std::optional<GameSession>{gameSession};
+}
+
+void GameSessionManager::startGameSession(const GameSession& gameSession){
+    // TODO: Currently game class is placeholder
+    // Need to insert game into a map as well
+    Game game;
+    _gameSessionToGameMap.insert(std::make_pair(gameSession, game));
 }
 
 void GameSessionManager::endGameSession(GameSession& gameSession){

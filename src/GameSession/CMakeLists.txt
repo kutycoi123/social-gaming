@@ -18,4 +18,5 @@ set_target_properties(session
 
 target_link_libraries(session
   invitation
+  GameSessionManager
 )

@@ -1,4 +1,5 @@
 #include "include/GameSession.h"
+#include "GameSessionManager.h"
 
 GameSession::GameSession(int ownerID) : 
     _invitationCode (Invitation()), 
@@ -51,10 +52,7 @@ void GameSession::setConfigurationSettings(std::string jsonSettings) {
 
 void GameSession::startGame() {
     _isGameStarted = true;
-}
-
-void GameSession::setOwner(uintptr_t ownerID) { 
-    this->_ownerID = ownerID;
+    GameSessionManager::startGameSession(*this);
 }
 
 // std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class
