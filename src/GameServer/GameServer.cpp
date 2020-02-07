@@ -16,21 +16,28 @@
 #include <thread>
 #include <vector>
 
+struct GlobalMessage{
+	std::string message;
+	//something to specifiy private message, broadcast to specifiv session, broadcast globally (all sessions)
+	//maybe user id?, session id?
+};
+
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 static UserList usersInMainLobby;
-static std::string globalMessage = "";
+static GlobalMessage globalMessage = {""};
 
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
+
+//these two should definitlly be changed, iirc Hunar is working on them
 static std::string getConfigurationFilePath(int, char* []);
 static void checkValidConfigurationFile(const nlohmann::json&);
 
 //message thread
 static void handleMessages(networking::Server&);
-static std::vector<networking::Message> processMessages(networking::Server&, const std::deque<networking::Message>&);
-static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>&);
+static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
 
 int main(int argc, char* argv[]){
 
@@ -57,7 +64,7 @@ int main(int argc, char* argv[]){
 	//while server up, process messages
 	std::string message = "";
 	do{
-		globalMessage = message;
+		globalMessage.message = message;
 		std::getline(std::cin, message);
 	} while (message != "shutdown");
 
@@ -96,14 +103,13 @@ static std::string getConfigurationFilePath(int argc, char* argv[]){
 static void checkValidConfigurationFile(const nlohmann::json &configurationFile) {
 	
 	auto port = configurationFile.at("DefaultPort");
-	std::string htmlpath = configurationFile.at("HTML Location");
-
 	//string to short conversion check
 	if(port.get<unsigned short>() != port.get<std::intmax_t>()){
 		std::cout << "Port out of range\n";
 	    std::exit(-1);
 	}
 
+	std::string htmlpath = configurationFile.at("HTML Location");
 	//html path check for valid file
 	if(access(htmlpath.c_str(), R_OK) == -1){
 	    std::cout << "Unable to open HTML index file: " << htmlpath << "\n";
@@ -131,12 +137,11 @@ static void handleMessages(networking::Server& server){
 
 		auto incoming = server.receive();
 		
-		std::vector<networking::Message> returnMessage = processMessages(server, incoming);
-
-		auto outgoing = buildOutgoing(returnMessage);
+		auto outgoing = gameServerUpdate(server, incoming);
 
 		server.send(outgoing);
 
+		//probably want to replace this with something else
 		if (errorWhileUpdating) {
 			break;
 		}
@@ -147,8 +152,8 @@ static void handleMessages(networking::Server& server){
 	return;
 }
 
-static std::vector<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
-	std::vector<networking::Message> result;
+static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::deque<networking::Message> commandResult;
 
 	for (networking::Message message : incoming) {
 
@@ -170,6 +175,7 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		}
 
 		//ad-hoc message processing
+		//definitly will be changed
 		if (message.text == "quit") {
 			server.disconnect(message.connection);
 		} 
@@ -183,17 +189,18 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 		else if (message.text == "create lobby"){
 			GameSession init = GameSessionManager::createGameSession(user);
 			Invitation code = init.getInvitationCode();
-			result.push_back(networking::Message{message.connection, "Your Invitation Code is: " + code.toString()});
+			commandResult.push_back(networking::Message{message.connection, "Your Invitation Code is: " + code.toString()});
 
 			std::cout << "creating lobby " << code.toString() << '\n';
 		}
 		else if (message.text.find("join") != std::string::npos) {
 			std::string inviteCode = message.text.substr(5);
 
-			if(GameSessionManager::joinGameSession(user, inviteCode)){
+			try{
+				GameSessionManager::joinGameSession(user, inviteCode);
 				std::cout << "joining lobby " << inviteCode << '\n';
 			}
-			else {
+			catch (...) {
 				std::cout << "lobby does not exist\n";
 			}
 
@@ -208,49 +215,27 @@ static std::vector<networking::Message> processMessages(networking::Server& serv
 
 			//for example something 
 			//game[connection].message = blahblahblah
-		
-			result.push_back(networking::Message{message.connection, message.text});
+
+			//dummy code, remove later
+			commandResult.push_back(networking::Message{message.connection, message.text});
 		}
 	}
-
-	//update all games
-
-	//process messages based on game logic
-
-	//get reply of all games
-
-	return result;
+	return commandResult;
 }
 
-//teacher provided functions
-static std::deque<networking::Message> buildOutgoing(const std::vector<networking::Message>& returnMessage) {
-	std::deque<networking::Message> outgoing;
+static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	//doesn't really make sense for command messages to be broadcasted to everyone, so only the person creating the command needs to see the server reply
+	std::deque<networking::Message> commandMessages = processMessages(server, incoming);
 
-	//dummy code
-	for(auto& message : returnMessage){
-		std::ostringstream log;
+	//update all games based on game logic (probs in gamesessionmanager)
 
-		User messageOwner = usersInMainLobby.getUser(message.connection.id);
-		if(GameSessionManager::inSession(messageOwner)) {
-			//send to everyone in session or not depending on game logic
-		}
-		else {
-			//send only to them
-			log << messageOwner.getId() << "> " << message.text << '\n';
-			outgoing.push_back({networking::Connection{messageOwner.getId()}, log.str()});
-		}
-	}
+	std::deque<networking::Message> gameMessages = GameSessionManager::getAllGameMessages();	
+	std::deque<networking::Message> lobbyMessages = GameSessionManager::getAllLobbyMessages();
+	
+	//somehow add the 3 lists together like:
+	//commandMessages + gameMessages + lobbyMessages
 
-	if(globalMessage != "") {
-		for(auto& entry : usersInMainLobby){
-			User user = entry.second;
-
-			outgoing.push_back({networking::Connection{user.getId()}, globalMessage});
-		}
-
-		globalMessage = "";
-	}
-
-	return outgoing;
+	return commandMessages;
 }
+
 #pragma endregion
