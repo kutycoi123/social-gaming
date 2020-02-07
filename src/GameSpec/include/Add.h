@@ -1,5 +1,5 @@
-#ifndef ADD.H
-#define ADD.H
+#ifndef ADD_H
+#define ADD_H
 
 #include "rule.h"
 #include "GameSpec.h"

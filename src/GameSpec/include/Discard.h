@@ -1,5 +1,5 @@
-#ifndef DISCARD.H
-#define DISCARD.H
+#ifndef DISCARD_H
+#define DISCARD_H
 
 #include "rule.h"
 #include <string>

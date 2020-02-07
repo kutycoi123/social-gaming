@@ -1,5 +1,5 @@
-#ifndef DEAL.H
-#define DEAL.H
+#ifndef DEAL_H
+#define DEAL_H
 
 #include "rule.h"
 #include "GameSpec.h"

@@ -1,5 +1,5 @@
-#ifndef RULES.H
-#define RULES.H
+#ifndef RULE_H
+#define RULE_H
 
 #include <string>
 

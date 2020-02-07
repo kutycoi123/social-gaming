@@ -1,5 +1,5 @@
-#ifndef FOREACH.H
-#define FOREACH.H
+#ifndef FOREACH_H
+#define FOREACH_H
 
 #include "Rule.h"
 #include "GameSpec.h"

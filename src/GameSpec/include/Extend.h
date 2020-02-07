@@ -1,5 +1,5 @@
-#ifndef EXTEND.H
-#define EXTEND.H
+#ifndef EXTEND_H
+#define EXTEND_H
 
 #include "Rule.h"
 #include "GameSpec.h"

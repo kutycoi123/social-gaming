@@ -1,5 +1,5 @@
-#ifndef REVERSE.H
-#define REVERSE.H
+#ifndef REVERSE_H
+#define REVERSE_H
 
 #include "rule.h"
 #include <string>

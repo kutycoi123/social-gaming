@@ -1,5 +1,5 @@
-#ifndef PARALLELFOR.H
-#define PARALLELFOR.H
+#ifndef PARALLELFOR_H
+#define PARALLELFOR_H
 
 #include "rule.h"
 #include <string>
