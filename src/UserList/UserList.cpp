@@ -10,6 +10,10 @@ void UserList::removeUser(const UserId& id) {
     _idToUserMap.erase(id);
 }
 
+void UserList::removeAllUsers() {
+    _idToUserMap.clear();
+}
+
 std::optional<User> UserList::getUser(const UserId& id) {
     auto iterator = _idToUserMap.find(id);
 
@@ -39,4 +43,8 @@ std::unordered_map<UserId, User, UserIdHash>::iterator UserList::begin() {
 
 std::unordered_map<UserId, User, UserIdHash>::iterator UserList::end() {
     return _idToUserMap.end();
+}
+
+size_t UserList::size() const noexcept {
+    return _idToUserMap.size();
 }

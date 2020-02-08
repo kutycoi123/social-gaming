@@ -14,6 +14,7 @@ public:
     UserList();
     void addUser(const UserId& id);
     void removeUser(const UserId& id);
+    void removeAllUsers();
 
     std::optional<User> getUser(const UserId& id);
     bool transferUser(UserList& transferTo, User& user);
@@ -21,7 +22,7 @@ public:
     std::unordered_map<UserId, User, UserIdHash>::iterator begin();
     std::unordered_map<UserId, User, UserIdHash>::iterator end();
 
-
+    size_t size() const noexcept;
 private:
     std::unordered_map<UserId, User, UserIdHash> _idToUserMap; 
 };

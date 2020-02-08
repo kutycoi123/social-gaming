@@ -1,5 +1,6 @@
 #include "GameSession.h"
 #include "Invitation.h"
+#include "User.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <optional>
@@ -27,12 +28,12 @@ namespace GameSessionManager{
         static std::vector<Game> gameList {};
         static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
         static std::unordered_set<Invitation, InvitationHash> _inviteCodes;
-        static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap; 
+        static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap;
     }
 
-    GameSession createGameSession(int ownerId);
+    GameSession createGameSession(User& owner);
     std::optional<GameSession> findGameSession(const Invitation& invitation);
-    std::optional<GameSession> joinGameSession(int playerId, const Invitation& invitation);
+    std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
     void endGameSession(GameSession& gameSession);
     size_t totalSessionCount();
     std::optional<Invitation> sessionExists(const std::string& invitationString);
