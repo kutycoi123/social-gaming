@@ -25,13 +25,13 @@ struct GlobalMessage{
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-static UserList usersInMainLobby;
-static GlobalMessage globalMessage = {""};
 
 static std::vector<std::string> strVector ;
 static std::vector<std::string> splitCommand(std::string s);
 const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
+static UserList usersInMainLobby;
+static GlobalMessage globalMessage = {""};
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -253,7 +253,6 @@ std::vector<std::string> splitCommand(std::string s){
     return results;
 
  }
-
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
 
