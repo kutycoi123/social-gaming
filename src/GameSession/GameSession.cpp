@@ -34,7 +34,7 @@ void GameSession::setTotalNumPlayers(int totalPlayers) {
     _totalNumPlayers = totalPlayers;
 }
 
-void GameSession::addUserToSession(uintptr_t userID) { 
+void GameSession::addUserToSession(uintptr_t userID) {
     _playersIDInSession.push_back(userID);
 }
 

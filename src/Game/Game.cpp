@@ -2,7 +2,7 @@
 
 int Game::_counter = 0;
 
-Game::Game() : id(_counter) {
+Game::Game() {
     _counter++;
 }
 

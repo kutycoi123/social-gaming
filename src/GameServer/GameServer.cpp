@@ -214,9 +214,15 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			// TODO djlin: investigate why gameSession isGameStarted both returns true
 			// This section is going to be swapped out in future
 			GameSession gameSession = GameSessionManager::createGameSession(1);
-			std::cout << "Invitation Code " << gameSession.getInvitationCode().toString() << '\n';
-			
 			Invitation inv = gameSession.getInvitationCode();
+			std::cout << "GameSession Address: " << &gameSession << '\n';
+
+			std::cout << "Invitation Code " << inv.toString() << '\n';
+
+			std::cout << "Is game started " << gameSession.isGameStarted() << '\n';
+			gameSession.startGame();
+			std::cout << "Is game started " << gameSession.isGameStarted() << '\n';
+
 			auto gs = GameSessionManager::joinGameSession(1, inv);
 
 			std::cout << "Is game started " << gameSession.isGameStarted() << '\n';
