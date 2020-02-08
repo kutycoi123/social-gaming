@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-
+#include <unordered_map>
 namespace GameSpecification{
 enum RuleType{
 	ForEach,Loop,Inparallel,Parallelfor,
@@ -15,11 +15,15 @@ enum RuleType{
 };
 	class BaseRule{
 		public:
+			static std::unordered_map<std::string, RuleType> rulemap;
+
 			BaseRule();
-			BaseRule(const std::string&);
+			BaseRule(const std::string&); 
+
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
 			void setRuleName(const std::string&);
+
 		private:
 			RuleType _ruleType;
 			std::string _ruleName;

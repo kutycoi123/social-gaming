@@ -2,10 +2,33 @@
 
 using GameSpecification::BaseRule;
 using GameSpecification::RuleType;
+
+std::unordered_map<std::string, RuleType> BaseRule::rulemap({
+	{"foreach", RuleType::ForEach},
+	{"loop", RuleType::Loop},
+	{"Inparallel", RuleType::Inparallel},
+	{"parallelfor", RuleType::Parallelfor},
+	{"switch", RuleType::Switch},
+	{"when", RuleType::When},
+	{"extend", RuleType::Extend},
+	{"reverse", RuleType::Reverse},
+	{"shuffle", RuleType::Shuffle},
+	{"sort", RuleType::Sort},
+	{"deal", RuleType::Deal},
+	{"discard", RuleType::Discard},
+	{"add", RuleType::Add},
+	{"timer", RuleType::Timer},
+	{"input-choice", RuleType::InputChoice},
+	{"input-text", RuleType::InputText},
+	{"message", RuleType::Message},
+	{"global-message", RuleType::GlobalMessage},
+	{"scores", RuleType::Scores}
+});
+
 BaseRule::BaseRule(){}
-
-BaseRule::BaseRule(const std::string& ruleName) : _ruleName(ruleName), _ruleType(getRuleTypeFromName(ruleName)){}
-
+BaseRule::BaseRule(const std::string& ruleName) : 
+	_ruleType(getRuleTypeFromName(ruleName)), 
+	_ruleName(ruleName)	{}
 std::string BaseRule::getRuleName() const{
 	return _ruleName;
 }
@@ -20,53 +43,10 @@ RuleType BaseRule::getRuleType() const{
 }
 
 RuleType BaseRule::getRuleTypeFromName(const std::string& name){
-	/*
-	switch(name){
-		case "foreach":
-			return RuleType::ForEach;
-		case "loop":
-			return RuleType::Loop;
-		case "inparallel":
-			return RuleType::Inparallel;
-		case "parallelfor":
-			return RuleType::Parallelfor;
-		case "switch":
-			return RuleType::Switch;
-		case "when":
-			return RuleType::When;
-		case "extend":
-			return RuleType::Extend;
-		case "reverse":
-			return RuleType::Reverse;
-		case "shuffle":
-			return RuleType::Shuffle;
-		case "sort":
-			return RuleType::Sort;
-		case "deal":
-			return RuleType::Deal;
-		case "discard":
-			return RuleType::Discard;
-		case "add":
-			return RuleType::Add;
-		case "timer":
-			return RuleType::Timer;
-		case "input-choice":
-			return RuleType::InputChoice;
-		case "input-text":
-			return RuleType::InputText;
-		case "input-vote":
-			return RuleType::InputVote;
-		case "message":
-			return RuleType::Message;
-		case "global-message":
-			return RuleType::GlobalMessage
-		case "scores":
-			return RuleType::Scores;
-		default:
-			return RuleType::Unknown;
-	*/
-
-	return RuleType::Unknown;
-	}
+	auto type = rulemap.find(name);
+	if(type == rulemap.end())	
+		return RuleType::Unknown;
+	return type->second;
+}
 	
 
