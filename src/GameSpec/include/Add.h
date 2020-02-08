@@ -1,11 +1,11 @@
 #ifndef ADD_H
 #define ADD_H
 
-#include "Rule.h"
-#include "GameSpec.h"
+#include "BaseRule.h"
+#include "AbstractSpec.h"
 #include <string>
-
-class Add : public Rule{
+namespace GameSpecification{
+class Add : public BaseRule{
     public:
         Add();
         Add(const std::string& to, const SpecValue& value);
@@ -17,5 +17,5 @@ class Add : public Rule{
         std::string _to;
         SpecValue _value;
 };
-
+}
 #endif

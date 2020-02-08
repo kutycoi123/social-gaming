@@ -1,11 +1,11 @@
 #ifndef LOOP_H
 #define LOOP_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
 #include <vector>
-
-class Loop : public Rule{
+namespace GameSpecification{
+class Loop : public BaseRule{
     public:
         Loop(const std::string& loopType, const std::string& failCondition, std::vector<std::string> rules);
         std::string getLoopType() const;
@@ -19,4 +19,5 @@ class Loop : public Rule{
         std::string _failCondition;
         std::vector<std::string> _rules;
 };
+}
 #endif

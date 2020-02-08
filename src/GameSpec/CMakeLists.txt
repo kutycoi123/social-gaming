@@ -1,12 +1,11 @@
 add_library(GameSpec
 			GameSpec.cpp
 			GameGeneralConfig.cpp
-			Rule.cpp
 			Add.cpp
 			Deal.cpp
 			Discard.cpp
 			Extend.cpp
-			Foreach.cpp
+			ForEach.cpp
 			Inparallel.cpp
 			Loop.cpp
 			Parallelfor.cpp

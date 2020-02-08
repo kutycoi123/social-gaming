@@ -1,8 +1,11 @@
 #include "Extend.h"
 
-Extend::Extend() : Rule("extend"), _target(""){}
+using GameSpecification::BaseRule;
+using GameSpecification::Extend;
+using GameSpecification::SpecValue;
+Extend::Extend() : BaseRule("extend"), _target(""){}
 
-Extend::Extend(const std::string& target, const SpecValue& list) : Rule("extend"), _target(target), _list(list){}
+Extend::Extend(const std::string& target, const SpecValue& list) : BaseRule("extend"), _target(target), _list(list){}
 
 std::string Extend::getTarget() const{
     return _target;

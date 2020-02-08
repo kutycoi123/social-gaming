@@ -1,9 +1,5 @@
 #include "InputChoiceRule.h"
 
-//using GameSpec::InputChoiceRule
-//using GameSpec::MessageRule
-//using GameSpec::SpecValue
-//namespace GameSpec{
 
 using GameSpecification::BaseRule;
 using GameSpecification::SpecValue;
@@ -30,5 +26,5 @@ using GameSpecification::MessageRule;
 	void InputChoiceRule::process(){
 		//TODO: add logic for this rule
 	}
-//}
+
 

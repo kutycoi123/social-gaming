@@ -1,11 +1,11 @@
 #ifndef DEAL_H
 #define DEAL_H
 
-#include "Rule.h"
-#include "GameSpec.h"
+#include "BaseRule.h"
+#include "AbstractSpec.h"
 #include <string>
-
-class Deal : public Rule{
+namespace GameSpecification{
+class Deal : public BaseRule{
     public:
         Deal();
         Deal(const std::string& from, const SpecValue& to, const int count);
@@ -20,5 +20,5 @@ class Deal : public Rule{
         SpecValue _to;
         int _count;
 };
-
+}
 #endif

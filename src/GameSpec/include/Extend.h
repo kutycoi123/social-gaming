@@ -1,11 +1,11 @@
 #ifndef EXTEND_H
 #define EXTEND_H
 
-#include "Rule.h"
-#include "GameSpec.h"
+#include "BaseRule.h"
+#include "AbstractSpec.h"
 #include <string>
-
-class Extend : public Rule{
+namespace GameSpecification{
+class Extend : public BaseRule{
     public:
         Extend();
         Extend(const std::string& target, const SpecValue& list);
@@ -17,5 +17,5 @@ class Extend : public Rule{
         std::string _target;
         SpecValue _list;
 };
-
+}
 #endif
