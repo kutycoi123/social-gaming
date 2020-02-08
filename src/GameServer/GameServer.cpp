@@ -223,19 +223,41 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 	return commandResult;
 }
 
+static std::deque<networking::Message> getGlobalMessages(){
+	std::deque<networking::Message> result {};
+	
+	if(globalMessage.message != ""){
+
+		for(auto& entry : usersInMainLobby){
+			User user = entry.second;
+			result.push_back({networking::Connection{user.getId()}, globalMessage.message});
+		}
+
+		globalMessage.message = "";
+	}
+
+	return result;
+}
+
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::deque<networking::Message> allMessages = {};
+
+	std::deque<networking::Message> globalMessages = getGlobalMessages();
+	allMessages.insert(allMessages.end(), globalMessages.begin(), globalMessages.end());
+
 	//doesn't really make sense for command messages to be broadcasted to everyone, so only the person creating the command needs to see the server reply
 	std::deque<networking::Message> commandMessages = processMessages(server, incoming);
+	allMessages.insert(allMessages.end(), commandMessages.begin(), commandMessages.end());
 
-	//update all games based on game logic (probs in gamesessionmanager)
+	//TODO: update all games based on game logic (probs in gamesessionmanager)
 
-	std::deque<networking::Message> gameMessages = GameSessionManager::getAllGameMessages();	
-	std::deque<networking::Message> lobbyMessages = GameSessionManager::getAllLobbyMessages();
+	std::deque<networking::Message> gameMessages = GameSessionManager::getAllGameMessages();
+	allMessages.insert(allMessages.end(), gameMessages.begin(), gameMessages.end());
 	
-	//somehow add the 3 lists together like:
-	//commandMessages + gameMessages + lobbyMessages
+	std::deque<networking::Message> lobbyMessages = GameSessionManager::getAllLobbyMessages();
+	allMessages.insert(allMessages.end(), lobbyMessages.begin(), lobbyMessages.end());
 
-	return commandMessages;
+	return allMessages;
 }
 
 #pragma endregion
