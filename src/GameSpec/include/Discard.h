@@ -1,10 +1,10 @@
 #ifndef DISCARD_H
 #define DISCARD_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
-
-class Discard : public Rule{
+namespace GameSpecification{
+class Discard : public BaseRule{
     public:
         Discard();
         Discard(const std::string& from, const int count);
@@ -16,5 +16,5 @@ class Discard : public Rule{
         std::string _from;
         int _count;
 };
-
+}
 #endif

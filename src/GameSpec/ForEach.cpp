@@ -1,8 +1,11 @@
-#include "Foreach.h"
+#include "ForEach.h"
 
-ForEach::ForEach() : Rule("foreach"), _element(""){}
+using GameSpecification::ForEach;
+using GameSpecification::SpecValue;
+using GameSpecification::BaseRule;
+ForEach::ForEach() : BaseRule("foreach"), _element(""){}
 
-ForEach::ForEach(const SpecValue& list, const std::string& element, std::vector<std::string>& rules) : Rule("foreach"), 
+ForEach::ForEach(const SpecValue& list, const std::string& element, std::vector<std::string>& rules) : BaseRule("foreach"), 
     _list(list), _element(element), _rules(rules){}
 
 SpecValue ForEach::getList() const{

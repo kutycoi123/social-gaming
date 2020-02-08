@@ -1,11 +1,11 @@
 #ifndef PARALLELFOR_H
 #define PARALLELFOR_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
 #include <vector>
-
-class Parallelfor : public Rule{
+namespace GameSpecification{
+class Parallelfor : public BaseRule{
     public:
         Parallelfor(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules);
         std::vector<std::string> getList() const;
@@ -19,5 +19,5 @@ class Parallelfor : public Rule{
         std::string _element;
         std::vector<std::string> _rules;
 };
-
+}
 #endif

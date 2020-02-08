@@ -1,10 +1,10 @@
 #ifndef REVERSE_H
 #define REVERSE_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
-
-class Reverse : public Rule{
+namespace GameSpecification{
+class Reverse : public BaseRule{
     public:
         Reverse();
         Reverse(const std::string& list);
@@ -13,5 +13,5 @@ class Reverse : public Rule{
     private:
         std::string _list;
 };
-
+}
 #endif

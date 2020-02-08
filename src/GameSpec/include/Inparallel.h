@@ -1,11 +1,11 @@
 #ifndef INPARALLEL_H
 #define INPARALLEL_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
 #include <vector>
-
-class Inparallel : public Rule{
+namespace GameSpecification{
+class Inparallel : public BaseRule{
     public:
         Inparallel(std::vector<std::string> rules);
         std::vector<std::string> getRules() const;
@@ -13,5 +13,5 @@ class Inparallel : public Rule{
     private:
         std::vector<std::string> _rules;
 };
-
+}
 #endif

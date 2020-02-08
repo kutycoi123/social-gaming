@@ -1,8 +1,10 @@
 #include "Add.h"
 
-Add::Add() : Rule("add"), _to(""){}
+using GameSpecification::Add;
+using GameSpecification::SpecValue;
+Add::Add() : BaseRule("add"), _to(""){}
 
-Add::Add(const std::string& to, const SpecValue& value) : Rule("add"), _to(to), _value(value){}
+Add::Add(const std::string& to, const SpecValue& value) : BaseRule("add"), _to(to), _value(value){}
 
 std::string Add::getTo() const{
     return _to;

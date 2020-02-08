@@ -1,12 +1,12 @@
 #ifndef FOREACH_H
 #define FOREACH_H
 
-#include "Rule.h"
-#include "GameSpec.h"
+#include "BaseRule.h"
+#include "AbstractSpec.h"
 #include <string>
 #include <vector>
-
-class ForEach : public Rule{
+namespace GameSpecification{
+class ForEach : public BaseRule{
     public:
         ForEach();
         ForEach(const SpecValue& list, const std::string& element, std::vector<std::string>& rules);
@@ -22,5 +22,5 @@ class ForEach : public Rule{
         std::string _element;
         std::vector<std::string> _rules;
 };
-
+}
 #endif

@@ -1,6 +1,8 @@
 #include "Loop.h"
 
-Loop::Loop(const std::string& loopType, const std::string& failCondition, std::vector<std::string> rules) : Rule("loop"), 
+using GameSpecification::BaseRule;
+using GameSpecification::Loop;
+Loop::Loop(const std::string& loopType, const std::string& failCondition, std::vector<std::string> rules) : BaseRule("loop"), 
     _loopType(loopType), _failCondition(failCondition), _rules(rules){}
 
 std::string Loop::getLoopType() const{

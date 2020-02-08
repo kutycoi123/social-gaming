@@ -1,8 +1,10 @@
 #include "Reverse.h"
 
-Reverse::Reverse() : Rule("reverse"), _list(""){}
+using GameSpecification::Reverse;
+using GameSpecification::BaseRule;
+Reverse::Reverse() : BaseRule("reverse"), _list(""){}
 
-Reverse::Reverse(const std::string& list) : Rule("reverse"), _list(list) {}
+Reverse::Reverse(const std::string& list) : BaseRule("reverse"), _list(list) {}
 
 std::string Reverse::getList() const{
     return _list;
