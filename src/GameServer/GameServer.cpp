@@ -174,6 +174,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		strVector = splitCommand(text);
 		
 		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+		if (message.text.find("Configurations") != std::string::npos) {
+			// call game engine
+			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
+			} catch( nlohmann::json gameConfig ) {
+				std::cout<< "incorrect json";
+			}
+		}
 
 		switch (serverCommand)
 		{
@@ -200,6 +207,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			std::cout << "creating lobby " << code.toString() << '\n';
 			break;
 		}
+
+
 		case ProcessCommand::CommandType::JOIN_LOBBY:
 		{
 
