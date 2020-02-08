@@ -46,7 +46,6 @@ private:
     std::string _currentGame;
     UserList _usersInSession;
 
-    std::string _currentGame;
     std::string _sessionName;
     std::string _JSONSetting;
 

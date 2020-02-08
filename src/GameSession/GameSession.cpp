@@ -7,14 +7,15 @@ GameSession::GameSession(User& owner) :
     _invitationCode (Invitation()), 
     _owner (owner),
     _isGameStarted(false)
-    // game(nlohmann::json gameSettings) {}
+    // game(nlohmann::json gameSettings) 
+{}
 
 Invitation GameSession::getInvitationCode() const {
     return _invitationCode;
 }
 
-size_t GameSession::getTotalPlayerCount() const noexcept{
-    return _playersIDInSession.size();
+size_t GameSession::getTotalPlayerCount() const noexcept {
+    return _usersInSession.size();
 }
 
 std::string GameSession::getSessionName() const {
@@ -32,10 +33,6 @@ void GameSession::setTotalNumPlayers(int totalPlayers) {
 void GameSession::addUserToSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.addUser(user.getUserId());
-}
-
-size_t GameSession::totalPlayerCount() const noexcept {
-    return _usersInSession.size();
 }
 
 void GameSession::removeUserFromSession(User& user) { 
