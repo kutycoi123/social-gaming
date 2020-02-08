@@ -1,6 +1,7 @@
 #ifndef GAMEGENERALCONFIG_H
 #define GAMEGENERALCONFIG_H
 
+#include <string>
 
 struct PlayerCount{
     int min;
