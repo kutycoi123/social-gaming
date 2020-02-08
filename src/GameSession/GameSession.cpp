@@ -3,12 +3,11 @@
 #include "Game.h"
 #include <nlohmann/json.hpp>
 
-GameSession::GameSession(uintptr_t ownerID) : 
+GameSession::GameSession(User& owner) : 
     _invitationCode (Invitation()), 
-    _ownerID (ownerID),
+    _owner (owner),
     _isGameStarted(false)
-    // game(nlohmann::json gameSettings)
-    {}
+    // game(nlohmann::json gameSettings) {}
 
 Invitation GameSession::getInvitationCode() const {
     return _invitationCode;
@@ -30,16 +29,22 @@ void GameSession::setTotalNumPlayers(int totalPlayers) {
     _totalNumPlayers = totalPlayers;
 }
 
-void GameSession::addUserToSession(uintptr_t userID) {
-    _playersIDInSession.push_back(userID);
+void GameSession::addUserToSession(User& user) { 
+    // TODO: UserList may need to be revised in order to accomodate this operation better.
+    _usersInSession.addUser(user.getUserId());
 }
 
-void GameSession::removeUserFromSession(uintptr_t userID) { 
-    _playersIDInSession.remove(userID);
+size_t GameSession::totalPlayerCount() const noexcept {
+    return _usersInSession.size();
+}
+
+void GameSession::removeUserFromSession(User& user) { 
+    // TODO: UserList may need to be revised in order to accomodate this operation better.
+    _usersInSession.removeUser(user.getUserId());
 }
 
 void GameSession::removeAllUsersfromSession(){ 
-    _playersIDInSession.clear();
+    _usersInSession.removeAllUsers();
 }
 
 void GameSession::setConfigurationSettings(std::string jsonSettings) { 
@@ -50,14 +55,6 @@ void GameSession::startGame() {
     _isGameStarted = true;
 }
 
-// std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class
-//     return this->_playersList;
-// }
-
-// void GameSession::setPlayerInviteCodes() {  // TODO: Link with the User class
-//     std::list<Player>::iterator it;
-    
-//     for (it = _playersList.begin(); it != _playersList.end(); it++) {
-//         //it->setInvitationCode(_invitationCode);
-//     }
-// }
+UserList GameSession::getUsersInSession() {
+    return _usersInSession;
+}

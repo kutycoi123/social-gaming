@@ -1,20 +1,20 @@
 #include "include/GameSessionManager.h"
 
-GameSession GameSessionManager::createGameSession(int ownerId){
-    GameSession gameSession{ownerId};
+GameSession GameSessionManager::createGameSession(User& owner){
+    GameSession gameSession{owner};
     _sessionsList.insert(gameSession);
     _inviteCodes.insert(gameSession.getInvitationCode());
     _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
     return gameSession;
 }
 
-std::optional<GameSession> GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
+std::optional<GameSession> GameSessionManager::joinGameSession(User& user, const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
 
     // TODO: Investigate why isGameStarted() is still returning false
     bool canJoinSession = gameSession.has_value() && !(gameSession->isGameStarted());
     if (canJoinSession){
-        gameSession.value().addUserToSession(playerId);
+        gameSession.value().addUserToSession(user);
     }
     return gameSession;
 }

@@ -6,25 +6,28 @@
 #include <list>
 #include "Invitation.h"
 #include "Game.h"
+#include "User.h"
+#include "UserList.h"
 
 class GameSession { 
     
 public:
-    GameSession(uintptr_t ownerID);
-    
+    GameSession(User& owner);
     Invitation getInvitationCode() const;
     size_t getTotalPlayerCount() const noexcept;
     std::string getSessionName() const;
     bool isGameStarted() const;
 
     void setTotalNumPlayers(int totalPlayers);
-    void addUserToSession(uintptr_t userID);
-    void removeUserFromSession(uintptr_t userID);
+    void addUserToSession(User& user);
+    void removeUserFromSession(User& user);
     void removeAllUsersfromSession();
 
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
     void startGame();
+
+    UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {
         return _invitationCode == gameSession._invitationCode;
@@ -40,8 +43,8 @@ private:
     std::list<std::string> _ListSettingVars;
     std::list<std::string> _ListPerAudience;
     std::list<std::string> _ListRules;
-
-    std::list<uintptr_t> _playersIDInSession;
+    std::string _currentGame;
+    UserList _usersInSession;
 
     std::string _currentGame;
     std::string _sessionName;
@@ -53,6 +56,7 @@ private:
     int _totalNumPlayers;
 
     bool _isGameStarted;
+    User& _owner;
 
     uintptr_t _ownerID;
 

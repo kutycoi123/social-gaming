@@ -21,4 +21,5 @@ target_link_libraries(session
   GameSessionManager
   game
   nlohmann_json::nlohmann_json
+  userlist
 )
