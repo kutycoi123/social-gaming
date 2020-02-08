@@ -172,6 +172,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			//GameSession init = GameSessionManager::createGameSession(user);
 			std::cout << "created session\n";
 		}
+
+		else if (message.text.find("Configurations") != std::string::npos) {
+			// call game engine
+		}
+
+		 
+
 		else if (message.text.find("join") != std::string::npos) {
 			
 			//something like
