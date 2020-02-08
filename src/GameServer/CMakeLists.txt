@@ -16,6 +16,7 @@ target_link_libraries(GameServer
   session
   user
   nlohmann_json::nlohmann_json
+  processcommand
   ${CMAKE_THREAD_LIBS_INIT}
 )
 

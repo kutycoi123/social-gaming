@@ -4,6 +4,7 @@
 
 #include "GameSessionManager.cpp"
 #include "User.h"
+#include "ProcessCommand.h"
 
 #include <atomic>
 #include <iostream>
@@ -24,6 +25,11 @@ static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 static std::vector<networking::Connection> clients;
 static std::vector<User> users;
+
+static std::vector<std::string> strVector ;
+static std::vector<std::string> splitCommand(std::string s);
+const int FIRST_COMMAND = 0;
+const int SECOND_COMMAND = 1;
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -179,45 +185,65 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			std::cout << message.connection.id << "> " << message.text << "\n";
 		}
 
-		//ad-hoc message processing
-		if (message.text == "quit") {
+		std::string text = message.text;
+
+		ProcessCommand evaluateText;
+
+		ProcessCommand evaluateMessage;		
+
+		ProcessCommand::CommandType serverCommand;
+
+		strVector = splitCommand(text);
+		
+		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+
+		switch (serverCommand)
+		{
+		case ProcessCommand::CommandType::QUIT:
+		{
+			std::cout << "quit game\n";
 			server.disconnect(message.connection);
-		} 
-		else if (message.text == "shutdown") {
+			break;
+		}
+		case ProcessCommand::CommandType::SHUTDOWN:
+		{
 			std::cout << "shutdown game\n";
-			//kick all players
-		} 
-		else if (message.text == "start game"){
+			break;
+		}
+		case ProcessCommand::CommandType::START_GAME:
+		{
 			std::cout << "start game\n";
-		} 
-		else if (message.text == "create lobby"){
+			break;
+		}
+		case ProcessCommand::CommandType::CREATE_LOBBY:
+		{
 			GameSession init = GameSessionManager::createGameSession(1);
 			Invitation code = init.getInvitationCode();
 			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
-
 			std::cout << "creating lobby " << code.toString() << '\n';
+			break;
 		}
-		else if (message.text == "join lobby") {
-			std::cout << "joining lobby\n";
-		} 
-		else if (message.text == "/username") {
-			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
-			// Use profs iteration when refactor happens
+		case ProcessCommand::CommandType::JOIN_LOBBY:
+		{
+
+			std::cout << "joining lobby ";
+			break;
+		}
+		case ProcessCommand::CommandType::USERNAME:
+		{
 			for (auto& user : users) {
-				// TODO: Maybe a hash table makes sense for this in the future, regardless template code
 				if (message.connection.id == user.getId()) {
 					user.setName("Testing");
 				}
 			}
+		break;
 		}
-		else {
-			//find session based on connection id
-			//send message into game
+		case ProcessCommand::CommandType::NULL_COMMAND:
+		{
+			std::cout << "Error, Invalid user command" << '\n';
+		break;
+		}
 
-			//for example something 
-			//game[connection].message = blahblahblah
-		
-			result.push_back(MessageInfo{networking::Message{message.connection, message.text}});
 		}
 	}
 
@@ -229,6 +255,14 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 
 	return result;
 }
+std::vector<std::string> splitCommand(std::string s){
+    
+    std::istringstream iss(s);
+    std::vector<std::string> results((std::istream_iterator<std::string>(iss)),
+                                 std::istream_iterator<std::string>());
+    return results;
+
+ };
 
 //teacher provided functions
 static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>& returnMessage) {
