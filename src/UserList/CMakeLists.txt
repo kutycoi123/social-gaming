@@ -1,8 +1,12 @@
-add_library(session 
-  GameSession.cpp 
+add_library(userlist 
+    UserList.cpp
 )
 
-target_include_directories(session
+target_link_libraries(userlist
+  user
+)
+
+target_include_directories(userlist
   PUBLIC
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -10,12 +14,8 @@ target_include_directories(session
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-set_target_properties(session
+set_target_properties(userlist
                       PROPERTIES
                       LINKER_LANGUAGE CXX
                       CXX_STANDARD 17
-)
-
-target_link_libraries(session
-  invitation
 )

@@ -4,6 +4,7 @@
 
 #include "GameSessionManager.cpp"
 #include "User.h"
+#include "UserList.h"
 
 #include <atomic>
 #include <iostream>
@@ -22,8 +23,7 @@ struct MessageInfo{
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-static std::vector<networking::Connection> clients;
-static std::vector<User> users;
+static UserList usersInMainLobby;
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -74,26 +74,16 @@ int main(int argc, char* argv[]){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	clients.push_back(c);
-	users.push_back(User(c.id));
+	UserId id(c.id);
+	usersInMainLobby.addUser(id);
 }
 
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	// Also use std methods of iterating over this when refactor comes in
-	for (int i = users.size(); i >= 0; --i)
-	{
-		if (users.at(i).getId() == c.id) {
-			users.erase(users.begin() + i);
-		}
-	}
-
-	auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-	clients.erase(eraseBegin, std::end(clients));
+	UserId id(c.id);
+	usersInMainLobby.removeUser(id);
 }
 
 static std::string getConfigurationFilePath(int argc, char* argv[]){
@@ -163,22 +153,6 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 	std::vector<MessageInfo> result;
 
 	for (networking::Message message : incoming) {
-
-		// TODO Mzegar: Use profs iteration when refactor happens
-		// Figure out somewhere else to put this
-		std::string name = std::string();
-		for (auto& user : users) {
-			if (message.connection.id == user.getId() && !user.getName().empty()) {
-				name = user.getName();
-			}
-		}
-
-		if (!name.empty()) {
-			std::cout << name << "> " << message.text << "\n";
-		} else {
-			std::cout << message.connection.id << "> " << message.text << "\n";
-		}
-
 		//ad-hoc message processing
 		if (message.text == "quit") {
 			server.disconnect(message.connection);
@@ -201,14 +175,7 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			std::cout << "joining lobby\n";
 		} 
 		else if (message.text == "/username") {
-			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
-			// Use profs iteration when refactor happens
-			for (auto& user : users) {
-				// TODO: Maybe a hash table makes sense for this in the future, regardless template code
-				if (message.connection.id == user.getId()) {
-					user.setName("Testing");
-				}
-			}
+
 		}
 		else {
 			//find session based on connection id
@@ -244,9 +211,12 @@ static std::deque<networking::Message> buildOutgoing(const std::vector<MessageIn
 		log << rawMessage.connection.id << "> " << rawMessage.text << '\n';
 	}
 
-	for (auto& client : clients) {
-		outgoing.push_back({client, log.str()});
-	}
+	// TODO: Use Yu's code here, as it uses the ID to push outgoing messages
+	// for(auto& entry : usersInMainLobby){
+	// 	auto user = entry.second;
+
+	// 	outgoing.push_back({networking::Connection{user.getUserId().getId()}});
+	// }
 
 	return outgoing;
 }
