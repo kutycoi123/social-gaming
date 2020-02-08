@@ -6,7 +6,7 @@ using GameSpecification::RuleType;
 std::unordered_map<std::string, RuleType> BaseRule::rulemap({
 	{"foreach", RuleType::ForEach},
 	{"loop", RuleType::Loop},
-	{"Inparallel", RuleType::Inparallel},
+	{"inparallel", RuleType::Inparallel},
 	{"parallelfor", RuleType::Parallelfor},
 	{"switch", RuleType::Switch},
 	{"when", RuleType::When},
