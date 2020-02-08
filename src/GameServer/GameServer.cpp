@@ -175,6 +175,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		else if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
+			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
+			
+			} catch( nlohmann::json gameConfig ) {
+				std::cout<< "incorrect json";
+			}
+				 
+
 		}
 
 		 
