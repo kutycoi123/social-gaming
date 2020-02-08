@@ -26,10 +26,6 @@ bool GameSession::isGameStarted() const {
     return _isGameStarted;
 }
 
-void GameSession::setCurrentGame(std::string name) {
-    _currentGame = name;
-}
-
 void GameSession::setTotalNumPlayers(int totalPlayers) { 
     _totalNumPlayers = totalPlayers;
 }

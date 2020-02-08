@@ -17,7 +17,6 @@ public:
     std::string getSessionName() const;
     bool isGameStarted() const;
 
-    void setCurrentGame(std::string name);
     void setTotalNumPlayers(int totalPlayers);
     void addUserToSession(uintptr_t userID);
     void removeUserFromSession(uintptr_t userID);
