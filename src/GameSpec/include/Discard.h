@@ -1,7 +1,7 @@
 #ifndef DISCARD_H
 #define DISCARD_H
 
-#include "rule.h"
+#include "Rule.h"
 #include <string>
 
 class Discard : public Rule{

@@ -1,7 +1,7 @@
 #ifndef INPARALLEL_H
 #define INPARALLEL_H
 
-#include "rule.h"
+#include "Rule.h"
 #include <string>
 #include <vector>
 

@@ -5,25 +5,23 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
+#include "User.h"
+#include "UserList.h"
 
 class GameSession { 
     
 public:
-    GameSession(uintptr_t ownerID);
+    GameSession(User& owner);
     Invitation getInvitationCode() const;
     std::string getSessionName() const;
     void setCurrentGame(std::string name);
-    void addUserToSession(uintptr_t userID);
-    void removeUserFromSession(uintptr_t userID);
+    void addUserToSession(User& user);
+    void removeUserFromSession(User& user);
     void removeAllUsersfromSession();
     size_t totalPlayerCount() const noexcept;
     int sessionConfigureSettings(std::string jsonSettings);
-    void setOwner(uintptr_t ownerID);
-    // std::list<Player> GetPlayers(); // TODO: Link with the User class
-    void SetPlayerInviteCodes();
-    void SetTotalNumPlayers(int totalPlayers);
-    void addUserIDToSession(int userID);
-    // std::list<Player> getPlayers();  // TODO: Link with the User class
+
+    UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {
         return _invitationCode == gameSession._invitationCode;
@@ -35,14 +33,13 @@ private:
     std::list<std::string> _ListPerAudience;
     std::list<std::string> _ListRules;
     std::string _currentGame;
-    std::list<uintptr_t> _playersIDInSession;
-    // std::list<Player> _playersList;  // TODO: Link with the User class
+    UserList _usersInSession;
 
     std::string _sessionName;
     const Invitation _invitationCode;
     int _gameID;
     int _totalNumPlayers;
-    uintptr_t _ownerID;
+    User& _owner;
     std::string _JSONSetting;
 
 };

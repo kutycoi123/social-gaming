@@ -1,7 +1,7 @@
 #ifndef REVERSE_H
 #define REVERSE_H
 
-#include "rule.h"
+#include "Rule.h"
 #include <string>
 
 class Reverse : public Rule{

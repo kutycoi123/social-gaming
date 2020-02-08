@@ -1,7 +1,7 @@
 #ifndef LOOP_H
 #define LOOP_H
 
-#include "rule.h"
+#include "Rule.h"
 #include <string>
 #include <vector>
 
