@@ -1,4 +1,4 @@
-#include "include/inparallel.h"
+#include "Inparallel.h"
 
 Inparallel::Inparallel(std::vector<std::string> rules) : Rule("inparallel"), _rules(rules) {}
 

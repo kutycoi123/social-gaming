@@ -1,9 +1,10 @@
-#include "GameSession.h"
 #include "Server.h"
 #include <nlohmann/json.hpp>
 
-#include "GameSessionManager.cpp"
+#include "GameSession.h"
 #include "User.h"
+#include "UserList.h"
+#include "GameSessionManager.h"
 
 #include "ProcessCommand.h"
 
@@ -16,16 +17,16 @@
 #include <thread>
 #include <vector>
 
-
-struct MessageInfo{
-	networking::Message message;
-	//information about which lobby to send message to
+struct GlobalMessage{
+	std::string message;
+	//something to specifiy private message, broadcast to specifiv session, broadcast globally (all sessions)
+	//maybe user id?, session id?
 };
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-static std::vector<networking::Connection> clients;
-static std::vector<User> users;
+static UserList usersInMainLobby;
+static GlobalMessage globalMessage = {""};
 
 static std::vector<std::string> strVector ;
 static std::vector<std::string> splitCommand(std::string s);
@@ -35,13 +36,14 @@ const int SECOND_COMMAND = 1;
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
+
+//these two should definitlly be changed, iirc Hunar is working on them
 static std::string getConfigurationFilePath(int, char* []);
 static void checkValidConfigurationFile(const nlohmann::json&);
 
 //message thread
 static void handleMessages(networking::Server&);
-static std::vector<MessageInfo> processMessages(networking::Server&, const std::deque<networking::Message>&);
-static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>&);
+static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
 
 int main(int argc, char* argv[]){
 
@@ -68,7 +70,8 @@ int main(int argc, char* argv[]){
 	//while server up, process messages
 	std::string message = "";
 	do{
-		std::cin >> message;
+		globalMessage.message = message;
+		std::getline(std::cin, message);
 	} while (message != "shutdown");
 
 	exit_thread_flag = true;
@@ -81,26 +84,16 @@ int main(int argc, char* argv[]){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	clients.push_back(c);
-	users.push_back(User(c.id));
+	UserId id(c.id);
+	usersInMainLobby.addUser(id);
 }
 
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 
-	// TODO: Mzegar think of some way to handle these two together
-	// Also use std methods of iterating over this when refactor comes in
-	for (int i = users.size(); i >= 0; --i)
-	{
-		if (users.at(i).getId() == c.id) {
-			users.erase(users.begin() + i);
-		}
-	}
-
-	auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-	clients.erase(eraseBegin, std::end(clients));
+	UserId id(c.id);
+	usersInMainLobby.removeUser(id);
 }
 
 static std::string getConfigurationFilePath(int argc, char* argv[]){
@@ -116,14 +109,13 @@ static std::string getConfigurationFilePath(int argc, char* argv[]){
 static void checkValidConfigurationFile(const nlohmann::json &configurationFile) {
 	
 	auto port = configurationFile.at("DefaultPort");
-	std::string htmlpath = configurationFile.at("HTML Location");
-
 	//string to short conversion check
 	if(port.get<unsigned short>() != port.get<std::intmax_t>()){
 		std::cout << "Port out of range\n";
 	    std::exit(-1);
 	}
 
+	std::string htmlpath = configurationFile.at("HTML Location");
 	//html path check for valid file
 	if(access(htmlpath.c_str(), R_OK) == -1){
 	    std::cout << "Unable to open HTML index file: " << htmlpath << "\n";
@@ -150,12 +142,12 @@ static void handleMessages(networking::Server& server){
 		}
 
 		auto incoming = server.receive();
-		std::vector<MessageInfo> returnMessage = processMessages(server, incoming);
-
-		auto outgoing = buildOutgoing(returnMessage);
+		
+		auto outgoing = gameServerUpdate(server, incoming);
 
 		server.send(outgoing);
 
+		//probably want to replace this with something else
 		if (errorWhileUpdating) {
 			break;
 		}
@@ -166,26 +158,13 @@ static void handleMessages(networking::Server& server){
 	return;
 }
 
-static std::vector<MessageInfo> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
-	std::vector<MessageInfo> result;
+static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::deque<networking::Message> commandResult;
 
 	for (networking::Message message : incoming) {
 
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
-		std::string name = std::string();
-		for (auto& user : users) {
-			if (message.connection.id == user.getId() && !user.getName().empty()) {
-				name = user.getName();
-			}
-		}
-
-		if (!name.empty()) {
-			std::cout << name << "> " << message.text << "\n";
-		} else {
-			std::cout << message.connection.id << "> " << message.text << "\n";
-		}
-
 		std::string text = message.text;
 
 		ProcessCommand evaluateText;
@@ -220,7 +199,6 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 		{
 			GameSession init = GameSessionManager::createGameSession(1);
 			Invitation code = init.getInvitationCode();
-			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
 			std::cout << "creating lobby " << code.toString() << '\n';
 			break;
 		}
@@ -232,11 +210,8 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 		}
 		case ProcessCommand::CommandType::USERNAME:
 		{
-			for (auto& user : users) {
-				if (message.connection.id == user.getId()) {
-					user.setName("Testing");
-				}
-			}
+			std::cout << "user name";
+
 		break;
 		}
 		case ProcessCommand::CommandType::NULL_COMMAND:
@@ -245,14 +220,28 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 		break;
 		}
 
+			//for example something 
+			//game[connection].message = blahblahblah
+
+			//dummy code, remove later
+			commandResult.push_back(networking::Message{message.connection, message.text});
 		}
 	}
+	return commandResult;
+}
 
-	//update all games
+static std::deque<networking::Message> getGlobalMessages(){
+	std::deque<networking::Message> result {};
+	
+	if(globalMessage.message != ""){
 
-	//process messages based on game logic
+		for(auto& entry : usersInMainLobby){
+			User user = entry.second;
+			result.push_back({networking::Connection{user.getUserId()}, globalMessage.message});
+		}
 
-	//get reply of all games
+		globalMessage.message = "";
+	}
 
 	return result;
 }
@@ -263,27 +252,27 @@ std::vector<std::string> splitCommand(std::string s){
                                  std::istream_iterator<std::string>());
     return results;
 
- };
+ }
 
-//teacher provided functions
-static std::deque<networking::Message> buildOutgoing(const std::vector<MessageInfo>& returnMessage) {
-	std::deque<networking::Message> outgoing;
+static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
+	std::deque<networking::Message> allMessages = {};
 
-	//only push to clients if they are in the same lobby
+	std::deque<networking::Message> globalMessages = getGlobalMessages();
+	allMessages.insert(allMessages.end(), globalMessages.begin(), globalMessages.end());
 
-	//dummy code
-	std::ostringstream log;
+	//doesn't really make sense for command messages to be broadcasted to everyone, so only the person creating the command needs to see the server reply
+	std::deque<networking::Message> commandMessages = processMessages(server, incoming);
+	allMessages.insert(allMessages.end(), commandMessages.begin(), commandMessages.end());
 
-	for(auto& message : returnMessage){
-		networking::Message rawMessage = message.message;
-		log << rawMessage.connection.id << "> " << rawMessage.text << '\n';
-	}
+	//TODO: update all games based on game logic (probs in gamesessionmanager)
 
-	for (auto& client : clients) {
-		outgoing.push_back({client, log.str()});
-	}
+	std::deque<networking::Message> gameMessages = GameSessionManager::getAllGameMessages();
+	allMessages.insert(allMessages.end(), gameMessages.begin(), gameMessages.end());
+	
+	std::deque<networking::Message> lobbyMessages = GameSessionManager::getAllLobbyMessages();
+	allMessages.insert(allMessages.end(), lobbyMessages.begin(), lobbyMessages.end());
 
-	return outgoing;
+	return allMessages;
 }
 
 #pragma endregion

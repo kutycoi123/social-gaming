@@ -1,17 +1,17 @@
-#include "include/GameSpec.h"
+#include "GameSpec.h"
 #include <fstream>
 
-GameSpec::GameSpec() : _rules(0), _specFilePath(""){
+GameSpec::GameSpec() : _specFilePath(""){
 }
 
-GameSpec::GameSpec(const std::string& path) : _specFilePath(path), _rules(0){
+GameSpec::GameSpec(const std::string& path) : _specFilePath(path){
 }
 
 inline std::vector<Rule> GameSpec::getRules() const{
 	return _rules;
 }
 
-inline std::string GameSpec::getpecFilePath() const{
+inline std::string GameSpec::getSpecFilePath() const{
 	return _specFilePath;
 }
 
@@ -32,7 +32,7 @@ void GameSpec::readSpec(){
     try{
         parseGameSpec(gameSpecJson);
     }catch (int n){
-        std::cout << "Parsing error occured\n";
+       // std::cout << "Parsing error occured\n";
     }
 
 }
