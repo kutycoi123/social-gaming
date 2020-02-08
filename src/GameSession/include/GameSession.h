@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
+#include "Game.h"
 #include "User.h"
 #include "UserList.h"
 
@@ -13,13 +14,18 @@ class GameSession {
 public:
     GameSession(User& owner);
     Invitation getInvitationCode() const;
+    size_t getTotalPlayerCount() const noexcept;
     std::string getSessionName() const;
-    void setCurrentGame(std::string name);
+    bool isGameStarted() const;
+
+    void setTotalNumPlayers(int totalPlayers);
     void addUserToSession(User& user);
     void removeUserFromSession(User& user);
     void removeAllUsersfromSession();
-    size_t totalPlayerCount() const noexcept;
-    int sessionConfigureSettings(std::string jsonSettings);
+
+    void setConfigurationSettings(std::string jsonSettings);
+    void createInviteCode();
+    void startGame();
 
     UserList getUsersInSession();
 
@@ -27,8 +33,13 @@ public:
         return _invitationCode == gameSession._invitationCode;
     }
 
+    // WIP
+    // std::list<Player> getPlayers();  // TODO: Link with the User class
+    // void setPlayerInviteCodes();
+
 private:
- 
+    // Game game;
+
     std::list<std::string> _ListSettingVars;
     std::list<std::string> _ListPerAudience;
     std::list<std::string> _ListRules;
@@ -36,12 +47,20 @@ private:
     UserList _usersInSession;
 
     std::string _sessionName;
-    const Invitation _invitationCode;
-    int _gameID;
-    int _totalNumPlayers;
-    User& _owner;
     std::string _JSONSetting;
 
+    const Invitation _invitationCode;
+
+    int _gameID;
+    int _totalNumPlayers;
+
+    bool _isGameStarted;
+    User& _owner;
+
+    uintptr_t _ownerID;
+
+    // WIP
+    // std::list<Player> _playersList;  // TODO: Link with the User class
 };
 
 #endif
