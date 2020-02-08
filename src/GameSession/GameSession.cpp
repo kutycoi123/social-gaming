@@ -13,7 +13,7 @@ void GameSession::setCurrentGame(std::string name) {
 }
 
 void GameSession::addUserToSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accodomate this operation better.
+    // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.addUser(user.getUserId());
 }
 
@@ -22,7 +22,7 @@ size_t GameSession::totalPlayerCount() const noexcept {
 }
 
 void GameSession::removeUserFromSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accodomate this operation better.
+    // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.removeUser(user.getUserId());
 }
 
