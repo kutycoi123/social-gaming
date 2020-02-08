@@ -1,67 +1,66 @@
-#include "GameSession.h"
-#include "Invitation.h"
-#include <unordered_map>
-#include <optional>
-#include <system_error>
+#include "include/GameSessionManager.h"
 
-namespace GameSessionManager{
-    //temporary struct to "pretend" as the game
-    struct Game{
-        std::string game;
-    };
+GameSession GameSessionManager::createGameSession(int ownerId){
+    GameSession gameSession{ownerId};
+    _sessionsList.insert(gameSession);
+    _inviteCodes.insert(gameSession.getInvitationCode());
+    _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
+    return gameSession;
+}
 
-    static std::list<GameSession> lobbyList;
-    static std::list<Game> gameList;
-    static std::list<Invitation> _inviteCodes;
-    static std::unordered_map<std::string, GameSession> _invitationToGameSessionMap; 
-
-    size_t totalSessionCount(){
-        return lobbyList.size();
+std::optional<GameSession> GameSessionManager::joinGameSession(int playerId, const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession.has_value()){
+        gameSession.value().addUserToSession(playerId);
     }
+    return gameSession;
+}
 
-    std::optional<Invitation> sessionExists(const Invitation& invitation) {
-        auto found = _invitationToGameSessionMap.find(invitation.toString());
-        if (found == _invitationToGameSessionMap.end()){
-            return std::nullopt;
-        }
-        return std::optional<Invitation>{invitation};
+std::optional<GameSession> GameSessionManager::findGameSession(const Invitation& invitation){
+    auto found = _invitationToGameSessionMap.find(invitation);
+    if (found == _invitationToGameSessionMap.end()){
+        return std::nullopt;
     }
+    auto gameSession = found->second;
+    return std::optional<GameSession>{gameSession};
+}
 
-    GameSession createGameSession(const User& owner){
-        GameSession gameSession{owner.getId()};
-        lobbyList.push_back(gameSession);
-        _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode().toString(), gameSession));
-        return gameSession;
-    }
-
-    //change booleon to error code
-    void joinGameSession(const User& player, const std::string& invitation){
-        auto found = _invitationToGameSessionMap.find(invitation);
-        if (found == _invitationToGameSessionMap.end()){
-            throw std::runtime_error("No such lobby");            
-        }
-
-        auto gameSession = found->second;
-        gameSession.addUserToSession(player.getId());
-    }
-
-    void endGameSession(const GameSession& gameSession){
-        auto invitationCode = gameSession.getInvitationCode();
-        if (sessionExists(invitationCode)){
-            _invitationToGameSessionMap.erase(invitationCode.toString());
-            //lobbyList.remove(gameSession);
-        }
-    }
-
-    std::deque<networking::Message> getAllGameMessages(){
-        //Queries Game to get the replies from the game
-        //dummy code
-        return {};
-    }
-
-    std::deque<networking::Message> getAllLobbyMessages(){
-        //queries lobbies to get replies from lobby
-        //dummy code;
-        return {};
+void GameSessionManager::endGameSession(GameSession& gameSession){
+    auto invitationCode = gameSession.getInvitationCode();
+    if (sessionExists(invitationCode)){
+        gameSession.removeAllUsersfromSession();
+        _invitationToGameSessionMap.erase(invitationCode);
+        _inviteCodes.erase(invitationCode);
+        _sessionsList.erase(gameSession);
     }
 }
+
+size_t GameSessionManager::totalSessionCount(){
+    return _sessionsList.size();
+}
+
+std::optional<Invitation> GameSessionManager::sessionExists(const std::string& invitationString){
+    return sessionExists(Invitation{invitationString});
+}
+
+std::optional<Invitation> GameSessionManager::sessionExists(const Invitation& invitation) {
+    auto found = _invitationToGameSessionMap.find(invitation);
+    if (found == _invitationToGameSessionMap.end()){
+        return std::nullopt;
+    }
+    return std::optional<Invitation>{found->first};
+}
+
+std::deque<networking::Message> GameSessionManager::getAllGameMessages(){
+    //Queries Game to get the replies from the game
+    //dummy code
+    return {};
+}
+
+std::deque<networking::Message> GameSessionManager::getAllLobbyMessages(){
+    //queries lobbies to get replies from lobby
+    //dummy code;
+    return {};
+}
+
+    

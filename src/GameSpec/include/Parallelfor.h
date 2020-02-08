@@ -1,13 +1,13 @@
-#ifndef FOREACH.H
-#define FOREACH.H
+#ifndef PARALLELFOR_H
+#define PARALLELFOR_H
 
 #include "rule.h"
 #include <string>
 #include <vector>
 
-class ForEach : public Rule{
+class Parallelfor : public Rule{
     public:
-        ForEach(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules);
+        Parallelfor(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules);
         std::vector<std::string> getList() const;
         std::string getElement() const;
         std::vector<std::string> getRules() const;

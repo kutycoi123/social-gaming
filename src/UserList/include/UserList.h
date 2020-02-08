@@ -1,4 +1,5 @@
 #include <User.h>
+#include <optional>
 #include <unordered_map>
 
 struct UserIdHash
@@ -14,8 +15,8 @@ public:
     void addUser(const UserId& id);
     void removeUser(const UserId& id);
 
-    User getUser(const UserId& id);
-    bool transferUser(UserList& from, UserList& to);
+    std::optional<User> getUser(const UserId& id);
+    bool transferUser(UserList& transferTo, User& user);
 
     std::unordered_map<UserId, User, UserIdHash>::iterator begin();
     std::unordered_map<UserId, User, UserIdHash>::iterator end();

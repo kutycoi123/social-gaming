@@ -1,29 +1,36 @@
 #include "include/UserList.h"
 
-UserList::UserList() {
-
-}
+UserList::UserList() {};
 
 void UserList::addUser(const UserId& id) {
-    _idToUserMap.insert(std::make_pair(UserId(id), User(id.getId())));
+    _idToUserMap.insert(std::make_pair(id, User(id)));
 }
 
 void UserList::removeUser(const UserId& id) {
-    _idToUserMap.erase(UserId(id));
+    _idToUserMap.erase(id);
 }
 
-User UserList::getUser(const UserId& id) {
+std::optional<User> UserList::getUser(const UserId& id) {
     auto iterator = _idToUserMap.find(id);
 
-    if (iterator != _idToUserMap.end()) {
-        return iterator->second;
-    } else {
-        throw std::runtime_error("no such user");
+    if (iterator == _idToUserMap.end()) {
+        return std::nullopt;
     }
+
+    return std::optional<User>{iterator->second};
 }
 
-bool UserList::transferUser(UserList& from, UserList& to) {
+bool UserList::transferUser(UserList& transferTo, User& user) {
+    UserId userId = user.getUserId();
+    auto iterator = _idToUserMap.find(userId);
 
+    if (iterator != _idToUserMap.end()) {
+        removeUser(userId);
+        transferTo.addUser(userId);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 std::unordered_map<UserId, User, UserIdHash>::iterator UserList::begin() {

@@ -10,8 +10,13 @@
 // 4. Some icon system? country system?
 // 5. Consider storing some connection info here or having this User class be a child of the web-socket-client
 
+struct UserName {
+    std::string name;
+};
+
 class UserId {
 public:
+    UserId();
     UserId(const uintptr_t& id);
     uintptr_t getId() const;
     bool operator==(const UserId& id) const;
@@ -22,19 +27,16 @@ private:
 
 class User {
 public:
-    User(const uintptr_t& id);
+    User(const UserId& userId);
 
-    // Game getCurrentGame() const;
-    std::string getName() const;
-    uintptr_t getId() const;
+    void setName(const UserName& name);
 
-	void setName(const std::string& name);
-    // void setCurrentGame(const Game& game);
+    UserName getName() const;
+    uintptr_t getUserId() const;
 
 private:
-    std::string _name;
-    uintptr_t _id;
-    // Game _currentGame = nullptr;
+    UserName _userName;
+    UserId _userId;
 };
 
 

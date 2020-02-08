@@ -4,8 +4,7 @@
 #include "GameSession.h"
 #include "User.h"
 #include "UserList.h"
-
-#include "GameSessionManager.cpp"
+#include "GameSessionManager.h"
 
 #include <atomic>
 #include <iostream>
@@ -156,24 +155,6 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 	std::deque<networking::Message> commandResult;
 
 	for (networking::Message message : incoming) {
-
-		// TODO Mzegar: Testing, this should go somewhere else
-		// Figure out somewhere else to put this and refactor
-		// Depending on our command structure in the future, we may only need to lookup the user once here 
-		// (we do same lookups at the bottom too) Ex. User owner = getUserFrom...
-		UserId id(message.connection.id);
-		std::string name = std::string();
-		User user = usersInMainLobby.getUser(id);
-		if (message.connection.id == user.getId() && !user.getName().empty()) {
-			name = user.getName();
-		}
-
-		if (!name.empty()) {
-			std::cout << name << "> " << message.text << "\n";
-		} else {
-			std::cout << message.connection.id << "> " << message.text << "\n";
-		}
-
 		//ad-hoc message processing
 		//definitly will be changed
 		if (message.text == "quit") {
@@ -187,13 +168,15 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			GameSession init = GameSessionManager::createGameSession(user);
-			Invitation code = init.getInvitationCode();
-			commandResult.push_back(networking::Message{message.connection, "Your Invitation Code is: " + code.toString()});
-
-			std::cout << "creating lobby " << code.toString() << '\n';
+			//Something like
+			//GameSession init = GameSessionManager::createGameSession(user);
+			std::cout << "created session\n";
 		}
 		else if (message.text.find("join") != std::string::npos) {
+			
+			//something like
+
+			/*
 			std::string inviteCode = message.text.substr(5);
 
 			try{
@@ -203,11 +186,11 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			catch (...) {
 				std::cout << "lobby does not exist\n";
 			}
+			*/
 
 		} 
 		else if (message.text == "/username") {
-			// TODO Mzegar: figure out where to put commands, alongside making a better system for creating commands...
-			user.setName("TestName");
+			//do something
 		}
 		else {
 			//find session based on connection id
@@ -230,7 +213,7 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 		for(auto& entry : usersInMainLobby){
 			User user = entry.second;
-			result.push_back({networking::Connection{user.getId()}, globalMessage.message});
+			result.push_back({networking::Connection{user.getUserId()}, globalMessage.message});
 		}
 
 		globalMessage.message = "";
