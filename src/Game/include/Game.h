@@ -6,10 +6,6 @@
 class Game {
 public:
     Game();
-    int howMany();
-
-private:
-    static int _counter;
 };
 
 #endif
