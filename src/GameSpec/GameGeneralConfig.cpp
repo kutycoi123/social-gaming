@@ -1,5 +1,8 @@
-#include "include/GameGeneralConfig.h"
+#include "GameGeneralConfig.h"
 
+using GameSpecification::GameGeneralConfig;
+using GameSpecification::PlayerCount;
+using GameSpecification::Setup;
 GameGeneralConfig::GameGeneralConfig()
     : _name(""),
       _playerCount({0, 0}), 

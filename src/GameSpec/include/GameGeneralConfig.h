@@ -3,6 +3,7 @@
 
 #include <string>
 
+namespace GameSpecification{
 struct PlayerCount{
     int min;
     int max;  
@@ -36,5 +37,5 @@ class GameGeneralConfig{
         Setup _setup;
 
 };
-
+}
 #endif
