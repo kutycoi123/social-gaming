@@ -24,8 +24,8 @@ UserName User::getName() const{
     return _userName;
 }
 
-UserId User::getUserId() const{
-    return _userId;
+uintptr_t User::getUserId() const{
+    return _userId.getId();
 }
 
 void User::setName(const UserName& name){

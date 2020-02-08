@@ -28,6 +28,7 @@ target_include_directories(
 )
 
 target_link_libraries (GameSessionManager
+  networking
   session
 )
 
@@ -35,6 +36,7 @@ target_link_libraries(GameServer
   networking
   session
   user
+  GameSpec
   userlist
   nlohmann_json::nlohmann_json
   ${CMAKE_THREAD_LIBS_INIT}

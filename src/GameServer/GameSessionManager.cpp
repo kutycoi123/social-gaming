@@ -50,3 +50,17 @@ std::optional<Invitation> GameSessionManager::sessionExists(const Invitation& in
     }
     return std::optional<Invitation>{found->first};
 }
+
+std::deque<networking::Message> GameSessionManager::getAllGameMessages(){
+    //Queries Game to get the replies from the game
+    //dummy code
+    return {};
+}
+
+std::deque<networking::Message> GameSessionManager::getAllLobbyMessages(){
+    //queries lobbies to get replies from lobby
+    //dummy code;
+    return {};
+}
+
+    

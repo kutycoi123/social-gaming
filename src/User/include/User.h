@@ -32,7 +32,7 @@ public:
     void setName(const UserName& name);
 
     UserName getName() const;
-    UserId getUserId() const;
+    uintptr_t getUserId() const;
 
 private:
     UserName _userName;

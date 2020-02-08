@@ -24,7 +24,7 @@ inline bool GameGeneralConfig::hasAudience() const{
     return _audience;
 }
 
-inline Setup getSetup() const{
+inline Setup GameGeneralConfig::getSetup() const{
     return _setup;
 }
 
