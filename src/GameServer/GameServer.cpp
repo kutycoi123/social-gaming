@@ -210,16 +210,6 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 				}
 			}
 		}
-		else if (message.text == "djlin") {
-			// TODO djlin: investigate why gameSession isGameStarted both returns true
-			// This section is going to be swapped out in future
-			GameSession gameSession = GameSessionManager::createGameSession(1);
-			Invitation inv = gameSession.getInvitationCode();
-
-			auto gs = GameSessionManager::joinGameSession(1, inv);
-			gameSession.startGame();
-			auto gs2 = GameSessionManager::joinGameSession(2, inv);
-		}
 		else {
 			//find session based on connection id
 			//send message into game

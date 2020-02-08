@@ -1,10 +1,14 @@
 #include "include/GameSession.h"
 #include "GameSessionManager.h"
+#include "Game.h"
+#include <nlohmann/json.hpp>
 
 GameSession::GameSession(int ownerID) : 
     _invitationCode (Invitation()), 
     _ownerID (ownerID),
-    _isGameStarted(false) {}
+    _isGameStarted(false)
+    // game(nlohmann::json gameSettings)
+    {}
 
 Invitation GameSession::getInvitationCode() const {
     return _invitationCode;
@@ -24,10 +28,6 @@ bool GameSession::isGameStarted() const {
 
 void GameSession::setCurrentGame(std::string name) {
     _currentGame = name;
-}
-
-void GameSession::setOwner(uintptr_t ownerID) { 
-    _ownerID = ownerID;
 }
 
 void GameSession::setTotalNumPlayers(int totalPlayers) { 
@@ -52,7 +52,6 @@ void GameSession::setConfigurationSettings(std::string jsonSettings) {
 
 void GameSession::startGame() {
     _isGameStarted = true;
-    GameSessionManager::startGameSession(*this);
 }
 
 // std::list<Player> GameSession::getPlayers() {   // TODO: Link with the User class

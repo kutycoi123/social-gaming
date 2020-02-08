@@ -29,7 +29,6 @@ target_include_directories(
 
 target_link_libraries (GameSessionManager
   session
-  game
 )
 
 target_link_libraries(GameServer

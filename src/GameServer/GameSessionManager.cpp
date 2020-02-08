@@ -28,13 +28,6 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::startGameSession(const GameSession& gameSession){
-    // TODO: Currently game class is placeholder
-    // Need to insert game into a map as well
-    Game game;
-    _gameSessionToGameMap.insert(std::make_pair(gameSession, game));
-}
-
 void GameSessionManager::endGameSession(GameSession& gameSession){
     auto invitationCode = gameSession.getInvitationCode();
     if (sessionExists(invitationCode)){

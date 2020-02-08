@@ -5,6 +5,8 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
+#include "Game.h"
+
 class GameSession { 
     
 public:
@@ -16,7 +18,6 @@ public:
     bool isGameStarted() const;
 
     void setCurrentGame(std::string name);
-    void setOwner(uintptr_t ownerID);
     void setTotalNumPlayers(int totalPlayers);
     void addUserToSession(uintptr_t userID);
     void removeUserFromSession(uintptr_t userID);
@@ -35,6 +36,8 @@ public:
     // void setPlayerInviteCodes();
 
 private:
+    // Game game;
+
     std::list<std::string> _ListSettingVars;
     std::list<std::string> _ListPerAudience;
     std::list<std::string> _ListRules;

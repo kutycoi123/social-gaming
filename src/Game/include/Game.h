@@ -2,10 +2,11 @@
 #define GAME_H
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 class Game {
 public:
-    Game();
+    Game(nlohmann::json gameSettings);
 };
 
 #endif
