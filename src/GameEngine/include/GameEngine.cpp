@@ -4,8 +4,12 @@
 void GameEngine::parseJSON(nlohmann::json gameConfiguration) {
     if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
       nlohmann::json configs = gameConfiguration["gameConfiguration"];
-      std::string name = configs["name"];
-      bool audience = configs["audience"];
+
+      this->configSettings.name = configs["name"];
+      this->configSettings.audience = configs["audience"];
+      this->configSettings.maxPlayercount = configs["player count"]["max"];
+      this->configSettings.minPlayercount = configs["player count"]["in"];
+      this->configSettings.setup = configs["setup"];
     }
     this->constants = gameConfiguration["constants"];
     this-> variables = gameConfiguration["variables"];
@@ -28,6 +32,7 @@ nlohmann::json fileToJson(std::string pathName) {
   i >> JsonConfig;
   return JsonConfig;
 }
+
 
 
 

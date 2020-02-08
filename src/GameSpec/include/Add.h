@@ -1,7 +1,7 @@
 #ifndef ADD_H
 #define ADD_H
 
-#include "rule.h"
+#include "Rule.h"
 #include "GameSpec.h"
 #include <string>
 

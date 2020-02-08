@@ -1,7 +1,7 @@
 #ifndef SHUFFLE_H
 #define SHUFFLE_H
 
-#include "rule.h"
+#include "Rule.h"
 #include <string>
 
 class Shuffle :public Rule{

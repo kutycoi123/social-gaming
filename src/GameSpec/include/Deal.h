@@ -1,7 +1,7 @@
 #ifndef DEAL_H
 #define DEAL_H
 
-#include "rule.h"
+#include "Rule.h"
 #include "GameSpec.h"
 #include <string>
 
