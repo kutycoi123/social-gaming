@@ -1,5 +1,5 @@
-#ifndef LOOP.H
-#define LOOP.H
+#ifndef LOOP_H
+#define LOOP_H
 
 #include "rule.h"
 #include <string>

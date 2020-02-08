@@ -2,6 +2,7 @@
 #define USER_H
 
 #include <string>
+#include <unordered_map>
 
 // TODO MZEGAR: Things to consider in the future
 // 1. Some point system? "global information will be displayed to all players on the main game screen."
@@ -9,23 +10,33 @@
 // 4. Some icon system? country system?
 // 5. Consider storing some connection info here or having this User class be a child of the web-socket-client
 
-class User {
+struct UserName {
+    std::string name;
+};
+
+class UserId {
 public:
-    User(const uintptr_t& id);
-    User(const std::string& name, const uintptr_t& id);
-    // User(const std::string& name, const std::string& id, const Game& currentGame);
-
-    // Game getCurrentGame() const;
-    std::string getName() const;
+    UserId();
+    UserId(const uintptr_t& id);
     uintptr_t getId() const;
-
-	void setName(const std::string& name);
-    // void setCurrentGame(const Game& game);
+    bool operator==(const UserId& id) const;
 
 private:
-    std::string _name;
     uintptr_t _id;
-    // Game _currentGame = nullptr;
+};
+
+class User {
+public:
+    User(const UserId& userId);
+
+    void setName(const UserName& name);
+
+    UserName getName() const;
+    uintptr_t getUserId() const;
+
+private:
+    UserName _userName;
+    UserId _userId;
 };
 
 

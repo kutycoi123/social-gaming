@@ -10,8 +10,8 @@
 class GameSession { 
     
 public:
-    GameSession(int ownerID);
-
+    GameSession(uintptr_t ownerID);
+    
     Invitation getInvitationCode() const;
     size_t getTotalPlayerCount() const noexcept;
     std::string getSessionName() const;

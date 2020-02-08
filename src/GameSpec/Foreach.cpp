@@ -1,9 +1,11 @@
-#include "include/foreach.h"
+#include "Foreach.h"
 
-ForEach::ForEach(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules) : Rule("foreach"), 
+ForEach::ForEach() : Rule("foreach"), _element(""){}
+
+ForEach::ForEach(const SpecValue& list, const std::string& element, std::vector<std::string>& rules) : Rule("foreach"), 
     _list(list), _element(element), _rules(rules){}
 
-std::vector<std::string> ForEach::getList() const{
+SpecValue ForEach::getList() const{
     return _list;
 }
 
@@ -15,7 +17,7 @@ std::vector<std::string> ForEach::getRules() const{
     return _rules;
 }
 
-void ForEach::setList(const std::vector<std::string>& list){
+void ForEach::setList(const SpecValue& list){
     _list = list;
 }
 

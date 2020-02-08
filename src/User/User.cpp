@@ -1,36 +1,33 @@
 #include "include/User.h"
 
-User::User(const uintptr_t& id) {
-    _id = id;
-}
+// ***********************
+// UserId
+// ***********************
+UserId::UserId(): _id(-1) {};
 
-User::User(const std::string& name, const uintptr_t& id) {
-    _name = name;
-    _id = id;
-}
+UserId::UserId(const uintptr_t& id): _id(id) {};
 
-// User::User(const std::string& name, const std::string& id, const Game& currentGame) {
-//      _name = name;
-//      _id = id;
-//      _currentGame = currentGame;
-// }
-
-// void User::setCurrentGame(const Game& game) {
-//      _currentGame = game;
-// }
-
-std::string User::getName() const{
-    return _name;
-}
-
-std::uintptr_t User::getId() const{
+std::uintptr_t UserId::getId() const {
     return _id;
 }
 
-// Game User::getCurrentGame() {
-//      return _currentGame;
-// }
+bool UserId::operator==(const UserId& id) const {
+    return _id == id.getId();
+}
 
-void User::setName(const std::string& name){
-	_name = name;
+// ***********************
+// User
+// ***********************
+User::User(const UserId& userId): _userId(userId) {};
+
+UserName User::getName() const{
+    return _userName;
+}
+
+uintptr_t User::getUserId() const{
+    return _userId.getId();
+}
+
+void User::setName(const UserName& name){
+	_userName = name;
 }

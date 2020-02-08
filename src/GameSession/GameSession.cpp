@@ -3,7 +3,7 @@
 #include "Game.h"
 #include <nlohmann/json.hpp>
 
-GameSession::GameSession(int ownerID) : 
+GameSession::GameSession(uintptr_t ownerID) : 
     _invitationCode (Invitation()), 
     _ownerID (ownerID),
     _isGameStarted(false)

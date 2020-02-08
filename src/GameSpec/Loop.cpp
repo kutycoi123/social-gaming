@@ -1,4 +1,4 @@
-#include "include/loop.h"
+#include "Loop.h"
 
 Loop::Loop(const std::string& loopType, const std::string& failCondition, std::vector<std::string> rules) : Rule("loop"), 
     _loopType(loopType), _failCondition(failCondition), _rules(rules){}

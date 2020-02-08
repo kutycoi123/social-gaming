@@ -1,5 +1,5 @@
-#ifndef INPARALLEL.H
-#define INPARALLEL.H
+#ifndef INPARALLEL_H
+#define INPARALLEL_H
 
 #include "rule.h"
 #include <string>
