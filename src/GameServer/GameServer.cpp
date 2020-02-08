@@ -4,7 +4,6 @@
 
 #include "GameSessionManager.cpp"
 #include "User.h"
-#include "UserList.h"
 
 #include <atomic>
 #include <iostream>
@@ -165,7 +164,7 @@ static std::vector<MessageInfo> processMessages(networking::Server& server, cons
 			std::cout << "start game\n";
 		} 
 		else if (message.text == "create lobby"){
-			GameSession init = GameSessionManager::createGameSession(1);
+			GameSession init = GameSessionManager::createGameSession();
 			Invitation code = init.getInvitationCode();
 			result.push_back(MessageInfo{networking::Message{message.connection, "Your Invitation Code is: " + code.toString()}});
 
