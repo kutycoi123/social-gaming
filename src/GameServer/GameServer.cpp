@@ -3,7 +3,7 @@
 
 #include "GameSessionManager.h"
 #include "User.h"
-
+#include "UserList.h"
 #include "ProcessCommand.h"
 
 #include <atomic>
@@ -182,6 +182,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 		}
 
+
 		switch (serverCommand)
 		{
 		case ProcessCommand::CommandType::QUIT:
@@ -202,9 +203,9 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
 		{
-			GameSession init = GameSessionManager::createGameSession(1);
-			Invitation code = init.getInvitationCode();
-			std::cout << "creating lobby " << code.toString() << '\n';
+			// GameSession init = GameSessionManager::createGameSession(1);
+			// Invitation code = init.getInvitationCode();
+			// std::cout << "creating lobby " << code.toString() << '\n';
 			break;
 		}
 
