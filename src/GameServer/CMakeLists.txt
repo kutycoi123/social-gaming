@@ -39,6 +39,7 @@ target_link_libraries(GameServer
   GameSpec
   userlist
   nlohmann_json::nlohmann_json
+  processcommand
   ${CMAKE_THREAD_LIBS_INIT}
 )
 

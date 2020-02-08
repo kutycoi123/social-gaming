@@ -4,6 +4,8 @@
 #include "GameSessionManager.h"
 #include "User.h"
 
+#include "ProcessCommand.h"
+
 #include <atomic>
 #include <iostream>
 #include <fstream>
@@ -21,6 +23,11 @@ struct GlobalMessage{
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
+
+static std::vector<std::string> strVector ;
+static std::vector<std::string> splitCommand(std::string s);
+const int FIRST_COMMAND = 0;
+const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
 
@@ -153,46 +160,63 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 	std::deque<networking::Message> commandResult;
 
 	for (networking::Message message : incoming) {
-		//ad-hoc message processing
-		//definitly will be changed
-		if (message.text == "quit") {
+
+		// TODO Mzegar: Use profs iteration when refactor happens
+		// Figure out somewhere else to put this
+		std::string text = message.text;
+
+		ProcessCommand evaluateText;
+
+		ProcessCommand evaluateMessage;		
+
+		ProcessCommand::CommandType serverCommand;
+
+		strVector = splitCommand(text);
+		
+		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+
+		switch (serverCommand)
+		{
+		case ProcessCommand::CommandType::QUIT:
+		{
+			std::cout << "quit game\n";
 			server.disconnect(message.connection);
-		} 
-		else if (message.text == "shutdown") {
+			break;
+		}
+		case ProcessCommand::CommandType::SHUTDOWN:
+		{
 			std::cout << "shutdown game\n";
-			//kick all players
-		} 
-		else if (message.text == "start game"){
+			break;
+		}
+		case ProcessCommand::CommandType::START_GAME:
+		{
 			std::cout << "start game\n";
-		} 
-		else if (message.text == "create lobby"){
-			//Something like
-			//GameSession init = GameSessionManager::createGameSession(user);
-			std::cout << "created session\n";
+			break;
 		}
-		else if (message.text.find("join") != std::string::npos) {
-			
-			//something like
-
-			/*
-			std::string inviteCode = message.text.substr(5);
-
-			try{
-				GameSessionManager::joinGameSession(user, inviteCode);
-				std::cout << "joining lobby " << inviteCode << '\n';
-			}
-			catch (...) {
-				std::cout << "lobby does not exist\n";
-			}
-			*/
-
-		} 
-		else if (message.text == "/username") {
-			//do something
+		case ProcessCommand::CommandType::CREATE_LOBBY:
+		{
+			GameSession init = GameSessionManager::createGameSession(1);
+			Invitation code = init.getInvitationCode();
+			std::cout << "creating lobby " << code.toString() << '\n';
+			break;
 		}
-		else {
-			//find session based on connection id
-			//send message into game
+		case ProcessCommand::CommandType::JOIN_LOBBY:
+		{
+
+			std::cout << "joining lobby ";
+			break;
+		}
+		case ProcessCommand::CommandType::USERNAME:
+		{
+			std::cout << "user name";
+
+		break;
+		}
+		case ProcessCommand::CommandType::NULL_COMMAND:
+		{
+			std::cout << "Error, Invalid user command" << '\n';
+		break;
+		}
 
 			//for example something 
 			//game[connection].message = blahblahblah
@@ -219,7 +243,14 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 	return result;
 }
+std::vector<std::string> splitCommand(std::string s){
+    
+    std::istringstream iss(s);
+    std::vector<std::string> results((std::istream_iterator<std::string>(iss)),
+                                 std::istream_iterator<std::string>());
+    return results;
 
+ }
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
 
