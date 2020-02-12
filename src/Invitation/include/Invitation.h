@@ -6,10 +6,15 @@
 class Invitation {
 public:
     std::string toString() const;
+    
+    // This constructor creates a new Invitation object with a semi-random code.
+    // It is intended to be used when a new GameSession is created.
     static Invitation createNewInvitation(){
         return Invitation();
     };
 
+    // This constructor turns wraps string input from the user into an Invitation object, 
+    // so that  it may be compared with other Invitation objects.
     static Invitation createInvitationFromStringInput(const std::string& invitationCode){
         return Invitation(invitationCode);
     }
