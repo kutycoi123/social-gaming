@@ -43,7 +43,7 @@ size_t GameSessionManager::totalSessionCount(){
 }
 
 std::optional<Invitation> GameSessionManager::sessionExists(const std::string& invitationString){
-    return sessionExists(Invitation{invitationString});
+    return sessionExists(Invitation::createInvitationFromStringInput(invitationString));
 }
 
 std::optional<Invitation> GameSessionManager::sessionExists(const Invitation& invitation) {

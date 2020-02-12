@@ -10,7 +10,3 @@ set_target_properties(invitation
                       CXX_STANDARD 17
                       PREFIX ""
 )
-
-target_link_libraries(invitation
-    GameSessionManager
-)
