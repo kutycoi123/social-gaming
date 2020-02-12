@@ -5,14 +5,21 @@
 
 class Invitation {
 public:
-    Invitation();
-    explicit Invitation(const std::string& invitationCode);
     std::string toString() const;
+    static Invitation createNewInvitation(){
+        return Invitation();
+    };
+
+    static Invitation createInvitationFromStringInput(const std::string& invitationCode){
+        return Invitation(invitationCode);
+    }
 
     bool operator==(const Invitation& invitation ) const {
         return _invitationCode.compare(invitation.toString()) == 0;
     }
 private:
+    Invitation();
+    explicit Invitation(const std::string& invitationCode);
     static unsigned long count;
     const std::string SEPARATOR = "x";
     const size_t MINIMUM_COUNT_STRING_LENGTH = 3;
