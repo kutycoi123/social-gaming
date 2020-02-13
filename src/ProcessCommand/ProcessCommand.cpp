@@ -11,11 +11,11 @@ ProcessCommand::CommandType ProcessCommand::evaluateCommand(std::string& message
     command = commands.find(message);
     if(command != commands.end())
     {
-        return userCommand = command->second;
+        return command->second;
     }
     else
     {
-        return userCommand = CommandType::NULL_COMMAND;
+        return CommandType::NULL_COMMAND;
     }
 }
 

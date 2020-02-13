@@ -40,6 +40,8 @@ target_link_libraries(GameServer
   userlist
   nlohmann_json::nlohmann_json
   processcommand
+  GameSessionManager
+  GameServerConfiguration
   ${CMAKE_THREAD_LIBS_INIT}
 )
 

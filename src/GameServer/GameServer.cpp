@@ -163,17 +163,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
-		std::string text = message.text;
-
-		ProcessCommand evaluateText;
-
-		ProcessCommand evaluateMessage;		
+		std::string text = message.text;	
 
 		ProcessCommand::CommandType serverCommand;
 
 		strVector = splitCommand(text);
 		
-		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -185,55 +181,53 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		switch (serverCommand)
 		{
 		case ProcessCommand::CommandType::QUIT:
-		{
-			std::cout << "quit game\n";
-			server.disconnect(message.connection);
+			{
+				std::cout << "quit game\n";
+				server.disconnect(message.connection);
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::SHUTDOWN:
-		{
-			std::cout << "shutdown game\n";
+			{
+				std::cout << "shutdown game\n";
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::START_GAME:
-		{
-			std::cout << "start game\n";
+			{
+				std::cout << "start game\n";
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
-		{
-			//GameSession init = GameSessionManager::createGameSession(1);
-			//Invitation code = init.getInvitationCode();
-			//std::cout << "creating lobby " << code.toString() << '\n';
+			{
+				//GameSession init = GameSessionManager::createGameSession(1);
+				//Invitation code = init.getInvitationCode();
+				//std::cout << "creating lobby " << code.toString() << '\n';
+			}
 			break;
-		}
-
-
 		case ProcessCommand::CommandType::JOIN_LOBBY:
-		{
-
-			std::cout << "joining lobby ";
+			{
+				std::cout << "joining lobby ";
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::USERNAME:
-		{
-			std::cout << "user name";
-
-		break;
-		}
+			{
+				std::cout << "user name";
+			}
+			break;
 		case ProcessCommand::CommandType::NULL_COMMAND:
-		{
-			std::cout << "Error, Invalid user command" << '\n';
-		break;
-		}
-
-			//for example something 
-			//game[connection].message = blahblahblah
-
-			//dummy code, remove later
-			commandResult.push_back(networking::Message{message.connection, message.text});
+			{
+				//not a command means just a message
+				//send to game sessions later
+				commandResult.push_back(networking::Message{message.connection, message.text});
+			}
+			break;
+		default:
+			{
+				//do nothing
+			}
+			break;
 		}
 	}
+
 	return commandResult;
 }
 
