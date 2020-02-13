@@ -7,6 +7,8 @@ Inparallel::Inparallel(std::vector<std::string> rules) : BaseRule("inparallel"),
 std::vector<std::string> Inparallel::getRules() const{
     return _rules;
 }
-void Inparallel::setRules(const std::vector<std::string>& rules){
-    _rules = rules;
+
+void process(){
+	//TODO: Add code to process inparallel
 }
+

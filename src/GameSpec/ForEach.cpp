@@ -20,14 +20,6 @@ std::vector<std::string> ForEach::getRules() const{
     return _rules;
 }
 
-void ForEach::setList(const SpecValue& list){
-    _list = list;
-}
-
-void ForEach::setElement(const std::string& element){
-    _element = element;
-}
-
-void ForEach::setRules(const std::vector<std::string>& rules){
-    _rules = rules;
+void ForEach::process(){
+	//TODO: Add code to process foreach rule
 }

@@ -23,9 +23,9 @@ namespace GameSpecification{
 
 		    std::vector<std::shared_ptr<BaseRule>> getRules() const;
 		    std::string getSpecFilePath() const;	
-		    void addRule(const BaseRule&);
+		    void addRule(std::shared_ptr<BaseRule>);
 		    void setSpecFilePath(const std::string&);
-		    void readSpec() override; //override
+		    void readSpec() override; 
 		    void parseGameSpec(const nlohmann::json&); 
 		    void addConstantSpec(const std::string&, const SpecValue& );
 		    void addVariableSpec(const std::string&, const SpecValue& );

@@ -9,7 +9,7 @@ class Inparallel : public BaseRule{
     public:
         Inparallel(std::vector<std::string> rules);
         std::vector<std::string> getRules() const;
-        void setRules(const std::vector<std::string>& rules);
+		void process() override;
     private:
         std::vector<std::string> _rules;
 };

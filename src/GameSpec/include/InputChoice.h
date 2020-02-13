@@ -24,14 +24,14 @@ namespace GameSpecification{
 			InputChoiceRule() : BaseRule("input-choice") {}
 			InputChoiceRule(const std::string& to, const MessageRule& prompt, const SpecValue& choices, 
 							const std::string& result, const std::string& timeout) 
-							:  _to(to), _prompt(prompt), _choices(choices), 
+							:  BaseRule("input-choice"), _to(to), _prompt(prompt), _choices(choices), 
 							   _result(result), _timeout(timeout) {}
 			std::string getTo() const;
 			std::string getResult() const;	
 			std::string getTimeout() const;
 			MessageRule getPrompt() const;
 			SpecValue getChoices() const;
-			void process(); //BaseRule's virtual func
+			void process() override; 
 		private:
 			std::string _to;	//represents field "to" in input choice rule
 			MessageRule _prompt; 

@@ -13,10 +13,6 @@ SpecValue Add::getValue() const{
     return _value;
 }
 
-void Add::setTo(const std::string& to){
-    _to = to;
-}
-
-void Add::setValue(const SpecValue& value){
-    _value = value;
+void Add::process(){
+	//TODO: Add code to process add rule
 }
