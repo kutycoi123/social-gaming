@@ -29,7 +29,10 @@ static std::vector<std::string> splitCommand(std::string s);
 const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
+ 
 static GlobalMessage globalMessage = {""};
+
+std::list<GameSession> GameSessionsList;
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -42,7 +45,7 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 //message thread
 static void handleMessages(networking::Server&);
 static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
-
+//player authentication. 
 int main(int argc, char* argv[]){
 
 	//Read Json
@@ -89,7 +92,7 @@ static void OnConnect(networking::Connection c) {
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
-
+	
 	UserId id(c.id);
 	usersInMainLobby.removeUser(id);
 }
@@ -141,9 +144,15 @@ static void handleMessages(networking::Server& server){
 
 		auto incoming = server.receive();
 		
-		auto outgoing = gameServerUpdate(server, incoming);
+
+		processMessages(server,incoming);
+
+		//auto outgoing = gameServerUpdate(server, incoming);
+		auto outgoing = SendMessageToSession();
 
 		server.send(outgoing);
+
+		
 
 		//probably want to replace this with something else
 		if (errorWhileUpdating) {
@@ -155,6 +164,33 @@ static void handleMessages(networking::Server& server){
 
 	return;
 }
+
+ 
+std::deque<networking::Message> SendMessageToSession() {
+	std::deque<networking::Message> commandResult;
+	
+	for (GameSession session:GameSessionsList) {
+		int total = session.getMessages().size();
+
+		for(int i = 0; i < total; i++) {
+			std::string message = session.getMessages().front();
+			session.getMessages().pop;
+
+			for( auto IdElement: session.getUsersInSession()) {
+				UserId id = IdElement.first;
+				commandResult.push_back(networking::Message{id.getId(), message});
+			}
+	
+		}
+	}
+	return commandResult;
+}
+	 
+ 
+	
+	//usersInMainLobby.begin
+	//commandResult.push_back(networking::Message{message.connection, message.text});
+
 
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
@@ -174,6 +210,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		strVector = splitCommand(text);
 		
 		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+		//where to process user Json here?
+
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -182,58 +220,91 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 		}
 
+		if (message.text.find("set Owner") != std::string::npos) {
+			// call game engine
+			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
+			} catch( nlohmann::json gameConfig ) {
+				std::cout<< "incorrect json";
+			}
+		}
+
+
 
 		switch (serverCommand)
 		{
-		case ProcessCommand::CommandType::QUIT:
-		{
-			std::cout << "quit game\n";
-			server.disconnect(message.connection);
-			break;
-		}
-		case ProcessCommand::CommandType::SHUTDOWN:
-		{
-			std::cout << "shutdown game\n";
-			break;
-		}
-		case ProcessCommand::CommandType::START_GAME:
-		{
-			std::cout << "start game\n";
-			break;
-		}
-		case ProcessCommand::CommandType::CREATE_LOBBY:
-		{
-			// GameSession init = GameSessionManager::createGameSession(1);
-			// Invitation code = init.getInvitationCode();
-			// std::cout << "creating lobby " << code.toString() << '\n';
-			break;
-		}
+			case ProcessCommand::CommandType::QUIT:
+			{
+				std::cout << "quit game\n";
+				server.disconnect(message.connection);
+				break;
+			}
+			case ProcessCommand::CommandType::SHUTDOWN:
+			{
+				std::cout << "shutdown game\n";
+				break;
+			}
+			case ProcessCommand::CommandType::START_GAME:
+			{
+				std::cout << "start game\n";
+				break;
+			}
+			case ProcessCommand::CommandType::CREATE_LOBBY:
+			{
+
+			 
+				UserId id(message.connection.id);
+				User owner(id.getId());
+				GameSession initSession = GameSessionManager::createGameSession(owner);
 
 
-		case ProcessCommand::CommandType::JOIN_LOBBY:
-		{
+				Invitation code = initSession.getInvitationCode();
 
-			std::cout << "joining lobby ";
+				initSession.addMessages(message.text);
+				GameSessionsList.push_back(initSession);
+
+				globalMessage.message.append("Creating lobby: \n");
+				std::cout << "creating lobby " << '\n';
+				globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
+		 
+
+				break;
+			}
+
+
+			case ProcessCommand::CommandType::JOIN_LOBBY:
+			{
+				
+				std::cout << "joining lobby ";
+				break;
+			}
+			case ProcessCommand::CommandType::USERNAME:
+			{
+				std::cout << "user name";
+
 			break;
-		}
-		case ProcessCommand::CommandType::USERNAME:
-		{
-			std::cout << "user name";
-
-		break;
-		}
-		case ProcessCommand::CommandType::NULL_COMMAND:
-		{
-			std::cout << "Error, Invalid user command" << '\n';
-		break;
-		}
+			}
+			case ProcessCommand::CommandType::NULL_COMMAND:
+			{
+				std::cout << "Error, Invalid user command" << '\n';
+			break;
+			}
 
 			//for example something 
 			//game[connection].message = blahblahblah
 
 			//dummy code, remove later
-			commandResult.push_back(networking::Message{message.connection, message.text});
+			//push message into Sessions. 
+			//if session exists push it into it. 
+			//and the message id into it. Pair message, Id,, 
+			//
+			
+
 		}
+		//UserConnection  to Invitation. 
+		//GameSession foundSession = GameSessionManager::findGameSession(Invitation());
+			
+
+		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
 	return commandResult;
 }

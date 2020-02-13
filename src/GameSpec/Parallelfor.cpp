@@ -1,6 +1,9 @@
 #include "Parallelfor.h"
 
-Parallelfor::Parallelfor(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules) : Rule("parallelfor"), 
+using GameSpecification::Parallelfor;
+using GameSpecification::BaseRule;
+
+Parallelfor::Parallelfor(std::vector<std::string> list, const std::string& element, std::vector<std::string> rules) : BaseRule("parallelfor"), 
     _list(list), _element(element), _rules(rules){}
 
 std::vector<std::string> Parallelfor::getList() const{

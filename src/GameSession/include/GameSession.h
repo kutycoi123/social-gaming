@@ -8,7 +8,7 @@
 #include "Game.h"
 #include "User.h"
 #include "UserList.h"
-
+#include <queue>
 class GameSession { 
     
 public:
@@ -33,6 +33,10 @@ public:
         return _invitationCode == gameSession._invitationCode;
     }
 
+    void addMessages(std::string message);
+
+    std::queue<std::string> getMessages();
+
     // WIP
     // std::list<Player> getPlayers();  // TODO: Link with the User class
     // void setPlayerInviteCodes();
@@ -45,6 +49,8 @@ private:
     std::list<std::string> _ListRules;
     std::string _currentGame;
     UserList _usersInSession;
+
+    std::queue<std::string> messages;
 
     std::string _sessionName;
     std::string _JSONSetting;

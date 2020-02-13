@@ -1,5 +1,9 @@
 #include "include/User.h"
 
+
+
+
+
 // ***********************
 // UserId
 // ***********************
@@ -31,3 +35,8 @@ uintptr_t User::getUserId() const{
 void User::setName(const UserName& name){
 	_userName = name;
 }
+
+void User::setPrivilage(privilage type){
+	type = type;
+}
+

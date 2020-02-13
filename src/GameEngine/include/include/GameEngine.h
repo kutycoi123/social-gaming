@@ -22,7 +22,7 @@ class GameEngine{
     void parseJSON(nlohmann::json gameConfiguration);
     void createGame();
     nlohmann::json stringTOJson(std::string);
-    void validator(nlohmann::json gameConfiguration);
+    bool validator(nlohmann::json gameConfiguration);
     nlohmann::json fileToJson(std::string pathName);
 
     void readRules();

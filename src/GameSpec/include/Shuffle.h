@@ -1,10 +1,10 @@
 #ifndef SHUFFLE_H
 #define SHUFFLE_H
 
-#include "Rule.h"
+#include "BaseRule.h"
 #include <string>
-
-class Shuffle :public Rule{
+namespace GameSpecification{
+class Shuffle :public BaseRule{
     public:
         Shuffle();
         Shuffle(const std::string& list);
@@ -13,5 +13,5 @@ class Shuffle :public Rule{
     private:
         std::string _list;
 };
-
+}
 #endif

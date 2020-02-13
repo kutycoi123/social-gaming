@@ -55,3 +55,12 @@ void GameSession::startGame() {
 UserList GameSession::getUsersInSession() {
     return _usersInSession;
 }
+
+
+void GameSession::addMessages(std::string message) {
+    messages.push(message);
+}
+
+std::queue<std::string> GameSession::getMessages() {
+     return messages;
+ }

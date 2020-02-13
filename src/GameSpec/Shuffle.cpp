@@ -1,8 +1,10 @@
 #include "Shuffle.h"
 
-Shuffle::Shuffle() : Rule("shuffle"), _list(""){}
+using GameSpecification::Shuffle;
+using GameSpecification::BaseRule;
+Shuffle::Shuffle() : BaseRule("shuffle"), _list(""){}
 
-Shuffle::Shuffle(const std::string& list): Rule("shuffle"), _list(list){}
+Shuffle::Shuffle(const std::string& list): BaseRule("shuffle"), _list(list){}
 
 std::string Shuffle::getList() const{
     return _list;

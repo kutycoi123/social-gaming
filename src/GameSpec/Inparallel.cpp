@@ -1,6 +1,8 @@
 #include "Inparallel.h"
 
-Inparallel::Inparallel(std::vector<std::string> rules) : Rule("inparallel"), _rules(rules) {}
+using GameSpecification::Inparallel;
+using GameSpecification::BaseRule;
+Inparallel::Inparallel(std::vector<std::string> rules) : BaseRule("inparallel"), _rules(rules) {}
 
 std::vector<std::string> Inparallel::getRules() const{
     return _rules;

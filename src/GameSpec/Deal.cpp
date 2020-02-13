@@ -1,8 +1,11 @@
 #include "Deal.h"
 
-Deal::Deal() : Rule("deal"), _from(""), _count(0){}
+using GameSpecification::Deal;
+using GameSpecification::SpecValue;
+using GameSpecification::BaseRule;
+Deal::Deal() : BaseRule("deal"), _from(""), _count(0){}
 
-Deal::Deal(const std::string& from, const SpecValue& to, const int count) : Rule("deal"), _from(from), _to(to), _count(count){}
+Deal::Deal(const std::string& from, const SpecValue& to, const int count) : BaseRule("deal"), _from(from), _to(to), _count(count){}
 
 std::string Deal::getFrom() const{
     return _from;
