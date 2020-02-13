@@ -182,76 +182,65 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		switch (serverCommand)
 		{
-		case ProcessCommand::CommandType::QUIT:
+			case ProcessCommand::CommandType::QUIT:
 			{
 				std::cout << "quit game\n";
 				server.disconnect(message.connection);
 			}
 			break;
-		case ProcessCommand::CommandType::SHUTDOWN:
+			case ProcessCommand::CommandType::SHUTDOWN:
 			{
 				std::cout << "shutdown game\n";
 			}
 			break;
-		case ProcessCommand::CommandType::START_GAME:
+			case ProcessCommand::CommandType::START_GAME:
 			{
 				std::cout << "start game\n";
 			}
 			break;
-		case ProcessCommand::CommandType::CREATE_LOBBY:
-		{
-			if (createLobby(message)){
-				break;
+			case ProcessCommand::CommandType::CREATE_LOBBY:
+			{
+				if (!createLobby(message)){
+					globalMessage.message.append("Error, Could not create lobby!");
+				}
+				
 			}
-			globalMessage.message.append("Error, Could not create lobby!");
 			break;
-		}
-
-		case ProcessCommand::CommandType::JOIN_LOBBY:
-		{
-			if(joinLobby(message)){
-				break;
+			case ProcessCommand::CommandType::JOIN_LOBBY:
+			{
+				if(!joinLobby(message)){
+					globalMessage.message.append("Error, cannot join lobby!");
 			}	
-			globalMessage.message.append("Error, cannot join lobby!");
 			break;
-		case ProcessCommand::CommandType::USERNAME:
+			case ProcessCommand::CommandType::USERNAME:
 			{
 				std::cout << "user name";
 			}
 			break;
-		case ProcessCommand::CommandType::NULL_COMMAND:
-		{
-			if(strVector[FIRST_COMMAND].find( "/")){
-				std::cout << strVector[FIRST_COMMAND] << "\n";
-				break;
+			case ProcessCommand::CommandType::NULL_COMMAND:
+			{
+				if(strVector[FIRST_COMMAND].find( "/")){
+					std::cout << strVector[FIRST_COMMAND] << "\n";
+					break;
+				}
+				std::cout << "Error, Invalid user command" << '\n';
+				globalMessage.message.append("Error, Invalid user command.");
 			}
-			std::cout << "Error, Invalid user command" << '\n';
-			globalMessage.message.append("Error, Invalid user command.");
-			break;
-		}
 			//for example something 
 			//game[connection].message = blahblahblah
 
 			//dummy code, remove later
 			commandResult.push_back(networking::Message{message.connection, message.text});
+			break;
+			default:
 			{
-				//not a command means just a message
-				//send to game sessions later
-				commandResult.push_back(networking::Message{message.connection, message.text});
+					//do nothing
 			}
 			break;
-		default:
-		{
-				//do nothing
-		}
-		break;
 		}
 	}
-
 	}
 	return commandResult;
-
-
 }
 
 static std::deque<networking::Message> getGlobalMessages(){
