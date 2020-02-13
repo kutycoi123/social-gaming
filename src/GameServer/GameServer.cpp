@@ -252,6 +252,7 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 	return result;
 }
+
 std::vector<std::string> splitCommand(std::string s){
     
     std::istringstream iss(s);
@@ -259,7 +260,8 @@ std::vector<std::string> splitCommand(std::string s){
                                  std::istream_iterator<std::string>());
     return results;
 
- }
+}
+
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
 

@@ -9,28 +9,8 @@ set_target_properties(GameServer
                       PREFIX ""
 )
 
-add_library(GameSessionManager
-  GameSessionManager.cpp
-)
-
-set_target_properties(GameSessionManager
-                      PROPERTIES
-                      LINKER_LANGUAGE CXX
-                      CXX_STANDARD 17
-                      PREFIX ""
-)
 
 find_package(Threads REQUIRED)
-
-target_include_directories(
-    GameSessionManager
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
-
-target_link_libraries (GameSessionManager
-  networking
-  session
-)
 
 target_link_libraries(GameServer
   networking
@@ -40,6 +20,7 @@ target_link_libraries(GameServer
   userlist
   nlohmann_json::nlohmann_json
   processcommand
+  GameSessionManager
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
