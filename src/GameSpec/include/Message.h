@@ -20,11 +20,9 @@ namespace GameSpecification{
 			MessageRule() : BaseRule("message"){}
 			MessageRule(const SpecValue& to, const std::string& val)
 						: _to(to), _messValue(val){}
-			void setTo(const SpecValue&);
-			void setValue(const std::string&);
 			SpecValue getTo() const;
 			std::string getValue() const;	
-
+			void process() override;
 		private:
 			SpecValue _to;
 			std::string	_messValue;

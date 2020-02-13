@@ -10,6 +10,8 @@ std::string Shuffle::getList() const{
     return _list;
 }
 
-void Shuffle::setList(const std::string& list){
-    _list = list;
+void Shuffle::process(){
+	//TODO: Add code to process shuffle rule
 }
+
+

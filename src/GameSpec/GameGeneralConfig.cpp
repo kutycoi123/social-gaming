@@ -2,9 +2,8 @@
 
 using GameSpecification::GameGeneralConfig;
 using GameSpecification::PlayerCount;
-using GameSpecification::Setup;
+using GameSpecification::SpecValue;
 using Setup = std::unordered_map<std::string, SpecValue>;
-
 
 GameGeneralConfig::GameGeneralConfig()
     : _name(""),

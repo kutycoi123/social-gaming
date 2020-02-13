@@ -1,17 +1,9 @@
-#include "MessageRule.h"
+#include "Message.h"
 
 
 using GameSpecification::MessageRule;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
-
-void MessageRule::setTo(const SpecValue& to){
-	_to= to;
-}
-
-void MessageRule::setValue(const std::string& val){
-	_messValue = val;
-}
 
 SpecValue MessageRule::getTo() const{
 	return _to;
@@ -20,3 +12,8 @@ SpecValue MessageRule::getTo() const{
 std::string MessageRule::getValue() const{
 	return _messValue;
 }
+
+void MessageRule::process(){
+	//TODO: Add code to process message rule
+}
+

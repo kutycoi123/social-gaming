@@ -1,9 +1,9 @@
 #include "Loop.h"
 
-using GameSpecification::BaseRule;
+using GameSpecification::ControlStructRule;
 using GameSpecification::Loop;
-Loop::Loop(const std::string& loopType, const std::string& failCondition, std::vector<std::string> rules) : BaseRule("loop"), 
-    _loopType(loopType), _failCondition(failCondition), _rules(rules){}
+Loop::Loop(const std::string& loopType, const std::string& failCondition) : ControlStructRule("loop"), 
+    _loopType(loopType), _failCondition(failCondition){}
 
 std::string Loop::getLoopType() const{
     return _loopType;
@@ -13,19 +13,6 @@ std::string Loop::getFailCondition() const{
     return _failCondition;
 }
 
-std::vector<std::string> Loop::getRules() const{
-    return _rules;
-
-}
-
-void Loop::setLoopType(const std::string& loopType){
-    _loopType = loopType;
-}
-
-void Loop::setFailCondition(const std::string& failCondition){
-    _failCondition = failCondition;
-}
-
-void Loop::setRules(const std::vector<std::string>& rules){
-    _rules = rules;
+void Loop::process(){
+	//TODO: add code to process loop rule
 }

@@ -1,12 +1,9 @@
 #include "Inparallel.h"
 
 using GameSpecification::Inparallel;
-using GameSpecification::BaseRule;
-Inparallel::Inparallel(std::vector<std::string> rules) : BaseRule("inparallel"), _rules(rules) {}
+using GameSpecification::ControlStructRule;
 
-std::vector<std::string> Inparallel::getRules() const{
-    return _rules;
-}
+Inparallel::Inparallel() : ControlStructRule("inparallel"){}
 
 void process(){
 	//TODO: Add code to process inparallel

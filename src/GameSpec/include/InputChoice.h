@@ -2,7 +2,7 @@
 #define INPUTCHOICERULE_H
 
 #include "GameSpec.h"
-#include "MessageRule.h"
+#include "Message.h"
 
 /*
 	{ "rule": "input-choice",

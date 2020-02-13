@@ -2,6 +2,8 @@
 #define GAMEGENERALCONFIG_H
 
 #include <string>
+#include <unordered_map>
+#include "AbstractSpec.h"
 
 namespace GameSpecification{
 struct PlayerCount{

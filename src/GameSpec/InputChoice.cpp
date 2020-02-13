@@ -1,4 +1,4 @@
-#include "InputChoiceRule.h"
+#include "InputChoice.h"
 
 
 using GameSpecification::BaseRule;
