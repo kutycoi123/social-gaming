@@ -30,7 +30,7 @@ const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
-static bool creatLobby(networking::Message);
+static bool createLobby(networking::Message);
 static bool joinLobby(networking::Message);
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -165,17 +165,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
-		std::string text = message.text;
-
-		ProcessCommand evaluateText;
-
-		ProcessCommand evaluateMessage;		
+		std::string text = message.text;	
 
 		ProcessCommand::CommandType serverCommand;
 
 		strVector = splitCommand(text);
 		
-		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -187,21 +183,21 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		switch (serverCommand)
 		{
 		case ProcessCommand::CommandType::QUIT:
-		{
-			std::cout << "quit game\n";
-			server.disconnect(message.connection);
+			{
+				std::cout << "quit game\n";
+				server.disconnect(message.connection);
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::SHUTDOWN:
-		{
-			std::cout << "shutdown game\n";
+			{
+				std::cout << "shutdown game\n";
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::START_GAME:
-		{
-			std::cout << "start game\n";
+			{
+				std::cout << "start game\n";
+			}
 			break;
-		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
 		{
 			if (createLobby(message)){
@@ -218,13 +214,11 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}	
 			globalMessage.message.append("Error, cannot join lobby!");
 			break;
-		}
 		case ProcessCommand::CommandType::USERNAME:
-		{
-			std::cout << "user name";
-
-		break;
-		}
+			{
+				std::cout << "user name";
+			}
+			break;
 		case ProcessCommand::CommandType::NULL_COMMAND:
 		{
 			if(strVector[FIRST_COMMAND].find( "/")){
@@ -240,9 +234,24 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 			//dummy code, remove later
 			commandResult.push_back(networking::Message{message.connection, message.text});
+			{
+				//not a command means just a message
+				//send to game sessions later
+				commandResult.push_back(networking::Message{message.connection, message.text});
+			}
+			break;
+		default:
+		{
+				//do nothing
+		}
+		break;
 		}
 	}
+
+	}
 	return commandResult;
+
+
 }
 
 static std::deque<networking::Message> getGlobalMessages(){
@@ -260,6 +269,7 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 	return result;
 }
+
 std::vector<std::string> splitCommand(std::string s){
     
     std::istringstream iss(s);
@@ -269,7 +279,7 @@ std::vector<std::string> splitCommand(std::string s){
 
  }
 
- bool createLobby(networking::Message m){
+bool createLobby(networking::Message m){
 	UserId id(m.connection.id);
 	User user(id);
 	GameSession init = GameSessionManager::createGameSession(user);
@@ -281,7 +291,7 @@ std::vector<std::string> splitCommand(std::string s){
 	return true;
  }
 
- bool joinLobby(networking::Message m){
+static bool joinLobby(networking::Message m){
 	UserId id(m.connection.id);
 	User user(id);
 	if(!strVector[SECOND_COMMAND].empty()){
