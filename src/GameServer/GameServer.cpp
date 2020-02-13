@@ -2,6 +2,7 @@
 #include <nlohmann/json.hpp>
 
 #include "GameSessionManager.h"
+#include "GameServerConfiguration.h"
 #include "User.h"
 
 #include "Command.h"
@@ -12,9 +13,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <unistd.h>
 #include <thread>
 #include <vector>
+#include <unistd.h>
 
 struct GlobalMessage{
 	std::string message;
@@ -33,10 +34,7 @@ static bool joinSession(Command, User);
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
-
-//these two should definitlly be changed, iirc Hunar is working on them
 static std::string getConfigurationFilePath(int, char* []);
-static void checkValidConfigurationFile(const nlohmann::json&);
 
 //message thread
 static void handleMessages(networking::Server&);
@@ -51,20 +49,17 @@ int main(int argc, char* argv[]){
 	//Read Json
 	std::string configurationFilePath = getConfigurationFilePath(argc, argv);
 	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
-
 	nlohmann::json configuration = nlohmann::json::parse(configurationFile);
+	
+	GameServerConfiguration::configureServer(configuration);
 
-	checkValidConfigurationFile(configuration);
+	unsigned short port = GameServerConfiguration::getPort();
+	std::string htmlContents = GameServerConfiguration::getHtmlFileContent();
 
-	unsigned short port = configuration["DefaultPort"];
-	std::string htmlpath = configuration["HTML Location"];
-
-	std::cout << "starting server \nport: " << port << "\nhtml path: " << htmlpath << '\n';
+	std::cout << "starting server on port: " << port << '\n';
 
 	//Configure Server
-  std::ifstream htmlFile{htmlpath};
-	std::string htmlFileStr{std::istreambuf_iterator<char>(htmlFile),std::istreambuf_iterator<char>()};
-  networking::Server server{port, htmlFileStr, OnConnect, OnDisconnect};
+    networking::Server server{port, htmlContents, OnConnect, OnDisconnect};
 
 	std::thread messageHandling(handleMessages, std::ref(server));
 
@@ -105,24 +100,6 @@ static std::string getConfigurationFilePath(int argc, char* argv[]){
 	else{
 		return argv[1];
 	}
-}
-
-static void checkValidConfigurationFile(const nlohmann::json &configurationFile) {
-	
-	auto port = configurationFile.at("DefaultPort");
-	//string to short conversion check
-	if(port.get<unsigned short>() != port.get<std::intmax_t>()){
-		std::cout << "Port out of range\n";
-	    std::exit(-1);
-	}
-
-	std::string htmlpath = configurationFile.at("HTML Location");
-	//html path check for valid file
-	if(access(htmlpath.c_str(), R_OK) == -1){
-	    std::cout << "Unable to open HTML index file: " << htmlpath << "\n";
-        std::exit(-1);
-	}
-	
 }
 
 #pragma region ClientServerNetworkingThread

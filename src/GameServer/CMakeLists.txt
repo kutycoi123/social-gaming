@@ -22,6 +22,7 @@ target_link_libraries(GameServer
   command
   GameSessionManager
   gameParser
+  GameServerConfiguration
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
