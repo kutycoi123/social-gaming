@@ -202,17 +202,26 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
 		{
-			//GameSession init = GameSessionManager::createGameSession(1);
-			//Invitation code = init.getInvitationCode();
-			//std::cout << "creating lobby " << code.toString() << '\n';
+
+			UserId id(message.connection.id);
+			User name(id.getId());
+			GameSession init = GameSessionManager::createGameSession(name);
+			Invitation code = init.getInvitationCode();
+			globalMessage.message.append("Creating lobby: \n");
+			std::cout << "creating lobby " << '\n';
+			globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
 			break;
 		}
 
 
 		case ProcessCommand::CommandType::JOIN_LOBBY:
 		{
-
-			std::cout << "joining lobby ";
+			UserId id(message.connection.id);
+			User name(id.getId());
+			Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
+			GameSessionManager::joinGameSession(name, userProvidedCode);
+			globalMessage.message.append("joining lobby: " + userProvidedCode.toString());
+			std::cout << "joining lobby: " << userProvidedCode.toString() << "\n";
 			break;
 		}
 		case ProcessCommand::CommandType::USERNAME:
@@ -224,9 +233,10 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		case ProcessCommand::CommandType::NULL_COMMAND:
 		{
 			std::cout << "Error, Invalid user command" << '\n';
+			globalMessage.message.append("Error, Invalid user command.");
+
 		break;
 		}
-
 			//for example something 
 			//game[connection].message = blahblahblah
 
