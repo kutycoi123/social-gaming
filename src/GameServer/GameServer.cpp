@@ -30,7 +30,9 @@ const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
-
+//static UserId messageIDs(networking::Message);
+static bool creatLobby(networking::Message);
+static bool joinLobby(networking::Message);
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
@@ -66,7 +68,7 @@ int main(int argc, char* argv[]){
 	std::thread messageHandling(handleMessages, std::ref(server));
 
 	//while server up, process messages
-	std::string message = "";
+	std::string message;
 	do{
 		globalMessage.message = message;
 		std::getline(std::cin, message);
@@ -158,9 +160,10 @@ static void handleMessages(networking::Server& server){
 
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
-
+	
+	
 	for (networking::Message message : incoming) {
-
+		
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
 		std::string text = message.text;
@@ -202,26 +205,19 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
 		{
-
-			UserId id(message.connection.id);
-			User name(id.getId());
-			GameSession init = GameSessionManager::createGameSession(name);
-			Invitation code = init.getInvitationCode();
-			globalMessage.message.append("Creating lobby: \n");
-			std::cout << "creating lobby " << '\n';
-			globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
+			if (creatLobby(message)){
+				break;
+			}
+			globalMessage.message.append("Error, Could not create lobby!");
 			break;
 		}
 
-
 		case ProcessCommand::CommandType::JOIN_LOBBY:
 		{
-			UserId id(message.connection.id);
-			User name(id.getId());
-			Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
-			GameSessionManager::joinGameSession(name, userProvidedCode);
-			globalMessage.message.append("joining lobby: " + userProvidedCode.toString());
-			std::cout << "joining lobby: " << userProvidedCode.toString() << "\n";
+			if(joinLobby(message)){
+				break;
+			}	
+			globalMessage.message.append("Error, cannot join lobby!");
 			break;
 		}
 		case ProcessCommand::CommandType::USERNAME:
@@ -270,6 +266,34 @@ std::vector<std::string> splitCommand(std::string s){
     return results;
 
  }
+
+ bool creatLobby(networking::Message m){
+	UserId id(m.connection.id);
+	User user(id);
+	GameSession init = GameSessionManager::createGameSession(user);
+	GameSession &initRef = init; 
+	Invitation code = initRef.getInvitationCode();
+	globalMessage.message.append("Creating lobby: \n");
+	std::cout << "creating lobby " << '\n';
+	globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
+	return true;
+ }
+
+ bool joinLobby(networking::Message m){
+	UserId id(m.connection.id);
+	User user(id);
+	if(!strVector[SECOND_COMMAND].empty()){
+		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
+		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
+			globalMessage.message.append("joining lobby: " + userProvidedCode.toString());
+			std::cout << "joining lobby: " << userProvidedCode.toString() << "\n";
+			return true;
+		}
+	}
+	return false;
+}
+
+
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
 
