@@ -30,7 +30,6 @@ const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
-//static UserId messageIDs(networking::Message);
 static bool creatLobby(networking::Message);
 static bool joinLobby(networking::Message);
 //main thread
@@ -205,7 +204,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		case ProcessCommand::CommandType::CREATE_LOBBY:
 		{
-			if (creatLobby(message)){
+			if (createLobby(message)){
 				break;
 			}
 			globalMessage.message.append("Error, Could not create lobby!");
@@ -230,13 +229,11 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		{
 			if(strVector[FIRST_COMMAND].find( "/")){
 				std::cout << strVector[FIRST_COMMAND] << "\n";
+				break;
 			}
-			else
-			{
-				std::cout << "Error, Invalid user command" << '\n';
-				globalMessage.message.append("Error, Invalid user command.");
-			}
-		break;
+			std::cout << "Error, Invalid user command" << '\n';
+			globalMessage.message.append("Error, Invalid user command.");
+			break;
 		}
 			//for example something 
 			//game[connection].message = blahblahblah
@@ -272,7 +269,7 @@ std::vector<std::string> splitCommand(std::string s){
 
  }
 
- bool creatLobby(networking::Message m){
+ bool createLobby(networking::Message m){
 	UserId id(m.connection.id);
 	User user(id);
 	GameSession init = GameSessionManager::createGameSession(user);
