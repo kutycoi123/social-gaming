@@ -3,7 +3,7 @@
 
 #include <string>
 #include <unordered_map>
-#include "Invitation.h"
+
 // TODO MZEGAR: Things to consider in the future
 // 1. Some point system? "global information will be displayed to all players on the main game screen."
 // 2. Check to see if a player has already created a game

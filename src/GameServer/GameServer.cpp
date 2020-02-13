@@ -273,9 +273,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 			case ProcessCommand::CommandType::JOIN_LOBBY:
 			{
-				
-				std::cout << "joining lobby ";
-				break;
+			 
 			}
 			case ProcessCommand::CommandType::USERNAME:
 			{
