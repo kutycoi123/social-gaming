@@ -228,9 +228,14 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		case ProcessCommand::CommandType::NULL_COMMAND:
 		{
-			std::cout << "Error, Invalid user command" << '\n';
-			globalMessage.message.append("Error, Invalid user command.");
-
+			if(strVector[FIRST_COMMAND].find( "/")){
+				std::cout << strVector[FIRST_COMMAND] << "\n";
+			}
+			else
+			{
+				std::cout << "Error, Invalid user command" << '\n';
+				globalMessage.message.append("Error, Invalid user command.");
+			}
 		break;
 		}
 			//for example something 
