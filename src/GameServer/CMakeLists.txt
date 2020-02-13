@@ -9,7 +9,6 @@ set_target_properties(GameServer
                       PREFIX ""
 )
 
-
 find_package(Threads REQUIRED)
 
 target_link_libraries(GameServer
