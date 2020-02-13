@@ -1,29 +1,32 @@
 #include "include/Invitation.h"
-#include "GameSessionManager.h"
 #include <random>
 #include <math.h>
+
+unsigned long Invitation::count = 0;
 
 Invitation::Invitation() : _invitationCode( generateInvitationCode() )
     {}
 
-Invitation::Invitation(std::string invitationCode) : _invitationCode( invitationCode )  
+Invitation::Invitation(const std::string& invitationCode) : _invitationCode( invitationCode )  
     {}
 
 std::string Invitation::toString() const {
     return _invitationCode;
 }
 
+// Returns an invitation code based on the count value and a random number (as a string)
+// This is in the format: <COUNT_VALUE><SEPERATOR><RANDOM_NUMBER>
 std::string Invitation::generateInvitationCode(){
-    // Returns a random number (as a string) with INVITATION_CODE_LENGTH digits for the invitation code
     std::random_device rd;
     std::mt19937 gen(rd());
-    long min = pow(10, INVITATION_CODE_LENGTH - 1);
-    long max = pow(10, INVITATION_CODE_LENGTH) - 1;
+    long min = pow(10, RANDOM_CODE_LENGTH - 1);
+    long max = pow(10, RANDOM_CODE_LENGTH) - 1;
     std::uniform_int_distribution<long> dis(min, max);
-    auto inviteCode = std::to_string(dis(gen));
-    // Checks to see if the generated inviteCode is duplicated
-    while (GameSessionManager::sessionExists(inviteCode).has_value()){
-        inviteCode = std::to_string(dis(gen));
+    auto countString = std::to_string(++count);
+    if (countString.length() < MINIMUM_COUNT_STRING_LENGTH){
+        countString = std::string(MINIMUM_COUNT_STRING_LENGTH - countString.length(), '0').append(countString);
     }
+    auto randomString = std::to_string(dis(gen));
+    auto inviteCode = countString.append(SEPARATOR).append(randomString);
     return inviteCode;
 }

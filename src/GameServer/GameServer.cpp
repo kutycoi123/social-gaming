@@ -199,19 +199,16 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
-		std::string text = message.text;
-
-		ProcessCommand evaluateText;
-
-		ProcessCommand evaluateMessage;		
+		std::string text = message.text;	
 
 		ProcessCommand::CommandType serverCommand;
 
 		strVector = splitCommand(text);
 		
-		serverCommand = evaluateMessage.evaluateCommand(strVector[FIRST_COMMAND]);
+		
 		//where to process user Json here?
 
+		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -304,6 +301,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
+
 	return commandResult;
 }
 
@@ -322,6 +320,7 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 	return result;
 }
+
 std::vector<std::string> splitCommand(std::string s){
     
     std::istringstream iss(s);
@@ -329,7 +328,8 @@ std::vector<std::string> splitCommand(std::string s){
                                  std::istream_iterator<std::string>());
     return results;
 
- }
+}
+
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
 

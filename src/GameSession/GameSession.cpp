@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 
 GameSession::GameSession(User& owner) : 
-    _invitationCode (Invitation()), 
+    _invitationCode (Invitation::createNewInvitation()), 
     _owner (owner),
     _isGameStarted(false)
     // game(nlohmann::json gameSettings) 
