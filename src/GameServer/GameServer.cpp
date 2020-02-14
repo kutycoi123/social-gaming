@@ -228,6 +228,12 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 				std::cout << "user name";
 			}
 			break;
+			case ProcessCommand::CommandType::HELP:
+			{
+				message.text.append("\n List of user commands: \n");
+				message.text.append(ProcessCommand::getAllCommandDescriptions());
+			}
+			break;
 			case ProcessCommand::CommandType::NULL_COMMAND:
 			{
 				if(!strVector[FIRST_COMMAND].find( "/")){
