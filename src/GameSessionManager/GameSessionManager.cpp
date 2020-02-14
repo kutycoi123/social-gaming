@@ -3,7 +3,6 @@
 GameSession GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     _sessionsList.insert(gameSession);
-    _inviteCodes.insert(gameSession.getInvitationCode());
     _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
     return gameSession;
 }
@@ -33,7 +32,6 @@ void GameSessionManager::endGameSession(GameSession& gameSession){
     if (sessionExists(invitationCode)){
         gameSession.removeAllUsersfromSession();
         _invitationToGameSessionMap.erase(invitationCode);
-        _inviteCodes.erase(invitationCode);
         _sessionsList.erase(gameSession);
     }
 }

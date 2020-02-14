@@ -27,7 +27,6 @@ namespace GameSessionManager{
 
         static std::vector<Game> gameList {};
         static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
-        static std::unordered_set<Invitation, InvitationHash> _inviteCodes;
         static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap;
     }
 

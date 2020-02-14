@@ -33,6 +33,9 @@ public:
 
     UserName getName() const;
     uintptr_t getUserId() const;
+    bool operator==(const User& user) const {
+        return getUserId() == user.getUserId();
+    }
 
 private:
     UserName _userName;

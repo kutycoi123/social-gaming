@@ -33,6 +33,8 @@ public:
         return _invitationCode == gameSession._invitationCode;
     }
 
+    bool doesUserOwnGame(const User& user) const;
+
     // WIP
     // std::list<Player> getPlayers();  // TODO: Link with the User class
     // void setPlayerInviteCodes();
