@@ -23,22 +23,22 @@ struct config {
 class GameParser{
   public:
     GameParser();
-    void parseJSON(nlohmann::json gameConfiguration);
+    void parseJSON(const nlohmann::json& gameConfiguration);
     void createGame();
-    nlohmann::json stringTOJson(std::string);
-    void validator(nlohmann::json gameConfiguration);
-    StatusCode rulesValidation(nlohmann::json gameConfiguration);
-    nlohmann::json fileToJson(std::string pathName);
+    nlohmann::json stringTOJson(const std::string);
+    void validator(const nlohmann::json& gameConfiguration);
+    StatusCode rulesValidation(const nlohmann::json& gameConfiguration);
+    nlohmann::json fileToJson(const std::string pathName);
 
     void readRules();
 
   private:
-      nlohmann::json constants;
-      nlohmann::json variables;
-      nlohmann::json perAudience;
+      nlohmann::json _constants;
+      nlohmann::json _variables;
+      nlohmann::json _perAudience;
       nlohmann::json _gameConfiguration;
       std::string _GameName;
       nlohmann::json _rules;
-      config configSettings;
+      config _configSettings;
 };
 #endif

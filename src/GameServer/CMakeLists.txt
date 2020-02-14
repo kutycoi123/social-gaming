@@ -20,6 +20,7 @@ target_link_libraries(GameServer
   nlohmann_json::nlohmann_json
   processcommand
   GameSessionManager
+  gameParser
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
