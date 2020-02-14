@@ -15,10 +15,10 @@
 
 */
 namespace GameSpecification{
-	class MessageRule : public BaseRule{
+	class Message: public BaseRule{
 		public:
-			MessageRule() : BaseRule("message"){}
-			MessageRule(const SpecValue& to, const std::string& val)
+			Message() : BaseRule("message"){}
+			Message(const SpecValue& to, const std::string& val)
 						: _to(to), _messValue(val){}
 			SpecValue getTo() const;
 			std::string getValue() const;	

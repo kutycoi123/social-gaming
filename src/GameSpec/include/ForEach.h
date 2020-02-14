@@ -1,7 +1,6 @@
 #ifndef FOREACH_H
 #define FOREACH_H
 
-#include "BaseRule.h"
 #include "AbstractSpec.h"
 #include "ControlStructRule.h"
 #include <string>

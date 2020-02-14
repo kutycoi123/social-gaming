@@ -18,23 +18,23 @@
 */
 
 namespace GameSpecification{
-	class InputChoiceRule : public BaseRule{
+	class InputChoice: public BaseRule{
 		
 		public:
-			InputChoiceRule() : BaseRule("input-choice") {}
-			InputChoiceRule(const std::string& to, const MessageRule& prompt, const SpecValue& choices, 
+			InputChoice() : BaseRule("input-choice") {}
+			InputChoice(const std::string& to, const Message& prompt, const SpecValue& choices, 
 							const std::string& result, const std::string& timeout) 
 							:  BaseRule("input-choice"), _to(to), _prompt(prompt), _choices(choices), 
 							   _result(result), _timeout(timeout) {}
 			std::string getTo() const;
 			std::string getResult() const;	
 			std::string getTimeout() const;
-			MessageRule getPrompt() const;
+			Message getPrompt() const;
 			SpecValue getChoices() const;
 			void process() override; 
 		private:
 			std::string _to;	//represents field "to" in input choice rule
-			MessageRule _prompt; 
+			Message _prompt; 
 			SpecValue _choices;
 			std::string _result; //represents field "result" in input choice rule
 			std::string _timeout;

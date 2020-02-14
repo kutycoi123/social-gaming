@@ -1,19 +1,19 @@
 #include "Message.h"
 
 
-using GameSpecification::MessageRule;
+using GameSpecification::Message;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 
-SpecValue MessageRule::getTo() const{
+SpecValue Message::getTo() const{
 	return _to;
 }
 
-std::string MessageRule::getValue() const{
+std::string Message::getValue() const{
 	return _messValue;
 }
 
-void MessageRule::process(){
+void Message::process(){
 	//TODO: Add code to process message rule
 }
 

@@ -2,6 +2,9 @@
 
 using GameSpecification::ControlStructRule;
 using GameSpecification::Loop;
+
+Loop::Loop() : ControlStructRule("loop"){}
+
 Loop::Loop(const std::string& loopType, const std::string& failCondition) : ControlStructRule("loop"), 
     _loopType(loopType), _failCondition(failCondition){}
 

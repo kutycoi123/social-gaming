@@ -3,27 +3,27 @@
 
 using GameSpecification::BaseRule;
 using GameSpecification::SpecValue;
-using GameSpecification::InputChoiceRule;
-using GameSpecification::MessageRule;
+using GameSpecification::InputChoice;
+using GameSpecification::Message;
 
-	std::string InputChoiceRule::getTo() const{
+	std::string InputChoice::getTo() const{
 		return _to;
 	}
-	std::string InputChoiceRule::getResult() const{
+	std::string InputChoice::getResult() const{
 		return _result;
 	}
-	std::string InputChoiceRule::getTimeout() const{
+	std::string InputChoice::getTimeout() const{
 		return _timeout;
 	}
-	MessageRule InputChoiceRule::getPrompt() const{
+	Message InputChoice::getPrompt() const{
 		return _prompt;
 	}
 	
-	SpecValue InputChoiceRule::getChoices() const{
+	SpecValue InputChoice::getChoices() const{
 		return _choices;
 	}	
 
-	void InputChoiceRule::process(){
+	void InputChoice::process(){
 		//TODO: add logic for this rule
 	}
 

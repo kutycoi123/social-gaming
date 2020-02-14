@@ -7,11 +7,11 @@
 #include <unordered_map>
 namespace GameSpecification{
 enum RuleType{
-	ForEach,Loop,Inparallel,Parallelfor,
-	Switch,When,Extend,Reverse,Shuffle,
-	Sort,Deal,Discard,Add,Timer,InputChoice,
-	InputText,InputVote,Message,GlobalMessage,
-	Scores,Unknown
+	ForEachType,LoopType,InparallelType,ParallelforType,
+	SwitchType,WhenType,ExtendType,ReverseType,ShuffleType,
+	SortType,DealType,DiscardType,AddType,TimerType,InputChoiceType,
+	InputTextType,InputVoteType,MessageType,GlobalMessageType,
+	ScoresType,Unknown
 };
 	class BaseRule{
 		public:

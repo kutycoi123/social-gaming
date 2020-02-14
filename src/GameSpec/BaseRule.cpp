@@ -4,25 +4,25 @@ using GameSpecification::BaseRule;
 using GameSpecification::RuleType;
 
 std::unordered_map<std::string, RuleType> BaseRule::rulemap({
-	{"foreach", RuleType::ForEach},
-	{"loop", RuleType::Loop},
-	{"inparallel", RuleType::Inparallel},
-	{"parallelfor", RuleType::Parallelfor},
-	{"switch", RuleType::Switch},
-	{"when", RuleType::When},
-	{"extend", RuleType::Extend},
-	{"reverse", RuleType::Reverse},
-	{"shuffle", RuleType::Shuffle},
-	{"sort", RuleType::Sort},
-	{"deal", RuleType::Deal},
-	{"discard", RuleType::Discard},
-	{"add", RuleType::Add},
-	{"timer", RuleType::Timer},
-	{"input-choice", RuleType::InputChoice},
-	{"input-text", RuleType::InputText},
-	{"message", RuleType::Message},
-	{"global-message", RuleType::GlobalMessage},
-	{"scores", RuleType::Scores}
+	{"foreach", RuleType::ForEachType},
+	{"loop", RuleType::LoopType},
+	{"inparallel", RuleType::InparallelType},
+	{"parallelfor", RuleType::ParallelforType},
+	{"switch", RuleType::SwitchType},
+	{"when", RuleType::WhenType},
+	{"extend", RuleType::ExtendType},
+	{"reverse", RuleType::ReverseType},
+	{"shuffle", RuleType::ShuffleType},
+	{"sort", RuleType::SortType},
+	{"deal", RuleType::DealType},
+	{"discard", RuleType::DiscardType},
+	{"add", RuleType::AddType},
+	{"timer", RuleType::TimerType},
+	{"input-choice", RuleType::InputChoiceType},
+	{"input-text", RuleType::InputTextType},
+	{"message", RuleType::MessageType},
+	{"global-message", RuleType::GlobalMessageType},
+	{"scores", RuleType::ScoresType}
 });
 
 BaseRule::BaseRule(){}
