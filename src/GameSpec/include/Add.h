@@ -11,8 +11,7 @@ class Add : public BaseRule{
         Add(const std::string& to, const SpecValue& value);
         std::string getTo() const;
         SpecValue getValue() const;
-        void setTo(const std::string& to);
-        void setValue(const SpecValue& value);
+		void process() override;
     private:
         std::string _to;
         SpecValue _value;

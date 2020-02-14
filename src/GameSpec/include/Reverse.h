@@ -9,7 +9,7 @@ class Reverse : public BaseRule{
         Reverse();
         Reverse(const std::string& list);
         std::string getList() const;
-        void setList(const std::string& list);
+		void process() override;
     private:
         std::string _list;
 };

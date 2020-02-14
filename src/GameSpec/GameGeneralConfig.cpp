@@ -2,12 +2,14 @@
 
 using GameSpecification::GameGeneralConfig;
 using GameSpecification::PlayerCount;
-using GameSpecification::Setup;
+using GameSpecification::SpecValue;
+using Setup = std::unordered_map<std::string, SpecValue>;
+
 GameGeneralConfig::GameGeneralConfig()
     : _name(""),
       _playerCount({0, 0}), 
       _audience(false),
-      _setup({1}){
+      _setup({}){
 }
 
 GameGeneralConfig::GameGeneralConfig(const std::string& name)
@@ -32,7 +34,7 @@ inline Setup GameGeneralConfig::getSetup() const{
 }
 
 void GameGeneralConfig::setName(const std::string& name){
-    _name = std::move(name);
+    _name = name;
 }
 
 void GameGeneralConfig::setPlayerCount(const PlayerCount& playerCount){
