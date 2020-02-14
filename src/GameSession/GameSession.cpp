@@ -22,6 +22,10 @@ std::string GameSession::getSessionName() const {
     return _sessionName;
 }
 
+bool GameSession::doesUserOwnGame(const User& user) const {
+    return (user == _owner);
+}
+
 bool GameSession::isGameStarted() const {
     return _isGameStarted;
 }
