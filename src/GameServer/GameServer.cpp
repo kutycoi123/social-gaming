@@ -30,8 +30,8 @@ const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
-static bool createLobby(networking::Message);
-static bool joinLobby(networking::Message);
+static std::pair<bool, Invitation> createLobby(networking::Message, User);
+static bool joinLobby(networking::Message, User);
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
@@ -170,7 +170,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		ProcessCommand::CommandType serverCommand;
 
 		strVector = splitCommand(text);
-		
+		UserId id(message.connection.id);
+		User user(id);
 		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
@@ -200,16 +201,26 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case ProcessCommand::CommandType::CREATE_LOBBY:
 			{
-				if (!createLobby(message)){
-					globalMessage.message.append("Error, Could not create lobby!");
+				std::pair<bool, Invitation>lobby = createLobby(message, user);
+				if (!lobby.first){
+					message.text.append(" Error, Could not create lobby!");
 				}
-				
+				else
+				{
+					message.text.append("\n Creating lobby: \n");
+					message.text.append(" Here is the invitational code for your lobby: ");
+					message.text.append(lobby.second.toString());
+				}
 			}
 			break;
 			case ProcessCommand::CommandType::JOIN_LOBBY:
 			{
-				if(!joinLobby(message)){
-					globalMessage.message.append("Error, cannot join lobby!");
+				if(!joinLobby(message, user)){
+					message.text.append(" Error, cannot join lobby!");
+				}
+				else{
+					message.text.append("\n joining lobby!");
+				}
 			}	
 			break;
 			case ProcessCommand::CommandType::USERNAME:
@@ -219,26 +230,24 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case ProcessCommand::CommandType::NULL_COMMAND:
 			{
-				if(strVector[FIRST_COMMAND].find( "/")){
-					std::cout << strVector[FIRST_COMMAND] << "\n";
-					break;
+				if(!strVector[FIRST_COMMAND].find( "/")){
+					std::cout << " Error, Invalid user command" << '\n';
+					message.text.append(" Error, Invalid user command.");
 				}
-				std::cout << "Error, Invalid user command" << '\n';
-				globalMessage.message.append("Error, Invalid user command.");
+				std::cout << strVector[FIRST_COMMAND] << '\n';
+				break;
 			}
 			//for example something 
 			//game[connection].message = blahblahblah
 
 			//dummy code, remove later
-			commandResult.push_back(networking::Message{message.connection, message.text});
-			break;
 			default:
 			{
 					//do nothing
 			}
 			break;
 		}
-	}
+		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
 	return commandResult;
 }
@@ -268,26 +277,17 @@ std::vector<std::string> splitCommand(std::string s){
 
  }
 
-bool createLobby(networking::Message m){
-	UserId id(m.connection.id);
-	User user(id);
+std::pair<bool, Invitation> createLobby(networking::Message m, User user){
 	GameSession init = GameSessionManager::createGameSession(user);
 	GameSession &initRef = init; 
 	Invitation code = initRef.getInvitationCode();
-	globalMessage.message.append("Creating lobby: \n");
-	std::cout << "creating lobby " << '\n';
-	globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
-	return true;
+	return std::make_pair(true, code);
  }
 
-static bool joinLobby(networking::Message m){
-	UserId id(m.connection.id);
-	User user(id);
+bool joinLobby(networking::Message m, User user){
 	if(!strVector[SECOND_COMMAND].empty()){
 		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
 		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
-			globalMessage.message.append("joining lobby: " + userProvidedCode.toString());
-			std::cout << "joining lobby: " << userProvidedCode.toString() << "\n";
 			return true;
 		}
 	}
