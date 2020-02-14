@@ -30,7 +30,8 @@ const int FIRST_COMMAND = 0;
 const int SECOND_COMMAND = 1;
 static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
-
+static std::pair<bool, Invitation> createLobby(networking::Message, User);
+static bool joinLobby(networking::Message, User);
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
@@ -66,7 +67,7 @@ int main(int argc, char* argv[]){
 	std::thread messageHandling(handleMessages, std::ref(server));
 
 	//while server up, process messages
-	std::string message = "";
+	std::string message;
 	do{
 		globalMessage.message = message;
 		std::getline(std::cin, message);
@@ -158,9 +159,10 @@ static void handleMessages(networking::Server& server){
 
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
-
+	
+	
 	for (networking::Message message : incoming) {
-
+		
 		// TODO Mzegar: Use profs iteration when refactor happens
 		// Figure out somewhere else to put this
 		std::string text = message.text;	
@@ -168,7 +170,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		ProcessCommand::CommandType serverCommand;
 
 		strVector = splitCommand(text);
-		
+		UserId id(message.connection.id);
+		User user(id);
 		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
@@ -180,54 +183,72 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		switch (serverCommand)
 		{
-		case ProcessCommand::CommandType::QUIT:
+			case ProcessCommand::CommandType::QUIT:
 			{
 				std::cout << "quit game\n";
 				server.disconnect(message.connection);
 			}
 			break;
-		case ProcessCommand::CommandType::SHUTDOWN:
+			case ProcessCommand::CommandType::SHUTDOWN:
 			{
 				std::cout << "shutdown game\n";
 			}
 			break;
-		case ProcessCommand::CommandType::START_GAME:
+			case ProcessCommand::CommandType::START_GAME:
 			{
 				std::cout << "start game\n";
 			}
 			break;
-		case ProcessCommand::CommandType::CREATE_LOBBY:
+			case ProcessCommand::CommandType::CREATE_LOBBY:
 			{
-				//GameSession init = GameSessionManager::createGameSession(1);
-				//Invitation code = init.getInvitationCode();
-				//std::cout << "creating lobby " << code.toString() << '\n';
+				std::pair<bool, Invitation>lobby = createLobby(message, user);
+				if (!lobby.first){
+					message.text.append(" Error, Could not create lobby!");
+				}
+				else
+				{
+					message.text.append("\n Creating lobby: \n");
+					message.text.append(" Here is the invitational code for your lobby: ");
+					message.text.append(lobby.second.toString());
+				}
 			}
 			break;
-		case ProcessCommand::CommandType::JOIN_LOBBY:
+			case ProcessCommand::CommandType::JOIN_LOBBY:
 			{
-				std::cout << "joining lobby ";
-			}
+				if(!joinLobby(message, user)){
+					message.text.append(" Error, cannot join lobby!");
+				}
+				else{
+					message.text.append("\n joining lobby!");
+				}
+			}	
 			break;
-		case ProcessCommand::CommandType::USERNAME:
+			case ProcessCommand::CommandType::USERNAME:
 			{
 				std::cout << "user name";
 			}
 			break;
-		case ProcessCommand::CommandType::NULL_COMMAND:
+			case ProcessCommand::CommandType::NULL_COMMAND:
 			{
-				//not a command means just a message
-				//send to game sessions later
-				commandResult.push_back(networking::Message{message.connection, message.text});
+				if(!strVector[FIRST_COMMAND].find( "/")){
+					std::cout << " Error, Invalid user command" << '\n';
+					message.text.append(" Error, Invalid user command.");
+				}
+				std::cout << strVector[FIRST_COMMAND] << '\n';
+				break;
 			}
-			break;
-		default:
+			//for example something 
+			//game[connection].message = blahblahblah
+
+			//dummy code, remove later
+			default:
 			{
-				//do nothing
+					//do nothing
 			}
 			break;
 		}
+		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
-
 	return commandResult;
 }
 
@@ -254,7 +275,25 @@ std::vector<std::string> splitCommand(std::string s){
                                  std::istream_iterator<std::string>());
     return results;
 
+ }
+
+std::pair<bool, Invitation> createLobby(networking::Message m, User user){
+	GameSession init = GameSessionManager::createGameSession(user);
+	GameSession &initRef = init; 
+	Invitation code = initRef.getInvitationCode();
+	return std::make_pair(true, code);
+ }
+
+bool joinLobby(networking::Message m, User user){
+	if(!strVector[SECOND_COMMAND].empty()){
+		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
+		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
+			return true;
+		}
+	}
+	return false;
 }
+
 
 static std::deque<networking::Message> gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> allMessages = {};
