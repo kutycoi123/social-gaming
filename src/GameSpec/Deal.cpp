@@ -3,6 +3,7 @@
 using GameSpecification::Deal;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
+
 Deal::Deal() : BaseRule("deal"), _from(""), _count(0){}
 
 Deal::Deal(const std::string& from, const SpecValue& to, const int count) : BaseRule("deal"), _from(from), _to(to), _count(count){}
@@ -19,14 +20,7 @@ int Deal::getCount() const{
     return _count;
 }
 
-void Deal::setFrom(const std::string& from){
-    _from = from;
+void Deal::process() {
+	//TODO: Add code to process deal rule
 }
 
-void Deal::setTo(const SpecValue& to){
-    _to = to;
-}
-
-void Deal::setCount(const int count){
-    _count  = count;
-}

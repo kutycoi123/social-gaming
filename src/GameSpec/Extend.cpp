@@ -15,10 +15,6 @@ SpecValue Extend::getList() const{
     return _list;
 }
 
-void Extend::setTarget(const std::string& target){
-    _target = target;
-}
-
-void Extend::setList(const SpecValue& list){
-    _list = list;
+void Extend::process(){
+	//TODO: Add code to process extend rule
 }

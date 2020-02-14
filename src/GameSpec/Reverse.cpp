@@ -10,7 +10,7 @@ std::string Reverse::getList() const{
     return _list;
 }
 
-void Reverse::setList(const std::string& list){
-    _list = list;
+void Reverse::process() {
+	//TODO: Add code to process reverse rule
 }
 
