@@ -20,6 +20,7 @@ public:
 
     void addUserToSession(User& user);
     void removeUserFromSession(User& user);
+    void removeAllUsersfromSession();
 
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
