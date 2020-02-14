@@ -1,5 +1,10 @@
+#include <iostream>
 #include "include/GameEngine.h"
- 
+#include "BaseRule.h"
+
+GameEngine::GameEngine() {
+  std::cout << "Creating GameEngine \n";
+};
 
 void GameEngine::parseJSON(nlohmann::json gameConfiguration) {
     if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
@@ -24,6 +29,19 @@ void GameEngine::validator(nlohmann::json gameConfiguration){
     assert(gameConfiguration.contains("variables"));
     assert(gameConfiguration.contains("per-audience"));
     assert(gameConfiguration.contains("rules"));
+}
+
+void GameEngine::rulesValidation(nlohmann::json rules) {
+  std::cout << "Attempting to stub \n";
+
+  nlohmann::json tempJsonStub;
+  tempJsonStub["test"] = "Rule 1"; 
+  tempJsonStub["test2"] = "Rule 2";
+
+  for (auto& key : tempJsonStub) {
+    std::cout << key << '\n';
+  }
+  // GameSpecification::BaseRule::rulemap;
 }
 
 nlohmann::json fileToJson(std::string pathName) {

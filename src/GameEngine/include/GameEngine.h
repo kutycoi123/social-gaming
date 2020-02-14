@@ -19,10 +19,12 @@ struct config {
 };
 class GameEngine{
   public:
+    GameEngine();
     void parseJSON(nlohmann::json gameConfiguration);
     void createGame();
     nlohmann::json stringTOJson(std::string);
     void validator(nlohmann::json gameConfiguration);
+    void rulesValidation(nlohmann::json gameConfiguration);
     nlohmann::json fileToJson(std::string pathName);
 
     void readRules();

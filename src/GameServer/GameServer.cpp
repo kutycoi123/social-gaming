@@ -3,6 +3,7 @@
 
 #include "GameSessionManager.h"
 #include "User.h"
+#include "GameEngine.h"
 
 #include "ProcessCommand.h"
 
@@ -82,6 +83,11 @@ int main(int argc, char* argv[]){
 //teacher provided functions
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
+	nlohmann::json j;
+	std::cout << "Validating rules\n";
+  	GameEngine g;
+	std::cout << "g: " << &g << "\n";
+	g.rulesValidation(j);
 
 	UserId id(c.id);
 	usersInMainLobby.addUser(id);
