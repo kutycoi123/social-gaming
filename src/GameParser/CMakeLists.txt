@@ -1,4 +1,4 @@
-add_library(gameParser gameParser.cpp)
+add_library(gameParser GameParser.cpp)
 
 target_include_directories(gameParser
   PUBLIC
