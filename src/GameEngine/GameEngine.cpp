@@ -29,17 +29,11 @@ void GameEngine::validator(nlohmann::json gameConfiguration){
     assert(gameConfiguration.contains("rules"));
 }
 
-void GameEngine::rulesValidation(nlohmann::json rules) {
-  // TODO: Remove temporary stub of json rules
-  nlohmann::json tempJsonStub;
-  tempJsonStub["foreach"] = "Rule 1"; 
-  tempJsonStub["test"] = "Rule 2";
-  tempJsonStub["loop"] = "Rule 3";
+void GameEngine::rulesValidation(nlohmann::json incomingRules) {
+  auto ruleMap = GameSpecification::BaseRule::rulemap;
 
-  auto mapRules = GameSpecification::BaseRule::rulemap;
-
-  for (nlohmann::json::iterator it = tempJsonStub.begin(); it != tempJsonStub.end(); ++it) {
-    if (mapRules.find(it.key()) == mapRules.end()) {
+  for (nlohmann::json::iterator it = incomingRules.begin(); it != incomingRules.end(); ++it) {
+    if (ruleMap.find(it.key()) == ruleMap.end()) {
       throw std::invalid_argument("Invalid rule specified");
     }
   }
