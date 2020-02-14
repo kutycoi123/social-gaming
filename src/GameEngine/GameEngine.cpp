@@ -2,9 +2,7 @@
 #include "include/GameEngine.h"
 #include "BaseRule.h"
 
-GameEngine::GameEngine() {
-  std::cout << "Creating GameEngine \n";
-};
+GameEngine::GameEngine() {};
 
 void GameEngine::parseJSON(nlohmann::json gameConfiguration) {
     if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
@@ -32,16 +30,19 @@ void GameEngine::validator(nlohmann::json gameConfiguration){
 }
 
 void GameEngine::rulesValidation(nlohmann::json rules) {
-  std::cout << "Attempting to stub \n";
-
+  // TODO: Remove temporary stub of json rules
   nlohmann::json tempJsonStub;
-  tempJsonStub["test"] = "Rule 1"; 
-  tempJsonStub["test2"] = "Rule 2";
+  tempJsonStub["foreach"] = "Rule 1"; 
+  tempJsonStub["test"] = "Rule 2";
+  tempJsonStub["loop"] = "Rule 3";
 
-  for (auto& key : tempJsonStub) {
-    std::cout << key << '\n';
+  auto mapRules = GameSpecification::BaseRule::rulemap;
+
+  for (nlohmann::json::iterator it = tempJsonStub.begin(); it != tempJsonStub.end(); ++it) {
+    if (mapRules.find(it.key()) == mapRules.end()) {
+      throw std::invalid_argument("Invalid rule specified");
+    }
   }
-  // GameSpecification::BaseRule::rulemap;
 }
 
 nlohmann::json fileToJson(std::string pathName) {
@@ -50,7 +51,3 @@ nlohmann::json fileToJson(std::string pathName) {
   i >> JsonConfig;
   return JsonConfig;
 }
-
-
-
-

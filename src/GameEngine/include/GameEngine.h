@@ -7,8 +7,6 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
-enum rule { forEach, inParallel,loop,inparallel,parallelFor,switchR }; 
-
 struct config {
   std::string name;
   int maxPlayercount;
