@@ -2,6 +2,7 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
+#include <algorithm>
 
 
 ProcessCommand::CommandType ProcessCommand::evaluateCommand(std::string& message){
@@ -19,3 +20,18 @@ ProcessCommand::CommandType ProcessCommand::evaluateCommand(std::string& message
     }
 }
 
+std::optional<std::string> ProcessCommand::getCommandDescription(CommandType command){
+    auto description = commandDescriptions.find(command);
+    if (description == commandDescriptions.end()){
+        return std::nullopt;
+    }
+    return std::optional<std::string>{description->second};
+}
+
+std::string ProcessCommand::getAllCommandDescriptions(){
+    std::string str{};
+    std::for_each(commandDescriptions.begin(), commandDescriptions.end(),
+        [&str](const std::pair<ProcessCommand::CommandType, std::string>& pair){str += pair.second;}
+    );
+    return str;
+}
