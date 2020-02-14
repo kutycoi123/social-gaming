@@ -38,6 +38,11 @@ void GameSessionManager::endGameSession(GameSession& gameSession){
     }
 }
 
+
+void GameSessionManager::MapUserIDToInvitation(const Invitation& invitation, uintptr_t id ){
+    userToInviteCode.insert(std::make_pair(id,invitation));
+}
+
 size_t GameSessionManager::totalSessionCount(){
     return _sessionsList.size();
 }

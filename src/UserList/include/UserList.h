@@ -1,3 +1,6 @@
+#ifndef USERLIST_H
+#define USERLIST_H
+
 #include <User.h>
 #include <optional>
 #include <unordered_map>
@@ -26,3 +29,5 @@ public:
 private:
     std::unordered_map<UserId, User, UserIdHash> _idToUserMap; 
 };
+
+#endif

@@ -5,7 +5,7 @@
 #include "User.h"
 #include "UserList.h"
 #include "ProcessCommand.h"
-
+#include <unordered_map> 
 #include <atomic>
 #include <iostream>
 #include <fstream>
@@ -24,6 +24,8 @@ struct GlobalMessage{
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 
+
+//std::unordered_map<UserId, Invitation> UserIdTOInvite;
 static std::vector<std::string> strVector ;
 static std::vector<std::string> splitCommand(std::string s);
 const int FIRST_COMMAND = 0;
@@ -33,6 +35,8 @@ static UserList usersInMainLobby;
 static GlobalMessage globalMessage = {""};
 
 std::list<GameSession> GameSessionsList;
+
+
 
 //main thread
 static void OnDisconnect(networking::Connection);
@@ -45,6 +49,8 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 //message thread
 static void handleMessages(networking::Server&);
 static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
+std::deque<networking::Message> SendMessageToSession();
+static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 //player authentication. 
 int main(int argc, char* argv[]){
 
@@ -147,13 +153,13 @@ static void handleMessages(networking::Server& server){
 
 		processMessages(server,incoming);
 
-		//auto outgoing = gameServerUpdate(server, incoming);
-		auto outgoing = SendMessageToSession();
+		auto outgoing = gameServerUpdate(server, incoming);
+		
 
 		server.send(outgoing);
 
-		
-
+		outgoing = SendMessageToSession();
+		server.send(outgoing);
 		//probably want to replace this with something else
 		if (errorWhileUpdating) {
 			break;
@@ -174,7 +180,7 @@ std::deque<networking::Message> SendMessageToSession() {
 
 		for(int i = 0; i < total; i++) {
 			std::string message = session.getMessages().front();
-			session.getMessages().pop;
+			session.getMessages().pop();
 
 			for( auto IdElement: session.getUsersInSession()) {
 				UserId id = IdElement.first;
@@ -209,6 +215,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		//where to process user Json here?
 
 		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
+		
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -242,6 +249,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 			case ProcessCommand::CommandType::START_GAME:
 			{
+				//print out those string games.
+				//find gameSession based on code, push back message to queue
+				GameSessionManager::userToInviteCode.find(message.connection.id);
+				
+				GameSession *session = &GameSessionManager::_invitationToGameSessionMap.find(code);
+
+				session->addMessages("joining lobby: " + code.toString());
 				std::cout << "start game\n";
 				break;
 			}
@@ -253,15 +267,27 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 				User owner(id.getId());
 				GameSession initSession = GameSessionManager::createGameSession(owner);
 
-
+			
 				Invitation code = initSession.getInvitationCode();
+				//UserIdTOInvite.insert({message.connection.id, code});
 
-				initSession.addMessages(message.text);
-				GameSessionsList.push_back(initSession);
+				GameSession *session = &GameSessionManager::_invitationToGameSessionMap[code];
 
-				globalMessage.message.append("Creating lobby: \n");
+				session->addMessages("joining lobby: " + code.toString());
+				
+				session->addMessages(" Here is the invitational code for your lobby:" + code.toString());
+				//initSession.addMessages(message.text);
+				//GameSessionsList.push_back(initSession);
+
+
+				 
+
+
+				//globalMessage.message.append("Creating lobby: \n");
 				std::cout << "creating lobby " << '\n';
-				globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
+				//globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
+
+
 		 
 
 				break;
@@ -270,6 +296,21 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 			case ProcessCommand::CommandType::JOIN_LOBBY:
 			{
+				UserId id(message.connection.id);
+				User name(id.getId());
+				Invitation userProvidedCode = Invitation::createInvitationFromStringInput(strVector[SECOND_COMMAND]);
+
+				GameSessionManager::MapUserIDToInvitation(userProvidedCode, message.connection.id);
+
+				GameSessionManager::joinGameSession(name, userProvidedCode);
+
+				GameSession *session = &GameSessionManager::_invitationToGameSessionMap[userProvidedCode];
+				session->addMessages("joining lobby: " + userProvidedCode.toString());
+
+				//globalMessage.message.append("joining lobby: " + userProvidedCode.toString());
+				std::cout << "joining lobby: " << userProvidedCode.toString() << "\n";
+				break;
+
 			 
 			}
 			case ProcessCommand::CommandType::USERNAME:
@@ -297,7 +338,10 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		}
 		//UserConnection  to Invitation. 
 		//GameSession foundSession = GameSessionManager::findGameSession(Invitation());
-			
+		//
+		//if message[list] is inside the table. 
+		//push to that Sessionqueue. 
+
 
 		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
