@@ -7,14 +7,19 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
 
+enum StatusCode {
+  VALID,
+  INVALID
+};
+
 struct config {
   std::string name;
   int maxPlayercount;
   int minPlayercount;
   bool audience;
   nlohmann::json setup;
-
 };
+
 class GameEngine{
   public:
     GameEngine();
@@ -22,7 +27,7 @@ class GameEngine{
     void createGame();
     nlohmann::json stringTOJson(std::string);
     void validator(nlohmann::json gameConfiguration);
-    void rulesValidation(nlohmann::json gameConfiguration);
+    StatusCode rulesValidation(nlohmann::json gameConfiguration);
     nlohmann::json fileToJson(std::string pathName);
 
     void readRules();

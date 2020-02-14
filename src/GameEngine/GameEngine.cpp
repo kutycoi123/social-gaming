@@ -5,22 +5,27 @@
 GameEngine::GameEngine() {};
 
 void GameEngine::parseJSON(nlohmann::json gameConfiguration) {
-    if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
-      nlohmann::json configs = gameConfiguration["gameConfiguration"];
+  // TODO: Refactor based on Hunars changes for validating game configurations
+  if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
+    nlohmann::json configs = gameConfiguration["gameConfiguration"];
 
-      this->configSettings.name = configs["name"];
-      this->configSettings.audience = configs["audience"];
-      this->configSettings.maxPlayercount = configs["player count"]["max"];
-      this->configSettings.minPlayercount = configs["player count"]["in"];
-      this->configSettings.setup = configs["setup"];
-    }
-    this->constants = gameConfiguration["constants"];
-    this-> variables = gameConfiguration["variables"];
-    this-> perAudience = gameConfiguration["per-audience"];
+    this->configSettings.name = configs["name"];
+    this->configSettings.audience = configs["audience"];
+    this->configSettings.maxPlayercount = configs["player count"]["max"];
+    this->configSettings.minPlayercount = configs["player count"]["in"];
+    this->configSettings.setup = configs["setup"];
+  }
+  this->constants = gameConfiguration["constants"];
+  this-> variables = gameConfiguration["variables"];
+  this-> perAudience = gameConfiguration["per-audience"];
+  // END-TODO
+
+  if (GameEngine::rulesValidation(gameConfiguration["rules"]) == StatusCode::VALID) {
     this->_rules = gameConfiguration["rules"];
-    //set name rules ect.. 
+  }
 }
 
+// TODO: Refactor based on Hunars changes for validating game configurations
 void GameEngine::validator(nlohmann::json gameConfiguration){
     assert(gameConfiguration.contains("gameConfiguration"));
     assert(gameConfiguration.contains("constants"));
@@ -28,15 +33,18 @@ void GameEngine::validator(nlohmann::json gameConfiguration){
     assert(gameConfiguration.contains("per-audience"));
     assert(gameConfiguration.contains("rules"));
 }
+// END-TODO
 
-void GameEngine::rulesValidation(nlohmann::json incomingRules) {
+StatusCode GameEngine::rulesValidation(nlohmann::json incomingRules) {
   auto ruleMap = GameSpecification::BaseRule::rulemap;
 
   for (nlohmann::json::iterator it = incomingRules.begin(); it != incomingRules.end(); ++it) {
     if (ruleMap.find(it.key()) == ruleMap.end()) {
-      throw std::invalid_argument("Invalid rule specified");
+      return StatusCode::INVALID;
     }
   }
+
+  return StatusCode::VALID;
 }
 
 nlohmann::json fileToJson(std::string pathName) {
