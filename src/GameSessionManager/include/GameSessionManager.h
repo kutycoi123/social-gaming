@@ -35,7 +35,7 @@ namespace GameSessionManager{
 
     GameSession createGameSession(User& owner);
 
-    void MapUserIDToInvitation(const Invitation invitation,uintptr_t id);
+    //void MapUserIDToInvitation(const Invitation invitation,uintptr_t id);
 
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);

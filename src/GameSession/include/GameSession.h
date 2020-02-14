@@ -26,7 +26,7 @@ public:
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
     void startGame();
-
+    void clearMessages();
     UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {

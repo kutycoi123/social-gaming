@@ -64,3 +64,9 @@ void GameSession::addMessages(std::string message) {
 std::queue<std::string> GameSession::getMessages() {
      return messages;
  }
+
+ void GameSession::clearMessages() {
+    while(!messages.empty()) {
+        messages.pop();
+    }
+ }
