@@ -1,6 +1,6 @@
-add_library(gameEngine GameEngine.cpp)
+add_library(gameParser gameParser.cpp)
 
-target_include_directories(gameEngine
+target_include_directories(gameParser
   PUBLIC
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -8,7 +8,7 @@ target_include_directories(gameEngine
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(gameEngine
+target_link_libraries(gameParser
   nlohmann_json::nlohmann_json
   GameSpec
 )

@@ -4,8 +4,8 @@
 #include <cassert>
 #include <fstream>
 #include <string>
-#ifndef GAME_ENGINE_H
-#define GAME_ENGINE_H
+#ifndef GAME_PARSER_H
+#define GAME_PARSER_H
 
 enum StatusCode {
   VALID,
@@ -20,9 +20,9 @@ struct config {
   nlohmann::json setup;
 };
 
-class GameEngine{
+class GameParser{
   public:
-    GameEngine();
+    GameParser();
     void parseJSON(nlohmann::json gameConfiguration);
     void createGame();
     nlohmann::json stringTOJson(std::string);
