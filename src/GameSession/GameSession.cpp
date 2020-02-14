@@ -30,10 +30,6 @@ bool GameSession::isGameStarted() const {
     return _isGameStarted;
 }
 
-void GameSession::setTotalNumPlayers(int totalPlayers) { 
-    _totalNumPlayers = totalPlayers;
-}
-
 void GameSession::addUserToSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.addUser(user.getUserId());

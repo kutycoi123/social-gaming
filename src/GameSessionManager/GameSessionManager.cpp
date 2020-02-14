@@ -30,16 +30,19 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::startGameInGameSession(GameSession& gameSession){
-    gameSession.startGame();
+void GameSessionManager::startGameInGameSession(const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession){
+        gameSession.value().startGame();
+    }
 }
 
-void GameSessionManager::endGameSession(GameSession& gameSession){
-    auto invitationCode = gameSession.getInvitationCode();
-    if (findGameSession(invitationCode)){
-        gameSession.removeAllUsersfromSession();
-        _invitationToGameSessionMap.erase(invitationCode);
-        _sessionsList.erase(gameSession);
+void GameSessionManager::endGameSession(const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession){
+        gameSession.value().removeAllUsersfromSession();
+        _invitationToGameSessionMap.erase(invitation);
+        _sessionsList.erase(gameSession.value());
     }
 }
 
