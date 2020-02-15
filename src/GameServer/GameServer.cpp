@@ -7,6 +7,7 @@
 #include "Command.h"
 
 #include <atomic>
+#include <queue>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -25,6 +26,7 @@ static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
 
 static UserList usersInMainLobby;
+ 
 static GlobalMessage globalMessage = {""};
 static std::pair<bool, Invitation> createSession(networking::Message, User);
 static bool joinSession(Command, User);
@@ -39,7 +41,11 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 //message thread
 static void handleMessages(networking::Server&);
 static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
+static std::deque<networking::Message> SendMessageToSession();
+static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
+static void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
+//player authentication. 
 int main(int argc, char* argv[]){
 
 	//Read Json
@@ -56,9 +62,9 @@ int main(int argc, char* argv[]){
 	std::cout << "starting server \nport: " << port << "\nhtml path: " << htmlpath << '\n';
 
 	//Configure Server
-    std::ifstream htmlFile{htmlpath};
+  std::ifstream htmlFile{htmlpath};
 	std::string htmlFileStr{std::istreambuf_iterator<char>(htmlFile),std::istreambuf_iterator<char>()};
-    networking::Server server{port, htmlFileStr, OnConnect, OnDisconnect};
+  networking::Server server{port, htmlFileStr, OnConnect, OnDisconnect};
 
 	std::thread messageHandling(handleMessages, std::ref(server));
 
@@ -86,7 +92,7 @@ static void OnConnect(networking::Connection c) {
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
-
+	
 	UserId id(c.id);
 	usersInMainLobby.removeUser(id);
 }
@@ -138,11 +144,13 @@ static void handleMessages(networking::Server& server){
 
 		auto incoming = server.receive();
 		
+
 		auto outgoing = gameServerUpdate(server, incoming);
+	 
 
+		//auto outgoing = SendMessageToSession();
 		server.send(outgoing);
-
-		//probably want to replace this with something else
+	 
 		if (errorWhileUpdating) {
 			break;
 		}
@@ -152,6 +160,57 @@ static void handleMessages(networking::Server& server){
 
 	return;
 }
+#pragma endregion end
+
+ 
+std::deque<networking::Message> SendMessageToSession() {
+	std::deque<networking::Message> commandResult;
+	
+	for (auto&  inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
+		//std::pair<UserId, User>
+		
+		for(auto& user:inviteGameElement.second.getUsersInSession()) {
+
+			std::cout<<inviteGameElement.second.getUsersInSession().size()<<std::endl;
+			std::queue messages = inviteGameElement.second.getMessages();
+
+			int total =  messages.size();
+			std::cout<<"total messages:"<<total<<std::endl;
+			for( int i = 0; i < total;  i++) {
+				 	std::cout<< "sending all messages to user"<<std::endl;
+				 	commandResult.push_back(networking::Message{user.first.getId(), messages.front()});
+			 }
+		}
+		inviteGameElement.second.clearMessages();
+	}
+ 
+	return commandResult;
+}
+	 
+ //paramters connection Id message
+ void AddMessageToCorrectSession(const uintptr_t userID, const std::string &message) {
+
+	 auto iter =  GameSessionManager::userToInviteCode.find(userID);
+	std::cout<<"looking for invitation"<<"\n";
+	if(iter != GameSessionManager::userToInviteCode.end()) {
+			std::cout<<"found invitation"<<"\n";
+
+			auto it = GameSessionManager::_invitationToGameSessionMap.find(iter->second);
+				
+			std::cout<<iter->second.toString()<<std::endl;
+				
+			if(it == GameSessionManager::_invitationToGameSessionMap.end()) {
+					std::cout<<"can't find session of user"<<"\n";
+			}
+				else {
+					std::cout<<"added message to session queue";
+					it->second.addMessages(message);
+				}
+
+		} 
+ }
+	
+ 
 
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
@@ -174,11 +233,21 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 		}
 
+		if (message.text.find("set Owner") != std::string::npos) {
+			// call game engine
+			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
+			} catch( nlohmann::json gameConfig ) {
+				std::cout<< "incorrect json";
+			}
+		}
+
+		 
 		switch (command.getCommandType())
 		{
 			case Command::CommandType::DISCONNECT:
 			{
 				server.disconnect(message.connection);
+				break;
 			}
 			break;
 			case Command::CommandType::SHUTDOWN:
@@ -189,6 +258,12 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::START_GAME:
 			{
+				//print out those string games.
+				//find gameSession based on code, push back message to queue
+
+		
+		 
+				//AddMessageToCorrectSession(message.connection.id, "start game\n");
 				std::cout << "start game\n";
 				// TODO: Requires Matthew's User MR
 			}
@@ -249,7 +324,9 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 					//do nothing
 			}
 			break;
-		}
+			}
+		
+		
 		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
 	return commandResult;
@@ -273,8 +350,13 @@ static std::deque<networking::Message> getGlobalMessages(){
 
 std::pair<bool, Invitation> createSession(networking::Message m, User user){
 	GameSession init = GameSessionManager::createGameSession(user);
-	GameSession &initRef = init; 
+	GameSession &initRef = init;
+
 	Invitation code = initRef.getInvitationCode();
+	//TODO: add mapUserIDToInvitation
+
+	//investigate  GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(userProvidedCode, session)); why doesn't it update invitation code
+	AddMessageToCorrectSession(m.connection.id,  "joining lobby: " + code.toString());
 	return std::make_pair(true, code);
  }
 
@@ -282,6 +364,7 @@ bool joinSession(Command command, User user){
 	if(command.getCommandArgument()){
 		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(command.getCommandArgument().value());
 		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
+			//AddMessageToCorrectSession(m.connection.id,m.text);
 			return true;
 		}
 	}

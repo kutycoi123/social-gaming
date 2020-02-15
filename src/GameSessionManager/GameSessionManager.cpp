@@ -9,13 +9,17 @@ GameSession GameSessionManager::createGameSession(User& owner){
 }
 
 std::optional<GameSession> GameSessionManager::joinGameSession(User& user, const Invitation& invitation){
+
     auto gameSession = findGameSession(invitation);
 
+    auto found = _invitationToGameSessionMap.find(invitation);
+    found->second.addUserToSession(user);
     // TODO: Investigate why isGameStarted() is still returning false
-    bool canJoinSession = gameSession.has_value() && !(gameSession->isGameStarted());
+    bool canJoinSession = gameSession.has_value();//&& !(gameSession->isGameStarted()
     if (canJoinSession){
         gameSession.value().addUserToSession(user);
     }
+     
     return gameSession;
 }
 
@@ -40,7 +44,7 @@ void GameSessionManager::startGameInGameSession(const Invitation& invitation){
 void GameSessionManager::endGameSession(const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
     if (gameSession){
-        gameSession.value().removeAllUsersfromSession();
+        //gameSession.value().removeAllUsersfromSession();
         _invitationToGameSessionMap.erase(invitation);
         _sessionsList.erase(gameSession.value());
     }
@@ -48,6 +52,10 @@ void GameSessionManager::endGameSession(const Invitation& invitation){
 
 size_t GameSessionManager::totalSessionCount(){
     return _sessionsList.size();
+}
+
+void GameSessionManager::mapUserIDToInvitation(uintptr_t id, const Invitation&invitation) {
+    userToInviteCode.insert(std::make_pair(id , invitation));
 }
 
 std::deque<networking::Message> GameSessionManager::getAllGameMessages(){

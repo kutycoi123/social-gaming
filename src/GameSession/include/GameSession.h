@@ -8,7 +8,7 @@
 #include "Game.h"
 #include "User.h"
 #include "UserList.h"
-
+#include <queue>
 class GameSession { 
     
 public:
@@ -25,13 +25,16 @@ public:
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
     void startGame();
-
+    void clearMessages();
     UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {
         return _invitationCode == gameSession._invitationCode;
     }
 
+    void addMessages(const std::string &message);
+
+    std::queue<std::string> getMessages();
     bool doesUserOwnGame(const User& user) const;
 
     // WIP
@@ -46,6 +49,8 @@ private:
     std::list<std::string> _ListRules;
     std::string _currentGame;
     UserList _usersInSession;
+
+    std::queue<std::string> messages;
 
     std::string _sessionName;
     std::string _JSONSetting;

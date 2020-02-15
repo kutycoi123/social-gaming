@@ -26,11 +26,17 @@ namespace GameSessionManager{
         };
 
         static std::vector<Game> gameList {};
+        
         static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
+        
+        static std::unordered_map<uintptr_t, Invitation> userToInviteCode; 
         static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap;
     }
 
     GameSession createGameSession(User& owner);
+
+    void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
+     
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
     void startGameInGameSession(const Invitation& invitation);

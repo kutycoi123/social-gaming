@@ -33,6 +33,7 @@ bool GameSession::isGameStarted() const {
 void GameSession::addUserToSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.addUser(user.getUserId());
+    
 }
 
 void GameSession::removeUserFromSession(User& user) { 
@@ -55,3 +56,18 @@ void GameSession::startGame() {
 UserList GameSession::getUsersInSession() {
     return _usersInSession;
 }
+
+
+void GameSession::addMessages(const std::string &message) {
+    messages.push(message);
+}
+
+std::queue<std::string> GameSession::getMessages() {
+     return messages;
+ }
+
+ void GameSession::clearMessages() {
+    while(!messages.empty()) {
+        messages.pop();
+    }
+ }

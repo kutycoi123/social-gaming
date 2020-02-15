@@ -14,6 +14,10 @@ struct UserName {
     std::string name;
 };
 
+enum privilage {
+    user, owner, serverAdmin 
+};
+
 class UserId {
 public:
     UserId();
@@ -23,6 +27,7 @@ public:
 
 private:
     uintptr_t _id;
+    
 };
 
 class User {
@@ -30,7 +35,7 @@ public:
     User(const UserId& userId);
 
     void setName(const UserName& name);
-
+    void setPrivilage(privilage type);
     UserName getName() const;
     uintptr_t getUserId() const;
     bool operator==(const User& user) const {
@@ -40,7 +45,10 @@ public:
 private:
     UserName _userName;
     UserId _userId;
+    privilage Type;
+
 };
+
 
 
 #endif
