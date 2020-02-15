@@ -22,12 +22,12 @@ std::string GameSession::getSessionName() const {
     return _sessionName;
 }
 
-bool GameSession::isGameStarted() const {
-    return _isGameStarted;
+bool GameSession::doesUserOwnGame(const User& user) const {
+    return (user == _owner);
 }
 
-void GameSession::setTotalNumPlayers(int totalPlayers) { 
-    _totalNumPlayers = totalPlayers;
+bool GameSession::isGameStarted() const {
+    return _isGameStarted;
 }
 
 void GameSession::addUserToSession(User& user) { 
@@ -38,10 +38,6 @@ void GameSession::addUserToSession(User& user) {
 void GameSession::removeUserFromSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.removeUser(user.getUserId());
-}
-
-void GameSession::removeAllUsersfromSession(){ 
-    _usersInSession.removeAllUsers();
 }
 
 void GameSession::setConfigurationSettings(std::string jsonSettings) { 

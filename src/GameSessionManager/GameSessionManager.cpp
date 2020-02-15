@@ -1,9 +1,9 @@
 #include "include/GameSessionManager.h"
 
+
 GameSession GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     _sessionsList.insert(gameSession);
-    _inviteCodes.insert(gameSession.getInvitationCode());
     _invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
     return gameSession;
 }
@@ -19,6 +19,8 @@ std::optional<GameSession> GameSessionManager::joinGameSession(User& user, const
     return gameSession;
 }
 
+// Finds corresponding game session to provided Invitation code
+// Returns the GameSession if one is found or an empty optional if none is found 
 std::optional<GameSession> GameSessionManager::findGameSession(const Invitation& invitation){
     auto found = _invitationToGameSessionMap.find(invitation);
     if (found == _invitationToGameSessionMap.end()){
@@ -28,30 +30,24 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::endGameSession(GameSession& gameSession){
-    auto invitationCode = gameSession.getInvitationCode();
-    if (sessionExists(invitationCode)){
-        gameSession.removeAllUsersfromSession();
-        _invitationToGameSessionMap.erase(invitationCode);
-        _inviteCodes.erase(invitationCode);
-        _sessionsList.erase(gameSession);
+void GameSessionManager::startGameInGameSession(const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession){
+        gameSession.value().startGame();
+    }
+}
+
+void GameSessionManager::endGameSession(const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+    if (gameSession){
+        gameSession.value().removeAllUsersfromSession();
+        _invitationToGameSessionMap.erase(invitation);
+        _sessionsList.erase(gameSession.value());
     }
 }
 
 size_t GameSessionManager::totalSessionCount(){
     return _sessionsList.size();
-}
-
-std::optional<Invitation> GameSessionManager::sessionExists(const std::string& invitationString){
-    return sessionExists(Invitation::createInvitationFromStringInput(invitationString));
-}
-
-std::optional<Invitation> GameSessionManager::sessionExists(const Invitation& invitation) {
-    auto found = _invitationToGameSessionMap.find(invitation);
-    if (found == _invitationToGameSessionMap.end()){
-        return std::nullopt;
-    }
-    return std::optional<Invitation>{found->first};
 }
 
 std::deque<networking::Message> GameSessionManager::getAllGameMessages(){
