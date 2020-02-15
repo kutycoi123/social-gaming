@@ -8,6 +8,13 @@ target_include_directories(gameParser
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+set_target_properties(gameParser
+                      PROPERTIES
+                      LINKER_LANGUAGE CXX
+                      CXX_STANDARD 17
+                      PREFIX ""
+)
+
 target_link_libraries(gameParser
   nlohmann_json::nlohmann_json
   GameSpec
