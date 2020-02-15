@@ -12,7 +12,7 @@ enum StatusCode {
   INVALID
 };
 
-struct config {
+struct Config {
   std::string name;
   int maxPlayercount;
   int minPlayercount;
