@@ -11,3 +11,6 @@ target_include_directories(jsonValidator
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_link_libraries(jsonValidator
+  nlohmann_json::nlohmann_json
+)

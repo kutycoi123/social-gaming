@@ -1,9 +1,8 @@
 #include<string>
 #include<map>
 
-class ProcessCommand
+namespace ProcessCommand
 {    
-public:
     enum CommandType{
         QUIT,
         SHUTDOWN,
@@ -14,7 +13,7 @@ public:
         NULL_COMMAND,
     };
     
-    std::map<std::string, CommandType> commands = 
+    static std::map<std::string, CommandType> commands = 
     {
         {"/quit", CommandType::QUIT},
         {"/shutdown", CommandType::SHUTDOWN},
@@ -23,9 +22,6 @@ public:
         {"/joinlobby", CommandType::JOIN_LOBBY},
         {"/username", CommandType::USERNAME}
     };
-    CommandType evaluateCommand(std::string& );
 
-private:
-    CommandType userCommand;
-    std::string invalidUserInput;
+    CommandType evaluateCommand(std::string&);
 };
