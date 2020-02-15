@@ -18,10 +18,8 @@ public:
     std::string getSessionName() const;
     bool isGameStarted() const;
 
-    void setTotalNumPlayers(int totalPlayers);
     void addUserToSession(User& user);
     void removeUserFromSession(User& user);
-    void removeAllUsersfromSession();
 
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
@@ -32,6 +30,8 @@ public:
     bool operator==(const GameSession& gameSession ) const {
         return _invitationCode == gameSession._invitationCode;
     }
+
+    bool doesUserOwnGame(const User& user) const;
 
     // WIP
     // std::list<Player> getPlayers();  // TODO: Link with the User class
@@ -52,12 +52,9 @@ private:
     const Invitation _invitationCode;
 
     int _gameID;
-    int _totalNumPlayers;
 
     bool _isGameStarted;
     User& _owner;
-
-    uintptr_t _ownerID;
 
     // WIP
     // std::list<Player> _playersList;  // TODO: Link with the User class
