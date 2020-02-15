@@ -184,11 +184,13 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			case Command::CommandType::SHUTDOWN:
 			{
 				std::cout << "shutdown game\n";
+				// TODO: Requires Matthew's User MR
 			}
 			break;
 			case Command::CommandType::START_GAME:
 			{
 				std::cout << "start game\n";
+				// TODO: Requires Matthew's User MR
 			}
 			break;
 			case Command::CommandType::CREATE_SESSION:
@@ -200,7 +202,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 				else
 				{
 					message.text.append("\n Creating lobby: \n");
-					message.text.append(" Here is the invitational code for your lobby: ");
+					message.text.append(" Here is the invitation code for your lobby: ");
 					message.text.append(session.second.toString());
 				}
 			}
@@ -218,6 +220,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			case Command::CommandType::USERNAME:
 			{
 				std::cout << "user name";
+				// TODO: Requires Matthew's User MR.
 			}
 			break;
 			case Command::CommandType::HELP:
@@ -228,7 +231,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::NULL_COMMAND:
 			{
-				if(!command.isFormattedAsACommand()){
+				if(!command.isCommandProperlyFormatted()){
 					std::cout << " Error, Invalid user command" << '\n';
 					message.text.append(" Error, Invalid user command.");
 				}

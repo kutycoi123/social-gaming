@@ -1,5 +1,5 @@
-#ifndef PROCESS_COMMAND_H
-#define PROCESS_COMMAND_H
+#ifndef COMMAND_H
+#define COMMAND_H
 
 #include <string>
 #include <map>
@@ -20,8 +20,7 @@ class Command {
             NULL_COMMAND,
         };
         Command(const std::string& s);
-        bool isCommandArgumentPresent();
-        bool isFormattedAsACommand();
+        bool isCommandProperlyFormatted();
         std::optional<std::string> getCommandArgument() const;
         CommandType getCommandType() const;
         std::string getCommandAsString();
@@ -31,7 +30,7 @@ class Command {
         std::vector<std::string> splitCommand(const std::string& s);
         std::string originalCommandString;
         const static std::map<std::string, CommandType> stringToCommandMap;
-        const static std::map<CommandType, std::string> commandDescriptions;
+        const static std::map<CommandType, std::string> commandToDescriptionMap;
         CommandType evaluateCommand(std::string& string);
         CommandType commandType;
         std::optional<std::string> commandArgument;

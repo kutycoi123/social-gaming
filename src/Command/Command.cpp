@@ -16,7 +16,8 @@ const std::map<std::string, Command::CommandType> Command::stringToCommandMap =
         {"/username", Command::CommandType::USERNAME}
     };
 
-const std::map<Command::CommandType, std::string> Command::commandDescriptions = 
+// TODO: This will likely need to be further revised to avoid hardcoding descriptions.
+const std::map<Command::CommandType, std::string> Command::commandToDescriptionMap = 
     {
         { Command::CommandType::LEAVE_SESSION, " /leavesession: Leaves your current game session if you are in one\n" },
         { Command::CommandType::DISCONNECT, " /disconnect: Disconnects from the server\n"},
@@ -52,8 +53,8 @@ std::vector<std::string> Command::splitCommand(const std::string& s){
 }
 
 std::optional<std::string> Command::getCommandDescription(Command::CommandType command) const{
-    auto description = commandDescriptions.find(command);
-    if (description == commandDescriptions.end()){
+    auto description = commandToDescriptionMap.find(command);
+    if (description == commandToDescriptionMap.end()){
         return std::nullopt;
     }
     return std::optional<std::string>{description->second};
@@ -61,7 +62,7 @@ std::optional<std::string> Command::getCommandDescription(Command::CommandType c
 
 std::string Command::getAllCommandDescriptions() {
     std::string str{};
-    std::for_each(commandDescriptions.begin(), commandDescriptions.end(),
+    std::for_each(commandToDescriptionMap.begin(), commandToDescriptionMap.end(),
         [&str](const std::pair<Command::CommandType, std::string>& pair){str += pair.second;}
     );
     return str;
@@ -80,6 +81,6 @@ std::string Command::getCommandAsString() {
     return originalCommandString;
 }
 
-bool Command::isFormattedAsACommand(){
+bool Command::isCommandProperlyFormatted(){
     return originalCommandString.find( "/");
 }
