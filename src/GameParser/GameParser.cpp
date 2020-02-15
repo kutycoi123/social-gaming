@@ -49,7 +49,7 @@ StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
   return StatusCode::VALID;
 }
 
-nlohmann::json fileToJson(const std::string& pathName) {
+nlohmann::json GameParser::fileToJson(const std::string& pathName) {
   std::ifstream i(pathName);
   nlohmann::json JsonConfig;
   i >> JsonConfig;
