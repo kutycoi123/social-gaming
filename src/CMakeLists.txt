@@ -1,6 +1,6 @@
 add_subdirectory(GameSession)
 add_subdirectory(Invitation)
-add_subdirectory(ProcessCommand)
+add_subdirectory(Command)
 add_subdirectory(User)
 add_subdirectory(Game)
 add_subdirectory(GameSpec)
