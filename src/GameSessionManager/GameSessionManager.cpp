@@ -54,8 +54,8 @@ size_t GameSessionManager::totalSessionCount(){
     return _sessionsList.size();
 }
 
-void GameSessionManager::mapUserIDToInvitation(UserId id,const Invitation &invitation) {
-    userToInviteCode.insert(std::make_pair(id,invitation));
+void GameSessionManager::mapUserIDToInvitation(uintptr_t id, const Invitation&invitation) {
+    userToInviteCode.insert(std::make_pair(id , invitation));
 }
 
 std::deque<networking::Message> GameSessionManager::getAllGameMessages(){
