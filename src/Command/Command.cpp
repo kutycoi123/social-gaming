@@ -82,5 +82,5 @@ std::string Command::getCommandAsString() {
 }
 
 bool Command::isCommandProperlyFormatted(){
-    return originalCommandString.find( "/");
+    return originalCommandString.find( "/") == 0;
 }

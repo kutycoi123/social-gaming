@@ -234,6 +234,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 				if(!command.isCommandProperlyFormatted()){
 					std::cout << " Error, Invalid user command" << '\n';
 					message.text.append(" Error, Invalid user command.");
+				} else {
+					message.text.append(" Error, command not found.");
 				}
 				std::cout << command.getCommandAsString() << '\n';
 				break;
