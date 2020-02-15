@@ -22,6 +22,12 @@ class JSONGAMEValidator
                       rounds
     };
 
+    enum StatusCode {
+      VALID,
+      INVALID
+    };
+
+
     map<std::string, GameSpecification> jsonGameSpecification = 
     {
       {"configuration", GameSpecification::configuration},
@@ -40,9 +46,9 @@ class JSONGAMEValidator
       {"setup", GameConfiguration::setup},
       {"max", GameConfiguration::maxPlayer},
       {"min", GameConfiguration::minPlayer},
-      {"Rounds", GameConfiguration::rounds}
+      {"rounds", GameConfiguration::rounds}
     };
-    void validGameJson(std::string& );
+    StatusCode validGameJson(std::string& );
     void validateConfiguration(std::string&);
 
   private:
