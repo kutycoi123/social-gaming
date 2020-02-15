@@ -37,6 +37,6 @@ void User::setName(const UserName& name){
 }
 
 void User::setPrivilage(privilage type){
-	type = type;
+	this->type = type;
 }
 

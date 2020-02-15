@@ -27,7 +27,7 @@ public:
 
 private:
     uintptr_t _id;
-    privilage type;
+    
 };
 
 class User {
@@ -45,6 +45,7 @@ public:
 private:
     UserName _userName;
     UserId _userId;
+    privilage type;
 
 };
 
