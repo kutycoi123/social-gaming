@@ -146,12 +146,11 @@ static void handleMessages(networking::Server& server){
 		
 
 		auto outgoing = gameServerUpdate(server, incoming);
-		//server.send(outgoing);
-		processMessages(server,incoming);
+	 
 
 		//auto outgoing = SendMessageToSession();
 		server.send(outgoing);
-		//probably want to replace this with something else
+	 
 		if (errorWhileUpdating) {
 			break;
 		}
