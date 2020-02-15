@@ -1,5 +1,6 @@
 #include "GlobalMessage.h"
 
+using GameSpecification::GlobalMessage;
 
 GlobalMessage::GlobalMessage(): BaseRule("global-message"), _value(""){}
 
