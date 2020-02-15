@@ -15,6 +15,12 @@ add_library(GameSpec
 			ControlStructRule.cpp
 			InputChoice.cpp
 			Message.cpp
+			Timer.cpp
+			Sort.cpp
+			Scores.cpp
+			InputVote.cpp
+			InputText.cpp
+			GlobalMessage.cpp
 )
 
 target_include_directories(GameSpec 

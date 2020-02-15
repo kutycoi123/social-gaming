@@ -12,6 +12,7 @@ class Shuffle :public BaseRule{
 		void process() override;
     private:
         std::string _list;
+        std::string _key;
 };
 }
 #endif
