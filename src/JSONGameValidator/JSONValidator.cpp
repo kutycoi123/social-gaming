@@ -4,9 +4,6 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 
-
-using json = nlohmann::json;
-
 JSONGAMEValidator::StatusCode JSONGAMEValidator::validGameJson(std::string& jsonString){
   nlohmann::json jsonObject = nlohmann::json::parse(jsonString);
   std::map<std::string, JSONGAMEValidator::GameSpecification>::iterator command;
@@ -26,12 +23,10 @@ JSONGAMEValidator::StatusCode JSONGAMEValidator::validGameJson(std::string& json
 }
 
 void JSONGAMEValidator::validateConfiguration(std::string& jsonObject){
-    json a = json::parse(jsonObject);
+    nlohmann::json  json  = nlohmann::json::parse(jsonObject);
     std::map<std::string, JSONGAMEValidator::GameConfiguration>::iterator command;
-    command = jsonGameConfiguration.find(a.object());
-
-    //command = jsonGameConfiguration.find(a.object());
-
+    command = jsonGameConfiguration.find(json.object());
+    
     if(command == jsonGameConfiguration.end()){
      throw std::invalid_argument("Json Game specifcation invalid");
     }

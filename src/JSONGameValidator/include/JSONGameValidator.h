@@ -1,25 +1,23 @@
 #include<string>
 #include<map>
 #include <nlohmann/json.hpp>
-using namespace std;
 
 class JSONGAMEValidator
 {
   public:
-    enum GameSpecification{configuration,
-                       constants,
-                       variables,
-                       perPlayer,
-                       perAudience,
-                       rules
+    enum GameSpecification{CONFIGURATION,
+                       CONSTANTS,
+                       VARIABLES,
+                       PER_PLAYER,
+                       PER_AUDIENCE,
+                       RULES
     };
-    enum GameConfiguration {name,
-                      playerCount,
-                      audience,
-                      setup,
-                      minPlayer,
-                      maxPlayer,
-                      rounds
+    enum GameConfiguration {NAME,
+                      PLAYER_COUNT,
+                      AUDIENCE,
+                      SETUP,
+                      MIN_PLAYER,
+                      MAX_PLAYER
     };
 
     enum StatusCode {
@@ -27,30 +25,25 @@ class JSONGAMEValidator
       INVALID
     };
 
-
-    map<std::string, GameSpecification> jsonGameSpecification = 
+    std::map<std::string, GameSpecification> jsonGameSpecification = 
     {
-      {"configuration", GameSpecification::configuration},
-      {"constants", GameSpecification::constants},
-      {"variables", GameSpecification::variables},
-      {"per-player", GameSpecification::perPlayer},
-      {"per-audience", GameSpecification::perAudience},
-      {"rules", GameSpecification::rules}
+      {"configuration", GameSpecification::CONFIGURATION},
+      {"constants", GameSpecification::CONSTANTS},
+      {"variables", GameSpecification::VARIABLES},
+      {"per-player", GameSpecification::PER_PLAYER},
+      {"per-audience", GameSpecification::PER_AUDIENCE},
+      {"rules", GameSpecification::RULES}
     };
 
-    map<std::string, GameConfiguration> jsonGameConfiguration = 
+    std::map<std::string, GameConfiguration> jsonGameConfiguration = 
     {
-      {"name", GameConfiguration::name},
-      {"player count", GameConfiguration::playerCount},
-      {"audience", GameConfiguration::audience},
-      {"setup", GameConfiguration::setup},
-      {"max", GameConfiguration::maxPlayer},
-      {"min", GameConfiguration::minPlayer},
-      {"rounds", GameConfiguration::rounds}
+      {"name", GameConfiguration::NAME},
+      {"player count", GameConfiguration::PLAYER_COUNT},
+      {"audience", GameConfiguration::AUDIENCE},
+      {"setup", GameConfiguration::SETUP},
+      {"max", GameConfiguration::MAX_PLAYER},
+      {"min", GameConfiguration::MIN_PLAYER}
     };
     StatusCode validGameJson(std::string& );
     void validateConfiguration(std::string&);
-
-  private:
-    std::string invalidUserInput;
 };
