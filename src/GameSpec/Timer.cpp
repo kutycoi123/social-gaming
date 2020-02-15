@@ -1,4 +1,4 @@
-#include "Time.h"
+#include "Timer.h"
 
 Timer::Timer(): BaseRule("timer"), _duration(0), _mode(""), bool(false){}
 
