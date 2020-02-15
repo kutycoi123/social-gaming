@@ -16,7 +16,6 @@ target_link_libraries(GameServer
   session
   user
   GameSpec
-  userlist
   
   nlohmann_json::nlohmann_json
   command

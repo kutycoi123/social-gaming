@@ -1,17 +1,30 @@
 #include "include/UserList.h"
+#include "Invitation.h"
 
-UserList::UserList() {};
+UserList::UserList(): _idToUserMap(std::unordered_map<UserId, User, UserIdHash>()) {};
 
-void UserList::addUser(const UserId& id) {
+bool UserList::onConnect(const UserId& id) {
+    auto user = getUser(id);
+
+    if (user.has_value()) {
+        std::cout << " Error, Connecting user is already in UserList." << '\n';
+        return false;
+    }
+
     _idToUserMap.insert(std::make_pair(id, User(id)));
+    return true;
 }
 
-void UserList::removeUser(const UserId& id) {
+bool UserList::onDisconnect(const UserId& id) {
+    auto user = getUser(id);
+
+    if (!user.has_value()) {
+        std::cout << " Error, Disconnecting user does not exist in the UserList." << '\n';
+        return false;
+    }
+
     _idToUserMap.erase(id);
-}
-
-void UserList::removeAllUsers() {
-    _idToUserMap.clear();
+    return true;
 }
 
 std::optional<User> UserList::getUser(const UserId& id) {
@@ -24,16 +37,16 @@ std::optional<User> UserList::getUser(const UserId& id) {
     return std::optional<User>{iterator->second};
 }
 
-bool UserList::transferUser(UserList& transferTo, User& user) {
-    UserId userId = user.getUserId();
-    auto iterator = _idToUserMap.find(userId);
+User &UserList::getUserRef(const User& user) {
+    return _idToUserMap.find(user.getUserId())->second;
+}
 
-    if (iterator != _idToUserMap.end()) {
-        removeUser(userId);
-        transferTo.addUser(userId);
-        return true;
-    } else {
-        return false;
+void UserList::removeUsersFromGameSession(const Invitation& code) {
+    std::string codeString = code.toString();
+    for (auto& entry : _idToUserMap) {
+        if (entry.second.isUserInGameSession(codeString)) {
+            entry.second.setCurrentGameSessionInvitationCode(std::string());
+        }
     }
 }
 

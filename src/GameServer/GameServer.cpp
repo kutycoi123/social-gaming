@@ -16,6 +16,9 @@
 #include <thread>
 #include <vector>
 
+//TODO: MZEGAR: MOVE THIS, WE SHOULDN'T HAVE GLOBALS
+UserList users = UserList();
+
 struct GlobalMessage{
 	std::string message;
 	//something to specifiy private message, broadcast to specifiv session, broadcast globally (all sessions)
@@ -24,8 +27,6 @@ struct GlobalMessage{
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
-
-static UserList usersInMainLobby;
  
 static GlobalMessage globalMessage = {""};
 static std::pair<bool, Invitation> createSession(networking::Message, User);
@@ -86,7 +87,7 @@ static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
 	UserId id(c.id);
-	usersInMainLobby.addUser(id);
+	users.onConnect(id);
 }
 
 //teacher provided functions
@@ -94,7 +95,7 @@ static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
 	
 	UserId id(c.id);
-	usersInMainLobby.removeUser(id);
+	users.onDisconnect(id);
 }
 
 static std::string getConfigurationFilePath(int argc, char* argv[]){
@@ -165,24 +166,26 @@ static void handleMessages(networking::Server& server){
  
 std::deque<networking::Message> SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
-	
-	for (auto&  inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
-		//std::pair<UserId, User>
-		
-		for(auto& user:inviteGameElement.second.getUsersInSession()) {
 
-			std::cout<<inviteGameElement.second.getUsersInSession().size()<<std::endl;
-			std::queue messages = inviteGameElement.second.getMessages();
-
-			int total =  messages.size();
-			std::cout<<"total messages:"<<total<<std::endl;
-			for( int i = 0; i < total;  i++) {
-				 	std::cout<< "sending all messages to user"<<std::endl;
-				 	commandResult.push_back(networking::Message{user.first.getId(), messages.front()});
-			 }
-		}
-		inviteGameElement.second.clearMessages();
-	}
+    //TODO: Consider how this should be implemented with the new way users are
+    // being handled
+//	for (auto&  inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
+//		//std::pair<UserId, User>
+//
+//		for(auto& user:inviteGameElement.second.getUsersInSession()) {
+//
+//			std::cout<<inviteGameElement.second.getUsersInSession().size()<<std::endl;
+//			std::queue messages = inviteGameElement.second.getMessages();
+//
+//			int total =  messages.size();
+//			std::cout<<"total messages:"<<total<<std::endl;
+//			for( int i = 0; i < total;  i++) {
+//				 	std::cout<< "sending all messages to user"<<std::endl;
+//				 	commandResult.push_back(networking::Message{user.first.getId(), messages.front()});
+//			 }
+//		}
+//		inviteGameElement.second.clearMessages();
+//	}
  
 	return commandResult;
 }
@@ -217,9 +220,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 	
 	
 	for (networking::Message message : incoming) {
-		
-		// TODO Mzegar: Use profs iteration when refactor happens
-		// Figure out somewhere else to put this
+
 		std::string text = message.text;
 
 		Command command = Command(text);
@@ -294,8 +295,10 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::USERNAME:
 			{
-				std::cout << "user name";
-				// TODO: Requires Matthew's User MR.
+			    auto name = command.getCommandArgument();
+			    if (name.has_value()) {
+                    users.getUserRef(user).setUserName(UserName(name.value()));
+                }
 			}
 			break;
 			case Command::CommandType::HELP:
@@ -337,9 +340,9 @@ static std::deque<networking::Message> getGlobalMessages(){
 	
 	if(globalMessage.message != ""){
 
-		for(auto& entry : usersInMainLobby){
+		for(auto& entry : users){
 			User user = entry.second;
-			result.push_back({networking::Connection{user.getUserId()}, globalMessage.message});
+			result.push_back({networking::Connection{user.getUserIdValue()}, globalMessage.message});
 		}
 
 		globalMessage.message = "";
