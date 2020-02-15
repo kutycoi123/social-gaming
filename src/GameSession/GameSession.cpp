@@ -33,6 +33,7 @@ void GameSession::setTotalNumPlayers(int totalPlayers) {
 void GameSession::addUserToSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
     _usersInSession.addUser(user.getUserId());
+    _totalNumPlayers++;
 }
 
 void GameSession::removeUserFromSession(User& user) { 
@@ -57,7 +58,7 @@ UserList GameSession::getUsersInSession() {
 }
 
 
-void GameSession::addMessages(std::string message) {
+void GameSession::addMessages(const std::string message) {
     messages.push(message);
 }
 

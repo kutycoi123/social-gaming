@@ -35,12 +35,13 @@ namespace GameSessionManager{
 
     GameSession createGameSession(User& owner);
 
-    //void MapUserIDToInvitation(const Invitation invitation,uintptr_t id);
+    void MapUserIDToInvitation(uintptr_t id,const Invitation invitation);
 
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
     void endGameSession(GameSession& gameSession);
     size_t totalSessionCount();
+
     std::optional<Invitation> sessionExists(const std::string& invitationString);
     std::optional<Invitation> sessionExists(const Invitation& invitation);
     std::deque<networking::Message> getAllGameMessages();

@@ -33,7 +33,7 @@ public:
         return _invitationCode == gameSession._invitationCode;
     }
 
-    void addMessages(std::string message);
+    void addMessages(const std::string message);
 
     std::queue<std::string> getMessages();
 
