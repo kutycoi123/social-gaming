@@ -23,7 +23,7 @@ std::string GameSession::getSessionName() const {
 }
 
 bool GameSession::doesUserOwnGame(const User& user) const {
-    //return (user == _owner);
+    return (user == _owner);
 }
 
 bool GameSession::isGameStarted() const {
@@ -58,7 +58,7 @@ UserList GameSession::getUsersInSession() {
 }
 
 
-void GameSession::addMessages(const std::string message) {
+void GameSession::addMessages(const std::string &message) {
     messages.push(message);
 }
 

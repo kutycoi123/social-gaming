@@ -44,7 +44,7 @@ static std::deque<networking::Message> gameServerUpdate(networking::Server&, con
 std::deque<networking::Message> SendMessageToSession();
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
-void AddMessageToCorrectSession(uintptr_t connectionID, std::string message);
+void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
 //player authentication. 
 int main(int argc, char* argv[]){
 
@@ -189,26 +189,26 @@ std::deque<networking::Message> SendMessageToSession() {
 }
 	 
  //paramters connection Id message
- void AddMessageToCorrectSession(const uintptr_t userID, const std::string message) {
+ void AddMessageToCorrectSession(const uintptr_t userID, const std::string &message) {
 
 	 auto iter =  GameSessionManager::userToInviteCode.find(userID);
-				std::cout<<"looking for invitation"<<"\n";
-			 	if(iter != GameSessionManager::userToInviteCode.end()) {
-					 	std::cout<<"found invitation"<<"\n";
+	std::cout<<"looking for invitation"<<"\n";
+	if(iter != GameSessionManager::userToInviteCode.end()) {
+			std::cout<<"found invitation"<<"\n";
 
-					 	auto it = GameSessionManager::_invitationToGameSessionMap.find(iter->second);
-						 
-						std::cout<<iter->second.toString()<<std::endl;
-						 
-						if(it == GameSessionManager::_invitationToGameSessionMap.end()) {
-								std::cout<<"can't find session of user"<<"\n";
-						}
-						 else if(it != GameSessionManager::_invitationToGameSessionMap.end()) {
-							 	std::cout<<"added message to session queue";
-							 	it->second.addMessages(message);
-						 }
+			auto it = GameSessionManager::_invitationToGameSessionMap.find(iter->second);
+				
+			std::cout<<iter->second.toString()<<std::endl;
+				
+			if(it == GameSessionManager::_invitationToGameSessionMap.end()) {
+					std::cout<<"can't find session of user"<<"\n";
+			}
+				else {
+					std::cout<<"added message to session queue";
+					it->second.addMessages(message);
+				}
 
-				 } 
+		} 
  }
 	
  
@@ -264,7 +264,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		
 		 
-				AddMessageToCorrectSession(message.connection.id, "start game\n");
+				//AddMessageToCorrectSession(message.connection.id, "start game\n");
 				std::cout << "start game\n";
 				// TODO: Requires Matthew's User MR
 			}
@@ -337,7 +337,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			//
 			
 
-		}
+		
 		
 		commandResult.push_back(networking::Message{message.connection, message.text});
 	}
@@ -376,7 +376,7 @@ bool joinSession(Command command, User user){
 	if(command.getCommandArgument()){
 		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(command.getCommandArgument().value());
 		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
-			AddMessageToCorrectSession(m.connection.id,m.text);
+			//AddMessageToCorrectSession(m.connection.id,m.text);
 			return true;
 		}
 	}

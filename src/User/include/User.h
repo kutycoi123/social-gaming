@@ -15,7 +15,7 @@ struct UserName {
 };
 
 enum privilage {
-    player, owner, serverAdmin 
+    user, owner, serverAdmin 
 };
 
 class UserId {
@@ -45,7 +45,7 @@ public:
 private:
     UserName _userName;
     UserId _userId;
-    privilage type;
+    privilage Type;
 
 };
 

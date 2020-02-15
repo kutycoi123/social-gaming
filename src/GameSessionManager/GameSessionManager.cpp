@@ -19,7 +19,7 @@ std::optional<GameSession> GameSessionManager::joinGameSession(User& user, const
     if (canJoinSession){
         gameSession.value().addUserToSession(user);
     }
-    gameSession.value().addUserToSession(user);
+     
     return gameSession;
 }
 
