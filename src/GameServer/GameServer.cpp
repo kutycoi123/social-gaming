@@ -326,17 +326,6 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 			break;
 			}
-
-			//for example something 
-			//game[connection].message = blahblahblah
-
-			//dummy code, remove later
-			//push message into Sessions. 
-			//if session exists push it into it. 
-			//and the message id into it. Pair message, Id,, 
-			//
-			
-
 		
 		
 		commandResult.push_back(networking::Message{message.connection, message.text});
