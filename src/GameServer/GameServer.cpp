@@ -41,10 +41,10 @@ static void checkValidConfigurationFile(const nlohmann::json&);
 //message thread
 static void handleMessages(networking::Server&);
 static std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
-std::deque<networking::Message> SendMessageToSession();
+static std::deque<networking::Message> SendMessageToSession();
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
-void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
+static void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
 //player authentication. 
 int main(int argc, char* argv[]){
 
