@@ -29,14 +29,14 @@ namespace GameSessionManager{
         
         static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
         static std::unordered_set<Invitation, InvitationHash> _inviteCodes;
-        static std::unordered_map<uintptr_t, Invitation> userToInviteCode; 
+        static std::unordered_map<UserId, Invitation> userToInviteCode; 
         static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap;
     }
 
     GameSession createGameSession(User& owner);
 
-    void MapUserIDToInvitation(uintptr_t id,const Invitation invitation);
-
+    void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
+     
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
     void startGameInGameSession(const Invitation& invitation);

@@ -383,7 +383,7 @@ std::pair<bool, Invitation> createLobby(networking::Message m, User user){
 	GameSession &initRef = init;
 
 	Invitation code = initRef.getInvitationCode();
-	//TODO: add GameSessionManager::userToInviteCode.insert(std::make_pair(message.connection.id,userProvidedCode ));
+	//TODO: add mapUserIDToInvitation
 
 	//investigate  GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(userProvidedCode, session)); why doesn't it update invitation code
 	AddMessageToCorrectSession(m.connection.id,  "joining lobby: " + code.toString());
