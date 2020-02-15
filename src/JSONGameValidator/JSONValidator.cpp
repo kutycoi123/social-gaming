@@ -7,23 +7,16 @@
 
 using json = nlohmann::json;
 
-void JSONGAMEValidator::valideGameJson(std::string& jsonString){
+void JSONGAMEValidator::validGameJson(std::string& jsonString){
   nlohmann::json jsonObject = nlohmann::json::parse(jsonString);
   std::map<std::string, JSONGAMEValidator::GameSpecification>::iterator command;
     size_t jsonGameSpecificationMapSize = jsonGameSpecification.size();
+    
     if(jsonGameSpecificationMapSize!=jsonObject.size())
     {
-        throw std::invalid_argument("Game Json specifcation invalid");
+        throw std::invalid_argument("Game Json specifcation invalid. Missing Game specifications.");
     }
-    else{
-      for(auto& object : jsonObject.items()){
-        command = jsonGameSpecification.find(object.key());
-        if(command == jsonGameSpecification.end())
-        {
-          throw std::invalid_argument("Json Game specifcation invalid");
-        }
-      }
-    }
+    std::find_if(jsonObject.items().begin(), jsonObject.items().end(), [](auto& elem){return jsonGameSpecification.find(elem.key()) == jsonGameSpecification.end();});
 }
 
 void JSONGAMEValidator::validateConfiguration(std::string& jsonObject){

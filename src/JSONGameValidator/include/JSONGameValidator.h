@@ -42,7 +42,7 @@ class JSONGAMEValidator
       {"min", GameConfiguration::minPlayer},
       {"Rounds", GameConfiguration::rounds}
     };
-    void valideGameJson(std::string& );
+    void validGameJson(std::string& );
     void validateConfiguration(std::string&);
 
   private:
