@@ -13,10 +13,6 @@ int Discard::getCount() const{
     return _count;
 }
 
-void Discard::setFrom(const std::string& from){
-    _from = from;
-}
-
-void Discard::setCount(const int count){
-    _count = count;
+void Discard::process() {
+	//TODO: Add code to process discard rule
 }

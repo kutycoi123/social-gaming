@@ -12,9 +12,7 @@ class Deal : public BaseRule{
         std::string getFrom() const;
         SpecValue getTo() const;
         int getCount() const;
-        void setFrom(const std::string& from);
-        void setTo(const SpecValue& to);
-        void setCount(const int count);
+		void process() override;
     private:
         std::string _from;
         SpecValue _to;

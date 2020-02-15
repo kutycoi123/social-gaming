@@ -11,8 +11,7 @@ class Extend : public BaseRule{
         Extend(const std::string& target, const SpecValue& list);
         std::string getTarget() const;
         SpecValue getList() const;
-        void setTarget(const std::string& target);
-        void setList(const SpecValue& list);
+       	void process() override; 
     private:
         std::string _target;
         SpecValue _list;

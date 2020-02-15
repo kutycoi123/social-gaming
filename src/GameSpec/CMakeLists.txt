@@ -13,8 +13,8 @@ add_library(GameSpec
 			Shuffle.cpp
 			BaseRule.cpp
 			ControlStructRule.cpp
-			InputChoiceRule.cpp
-			MessageRule.cpp
+			InputChoice.cpp
+			Message.cpp
 )
 
 target_include_directories(GameSpec 

@@ -10,8 +10,7 @@ class Discard : public BaseRule{
         Discard(const std::string& from, const int count);
         std::string getFrom() const;
         int getCount() const;
-        void setFrom(const std::string& from);
-        void setCount(const int count);
+       	void process() override; 
     private:
         std::string _from;
         int _count;

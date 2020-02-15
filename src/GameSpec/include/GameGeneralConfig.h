@@ -2,6 +2,8 @@
 #define GAMEGENERALCONFIG_H
 
 #include <string>
+#include <unordered_map>
+#include "AbstractSpec.h"
 
 namespace GameSpecification{
 struct PlayerCount{
@@ -9,11 +11,8 @@ struct PlayerCount{
     int max;  
 };
 
-struct Setup{
-    int round;
-    //TODO: Add more fields when more details are provided
-    
-};
+using Setup = std::unordered_map<std::string, SpecValue>;
+
 
 class GameGeneralConfig{
     public:
@@ -34,7 +33,7 @@ class GameGeneralConfig{
         std::string _name;
         PlayerCount _playerCount;
         bool _audience;
-        Setup _setup;
+		Setup _setup;
 
 };
 }

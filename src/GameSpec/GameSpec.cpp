@@ -10,8 +10,8 @@ using GameSpecification::GameSpec;
 		return _specFilePath;
 	}
 	
-	void GameSpec::addRule(const BaseRule& rule){
-		_rules.push_back(std::make_shared<BaseRule>(rule));
+	void GameSpec::addRule(std::shared_ptr<BaseRule> rule){
+		_rules.push_back(rule);
 	}
 	
 	void GameSpec::setSpecFilePath(const std::string& path){
