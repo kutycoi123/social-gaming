@@ -8,10 +8,10 @@ namespace GameSpecification{
 class InputVote : public BaseRule{
     public:
 		InputVote();
-        InputVote(const User& user, const std::string& prompt);
+        InputVote(const User& user,const std::string& prompt, const std::string& choices, const std::string& result, const double timeout);
         std::vector<User> getUser() const;
         std::string getPrompt() const;
-        std::stringgetChoice() const;
+        std::string getChoice() const;
         std::string getResult() const;
         double getTimeOut() const;
 		void process() override;

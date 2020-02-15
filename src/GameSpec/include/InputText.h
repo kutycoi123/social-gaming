@@ -8,7 +8,7 @@ namespace GameSpecification{
 class InputText : public BaseRule{
     public:
 		InputText();
-        InputText(const User& user, const std::string& prompt);
+        InputText(const User& user, const std::string& prompt, const std::string& result, const double timeout);
         User getUser() const;
         std::string getPrompt() const;
         std::string getResult() const;

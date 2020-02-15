@@ -8,9 +8,9 @@ class Timer : public BaseRule{
     public:
         Timer();
         Timer(const double duration, const std::string& mode, const bool flag);
-        double getDuration(0 const);
-        std::string getDuration() const;
-        double getFlag();
+        double getDuration() const;
+        std::string getMode() const;
+        bool getFlag() const;
        	void process() override; 
     private:
         double _duration;
@@ -19,5 +19,3 @@ class Timer : public BaseRule{
 };
 }
 #endif
-
-// sort, time, input text, input vote, globalmessage, score

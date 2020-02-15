@@ -7,7 +7,7 @@ namespace GameSpecification{
 class Sort : public BaseRule{
     public:
         Sort();
-        Sort(const std::string& _list, const std::string& _list);
+        Sort(const std::string& _list, const std::string& _key);
         std::string getList() const;
         std::string getKey() const;
        	void process() override; 
