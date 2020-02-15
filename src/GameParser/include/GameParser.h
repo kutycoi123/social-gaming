@@ -36,6 +36,6 @@ class GameParser{
       nlohmann::json _gameConfiguration;
       std::string _GameName;
       nlohmann::json _rules;
-      config _configSettings;
+      Config _configSettings;
 };
 #endif
