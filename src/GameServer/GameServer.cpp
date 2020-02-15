@@ -301,15 +301,10 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 				GameSessionManager::userToInviteCode.insert(std::make_pair(message.connection.id, code));
 
-				//GameSessionManager::MapUserIDToInvitation(message.connection.id,code);
-
 				GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(code, initSession));
-
 				
 				AddMessageToCorrectSession(message.connection.id, "Here is the invitational code for your lobby:" + code.toString());
-				//AddMessageToCorrectSession(message.connection.id, "creating lobby\n");
-
-
+			
 				//globalMessage.message.append("Creating lobby: \n");
 				std::cout << "creating lobby " << '\n';
 				//globalMessage.message.append(" Here is the invitational code for your lobby:" + code.toString());
