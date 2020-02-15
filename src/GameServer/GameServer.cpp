@@ -226,8 +226,6 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		Command command = Command(text);
 		UserId id(message.connection.id);
 		User user(id);
-		serverCommand = ProcessCommand::evaluateCommand(strVector[FIRST_COMMAND]);
-		
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -244,9 +242,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 		}
 
-
-
-		switch (serverCommand)
+		 
+		switch (command.getCommandType())
 		{
 			case Command::CommandType::DISCONNECT:
 			{
