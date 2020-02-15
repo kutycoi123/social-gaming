@@ -39,11 +39,9 @@ namespace GameSessionManager{
 
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
-    void endGameSession(GameSession& gameSession);
+    void startGameInGameSession(const Invitation& invitation);
+    void endGameSession(const Invitation& invitation);
     size_t totalSessionCount();
-
-    std::optional<Invitation> sessionExists(const std::string& invitationString);
-    std::optional<Invitation> sessionExists(const Invitation& invitation);
     std::deque<networking::Message> getAllGameMessages();
     std::deque<networking::Message> getAllLobbyMessages();
 
