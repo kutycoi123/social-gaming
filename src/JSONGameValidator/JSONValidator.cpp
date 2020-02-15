@@ -11,12 +11,10 @@ JSONGAMEValidator::StatusCode JSONGAMEValidator::validGameJson(std::string& json
     
   if(jsonGameSpecificationMapSize!=jsonObject.size())
   {
-    throw std::invalid_argument("Game Json specifcation invalid. Missing Game specification.");
     return StatusCode::INVALID;
   }
   auto key=  std::find_if(jsonObject.items().begin(), jsonObject.items().end(), [](auto& elem){return jsonGameSpecification.find(elem.key()) == jsonGameSpecification.end();});
   if (key == jsonObject.items().begin()){
-      throw std::invalid_argument("Game Json specifcation invalid.");
       return StatusCode::INVALID;
   }
   return StatusCode::VALID;
@@ -26,7 +24,7 @@ void JSONGAMEValidator::validateConfiguration(std::string& jsonObject){
     nlohmann::json  json  = nlohmann::json::parse(jsonObject);
     std::map<std::string, JSONGAMEValidator::GameConfiguration>::iterator command;
     command = jsonGameConfiguration.find(json.object());
-    
+
     if(command == jsonGameConfiguration.end()){
      throw std::invalid_argument("Json Game specifcation invalid");
     }
