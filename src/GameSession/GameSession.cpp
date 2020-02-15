@@ -41,6 +41,10 @@ void GameSession::removeUserFromSession(User& user) {
     _usersInSession.removeUser(user.getUserId());
 }
 
+void GameSession::removeAllUsersfromSession(){ 
+    _usersInSession.removeAllUsers();
+}
+
 void GameSession::setConfigurationSettings(std::string jsonSettings) { 
     _JSONSetting = jsonSettings;
 }
