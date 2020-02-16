@@ -10,7 +10,7 @@ enum privilage {
 
 class UserName {
 public:
-    UserName(const std::string& stringName) : name(stringName) {}
+    UserName(const std::string& stringName) : name(stringName) {};
     std::string name;
 };
 

@@ -23,7 +23,7 @@ public:
     bool onDisconnect(const UserId& id);
 
     std::optional<User> getUser(const UserId& id);
-    std::optional<std::unique_ptr<User>> getUserRef(const UserId& id);
+    std::optional<User*> getUserRef(const UserId& id);
 
     void removeUsersFromGameSession(const Invitation& code);
     std::vector<std::shared_ptr<User>> getUsersInSession(const Invitation& code);

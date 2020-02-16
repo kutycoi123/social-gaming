@@ -166,7 +166,7 @@ static void handleMessages(networking::Server& server){
  
 std::deque<networking::Message> SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
-	
+
     for (auto& inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
         for (auto& user : users.getUsersInSession(inviteGameElement.second.getInvitationCode())) {
             std::queue messages = inviteGameElement.second.getMessages();
@@ -219,7 +219,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 
 		Command command = Command(text);
 		UserId id(message.connection.id);
-		User user(id);
+		std::optional<User> user = users.getUser(id);
 		if (message.text.find("Configurations") != std::string::npos) {
 			// call game engine
 			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
@@ -265,7 +265,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::CREATE_SESSION:
 			{
-				std::pair<bool, Invitation> session = createSession(message, user);
+				std::pair<bool, Invitation> session = createSession(message, user.value());
 				if (!session.first){
 					message.text.append(" Error, Could not create lobby!");
 				}
@@ -279,7 +279,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::JOIN_SESSION:
 			{
-				if(!joinSession(command, user)){
+				if(!joinSession(command, user.value())){
 					message.text.append(" Error, cannot join lobby!");
 				}
 				else{
@@ -290,9 +290,9 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			case Command::CommandType::USERNAME:
 			{
 			    auto name = command.getCommandArgument();
-                auto userRef = users.getUserRef(user.getUserId());
+                auto userRef = users.getUserRef(id);
 			    if (name.has_value() && userRef.has_value()) {
-                    userRef.value()->setUserName(name.value());
+			        userRef.value()->setUserName(UserName("test"));
                 }
 			}
 			break;
@@ -304,11 +304,9 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case Command::CommandType::NULL_COMMAND:
 			{
-				if(!command.isCommandProperlyFormatted()){
+				if (command.isCommandProperlyFormatted()) {
 					std::cout << " Error, Invalid user command" << '\n';
-					message.text.append(" Error, Invalid user command.");
-				} else {
-					message.text.append(" Error, command not found.");
+                    message.text.append(" Error, command not found.");
 				}
 				std::cout << command.getCommandAsString() << '\n';
 				break;
@@ -323,9 +321,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			}
 			break;
 			}
-		
-		
-		commandResult.push_back(networking::Message{message.connection, message.text});
+
+		commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().getUserName() + ": ")});
 	}
 	return commandResult;
 }

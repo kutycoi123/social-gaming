@@ -37,14 +37,10 @@ std::optional<User> UserList::getUser(const UserId& id) {
     return std::optional<User>{iterator->second};
 }
 
-std::optional<std::unique_ptr<User>> UserList::getUserRef(const UserId& id) {
+// The returned pointer should never outlive the scope of the caller function
+std::optional<User*> UserList::getUserRef(const UserId& id) {
     auto iterator = _idToUserMap.find(id);
-
-    if (iterator == _idToUserMap.end()) {
-        return std::nullopt;
-    }
-
-    return std::optional<std::unique_ptr<User>>{&iterator->second};
+    return std::optional<User*>{&iterator->second};
 }
 
 void UserList::removeUsersFromGameSession(const Invitation& code) {
