@@ -292,7 +292,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			    auto name = command.getCommandArgument();
                 auto userRef = users.getUserRef(id);
 			    if (name.has_value() && userRef.has_value()) {
-			        userRef.value()->setUserName(UserName("test"));
+			        userRef.value()->setUserName(UserName(name.value()));
                 }
 			}
 			break;
