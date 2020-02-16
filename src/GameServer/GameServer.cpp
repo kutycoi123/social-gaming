@@ -166,26 +166,20 @@ static void handleMessages(networking::Server& server){
  
 std::deque<networking::Message> SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
+	
+    for (auto& inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
+        for (auto& user : users.getUsersInSession(inviteGameElement.second.getInvitationCode())) {
+            std::queue messages = inviteGameElement.second.getMessages();
 
-    //TODO: Consider how this should be implemented with the new way users are
-    // being handled
-//	for (auto&  inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
-//		//std::pair<UserId, User>
-//
-//		for(auto& user:inviteGameElement.second.getUsersInSession()) {
-//
-//			std::cout<<inviteGameElement.second.getUsersInSession().size()<<std::endl;
-//			std::queue messages = inviteGameElement.second.getMessages();
-//
-//			int total =  messages.size();
-//			std::cout<<"total messages:"<<total<<std::endl;
-//			for( int i = 0; i < total;  i++) {
-//				 	std::cout<< "sending all messages to user"<<std::endl;
-//				 	commandResult.push_back(networking::Message{user.first.getId(), messages.front()});
-//			 }
-//		}
-//		inviteGameElement.second.clearMessages();
-//	}
+            int total = messages.size();
+            std::cout << "Total messages:" << total << std::endl;
+            for (int i = 0; i < total; ++i) {
+                std::cout << "Sending all messages to user" << std::endl;
+                commandResult.push_back(networking::Message{user->getUserIdValue(), messages.front()});
+            }
+        }
+        inviteGameElement.second.clearMessages();
+    }
  
 	return commandResult;
 }

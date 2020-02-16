@@ -48,12 +48,22 @@ std::optional<std::unique_ptr<User>> UserList::getUserRef(const UserId& id) {
 }
 
 void UserList::removeUsersFromGameSession(const Invitation& code) {
+    auto usersInSession = getUsersInSession(code);
+    for (auto& user : usersInSession) {
+        user->setCurrentGameSessionInvitationCode(std::string());
+    }
+}
+
+std::vector<std::shared_ptr<User>> UserList::getUsersInSession(const Invitation& code) {
     std::string codeString = code.toString();
+    std::vector<std::shared_ptr<User>> users;
     for (auto& entry : _idToUserMap) {
         if (entry.second.isUserInGameSession(codeString)) {
-            entry.second.setCurrentGameSessionInvitationCode(std::string());
+            users.push_back(std::shared_ptr<User>(&entry.second));
         }
     }
+
+    return users;
 }
 
 std::unordered_map<UserId, User, UserIdHash>::iterator UserList::begin() {
