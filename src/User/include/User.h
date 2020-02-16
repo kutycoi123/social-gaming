@@ -36,7 +36,7 @@ public:
 
     bool isUserInGameSession(const std::string& code) const;
 
-    std::string getUserName() const;
+    std::string getUserNameValue() const;
     UserId getUserId() const;
     uintptr_t getUserIdValue() const;
     std::string getCurrentGameSessionInvitationCode() const;

@@ -322,7 +322,8 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			}
 
-		commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().getUserName() + ": ")});
+		commandResult.push_back(networking::Message{message.connection, message.text.insert(0,
+                                                                                            user.value().getUserNameValue() + ": ")});
 	}
 	return commandResult;
 }

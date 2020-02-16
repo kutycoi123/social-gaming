@@ -36,7 +36,7 @@ bool User::isUserInGameSession(const std::string& code) const {
     return !_currentGameSessionInvitationCode.empty() && _currentGameSessionInvitationCode == code;
 }
 
-std::string User::getUserName() const {
+std::string User::getUserNameValue() const {
     return _userName.name;
 }
 
