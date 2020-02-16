@@ -15,7 +15,10 @@ std::optional<GameSession> GameSessionManager::joinGameSession(const User& user,
     // TODO: Investigate why isGameStarted() is still returning false
     bool canJoinSession = gameSession.has_value(); // && !(gameSession->isGameStarted())
     if (canJoinSession) {
-        users.getUserRef(user).setCurrentGameSessionInvitationCode(invitation.toString());
+        auto userRef = users.getUserRef(user.getUserId());
+        if (userRef.has_value()) {
+            userRef.value()->setCurrentGameSessionInvitationCode(invitation.toString());
+        }
     }
 
     return gameSession;

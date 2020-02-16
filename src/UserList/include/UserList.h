@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 struct UserIdHash
 {
@@ -22,7 +23,7 @@ public:
     bool onDisconnect(const UserId& id);
 
     std::optional<User> getUser(const UserId& id);
-    User& getUserRef(const User& user);
+    std::optional<std::unique_ptr<User>> getUserRef(const UserId& id);
 
     void removeUsersFromGameSession(const Invitation& code);
 

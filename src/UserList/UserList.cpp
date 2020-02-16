@@ -37,8 +37,14 @@ std::optional<User> UserList::getUser(const UserId& id) {
     return std::optional<User>{iterator->second};
 }
 
-User &UserList::getUserRef(const User& user) {
-    return _idToUserMap.find(user.getUserId())->second;
+std::optional<std::unique_ptr<User>> UserList::getUserRef(const UserId& id) {
+    auto iterator = _idToUserMap.find(id);
+
+    if (iterator == _idToUserMap.end()) {
+        return std::nullopt;
+    }
+
+    return std::optional<std::unique_ptr<User>>{&iterator->second};
 }
 
 void UserList::removeUsersFromGameSession(const Invitation& code) {

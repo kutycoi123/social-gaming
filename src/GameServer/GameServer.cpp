@@ -296,8 +296,9 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			case Command::CommandType::USERNAME:
 			{
 			    auto name = command.getCommandArgument();
-			    if (name.has_value()) {
-                    users.getUserRef(user).setUserName(UserName(name.value()));
+                auto userRef = users.getUserRef(user.getUserId());
+			    if (name.has_value() && userRef.has_value()) {
+                    userRef.value()->setUserName(name.value());
                 }
 			}
 			break;
