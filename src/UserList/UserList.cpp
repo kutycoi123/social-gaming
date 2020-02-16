@@ -50,12 +50,12 @@ void UserList::removeUsersFromGameSession(const Invitation& code) {
     }
 }
 
-std::vector<std::shared_ptr<User>> UserList::getUsersInSession(const Invitation& code) {
+std::vector<User*> UserList::getUsersInSession(const Invitation& code) {
     std::string codeString = code.toString();
-    std::vector<std::shared_ptr<User>> users;
+    std::vector<User*> users;
     for (auto& entry : _idToUserMap) {
         if (entry.second.isUserInGameSession(codeString)) {
-            users.push_back(std::shared_ptr<User>(&entry.second));
+            users.push_back(&entry.second);
         }
     }
 

@@ -26,7 +26,7 @@ public:
     std::optional<User*> getUserRef(const UserId& id);
 
     void removeUsersFromGameSession(const Invitation& code);
-    std::vector<std::shared_ptr<User>> getUsersInSession(const Invitation& code);
+    std::vector<User*> getUsersInSession(const Invitation& code);
 
     std::unordered_map<UserId, User, UserIdHash>::iterator begin();
     std::unordered_map<UserId, User, UserIdHash>::iterator end();
