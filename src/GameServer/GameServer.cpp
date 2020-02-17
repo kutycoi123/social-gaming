@@ -30,7 +30,8 @@ static UserList usersInMainLobby;
  
 static GlobalMessage globalMessage = {""};
 static std::pair<bool, Invitation> createSession(networking::Message, User);
-static bool joinSession(Command, User);
+static bool joinSession(const std::string&, User);
+
 //main thread
 static void OnDisconnect(networking::Connection);
 static void OnConnect(networking::Connection);
@@ -42,8 +43,8 @@ static std::deque<networking::Message> gameServerUpdate(networking::Server&, con
 static std::deque<networking::Message> SendMessageToSession();
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
-static void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
 //player authentication. 
+
 int main(int argc, char* argv[]){
 
 	//Read Json
@@ -61,6 +62,7 @@ int main(int argc, char* argv[]){
 	//Configure Server
     networking::Server server{port, htmlContents, OnConnect, OnDisconnect};
 
+	
 	std::thread messageHandling(handleMessages, std::ref(server));
 
 	//while server up, process messages
@@ -72,7 +74,7 @@ int main(int argc, char* argv[]){
 
 	exit_thread_flag = true;
 	messageHandling.join();
-
+	
 	return 0;
 }
 
@@ -137,8 +139,6 @@ static void handleMessages(networking::Server& server){
 
 	return;
 }
-#pragma endregion end
-
  
 std::deque<networking::Message> SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
@@ -164,8 +164,8 @@ std::deque<networking::Message> SendMessageToSession() {
 	return commandResult;
 }
 	 
- //paramters connection Id message
- void AddMessageToCorrectSession(const uintptr_t userID, const std::string &message) {
+//paramters connection Id message
+static void AddMessageToCorrectSession(const uintptr_t userID, const std::string &message) {
 
 	 auto iter =  GameSessionManager::userToInviteCode.find(userID);
 	std::cout<<"looking for invitation"<<"\n";
@@ -186,8 +186,6 @@ std::deque<networking::Message> SendMessageToSession() {
 
 		} 
  }
-	
- 
 
 static std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
@@ -199,113 +197,83 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 		// Figure out somewhere else to put this
 		std::string text = message.text;
 
-		Command command = Command(text);
 		UserId id(message.connection.id);
-		User user(id);
-		if (message.text.find("Configurations") != std::string::npos) {
-			// call game engine
-			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
-			} catch( nlohmann::json gameConfig ) {
-				std::cout<< "incorrect json";
-			}
-		}
-
-		if (message.text.find("set Owner") != std::string::npos) {
-			// call game engine
-			try { nlohmann::json gameConfig = nlohmann::json::parse(message.text);
-			} catch( nlohmann::json gameConfig ) {
-				std::cout<< "incorrect json";
-			}
-		}
-
-		 
-		switch (command.getCommandType())
+		User user(id);		 
+		
+		switch (Command::getCommandType(text))
 		{
-			case Command::CommandType::DISCONNECT:
-			{
-				server.disconnect(message.connection);
-				break;
-			}
-			break;
-			case Command::CommandType::SHUTDOWN:
-			{
-				std::cout << "shutdown game\n";
-				// TODO: Requires Matthew's User MR
-			}
-			break;
-			case Command::CommandType::START_GAME:
-			{
-				//print out those string games.
-				//find gameSession based on code, push back message to queue
-
-		
-		 
-				//AddMessageToCorrectSession(message.connection.id, "start game\n");
-				std::cout << "start game\n";
-				// TODO: Requires Matthew's User MR
-			}
-			break;
-			case Command::CommandType::CREATE_SESSION:
-			{
-				std::pair<bool, Invitation> session = createSession(message, user);
-				if (!session.first){
-					message.text.append(" Error, Could not create lobby!");
-				}
-				else
+			case GameServerConfiguration::CommandType::DISCONNECT:
 				{
-					message.text.append("\n Creating lobby: \n");
-					message.text.append(" Here is the invitation code for your lobby: ");
-					message.text.append(session.second.toString());
+					server.disconnect(message.connection);
 				}
-			}
 			break;
-			case Command::CommandType::JOIN_SESSION:
-			{
-				if(!joinSession(command, user)){
-					message.text.append(" Error, cannot join lobby!");
+			case GameServerConfiguration::CommandType::SHUTDOWN:
+				{
+					std::cout << "shutdown game\n";
+					// TODO: Requires Matthew's User MR
 				}
-				else{
-					message.text.append("\n joining lobby!");
-				}
-			}	
 			break;
-			case Command::CommandType::USERNAME:
-			{
-				std::cout << "user name";
-				// TODO: Requires Matthew's User MR.
-			}
-			break;
-			case Command::CommandType::HELP:
-			{
-				message.text.append("\n List of user commands: \n");
-				message.text.append(Command::getAllCommandDescriptions());
-			}
-			break;
-			case Command::CommandType::NULL_COMMAND:
-			{
-				if(!command.isCommandProperlyFormatted()){
-					std::cout << " Error, Invalid user command" << '\n';
-					message.text.append(" Error, Invalid user command.");
-				} else {
-					message.text.append(" Error, command not found.");
-				}
-				std::cout << command.getCommandAsString() << '\n';
-				break;
-			}
-			//for example something 
-			//game[connection].message = blahblahblah
+			case GameServerConfiguration::CommandType::START_GAME:
+				{
+					//print out those string games.
+					//find gameSession based on code, push back message to queue
 
-			//dummy code, remove later
-			default:
-			{
-					//do nothing
-			}
+			
+			
+					//AddMessageToCorrectSession(message.connection.id, "start game\n");
+					std::cout << "start game\n";
+					// TODO: Requires Matthew's User MR
+				}
 			break;
-			}
-		
-		
-		commandResult.push_back(networking::Message{message.connection, message.text});
-	}
+			case GameServerConfiguration::CommandType::CREATE_SESSION:
+				{
+					std::pair<bool, Invitation> session = createSession(message, user);
+					if (!session.first){
+						message.text.append(" Error, Could not create lobby!");
+					}
+					else
+					{
+						message.text.append("\n Creating lobby: \n");
+						message.text.append(" Here is the invitation code for your lobby: ");
+						message.text.append(session.second.toString());
+					}
+				}
+			break;
+			case GameServerConfiguration::CommandType::JOIN_SESSION:
+				{
+					if(!joinSession(text, user)){
+						message.text.append(" Error, cannot join lobby!");
+					}
+					else{
+						message.text.append("\n joining lobby!");
+					}
+				}	
+			break;
+			case GameServerConfiguration::CommandType::USERNAME:
+				{
+					std::cout << "user name\n";
+					// TODO: Requires Matthew's User MR.
+				}
+			break;
+			case GameServerConfiguration::CommandType::HELP:
+				{
+					message.text.append("\n List of user commands: \n");
+					message.text.append(Command::getAllCommandDescriptions());
+				}
+			break;
+			case GameServerConfiguration::CommandType::NULL_COMMAND:
+				{
+					std::cout << text << '\n';
+					commandResult.push_back(networking::Message{message.connection, message.text});
+				}
+			break;
+			default:
+				{
+					//do nothing
+				}
+			break;
+			}		
+		}
 	return commandResult;
 }
 
@@ -337,9 +305,11 @@ std::pair<bool, Invitation> createSession(networking::Message m, User user){
 	return std::make_pair(true, code);
  }
 
-bool joinSession(Command command, User user){
-	if(command.getCommandArgument()){
-		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(command.getCommandArgument().value());
+bool joinSession(const std::string& command, User user){
+	std::vector<std::string> params = Command::getCommandArguments(command);
+
+	if(params.size() > 0){
+		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(params.at(0));
 		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
 			//AddMessageToCorrectSession(m.connection.id,m.text);
 			return true;
