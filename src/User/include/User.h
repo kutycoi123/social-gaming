@@ -43,8 +43,8 @@ public:
     }
 
 private:
-    UserName _userName;
-    UserId _userId;
+    UserName userName;
+    UserId userId;
     privilage Type;
 
 };

@@ -20,7 +20,7 @@ public:
     }
 
     bool operator==(const Invitation& invitation ) const {
-        return _invitationCode.compare(invitation.toString()) == 0;
+        return invitationCode.compare(invitation.toString()) == 0;
     }
 private:
     Invitation();
@@ -30,7 +30,7 @@ private:
     const size_t MINIMUM_COUNT_STRING_LENGTH = 3;
     const size_t RANDOM_CODE_LENGTH = 3;
     const size_t MINIMUM_LENGTH = MINIMUM_COUNT_STRING_LENGTH + RANDOM_CODE_LENGTH + SEPARATOR.length();
-    std::string _invitationCode;
+    std::string invitationCode;
     std::string generateInvitationCode();
 };
 

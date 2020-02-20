@@ -22,18 +22,18 @@ bool UserId::operator==(const UserId& id) const {
 // ***********************
 // User
 // ***********************
-User::User(const UserId& userId): _userId(userId) {};
+User::User(const UserId& userId): userId(userId) {};
 
 UserName User::getName() const{
-    return _userName;
+    return userName;
 }
 
 uintptr_t User::getUserId() const{
-    return _userId.getId();
+    return userId.getId();
 }
 
 void User::setName(const UserName& name){
-	_userName = name;
+	userName = name;
 }
 
 void User::setPrivilage(privilage type){
