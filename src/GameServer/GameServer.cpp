@@ -166,7 +166,7 @@ static void handleMessages(networking::Server& server){
 std::deque<networking::Message> SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
 	
-	for (auto&  inviteGameElement : GameSessionManager::_invitationToGameSessionMap) {
+	for (auto&  inviteGameElement : GameSessionManager::invitationToGameSessionMap) {
 		//std::pair<UserId, User>
 		
 		for(auto& user:inviteGameElement.second.getUsersInSession()) {
@@ -195,11 +195,11 @@ std::deque<networking::Message> SendMessageToSession() {
 	if(iter != GameSessionManager::userToInviteCode.end()) {
 			std::cout<<"found invitation"<<"\n";
 
-			auto it = GameSessionManager::_invitationToGameSessionMap.find(iter->second);
+			auto it = GameSessionManager::invitationToGameSessionMap.find(iter->second);
 				
 			std::cout<<iter->second.toString()<<std::endl;
 				
-			if(it == GameSessionManager::_invitationToGameSessionMap.end()) {
+			if(it == GameSessionManager::invitationToGameSessionMap.end()) {
 					std::cout<<"can't find session of user"<<"\n";
 			}
 				else {

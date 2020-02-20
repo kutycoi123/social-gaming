@@ -6,47 +6,47 @@ using GameSpecification::SpecValue;
 using Setup = std::unordered_map<std::string, SpecValue>;
 
 GameGeneralConfig::GameGeneralConfig()
-    : _name(""),
-      _playerCount({0, 0}), 
-      _audience(false),
-      _setup({}){
+    : name(""),
+      playerCount({0, 0}), 
+      audience(false),
+      setup({}){
 }
 
 GameGeneralConfig::GameGeneralConfig(const std::string& name)
     : GameGeneralConfig() {
-    _name = name;
+    this->name = name;
 }
 
 inline std::string GameGeneralConfig::getName() const{
-    return _name;
+    return name;
 }
 
 inline PlayerCount GameGeneralConfig::getPlayerCount() const{
-    return _playerCount;
+    return playerCount;
 }
 
 inline bool GameGeneralConfig::hasAudience() const{
-    return _audience;
+    return audience;
 }
 
 inline Setup GameGeneralConfig::getSetup() const{
-    return _setup;
+    return setup;
 }
 
 void GameGeneralConfig::setName(const std::string& name){
-    _name = name;
+    this->name = name;
 }
 
 void GameGeneralConfig::setPlayerCount(const PlayerCount& playerCount){
-    _playerCount = playerCount;
+    this->playerCount = playerCount;
 }
 
 void GameGeneralConfig::setAudience(bool audience){
-    _audience = audience;
+    this->audience = audience;
 }
 
 void GameGeneralConfig::setSetup(const Setup& setup){
-    _setup = setup;
+    this->setup = setup;
 }
 
 

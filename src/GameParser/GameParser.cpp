@@ -9,19 +9,19 @@ void GameParser::parseJSON(const nlohmann::json& gameConfiguration) {
   if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
     nlohmann::json configs = gameConfiguration["gameConfiguration"];
 
-    _configSettings.name = configs["name"];
-    _configSettings.audience = configs["audience"];
-    _configSettings.maxPlayercount = configs["player count"]["max"];
-    _configSettings.minPlayercount = configs["player count"]["in"];
-    _configSettings.setup = configs["setup"];
+    configSettings.name = configs["name"];
+    configSettings.audience = configs["audience"];
+    configSettings.maxPlayercount = configs["player count"]["max"];
+    configSettings.minPlayercount = configs["player count"]["in"];
+    configSettings.setup = configs["setup"];
   }
-  _constants = gameConfiguration["constants"];
-  _variables = gameConfiguration["variables"];
-  _perAudience = gameConfiguration["per-audience"];
+  constants = gameConfiguration["constants"];
+  variables = gameConfiguration["variables"];
+  perAudience = gameConfiguration["per-audience"];
   // END-TODO
 
   if (GameParser::rulesValidation(gameConfiguration["rules"]) == StatusCode::VALID) {
-    _rules = gameConfiguration["rules"];
+    rules = gameConfiguration["rules"];
   }
 }
 

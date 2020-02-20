@@ -19,13 +19,13 @@ namespace GameSpecification{
 		public:
 			Message() : BaseRule("message"){}
 			Message(const SpecValue& to, const std::string& val)
-						: _to(to), _messValue(val){}
+						: to(to), messValue(val){}
 			SpecValue getTo() const;
 			std::string getValue() const;	
 			void process() override;
 		private:
-			SpecValue _to;
-			std::string	_messValue;
+			SpecValue to;
+			std::string	messValue;
 
 	};
 

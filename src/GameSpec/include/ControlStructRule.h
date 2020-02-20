@@ -15,7 +15,7 @@ namespace GameSpecification{
 			void addSubRule(std::shared_ptr<BaseRule>);
 			virtual void process() = 0;
 		private:
-			std::vector<std::shared_ptr<BaseRule>> _subRules;
+			std::vector<std::shared_ptr<BaseRule>> subRules;
 	};
 }
 #endif

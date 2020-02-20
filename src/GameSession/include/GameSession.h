@@ -29,7 +29,7 @@ public:
     UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {
-        return _invitationCode == gameSession._invitationCode;
+        return invitationCode == gameSession.invitationCode;
     }
 
     void addMessages(const std::string &message);
@@ -44,23 +44,23 @@ public:
 private:
     // Game game;
 
-    std::list<std::string> _ListSettingVars;
-    std::list<std::string> _ListPerAudience;
-    std::list<std::string> _ListRules;
-    std::string _currentGame;
-    UserList _usersInSession;
+    std::list<std::string> listSettingVars;
+    std::list<std::string> listPerAudience;
+    std::list<std::string> listRules;
+    std::string currentGame;
+    UserList usersInSession;
 
     std::queue<std::string> messages;
 
-    std::string _sessionName;
-    std::string _JSONSetting;
+    std::string sessionName;
+    std::string JSONSetting;
 
-    const Invitation _invitationCode;
+    const Invitation invitationCode;
 
-    int _gameID;
+    int gameID;
 
-    bool _isGameStarted;
-    User& _owner;
+    bool gameStarted;
+    User& owner;
 
     // WIP
     // std::list<Player> _playersList;  // TODO: Link with the User class

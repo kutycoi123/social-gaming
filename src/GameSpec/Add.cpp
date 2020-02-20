@@ -2,15 +2,15 @@
 
 using GameSpecification::Add;
 using GameSpecification::SpecValue;
-Add::Add() : BaseRule("add"), _to(""){}
+Add::Add() : BaseRule("add"), to(""){}
 
-Add::Add(const std::string& to, const SpecValue& value) : BaseRule("add"), _to(to), _value(value){}
+Add::Add(const std::string& to, const SpecValue& value) : BaseRule("add"), to(to), value(value){}
 
 std::string Add::getTo() const{
-    return _to;
+    return to;
 }
 SpecValue Add::getValue() const{
-    return _value;
+    return value;
 }
 
 void Add::process(){

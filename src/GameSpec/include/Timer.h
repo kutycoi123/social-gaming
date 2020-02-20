@@ -13,9 +13,9 @@ class Timer : public BaseRule{
         bool getFlag() const;
        	void process() override; 
     private:
-        double _duration;
-        std::string _mode;
-        bool _flag;
+        double duration;
+        std::string mode;
+        bool flag;
 };
 }
 #endif

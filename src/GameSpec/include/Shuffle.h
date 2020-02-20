@@ -11,8 +11,8 @@ class Shuffle :public BaseRule{
         std::string getList() const;
 		void process() override;
     private:
-        std::string _list;
-        std::string _key;
+        std::string list;
+        std::string key;
 };
 }
 #endif

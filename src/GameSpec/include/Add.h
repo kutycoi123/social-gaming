@@ -13,8 +13,8 @@ class Add : public BaseRule{
         SpecValue getValue() const;
 		void process() override;
     private:
-        std::string _to;
-        SpecValue _value;
+        std::string to;
+        SpecValue value;
 };
 }
 #endif

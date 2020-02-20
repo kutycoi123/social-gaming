@@ -4,57 +4,57 @@
 #include <nlohmann/json.hpp>
 
 GameSession::GameSession(User& owner) : 
-    _invitationCode (Invitation::createNewInvitation()), 
-    _owner (owner),
-    _isGameStarted(false)
+    invitationCode (Invitation::createNewInvitation()), 
+    owner (owner),
+    gameStarted(false)
     // game(nlohmann::json gameSettings) 
 {}
 
 Invitation GameSession::getInvitationCode() const {
-    return _invitationCode;
+    return invitationCode;
 }
 
 size_t GameSession::getTotalPlayerCount() const noexcept {
-    return _usersInSession.size();
+    return usersInSession.size();
 }
 
 std::string GameSession::getSessionName() const {
-    return _sessionName;
+    return sessionName;
 }
 
 bool GameSession::doesUserOwnGame(const User& user) const {
-    return (user == _owner);
+    return (user == owner);
 }
 
 bool GameSession::isGameStarted() const {
-    return _isGameStarted;
+    return gameStarted;
 }
 
 void GameSession::addUserToSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
-    _usersInSession.addUser(user.getUserId());
+    usersInSession.addUser(user.getUserId());
     
 }
 
 void GameSession::removeUserFromSession(User& user) { 
     // TODO: UserList may need to be revised in order to accomodate this operation better.
-    _usersInSession.removeUser(user.getUserId());
+    usersInSession.removeUser(user.getUserId());
 }
 
 void GameSession::removeAllUsersfromSession(){ 
-    _usersInSession.removeAllUsers();
+    usersInSession.removeAllUsers();
 }
 
 void GameSession::setConfigurationSettings(std::string jsonSettings) { 
-    _JSONSetting = jsonSettings;
+    JSONSetting = jsonSettings;
 }
 
 void GameSession::startGame() {
-    _isGameStarted = true;
+    gameStarted = true;
 }
 
 UserList GameSession::getUsersInSession() {
-    return _usersInSession;
+    return usersInSession;
 }
 
 

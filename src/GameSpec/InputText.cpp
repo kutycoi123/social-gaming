@@ -2,25 +2,25 @@
 
 using GameSpecification::InputText;
 
-InputText::InputText(): BaseRule("input-text"), _user(NULL), _prompt(""), _result(""), _timeout(0){}
+InputText::InputText(): BaseRule("input-text"), user(NULL), prompt(""), result(""), timeout(0){}
 
 InputText::InputText(const std::string& user, const std::string& prompt, const std::string& result, const double timeout): 
-    BaseRule("input-text"), _user(user), _prompt(prompt), _result(result), _timeout(timeout){}
+    BaseRule("input-text"), user(user), prompt(prompt), result(result), timeout(timeout){}
 
 std::string InputText::getUser() const{
-    return _user;
+    return user;
 }
 
 std::string InputText::getPrompt() const{
-    return _prompt;
+    return prompt;
 }
 
 std::string InputText::getResult() const{
-    return _result;
+    return result;
 }
 
 double InputText::getTimeOut() const{
-    return _timeout;
+    return timeout;
 }
 
 void process(){

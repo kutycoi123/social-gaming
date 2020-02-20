@@ -2,12 +2,12 @@
 
 using GameSpecification::Shuffle;
 using GameSpecification::BaseRule;
-Shuffle::Shuffle() : BaseRule("shuffle"), _list(""){}
+Shuffle::Shuffle() : BaseRule("shuffle"), list(""){}
 
-Shuffle::Shuffle(const std::string& list): BaseRule("shuffle"), _list(list){}
+Shuffle::Shuffle(const std::string& list): BaseRule("shuffle"), list(list){}
 
 std::string Shuffle::getList() const{
-    return _list;
+    return list;
 }
 
 void Shuffle::process(){

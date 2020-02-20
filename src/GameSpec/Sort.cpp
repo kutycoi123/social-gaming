@@ -2,16 +2,16 @@
 
 using GameSpecification::Sort;
 
-Sort::Sort(): BaseRule("sort"), _list(""), _key("") {}
+Sort::Sort(): BaseRule("sort"), list(""), key("") {}
 
-Sort::Sort(const std::string& list, const std::string& key): _list(list), _key(key){}
+Sort::Sort(const std::string& list, const std::string& key): list(list), key(key){}
 
 std::string Sort::getList() const{
-    return _list;
+    return list;
 }
 
 std::string Sort::getKey() const{
-    return _key;
+    return key;
 }
 
 void Sort::process(){

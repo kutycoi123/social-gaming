@@ -6,11 +6,11 @@ using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 
 SpecValue Message::getTo() const{
-	return _to;
+	return to;
 }
 
 std::string Message::getValue() const{
-	return _messValue;
+	return messValue;
 }
 
 void Message::process(){

@@ -7,20 +7,20 @@ using GameSpecification::InputChoice;
 using GameSpecification::Message;
 
 	std::string InputChoice::getTo() const{
-		return _to;
+		return to;
 	}
 	std::string InputChoice::getResult() const{
-		return _result;
+		return result;
 	}
 	std::string InputChoice::getTimeout() const{
-		return _timeout;
+		return timeout;
 	}
 	Message InputChoice::getPrompt() const{
-		return _prompt;
+		return prompt;
 	}
 	
 	SpecValue InputChoice::getChoices() const{
-		return _choices;
+		return choices;
 	}	
 
 	void InputChoice::process(){

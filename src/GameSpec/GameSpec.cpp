@@ -4,24 +4,24 @@
 using GameSpecification::GameSpec;
 
 	std::vector<std::shared_ptr<BaseRule>> GameSpec::getRules() const{
-		return _rules;
+		return rules;
 	}
 	std::string GameSpec::getSpecFilePath() const{
-		return _specFilePath;
+		return specFilePath;
 	}
 	
 	void GameSpec::addRule(std::shared_ptr<BaseRule> rule){
-		_rules.push_back(rule);
+		rules.push_back(rule);
 	}
 	
 	void GameSpec::setSpecFilePath(const std::string& path){
-		_specFilePath = path;
+		specFilePath = path;
 	}
 	
 	void GameSpec::readSpec(){
-	    if(_specFilePath.empty())
+	    if(specFilePath.empty())
 	        return;
-	    std::ifstream specFile(_specFilePath, std::ifstream::in);
+	    std::ifstream specFile(specFilePath, std::ifstream::in);
 	
 	    try{
 	    	nlohmann::json gameSpecJson = nlohmann::json::parse(specFile);
@@ -38,21 +38,21 @@ using GameSpecification::GameSpec;
 	}
 	
 	void GameSpec::addConstantSpec(const std::string& name, const SpecValue& val){
-	    _constants[name] = val;
+	    constants[name] = val;
 	}
 	
 	void GameSpec::addVariableSpec(const std::string& name, const SpecValue& val){
-	    _variables[name] = val;
+	    variables[name] = val;
 	}
 	
 	void GameSpec::addPerPlayerSpec(const std::string& name, const SpecValue& val){
-	    _perPlayer[name] = val;
+	    perPlayer[name] = val;
 	}
 	
 	void GameSpec::addPerAudienceSpec(const std::string& name, const SpecValue& val){
-	    _perAudience[name] = val;
+	    perAudience[name] = val;
 	}
 	
 	void GameSpec::addConfig(const GameGeneralConfig& config){
-		_config = config;	
+		this->config = config;	
 	}
