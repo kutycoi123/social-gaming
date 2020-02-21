@@ -20,14 +20,13 @@
 
 ## Variables
 
-- Public variables should be CamelCase
-- Private variables should start with an underscore
+- Public and private variables should NOT start with an underscore
 
 ```cpp
 public:
 	int example = 1;
 private:
-	int _example2 = 2;
+	int example2 = 2;
 ```
 
 
