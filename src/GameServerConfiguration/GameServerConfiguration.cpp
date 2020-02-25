@@ -8,20 +8,31 @@
 
 #pragma region PrivateHelperMethods
 
+namespace ConfigurationCommandTags{
+    const std::string PORT = "Default Port";
+    const std::string HTML_PAGE = "HTML Location";
+    const std::string COMMAND_CONFIGURATION = "Commands Configuration";
+    const std::string COMMAND_PREFIX_SYMBOL = "Prefix Symbol";
+    const std::string COMMAND_LIST = "Command List";
+    const std::string COMMAND_TYPE = "Type";
+    const std::string COMMAND_DESCRIPTION = "Description";
+    const std::string COMMAND_TRIGGER = "User Commands"; 
+}
+
 static std::map<std::string, GameServerConfiguration::CommandType> stringToCommandMap;
 static std::map<GameServerConfiguration::CommandType, std::string> commandToDescriptionMap;
 
 static void verifyJSON(const nlohmann::json &configurationFile) noexcept{
     //TODO: add check if field actually exist
 
-    auto port = configurationFile.at("Default Port");
+    auto port = configurationFile.at(ConfigurationCommandTags::PORT);
 	//string to short conversion check
 	if(port.get<unsigned short>() != port.get<std::intmax_t>()){
 		std::cout << "Port out of range\n";
 	    std::exit(-1);
 	}
 
-	std::string htmlpath = configurationFile.at("HTML Location");
+	std::string htmlpath = configurationFile.at(ConfigurationCommandTags::HTML_PAGE);
 	//html path check for valid file
 	if(access(htmlpath.c_str(), R_OK) == -1){
 	    std::cout << "Unable to open HTML index file: " << htmlpath << "\n";
@@ -64,13 +75,14 @@ static std::optional<GameServerConfiguration::CommandType> string2CommandType(co
 
 static void configureCommands(const std::string& commandPrefix, const nlohmann::json& commandList){
     for(auto& command : commandList){
-        std::optional<GameServerConfiguration::CommandType> type = string2CommandType(command.at("Type"));
+        std::string commandTypeString = command.at(ConfigurationCommandTags::COMMAND_TYPE);
+        std::optional<GameServerConfiguration::CommandType> type = string2CommandType(commandTypeString);
         
         if(type != std::nullopt){
-            std::string commandDescription = command.at("Description");
+            std::string commandDescription = command.at(ConfigurationCommandTags::COMMAND_DESCRIPTION);
             commandToDescriptionMap.insert(std::make_pair(type.value(), commandDescription));
 
-            std::vector<std::string> userCommands = command.at("User Commands");
+            std::vector<std::string> userCommands = command.at(ConfigurationCommandTags::COMMAND_TRIGGER);
 
             for(auto& commandString : userCommands){
                 stringToCommandMap.insert(std::make_pair(commandPrefix + commandString, type.value()));
@@ -83,12 +95,11 @@ static void configureCommands(const std::string& commandPrefix, const nlohmann::
 
 void GameServerConfiguration::configureServer(const nlohmann::json &configurationFile) noexcept{
     verifyJSON(configurationFile);
+    GameServerConfiguration::port.id = configurationFile[ConfigurationCommandTags::PORT];
+    GameServerConfiguration::htmlFile.path = configurationFile[ConfigurationCommandTags::HTML_PAGE];
 
-    GameServerConfiguration::port.id = configurationFile["Default Port"];
-    GameServerConfiguration::htmlFile.path = configurationFile["HTML Location"];
-    
-    std::string commandPrefix = configurationFile["Commands Configuration"]["Prefix Symbol"];
-    nlohmann::json commandList = configurationFile["Commands Configuration"]["Command List"];
+    std::string commandPrefix = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL];
+    nlohmann::json commandList = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_LIST];
 
     configureCommands(commandPrefix, commandList);
 }
