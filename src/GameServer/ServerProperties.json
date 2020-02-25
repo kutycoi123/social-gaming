@@ -1,4 +1,65 @@
 {
-  "DefaultPort": 4000,
-  "HTML Location": "socialapp.html"
+  "Default Port": 4000,
+  "HTML Location": "socialapp.html",
+  "Commands Configuration": {
+    "Prefix Symbol": "/",
+    "Command List": [
+      {
+        "Type": "DISCONNECT",
+        "User Commands": [
+          "disconnect"
+        ],
+        "Description": "Disconnects from the server"
+      },
+      {
+        "Type": "SHUTDOWN",
+        "User Commands": [
+          "shutdown"
+        ],
+        "Description": "Shuts down the provided game session if you are the owner"
+      },
+      {
+        "Type": "START_GAME",
+        "User Commands": [
+          "startgame"
+        ],
+        "Description": "Starts the game within the provided game session"
+      },
+      {
+        "Type": "CREATE_SESSION",
+        "User Commands": [
+          "createsession"
+        ],
+        "Description": "Creates a new session given a game and a game json and returns the invitation code"
+      },
+      {
+        "Type": "JOIN_SESSION",
+        "User Commands": [
+          "joinsession"
+        ],
+        "Description": "Join a game session with the provided invitation cod"
+      },
+      {
+        "Type": "LEAVE_SESSION",
+        "User Commands": [
+          "leavesession"
+        ],
+        "Description": "Leaves your current game session if you are in one"
+      },
+      {
+        "Type": "USERNAME",
+        "User Commands": [
+          "setname"
+        ],
+        "Description": "Changes the current user's username"
+      },
+      {
+        "Type": "HELP",
+        "User Commands": [
+          "help"
+        ],
+        "Description": "Provides a list of valid commands"
+      }
+    ]
+  }
 }
