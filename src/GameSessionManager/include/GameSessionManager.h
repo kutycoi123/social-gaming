@@ -39,9 +39,9 @@ namespace GameSessionManager{
     void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
      
     std::optional<GameSession> findGameSession(const Invitation& invitation);
-    std::optional<GameSession> joinGameSession(const User& user, const Invitation& invitation);
+    std::optional<GameSession> joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
     void startGameInGameSession(const Invitation& invitation);
-    void endGameSession(const Invitation& invitation);
+    void endGameSession(const Invitation& invitation, UserList& users);
     size_t totalSessionCount();
     std::deque<networking::Message> getAllGameMessages();
     std::deque<networking::Message> getAllLobbyMessages();

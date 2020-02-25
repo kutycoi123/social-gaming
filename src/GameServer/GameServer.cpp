@@ -9,6 +9,7 @@
 #include <atomic>
 #include <queue>
 #include <iostream>
+#include <functional>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -16,14 +17,14 @@
 #include <thread>
 #include <vector>
 
-//TODO: MZEGAR: MOVE THIS, WE SHOULDN'T HAVE GLOBALS
-UserList users = UserList();
-
 struct GlobalMessage{
 	std::string message;
 	//something to specifiy private message, broadcast to specifiv session, broadcast globally (all sessions)
 	//maybe user id?, session id?
 };
+
+// TODO: Mzegar consider moving this into some component
+static UserList users;
 
 static std::atomic<bool> exit_thread_flag{false};
 static const std::string SERVER_CONFIGURATION_FILE_LOCATION = "config/ServerProperties.json";
@@ -48,7 +49,6 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 static void AddMessageToCorrectSession(uintptr_t connectionID, std::string &message);
 //player authentication. 
 int main(int argc, char* argv[]){
-
 	//Read Json
 	std::string configurationFilePath = getConfigurationFilePath(argc, argv);
 	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
@@ -63,9 +63,9 @@ int main(int argc, char* argv[]){
 	std::cout << "starting server \nport: " << port << "\nhtml path: " << htmlpath << '\n';
 
 	//Configure Server
-  std::ifstream htmlFile{htmlpath};
+    std::ifstream htmlFile{htmlpath};
 	std::string htmlFileStr{std::istreambuf_iterator<char>(htmlFile),std::istreambuf_iterator<char>()};
-  networking::Server server{port, htmlFileStr, OnConnect, OnDisconnect};
+    networking::Server server{port, htmlFileStr, OnConnect, OnDisconnect};
 
 	std::thread messageHandling(handleMessages, std::ref(server));
 
@@ -175,7 +175,7 @@ std::deque<networking::Message> SendMessageToSession() {
             std::cout << "Total messages:" << total << std::endl;
             for (int i = 0; i < total; ++i) {
                 std::cout << "Sending all messages to user" << std::endl;
-                commandResult.push_back(networking::Message{user->getUserIdValue(), messages.front()});
+                commandResult.push_back(networking::Message{{user.get().getUserIdValue()}, messages.front()});
             }
         }
         inviteGameElement.second.clearMessages();
@@ -292,7 +292,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			    auto name = command.getCommandArgument();
                 auto userRef = users.getUserRef(id);
 			    if (name.has_value() && userRef.has_value()) {
-			        userRef.value()->setUserName(UserName(name.value()));
+			        userRef.value().get().setUserName(UserName(name.value()));
                 }
 			}
 			break;
@@ -359,10 +359,13 @@ std::pair<bool, Invitation> createSession(networking::Message m, User user){
 bool joinSession(Command command, User user){
 	if(command.getCommandArgument()){
 		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(command.getCommandArgument().value());
-		if(GameSessionManager::joinGameSession(user, userProvidedCode)){
-			//AddMessageToCorrectSession(m.connection.id,m.text);
-			return true;
-		}
+		auto userRef = users.getUserRef(user.getUserId());
+		if (userRef.has_value()) {
+            if (GameSessionManager::joinGameSession(userRef.value(), userProvidedCode)) {
+                //AddMessageToCorrectSession(m.connection.id,m.text);
+                return true;
+            }
+        }
 	}
 	return false;
 }

@@ -1,7 +1,5 @@
 #include "include/GameSessionManager.h"
 
-extern UserList users;
-
 GameSession GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     _sessionsList.insert(gameSession);
@@ -9,16 +7,13 @@ GameSession GameSessionManager::createGameSession(User& owner){
     return gameSession;
 }
 
-std::optional<GameSession> GameSessionManager::joinGameSession(const User& user, const Invitation& invitation){
+std::optional<GameSession> GameSessionManager::joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
 
     // TODO: Investigate why isGameStarted() is still returning false
     bool canJoinSession = gameSession.has_value(); // && !(gameSession->isGameStarted())
     if (canJoinSession) {
-        auto userRef = users.getUserRef(user.getUserId());
-        if (userRef.has_value()) {
-            userRef.value()->setCurrentGameSessionInvitationCode(invitation.toString());
-        }
+        userRef.get().setCurrentGameSessionInvitationCode(invitation.toString());
     }
 
     return gameSession;
@@ -42,7 +37,7 @@ void GameSessionManager::startGameInGameSession(const Invitation& invitation){
     }
 }
 
-void GameSessionManager::endGameSession(const Invitation& invitation){
+void GameSessionManager::endGameSession(const Invitation& invitation, UserList& users){
     auto gameSession = findGameSession(invitation);
     if (gameSession){
         users.removeUsersFromGameSession(invitation);

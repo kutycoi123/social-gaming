@@ -4,6 +4,7 @@
 #include "User.h"
 #include "Invitation.h"
 #include <optional>
+#include <functional>
 #include <unordered_map>
 #include <iostream>
 #include <vector>
@@ -23,10 +24,10 @@ public:
     bool onDisconnect(const UserId& id);
 
     std::optional<User> getUser(const UserId& id);
-    std::optional<User*> getUserRef(const UserId& id);
+    std::optional<std::reference_wrapper<User>> getUserRef(const UserId& id);
 
     void removeUsersFromGameSession(const Invitation& code);
-    std::vector<User*> getUsersInSession(const Invitation& code);
+    std::vector<std::reference_wrapper<User>> getUsersInSession(const Invitation& code);
 
     std::unordered_map<UserId, User, UserIdHash>::iterator begin();
     std::unordered_map<UserId, User, UserIdHash>::iterator end();

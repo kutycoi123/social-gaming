@@ -38,24 +38,24 @@ std::optional<User> UserList::getUser(const UserId& id) {
 }
 
 // The returned pointer should never outlive the scope of the caller function
-std::optional<User*> UserList::getUserRef(const UserId& id) {
+std::optional<std::reference_wrapper<User>> UserList::getUserRef(const UserId& id) {
     auto iterator = _idToUserMap.find(id);
-    return std::optional<User*>{&iterator->second};
+    return std::optional<std::reference_wrapper<User>>{iterator->second};
 }
 
 void UserList::removeUsersFromGameSession(const Invitation& code) {
     auto usersInSession = getUsersInSession(code);
     for (auto& user : usersInSession) {
-        user->setCurrentGameSessionInvitationCode(std::string());
+        user.get().setCurrentGameSessionInvitationCode(std::string());
     }
 }
 
-std::vector<User*> UserList::getUsersInSession(const Invitation& code) {
+std::vector<std::reference_wrapper<User>> UserList::getUsersInSession(const Invitation& code) {
     std::string codeString = code.toString();
-    std::vector<User*> users;
+    std::vector<std::reference_wrapper<User>> users;
     for (auto& entry : _idToUserMap) {
         if (entry.second.isUserInGameSession(codeString)) {
-            users.push_back(&entry.second);
+            users.emplace_back(entry.second);
         }
     }
 
