@@ -2,19 +2,19 @@
 
 using GameSpecification::Timer;
 
-Timer::Timer() : BaseRule("timer"), _duration(0), _mode(""), _flag(false){}
+Timer::Timer() : BaseRule("timer"), duration(0), mode(""), flag(false){}
 
-Timer::Timer(const double duration, const std::string& mode, const bool flag): BaseRule("timer"), _duration(duration), 
-    _mode(mode), _flag(flag){}
+Timer::Timer(const double duration, const std::string& mode, const bool flag): BaseRule("timer"), duration(duration), 
+    mode(mode), flag(flag){}
 
 double Timer::getDuration() const{
-    return _duration;
+    return duration;
 }
 std::string  Timer::getMode() const{
-    return _mode;
+    return mode;
 }
 bool Timer::getFlag() const{
-    return _flag;
+    return flag;
 }
 void Timer::process(){
 

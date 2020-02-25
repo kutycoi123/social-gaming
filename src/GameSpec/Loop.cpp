@@ -6,14 +6,14 @@ using GameSpecification::Loop;
 Loop::Loop() : ControlStructRule("loop"){}
 
 Loop::Loop(const std::string& loopType, const std::string& failCondition) : ControlStructRule("loop"), 
-    _loopType(loopType), _failCondition(failCondition){}
+    loopType(loopType), failCondition(failCondition){}
 
 std::string Loop::getLoopType() const{
-    return _loopType;
+    return loopType;
 }
 
 std::string Loop::getFailCondition() const{
-    return _failCondition;
+    return failCondition;
 }
 
 void Loop::process(){

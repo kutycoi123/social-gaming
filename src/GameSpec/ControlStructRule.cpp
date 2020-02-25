@@ -7,11 +7,11 @@ ControlStructRule::ControlStructRule() : BaseRule(){}
 
 ControlStructRule::ControlStructRule(const std::string& name ) : BaseRule(name){}
 void ControlStructRule::addSubRule(std::shared_ptr<BaseRule> rule){
-	_subRules.push_back(rule);
+	subRules.push_back(rule);
 }
 
 std::vector<std::shared_ptr<BaseRule>> ControlStructRule::getSubRules() const{
-	return _subRules;
+	return subRules;
 }
 
 

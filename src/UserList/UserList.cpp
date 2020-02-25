@@ -3,21 +3,21 @@
 UserList::UserList() {};
 
 void UserList::addUser(const UserId& id) {
-    _idToUserMap.insert(std::make_pair(id, User(id)));
+    idToUserMap.insert(std::make_pair(id, User(id)));
 }
 
 void UserList::removeUser(const UserId& id) {
-    _idToUserMap.erase(id);
+    idToUserMap.erase(id);
 }
 
 void UserList::removeAllUsers() {
-    _idToUserMap.clear();
+    idToUserMap.clear();
 }
 
 std::optional<User> UserList::getUser(const UserId& id) {
-    auto iterator = _idToUserMap.find(id);
+    auto iterator = idToUserMap.find(id);
 
-    if (iterator == _idToUserMap.end()) {
+    if (iterator == idToUserMap.end()) {
         return std::nullopt;
     }
 
@@ -26,9 +26,9 @@ std::optional<User> UserList::getUser(const UserId& id) {
 
 bool UserList::transferUser(UserList& transferTo, User& user) {
     UserId userId = user.getUserId();
-    auto iterator = _idToUserMap.find(userId);
+    auto iterator = idToUserMap.find(userId);
 
-    if (iterator != _idToUserMap.end()) {
+    if (iterator != idToUserMap.end()) {
         removeUser(userId);
         transferTo.addUser(userId);
         return true;
@@ -38,13 +38,13 @@ bool UserList::transferUser(UserList& transferTo, User& user) {
 }
 
 std::unordered_map<UserId, User, UserIdHash>::iterator UserList::begin() {
-    return _idToUserMap.begin();
+    return idToUserMap.begin();
 }
 
 std::unordered_map<UserId, User, UserIdHash>::iterator UserList::end() {
-    return _idToUserMap.end();
+    return idToUserMap.end();
 }
 
 size_t UserList::size() const noexcept {
-    return _idToUserMap.size();
+    return idToUserMap.size();
 }

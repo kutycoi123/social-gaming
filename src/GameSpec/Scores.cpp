@@ -2,16 +2,16 @@
 
 using GameSpecification::Scores;
 
-Scores::Scores(): BaseRule("scores"), _score(0), _ascending(false){}
+Scores::Scores(): BaseRule("scores"), score(0), ascending(false){}
 
-Scores::Scores(const double score, const bool ascending): BaseRule("scores"), _score(score), _ascending(ascending){}
+Scores::Scores(const double score, const bool ascending): BaseRule("scores"), score(score), ascending(ascending){}
 
 double Scores::getScore() const{
-    return _score;
+    return score;
 }
 
 bool Scores::getAscending() const{
-    return _ascending;
+    return ascending;
 }
 
 void Scores::process(){

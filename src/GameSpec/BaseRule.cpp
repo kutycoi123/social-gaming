@@ -27,19 +27,19 @@ std::unordered_map<std::string, RuleType> BaseRule::rulemap({
 
 BaseRule::BaseRule(){}
 BaseRule::BaseRule(const std::string& ruleName) : 
-	_ruleType(getRuleTypeFromName(ruleName)), 
-	_ruleName(ruleName)	{}
+	ruleType(getRuleTypeFromName(ruleName)), 
+	ruleName(ruleName)	{}
 std::string BaseRule::getRuleName() const{
-	return _ruleName;
+	return ruleName;
 }
 
 void BaseRule::setRuleName(const std::string& ruleName){
-	_ruleName = ruleName;
-	_ruleType = getRuleTypeFromName(ruleName);
+	this-> ruleName = ruleName;
+	ruleType = getRuleTypeFromName(ruleName);
 }
 
 RuleType BaseRule::getRuleType() const{
-	return _ruleType;
+	return ruleType;
 }
 
 RuleType BaseRule::getRuleTypeFromName(const std::string& name){

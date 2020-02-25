@@ -14,8 +14,8 @@ class Loop : public ControlStructRule{
         std::string getFailCondition() const;
 		void process() override;
     private:
-        std::string _loopType;
-        std::string _failCondition;
+        std::string loopType;
+        std::string failCondition;
 };
 }
 #endif

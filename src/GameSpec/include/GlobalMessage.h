@@ -12,7 +12,7 @@ class GlobalMessage : public BaseRule{
         std::string getValue() const;
 		void process() override;
     private:
-        std::string _value;
+        std::string value;
 };
 }
 #endif

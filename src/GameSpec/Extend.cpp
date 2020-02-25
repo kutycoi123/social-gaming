@@ -3,16 +3,16 @@
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
 using GameSpecification::SpecValue;
-Extend::Extend() : BaseRule("extend"), _target(""){}
+Extend::Extend() : BaseRule("extend"), target(""){}
 
-Extend::Extend(const std::string& target, const SpecValue& list) : BaseRule("extend"), _target(target), _list(list){}
+Extend::Extend(const std::string& target, const SpecValue& list) : BaseRule("extend"), target(target), list(list){}
 
 std::string Extend::getTarget() const{
-    return _target;
+    return target;
 }
 
 SpecValue Extend::getList() const{
-    return _list;
+    return list;
 }
 
 void Extend::process(){

@@ -11,7 +11,7 @@ class Reverse : public BaseRule{
         std::string getList() const;
 		void process() override;
     private:
-        std::string _list;
+        std::string list;
 };
 }
 #endif

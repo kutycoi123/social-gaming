@@ -30,12 +30,12 @@ class GameParser{
     nlohmann::json fileToJson(const std::string& pathName);
 
   private:
-      nlohmann::json _constants;
-      nlohmann::json _variables;
-      nlohmann::json _perAudience;
-      nlohmann::json _gameConfiguration;
-      std::string _GameName;
-      nlohmann::json _rules;
-      Config _configSettings;
+      nlohmann::json constants;
+      nlohmann::json variables;
+      nlohmann::json perAudience;
+      nlohmann::json gameConfiguration;
+      std::string gameName;
+      nlohmann::json rules;
+      Config configSettings;
 };
 #endif

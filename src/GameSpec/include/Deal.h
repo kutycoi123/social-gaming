@@ -14,9 +14,9 @@ class Deal : public BaseRule{
         int getCount() const;
 		void process() override;
     private:
-        std::string _from;
-        SpecValue _to;
-        int _count;
+        std::string from;
+        SpecValue to;
+        int count;
 };
 }
 #endif

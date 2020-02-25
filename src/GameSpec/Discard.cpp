@@ -1,16 +1,16 @@
 #include "Discard.h"
 using GameSpecification::Discard;
 using GameSpecification::BaseRule;
-Discard::Discard() : BaseRule("discard"), _from(""), _count(0){}
+Discard::Discard() : BaseRule("discard"), from(""), count(0){}
 
-Discard::Discard(const std::string& from, const int count) : BaseRule("discard"), _from(from), _count(count){}
+Discard::Discard(const std::string& from, const int count) : BaseRule("discard"), from(from), count(count){}
 
 std::string Discard::getFrom() const{
-    return _from;
+    return from;
 }
 
 int Discard::getCount() const{
-    return _count;
+    return count;
 }
 
 void Discard::process() {

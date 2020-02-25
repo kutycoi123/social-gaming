@@ -15,10 +15,10 @@ class InputText : public BaseRule{
         double getTimeOut() const;
 		void process() override;
     private:
-        std::string _user;
-        std::string _prompt;
-        std::string _result;
-        double _timeout;
+        std::string user;
+        std::string prompt;
+        std::string result;
+        double timeout;
 };
 }
 #endif

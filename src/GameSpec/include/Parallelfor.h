@@ -14,8 +14,8 @@ class Parallelfor : public ControlStructRule{
         std::string getElement() const;
 		void process() override;        
     private:
-        std::vector<std::string> _list;
-        std::string _element;
+        std::vector<std::string> list;
+        std::string element;
 };
 }
 #endif

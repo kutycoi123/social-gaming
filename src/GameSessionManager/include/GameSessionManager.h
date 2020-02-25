@@ -27,10 +27,10 @@ namespace GameSessionManager{
 
         static std::vector<Game> gameList {};
         
-        static std::unordered_set<GameSession, GameSessionHash> _sessionsList;
+        static std::unordered_set<GameSession, GameSessionHash> sessionsList;
         
         static std::unordered_map<uintptr_t, Invitation> userToInviteCode; 
-        static std::unordered_map<Invitation, GameSession, InvitationHash> _invitationToGameSessionMap;
+        static std::unordered_map<Invitation, GameSession, InvitationHash> invitationToGameSessionMap;
     }
 
     GameSession createGameSession(User& owner);

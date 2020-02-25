@@ -12,8 +12,8 @@ class Discard : public BaseRule{
         int getCount() const;
        	void process() override; 
     private:
-        std::string _from;
-        int _count;
+        std::string from;
+        int count;
 };
 }
 #endif

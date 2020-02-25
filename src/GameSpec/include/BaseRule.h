@@ -26,8 +26,8 @@ enum RuleType{
 			virtual void process() = 0;
 
 		private:
-			RuleType _ruleType;
-			std::string _ruleName;
+			RuleType ruleType;
+			std::string ruleName;
 			
 			RuleType getRuleTypeFromName(const std::string&);
 	

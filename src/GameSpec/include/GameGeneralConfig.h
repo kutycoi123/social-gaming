@@ -30,10 +30,10 @@ class GameGeneralConfig{
         void setSetup(const Setup& );
 
     private:
-        std::string _name;
-        PlayerCount _playerCount;
-        bool _audience;
-		Setup _setup;
+        std::string name;
+        PlayerCount playerCount;
+        bool audience;
+		Setup setup;
 
 };
 }

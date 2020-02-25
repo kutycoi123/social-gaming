@@ -4,14 +4,14 @@
 
 unsigned long Invitation::count = 0;
 
-Invitation::Invitation() : _invitationCode( generateInvitationCode() )
+Invitation::Invitation() : invitationCode( generateInvitationCode() )
     {}
 
-Invitation::Invitation(const std::string& invitationCode) : _invitationCode( invitationCode )  
+Invitation::Invitation(const std::string& invitationCode) : invitationCode( invitationCode )  
     {}
 
 std::string Invitation::toString() const {
-    return _invitationCode;
+    return invitationCode;
 }
 
 // Returns an invitation code based on the count value and a random number (as a string)

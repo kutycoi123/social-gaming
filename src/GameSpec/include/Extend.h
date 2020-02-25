@@ -13,8 +13,8 @@ class Extend : public BaseRule{
         SpecValue getList() const;
        	void process() override; 
     private:
-        std::string _target;
-        SpecValue _list;
+        std::string target;
+        SpecValue list;
 };
 }
 #endif

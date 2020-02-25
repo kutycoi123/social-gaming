@@ -15,8 +15,8 @@ class ForEach : public ControlStructRule{
        	void process() override; 
     private:
         //spec value take all value
-        SpecValue _list;
-        std::string _element;
+        SpecValue list;
+        std::string element;
 };
 }
 #endif

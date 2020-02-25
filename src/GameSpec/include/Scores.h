@@ -13,8 +13,8 @@ class Scores : public BaseRule{
         bool getAscending() const;
 		void process() override;
     private:
-        double _score;
-        bool _ascending;
+        double score;
+        bool ascending;
 };
 }
 #endif

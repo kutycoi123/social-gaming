@@ -27,7 +27,7 @@ public:
 
     size_t size() const noexcept;
 private:
-    std::unordered_map<UserId, User, UserIdHash> _idToUserMap; 
+    std::unordered_map<UserId, User, UserIdHash> idToUserMap; 
 };
 
 #endif
