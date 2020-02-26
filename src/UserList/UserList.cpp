@@ -23,7 +23,7 @@ bool UserList::onDisconnect(const UserId& id) {
         return false;
     }
 
-    _idToUserMap.erase(id);
+    idToUserMap.erase(id);
     return true;
 }
 
