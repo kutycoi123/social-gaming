@@ -48,6 +48,8 @@ public:
 private:
     UserName _userName;
     UserId _userId;
+
+    // TODO: Consider changing this to an invitation object using the second constructor
     std::string _currentGameSessionInvitationCode;
     privilage Type;
 };
