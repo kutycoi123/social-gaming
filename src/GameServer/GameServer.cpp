@@ -262,8 +262,7 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 			break;
 			case GameServerConfiguration::CommandType::NULL_COMMAND:
 			    {
-                    std::cout << text << '\n';
-                    commandResult.push_back(networking::Message{message.connection, message.text});
+			        
 				}
 			break;
 			default:
@@ -272,7 +271,11 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
 				}
 			break;
 			}
-		}
+
+            commandResult.push_back(networking::Message{message.connection, message.text.insert(0,user.value().getUserNameValue() + ": ")});
+
+    }
+
 	return commandResult;
 }
 
