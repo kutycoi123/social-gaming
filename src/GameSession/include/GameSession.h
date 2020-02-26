@@ -7,7 +7,6 @@
 #include "Invitation.h"
 #include "Game.h"
 #include "User.h"
-#include "UserList.h"
 #include <queue>
 class GameSession { 
     
@@ -18,15 +17,10 @@ public:
     std::string getSessionName() const;
     bool isGameStarted() const;
 
-    void addUserToSession(User& user);
-    void removeUserFromSession(User& user);
-    void removeAllUsersfromSession();
-
     void setConfigurationSettings(std::string jsonSettings);
     void createInviteCode();
     void startGame();
     void clearMessages();
-    UserList getUsersInSession();
 
     bool operator==(const GameSession& gameSession ) const {
         return invitationCode == gameSession.invitationCode;
@@ -48,7 +42,6 @@ private:
     std::list<std::string> listPerAudience;
     std::list<std::string> listRules;
     std::string currentGame;
-    UserList usersInSession;
 
     std::queue<std::string> messages;
 
@@ -61,9 +54,6 @@ private:
 
     bool gameStarted;
     User& owner;
-
-    // WIP
-    // std::list<Player> _playersList;  // TODO: Link with the User class
 };
 
 #endif

@@ -1,9 +1,14 @@
 #ifndef USERLIST_H
 #define USERLIST_H
 
-#include <User.h>
+#include "User.h"
+#include "Invitation.h"
 #include <optional>
+#include <functional>
 #include <unordered_map>
+#include <iostream>
+#include <vector>
+#include <memory>
 
 struct UserIdHash
 {
@@ -15,19 +20,20 @@ struct UserIdHash
 class UserList {
 public:
     UserList();
-    void addUser(const UserId& id);
-    void removeUser(const UserId& id);
-    void removeAllUsers();
+    bool onConnect(const UserId& id);
+    bool onDisconnect(const UserId& id);
 
     std::optional<User> getUser(const UserId& id);
-    bool transferUser(UserList& transferTo, User& user);
+    std::optional<std::reference_wrapper<User>> getUserRef(const UserId& id);
+
+    void removeUsersFromGameSession(const Invitation& code);
+    std::vector<std::reference_wrapper<User>> getUsersInSession(const Invitation& code);
 
     std::unordered_map<UserId, User, UserIdHash>::iterator begin();
     std::unordered_map<UserId, User, UserIdHash>::iterator end();
-
     size_t size() const noexcept;
 private:
-    std::unordered_map<UserId, User, UserIdHash> idToUserMap; 
+    std::unordered_map<UserId, User, UserIdHash> idToUserMap;
 };
 
 #endif

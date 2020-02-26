@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 
 GameSession::GameSession(User& owner) : 
-    invitationCode (Invitation::createNewInvitation()), 
+    invitationCode (Invitation::createNewInvitation()),
     owner (owner),
     gameStarted(false)
     // game(nlohmann::json gameSettings) 
@@ -12,10 +12,6 @@ GameSession::GameSession(User& owner) :
 
 Invitation GameSession::getInvitationCode() const {
     return invitationCode;
-}
-
-size_t GameSession::getTotalPlayerCount() const noexcept {
-    return usersInSession.size();
 }
 
 std::string GameSession::getSessionName() const {
@@ -30,21 +26,6 @@ bool GameSession::isGameStarted() const {
     return gameStarted;
 }
 
-void GameSession::addUserToSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accomodate this operation better.
-    usersInSession.addUser(user.getUserId());
-    
-}
-
-void GameSession::removeUserFromSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accomodate this operation better.
-    usersInSession.removeUser(user.getUserId());
-}
-
-void GameSession::removeAllUsersfromSession(){ 
-    usersInSession.removeAllUsers();
-}
-
 void GameSession::setConfigurationSettings(std::string jsonSettings) { 
     JSONSetting = jsonSettings;
 }
@@ -52,11 +33,6 @@ void GameSession::setConfigurationSettings(std::string jsonSettings) {
 void GameSession::startGame() {
     gameStarted = true;
 }
-
-UserList GameSession::getUsersInSession() {
-    return usersInSession;
-}
-
 
 void GameSession::addMessages(const std::string &message) {
     messages.push(message);

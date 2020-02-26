@@ -1,6 +1,7 @@
 #include "GameSession.h"
 #include "Invitation.h"
 #include "User.h"
+#include "UserList.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <optional>
@@ -38,9 +39,9 @@ namespace GameSessionManager{
     void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
      
     std::optional<GameSession> findGameSession(const Invitation& invitation);
-    std::optional<GameSession> joinGameSession(User& user, const Invitation& invitation);
+    std::optional<GameSession> joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
     void startGameInGameSession(const Invitation& invitation);
-    void endGameSession(const Invitation& invitation);
+    void endGameSession(const Invitation& invitation, UserList& users);
     size_t totalSessionCount();
     std::deque<networking::Message> getAllGameMessages();
     std::deque<networking::Message> getAllLobbyMessages();

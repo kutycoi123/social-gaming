@@ -4,18 +4,14 @@
 #include <string>
 #include <unordered_map>
 
-// TODO MZEGAR: Things to consider in the future
-// 1. Some point system? "global information will be displayed to all players on the main game screen."
-// 2. Check to see if a player has already created a game
-// 4. Some icon system? country system?
-// 5. Consider storing some connection info here or having this User class be a child of the web-socket-client
-
-struct UserName {
-    std::string name;
-};
-
 enum privilage {
     user, owner, serverAdmin 
+};
+
+class UserName {
+public:
+    UserName(const std::string& stringName) : name(stringName) {};
+    std::string name;
 };
 
 class UserId {
@@ -34,19 +30,28 @@ class User {
 public:
     User(const UserId& userId);
 
-    void setName(const UserName& name);
+    void setUserName(const UserName& name);
+    void setCurrentGameSessionInvitationCode(const std::string& code);
     void setPrivilage(privilage type);
-    UserName getName() const;
-    uintptr_t getUserId() const;
+
+    bool isUserInGameSession(const std::string& code) const;
+
+    std::string getUserNameValue() const;
+    UserId getUserId() const;
+    uintptr_t getUserIdValue() const;
+    std::string getCurrentGameSessionInvitationCode() const;
+
     bool operator==(const User& user) const {
-        return getUserId() == user.getUserId();
+        return getUserIdValue() == user.getUserIdValue();
     }
 
 private:
     UserName userName;
     UserId userId;
-    privilage Type;
 
+    // TODO: Consider changing this to an invitation object using the second constructor
+    std::string currentGameSessionInvitationCode;
+    privilage Type;
 };
 
 
