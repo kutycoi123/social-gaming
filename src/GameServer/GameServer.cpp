@@ -247,6 +247,21 @@ static std::deque<networking::Message> processMessages(networking::Server& serve
                     }
 				}
 			break;
+		    case GameServerConfiguration::CommandType::LEAVE_SESSION:
+                {
+                    // Users are only allowed to leave if the game session has NOT started their game.
+                    // TODO: Consider the behaviour, should owners be able to leave a session?
+                    // TODO: Should users be able to leave a session once it's started?
+                    // TODO: Mzegar modify leaveGameSession to use Invitation obj in User class
+                    auto userProvidedCode = Invitation::createInvitationFromStringInput(firstCommandParam);
+                    auto userRef = users.getUserRef(user.value().getUserId());
+                    if (userRef.has_value() && GameSessionManager::leaveGameSession(userRef.value(), userProvidedCode)) {
+                        message.text.append("\n Left session!");
+                    } else {
+                        message.text.append("\n Unable to leave session!");
+                    }
+                }
+            break;
 			case GameServerConfiguration::CommandType::USERNAME:
 				{
                     auto userRef = users.getUserRef(id);

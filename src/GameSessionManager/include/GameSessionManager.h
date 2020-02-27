@@ -42,6 +42,7 @@ namespace GameSessionManager{
     std::optional<std::reference_wrapper<GameSession>> findGameSessionRef(const Invitation& invitation);
 
     std::optional<GameSession> joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
+    bool leaveGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
     bool startGameInGameSession(const Invitation& invitation);
     bool endGameSession(const Invitation& invitation, UserList& users);
     size_t totalSessionCount();

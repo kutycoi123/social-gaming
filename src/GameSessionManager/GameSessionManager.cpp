@@ -19,6 +19,17 @@ std::optional<GameSession> GameSessionManager::joinGameSession(std::reference_wr
     return gameSession;
 }
 
+bool GameSessionManager::leaveGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+
+    if (gameSession && !gameSession.value().isGameStarted()) {
+        userRef.get().setCurrentGameSessionInvitationCode(std::string());
+        return true;
+    }
+
+    return false;
+}
+
 // Finds corresponding game session to provided Invitation code
 // Returns the GameSession if one is found or an empty optional if none is found 
 std::optional<GameSession> GameSessionManager::findGameSession(const Invitation& invitation){
