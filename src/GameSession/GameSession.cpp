@@ -3,7 +3,8 @@
 
 GameSession::GameSession(User& owner) : 
     invitationCode (Invitation::createNewInvitation()),
-    gameState{},
+    gameSpec{},
+    gameState{gameSpec},
     owner (owner)
 {}
 
@@ -28,13 +29,13 @@ bool GameSession::isGameStarted() const {
 }
 
 void GameSession::addUserToSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accomodate this operation better.
+    // TODO: UserList may need to be revised in order to accommodate this operation better.
     usersInSession.addUser(user.getUserId());
     
 }
 
 void GameSession::removeUserFromSession(User& user) { 
-    // TODO: UserList may need to be revised in order to accomodate this operation better.
+    // TODO: UserList may need to be revised in order to accommodate this operation better.
     usersInSession.removeUser(user.getUserId());
 }
 
@@ -42,7 +43,7 @@ void GameSession::removeAllUsersfromSession(){
     usersInSession.removeAllUsers();
 }
 
-void GameSession::setConfigurationSettings(std::string jsonSettings) { 
+void GameSession::setConfigurationSettings(std::string& jsonSettings) {
     JSONSetting = jsonSettings;
 }
 

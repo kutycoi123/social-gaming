@@ -9,7 +9,9 @@
 #include "User.h"
 #include "UserList.h"
 #include <queue>
-class GameSession { 
+#include <GameSpec.h>
+
+class GameSession {
     
 public:
     explicit GameSession(User& owner);
@@ -22,7 +24,7 @@ public:
     void removeUserFromSession(User& user);
     void removeAllUsersfromSession();
 
-    void setConfigurationSettings(std::string jsonSettings);
+    void setConfigurationSettings(std::string& jsonSettings);
     void startGame();
     void clearMessages();
     UserList getUsersInSession();
@@ -36,14 +38,7 @@ public:
     std::queue<std::string> getMessages();
     bool doesUserOwnGame(const User& user) const;
 
-    // WIP
-    // std::list<Player> getPlayers();  // TODO: Link with the User class
-    // void setPlayerInviteCodes();
-
 private:
-    std::list<std::string> listSettingVars;
-    std::list<std::string> listPerAudience;
-    std::list<std::string> listRules;
     std::string currentGame;
     UserList usersInSession;
 
@@ -55,6 +50,7 @@ private:
     const Invitation invitationCode;
 
     GameState gameState;
+    GameSpecification::GameSpec gameSpec;
     User& owner;
 
     // WIP

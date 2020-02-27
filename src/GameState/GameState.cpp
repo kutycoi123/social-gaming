@@ -1,8 +1,14 @@
-#include "include/GameState.h"
+#include "GameState.h"
 
-GameState::GameState() : gameStarted(false) {
-
-}
+GameState::GameState(GameSpecification::GameSpec& gameSpec) :
+    gameSpec(gameSpec),
+    gameStarted(false),
+    // The following methods are supposed to make copies. I wanted to confirm if they actually do that.
+    constantsMap(gameSpec.getConstants()),
+    variablesMap(gameSpec.getVariables()),
+    perPlayerMap(gameSpec.getPerPlayer()),
+    perAudienceMap(gameSpec.getPerAudience())
+    {}
 
 void GameState::startGame() {
     gameStarted = true;
