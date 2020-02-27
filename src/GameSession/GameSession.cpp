@@ -24,7 +24,7 @@ bool GameSession::isGameStarted() const {
     return gameState.isGameStarted();
 }
 
-void GameSession::setConfigurationSettings(std::string jsonSettings) {
+void GameSession::setConfigurationSettings(std::string& jsonSettings) {
     JSONSetting = jsonSettings;
 }
 

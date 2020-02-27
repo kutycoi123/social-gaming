@@ -19,7 +19,7 @@ public:
     std::string getSessionName() const;
     bool isGameStarted() const;
 
-    void setConfigurationSettings(std::string jsonSettings);
+    void setConfigurationSettings(std::string& jsonSettings);
     void startGame();
     void clearMessages();
 
