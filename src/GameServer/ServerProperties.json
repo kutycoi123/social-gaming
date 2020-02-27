@@ -49,7 +49,7 @@
       {
         "Type": "USERNAME",
         "User Commands": [
-          "username"
+          "setname"
         ],
         "Description": "Changes the current user's username"
       },
