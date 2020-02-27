@@ -8,7 +8,9 @@
 #include "GameState.h"
 #include "User.h"
 #include <queue>
-class GameSession { 
+#include <GameSpec.h>
+
+class GameSession {
     
 public:
     explicit GameSession(User& owner);
@@ -30,14 +32,7 @@ public:
     std::queue<std::string> getMessages();
     bool doesUserOwnGame(const User& user) const;
 
-    // WIP
-    // std::list<Player> getPlayers();  // TODO: Link with the User class
-    // void setPlayerInviteCodes();
-
 private:
-    std::list<std::string> listSettingVars;
-    std::list<std::string> listPerAudience;
-    std::list<std::string> listRules;
     std::string currentGame;
 
     std::queue<std::string> messages;
@@ -48,6 +43,7 @@ private:
     const Invitation invitationCode;
 
     GameState gameState;
+    GameSpecification::GameSpec gameSpec;
     User& owner;
 };
 

@@ -3,7 +3,8 @@
 
 GameSession::GameSession(User& owner) : 
     invitationCode (Invitation::createNewInvitation()),
-    gameState{},
+    gameSpec{},
+    gameState{gameSpec},
     owner (owner)
 {}
 
@@ -23,7 +24,7 @@ bool GameSession::isGameStarted() const {
     return gameState.isGameStarted();
 }
 
-void GameSession::setConfigurationSettings(std::string jsonSettings) { 
+void GameSession::setConfigurationSettings(std::string jsonSettings) {
     JSONSetting = jsonSettings;
 }
 

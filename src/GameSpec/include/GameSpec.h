@@ -19,8 +19,7 @@ namespace GameSpecification{
 	class GameSpec : public AbstractSpec{
 		public:
 		    GameSpec() : specFilePath(""){}
-		    GameSpec(const std::string& path) : specFilePath(path) {} 
-
+		    explicit GameSpec(const std::string& path) : specFilePath(path) {}
 		    std::vector<std::shared_ptr<BaseRule>> getRules() const;
 		    std::string getSpecFilePath() const;	
 		    void addRule(std::shared_ptr<BaseRule>);
@@ -32,15 +31,18 @@ namespace GameSpecification{
 		    void addPerPlayerSpec(const std::string&, const SpecValue& );
 		    void addPerAudienceSpec(const std::string&, const SpecValue& );
 			void addConfig(const GameGeneralConfig& );
+            const std::unordered_map<std::string, SpecValue>& getConstants() const;
+            const std::unordered_map<std::string, SpecValue>& getVariables() const;
+            const std::unordered_map<std::string, SpecValue>& getPerPlayer() const;
+            const std::unordered_map<std::string, SpecValue>& getPerAudience() const;
 		private:
 		    std::vector<std::shared_ptr<BaseRule>> rules; 
 		    std::string specFilePath;
 		    std::unordered_map<std::string, SpecValue> constants;
-		    std::unordered_map<std::string, SpecValue> variables;
+            std::unordered_map<std::string, SpecValue> variables;
 		    std::unordered_map<std::string, SpecValue> perPlayer;
 		    std::unordered_map<std::string, SpecValue> perAudience;  
-			GameGeneralConfig config;	
-			
+			GameGeneralConfig config;
 	};
 	
 }
