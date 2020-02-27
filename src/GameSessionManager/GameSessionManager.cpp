@@ -1,6 +1,6 @@
 #include "include/GameSessionManager.h"
 
-GameSession GameSessionManager::createGameSession(User& owner){
+std::optional<GameSession> GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     sessionsList.insert(gameSession);
     invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
@@ -30,20 +30,26 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::startGameInGameSession(const Invitation& invitation){
+bool GameSessionManager::startGameInGameSession(const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
     if (gameSession){
         gameSession.value().startGame();
+        return true;
     }
+
+    return false;
 }
 
-void GameSessionManager::endGameSession(const Invitation& invitation, UserList& users){
+bool GameSessionManager::endGameSession(const Invitation& invitation, UserList& users){
     auto gameSession = findGameSession(invitation);
     if (gameSession){
         users.removeUsersFromGameSession(invitation);
         invitationToGameSessionMap.erase(invitation);
         sessionsList.erase(gameSession.value());
+        return true;
     }
+
+    return false;
 }
 
 size_t GameSessionManager::totalSessionCount(){

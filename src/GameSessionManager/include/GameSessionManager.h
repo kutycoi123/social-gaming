@@ -34,14 +34,14 @@ namespace GameSessionManager{
         static std::unordered_map<Invitation, GameSession, InvitationHash> invitationToGameSessionMap;
     }
 
-    GameSession createGameSession(User& owner);
+    std::optional<GameSession> createGameSession(User& owner);
 
     void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
      
     std::optional<GameSession> findGameSession(const Invitation& invitation);
     std::optional<GameSession> joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
-    void startGameInGameSession(const Invitation& invitation);
-    void endGameSession(const Invitation& invitation, UserList& users);
+    bool startGameInGameSession(const Invitation& invitation);
+    bool endGameSession(const Invitation& invitation, UserList& users);
     size_t totalSessionCount();
     std::deque<networking::Message> getAllGameMessages();
     std::deque<networking::Message> getAllLobbyMessages();
