@@ -5,20 +5,19 @@
 #include <string>
 #include <list>
 #include "Invitation.h"
-#include "Game.h"
+#include "GameState.h"
 #include "User.h"
 #include <queue>
 class GameSession { 
     
 public:
-    GameSession(User& owner);
+    explicit GameSession(User& owner);
     Invitation getInvitationCode() const;
     size_t getTotalPlayerCount() const noexcept;
     std::string getSessionName() const;
     bool isGameStarted() const;
 
     void setConfigurationSettings(std::string jsonSettings);
-    void createInviteCode();
     void startGame();
     void clearMessages();
 
@@ -36,8 +35,6 @@ public:
     // void setPlayerInviteCodes();
 
 private:
-    // Game game;
-
     std::list<std::string> listSettingVars;
     std::list<std::string> listPerAudience;
     std::list<std::string> listRules;
@@ -50,9 +47,7 @@ private:
 
     const Invitation invitationCode;
 
-    int gameID;
-
-    bool gameStarted;
+    GameState gameState;
     User& owner;
 };
 
