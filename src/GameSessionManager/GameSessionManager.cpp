@@ -30,10 +30,15 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
+std::optional<std::reference_wrapper<GameSession>> GameSessionManager::findGameSessionRef(const Invitation& invitation) {
+    auto iterator = invitationToGameSessionMap.find(invitation);
+    return std::optional<std::reference_wrapper<GameSession>>{iterator->second};
+}
+
 bool GameSessionManager::startGameInGameSession(const Invitation& invitation){
-    auto gameSession = findGameSession(invitation);
+    auto gameSession = findGameSessionRef(invitation);
     if (gameSession){
-        gameSession.value().startGame();
+        gameSession.value().get().startGame();
         return true;
     }
 

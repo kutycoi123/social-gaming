@@ -39,6 +39,8 @@ namespace GameSessionManager{
     void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
      
     std::optional<GameSession> findGameSession(const Invitation& invitation);
+    std::optional<std::reference_wrapper<GameSession>> findGameSessionRef(const Invitation& invitation);
+
     std::optional<GameSession> joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation);
     bool startGameInGameSession(const Invitation& invitation);
     bool endGameSession(const Invitation& invitation, UserList& users);
