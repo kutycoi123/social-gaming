@@ -1,13 +1,10 @@
-#include "include/GameSession.h"
+#include "GameSession.h"
 #include "GameSessionManager.h"
-#include "Game.h"
-#include <nlohmann/json.hpp>
 
 GameSession::GameSession(User& owner) : 
-    invitationCode (Invitation::createNewInvitation()), 
-    owner (owner),
-    gameStarted(false)
-    // game(nlohmann::json gameSettings) 
+    invitationCode (Invitation::createNewInvitation()),
+    gameState{},
+    owner (owner)
 {}
 
 Invitation GameSession::getInvitationCode() const {
@@ -27,7 +24,7 @@ bool GameSession::doesUserOwnGame(const User& user) const {
 }
 
 bool GameSession::isGameStarted() const {
-    return gameStarted;
+    return gameState.isGameStarted();
 }
 
 void GameSession::addUserToSession(User& user) { 
@@ -50,7 +47,7 @@ void GameSession::setConfigurationSettings(std::string jsonSettings) {
 }
 
 void GameSession::startGame() {
-    gameStarted = true;
+    gameState.startGame();
 }
 
 UserList GameSession::getUsersInSession() {
