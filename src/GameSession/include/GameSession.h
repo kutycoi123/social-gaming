@@ -15,11 +15,7 @@ class GameSession {
 public:
     explicit GameSession(User& owner);
     Invitation getInvitationCode() const;
-    size_t getTotalPlayerCount() const noexcept;
-    std::string getSessionName() const;
     bool isGameStarted() const;
-
-    void setConfigurationSettings(std::string& jsonSettings);
     void startGame();
     void clearMessages();
 
@@ -33,17 +29,10 @@ public:
     bool doesUserOwnGame(const User& user) const;
 
 private:
-    std::string currentGame;
-
     std::queue<std::string> messages;
-
-    std::string sessionName;
-    std::string JSONSetting;
-
     const Invitation invitationCode;
-
-    GameState gameState;
     GameSpecification::GameSpec gameSpec;
+    GameState gameState;
     User& owner;
 };
 

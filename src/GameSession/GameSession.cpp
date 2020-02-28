@@ -12,20 +12,12 @@ Invitation GameSession::getInvitationCode() const {
     return invitationCode;
 }
 
-std::string GameSession::getSessionName() const {
-    return sessionName;
-}
-
 bool GameSession::doesUserOwnGame(const User& user) const {
     return (user == owner);
 }
 
 bool GameSession::isGameStarted() const {
     return gameState.isGameStarted();
-}
-
-void GameSession::setConfigurationSettings(std::string& jsonSettings) {
-    JSONSetting = jsonSettings;
 }
 
 void GameSession::startGame() {
@@ -41,7 +33,5 @@ std::queue<std::string> GameSession::getMessages() {
  }
 
  void GameSession::clearMessages() {
-    while(!messages.empty()) {
-        messages.pop();
-    }
+    messages = std::queue<std::string>();
  }

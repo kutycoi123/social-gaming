@@ -13,13 +13,13 @@ public:
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerPlayerValue(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerAudienceValue(const std::string&);
 private:
+    GameSpecification::GameSpec& gameSpec;
     bool gameStarted;
     std::unordered_map<std::string, GameSpecification::SpecValue> constantsMap;
     std::unordered_map<std::string, GameSpecification::SpecValue> variablesMap;
-    // Will change perPlayer/perAudience impl to be different from constantsMap/variablesMap
+    // TODO: Will change perPlayer/perAudience impl to be different from constantsMap/variablesMap
     std::unordered_map<std::string, GameSpecification::SpecValue> perPlayerMap;
     std::unordered_map<std::string, GameSpecification::SpecValue> perAudienceMap;
-    GameSpecification::GameSpec& gameSpec;
 };
 
 #endif

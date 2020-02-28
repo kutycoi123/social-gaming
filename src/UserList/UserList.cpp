@@ -28,19 +28,20 @@ bool UserList::onDisconnect(const UserId& id) {
 }
 
 std::optional<User> UserList::getUser(const UserId& id) {
-    auto iterator = idToUserMap.find(id);
-
-    if (iterator == idToUserMap.end()) {
+    auto userRef = getUserRef(id);
+    if (!userRef.has_value()){
         return std::nullopt;
     }
-
-    return std::optional<User>{iterator->second};
+    return std::optional<User>{userRef};
 }
 
 // The returned pointer should never outlive the scope of the caller function
 std::optional<std::reference_wrapper<User>> UserList::getUserRef(const UserId& id) {
     auto iterator = idToUserMap.find(id);
-    return std::optional<std::reference_wrapper<User>>{iterator->second};
+    if (iterator == idToUserMap.end()) {
+        return std::nullopt;
+    }
+    return  std::optional<std::reference_wrapper<User>>{iterator->second};
 }
 
 void UserList::removeUsersFromGameSession(const Invitation& code) {
