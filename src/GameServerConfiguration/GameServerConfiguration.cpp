@@ -1,28 +1,49 @@
 #include "GameServerConfiguration.h"
-#include <unistd.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <map>
-#include <vector>
 
-#pragma region PrivateHelperMethods
-
-namespace ConfigurationCommandTags{
-    const std::string PORT = "Default Port";
-    const std::string HTML_PAGE = "HTML Location";
-    const std::string COMMAND_CONFIGURATION = "Commands Configuration";
-    const std::string COMMAND_PREFIX_SYMBOL = "Prefix Symbol";
-    const std::string COMMAND_LIST = "Command List";
-    const std::string COMMAND_TYPE = "Type";
-    const std::string COMMAND_DESCRIPTION = "Description";
-    const std::string COMMAND_TRIGGER = "User Commands"; 
+GameServerConfiguration::GameServerConfiguration(const nlohmann::json &configurationFile){
+    configureServer(configurationFile);
 }
 
-static std::map<std::string, GameServerConfiguration::CommandType> stringToCommandMap;
-static std::map<GameServerConfiguration::CommandType, std::string> commandToDescriptionMap;
+unsigned short GameServerConfiguration::getPort() const noexcept{
+    return GameServerConfiguration::port.id;
+}
 
-static void verifyJSON(const nlohmann::json &configurationFile) noexcept{
+std::string GameServerConfiguration::getHtmlFileContent() const noexcept{
+    std::ifstream htmlFileStream{GameServerConfiguration::htmlFile.path};
+
+    std::string htmlFileContents{std::istreambuf_iterator<char>(htmlFileStream), std::istreambuf_iterator<char>()};
+    
+    return htmlFileContents;
+}
+
+GameServerConfiguration::CommandType GameServerConfiguration::string2Command(const std::string& input) const noexcept{
+    try {
+        
+        return stringToCommandMap.at(input);
+
+    } catch (std::out_of_range& error) {
+        
+        return GameServerConfiguration::CommandType::NULL_COMMAND;
+
+    }
+}
+
+std::string GameServerConfiguration::command2Description(const CommandType& input) const noexcept{
+    return commandToDescriptionMap.at(input);
+}
+
+void GameServerConfiguration::configureServer(const nlohmann::json &configurationFile) noexcept{
+    verifyJSON(configurationFile);
+    GameServerConfiguration::port.id = configurationFile[ConfigurationCommandTags::PORT];
+    GameServerConfiguration::htmlFile.path = configurationFile[ConfigurationCommandTags::HTML_PAGE];
+
+    std::string commandPrefix = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL];
+    nlohmann::json commandList = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_LIST];
+
+    configureCommands(commandPrefix, commandList);
+}
+
+void GameServerConfiguration::verifyJSON(const nlohmann::json &configurationFile) const noexcept{
     //TODO: add check if field actually exist
 
     auto port = configurationFile.at(ConfigurationCommandTags::PORT);
@@ -42,7 +63,7 @@ static void verifyJSON(const nlohmann::json &configurationFile) noexcept{
     //... add more checks
 }
 
-static std::optional<GameServerConfiguration::CommandType> string2CommandType(const std::string& commandString){
+std::optional<GameServerConfiguration::CommandType> GameServerConfiguration::string2CommandType(const std::string& commandString) const noexcept{
 
     if(commandString == "CREATE_SESSION"){
         return GameServerConfiguration::CommandType::CREATE_SESSION;
@@ -73,7 +94,7 @@ static std::optional<GameServerConfiguration::CommandType> string2CommandType(co
     }
 }
 
-static void configureCommands(const std::string& commandPrefix, const nlohmann::json& commandList){
+void GameServerConfiguration::configureCommands(const std::string& commandPrefix, const nlohmann::json& commandList) {
     for(auto& command : commandList){
         std::string commandTypeString = command.at(ConfigurationCommandTags::COMMAND_TYPE);
         std::optional<GameServerConfiguration::CommandType> type = string2CommandType(commandTypeString);
@@ -89,37 +110,46 @@ static void configureCommands(const std::string& commandPrefix, const nlohmann::
             }
         }
     }
+
+    //Null commands does not and should not have any description
+    commandToDescriptionMap.insert(std::make_pair(GameServerConfiguration::CommandType::NULL_COMMAND, ""));
+
+    //placeholder enums for iterating should also not have any description
+    commandToDescriptionMap.insert(std::make_pair(GameServerConfiguration::CommandType::FIRST, ""));
+    commandToDescriptionMap.insert(std::make_pair(GameServerConfiguration::CommandType::LAST, ""));
+
 }
 
-#pragma endregion
-
-void GameServerConfiguration::configureServer(const nlohmann::json &configurationFile) noexcept{
-    verifyJSON(configurationFile);
-    GameServerConfiguration::port.id = configurationFile[ConfigurationCommandTags::PORT];
-    GameServerConfiguration::htmlFile.path = configurationFile[ConfigurationCommandTags::HTML_PAGE];
-
-    std::string commandPrefix = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL];
-    nlohmann::json commandList = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_LIST];
-
-    configureCommands(commandPrefix, commandList);
+std::vector<std::string> GameServerConfiguration::splitCommand(const std::string& command){
+    std::istringstream iss(command);
+    std::vector<std::string> results((std::istream_iterator<std::string>(iss)),
+                                 std::istream_iterator<std::string>());
+    return results;
 }
 
-unsigned short GameServerConfiguration::getPort() noexcept{
-    return GameServerConfiguration::port.id;
-}
-
-std::string GameServerConfiguration::getHtmlFileContent() noexcept{
-    std::ifstream htmlFileStream{GameServerConfiguration::htmlFile.path};
-
-    std::string htmlFileContents{std::istreambuf_iterator<char>(htmlFileStream), std::istreambuf_iterator<char>()};
+std::string GameServerConfiguration::getAllCommandDescriptions(const GameServerConfiguration &configuration) noexcept{
+    std::string str = "";
     
-    return htmlFileContents;
+    //is there a better way?
+    for(int index = GameServerConfiguration::CommandType::FIRST; index < GameServerConfiguration::CommandType::LAST; index++){
+        str += configuration.command2Description(static_cast<GameServerConfiguration::CommandType> (index)) + "\n";
+    }
+
+    return str;
 }
 
-GameServerConfiguration::CommandType GameServerConfiguration::string2Command(const std::string& input){
-    return stringToCommandMap.at(input);
+std::vector<std::string> GameServerConfiguration::getCommandArgumentsFromString(const std::string& command) noexcept{
+    //TODO: make this more intelligent
+    //all this does right now is split commands based on whitespace and remove the command at the 0th position 
+    std::vector<std::string> commandParts = splitCommand(command);
+    commandParts.erase(commandParts.begin());
+    return commandParts;
 }
 
-std::string GameServerConfiguration::command2Description(const CommandType& input){
-    return commandToDescriptionMap.at(input);
+GameServerConfiguration::CommandType GameServerConfiguration::getCommandTypeFromString(const GameServerConfiguration& configuration, const std::string& command) noexcept{
+    std::vector<std::string> commandParts = splitCommand(command);
+
+    std::string commandWithoutParameters = commandParts.at(0);
+
+    return configuration.string2Command(commandWithoutParameters);
 }

@@ -1,6 +1,6 @@
 #include "include/GameSessionManager.h"
 
-std::optional<GameSession> GameSessionManager::createGameSession(User& owner){
+GameSession GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     sessionsList.insert(gameSession);
     invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
@@ -13,7 +13,7 @@ std::optional<GameSession> GameSessionManager::joinGameSession(std::reference_wr
     // TODO: Investigate why isGameStarted() is still returning false
     bool canJoinSession = gameSession.has_value(); // && !(gameSession->isGameStarted())
     if (canJoinSession) {
-        userRef.get().setCurrentGameSessionInvitationCode(invitation.toString());
+        userRef.get().setCurrentGameSessionInvitationCode(invitation);
     }
 
     return gameSession;
@@ -23,7 +23,7 @@ bool GameSessionManager::leaveGameSession(std::reference_wrapper<User>& userRef,
     auto gameSession = findGameSession(invitation);
 
     if (gameSession && !gameSession.value().isGameStarted()) {
-        userRef.get().setCurrentGameSessionInvitationCode(std::string());
+        userRef.get().setCurrentGameSessionInvitationCode(invitation);
         return true;
     }
 
