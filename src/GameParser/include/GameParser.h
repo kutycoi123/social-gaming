@@ -11,7 +11,8 @@
 #include <vector>
 #include <unordered_map>
 #include <cassert>
-#include<map>
+#include <map>
+#include "BaseRule.h"
 
 enum GameSpecificationJSON{
     CONFIGURATION,
@@ -87,7 +88,7 @@ class GameParser{
 
   private:
       void handleOtherFields(const std::string& nonRules);
-      void processRuleField(nlohmann::json::iterator singleRule);
+      void processRuleField(const nlohmann::json& singleRule );
        
       void parseRules(const nlohmann::json& rules);
       void parseConfiguration(const nlohmann::json& gameConfiguration);
