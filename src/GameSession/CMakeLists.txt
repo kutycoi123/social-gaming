@@ -19,7 +19,6 @@ set_target_properties(session
 target_link_libraries(session
   invitation
   GameSessionManager
-  game
-  nlohmann_json::nlohmann_json
+  GameState
   userlist
 )
