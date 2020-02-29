@@ -1,12 +1,7 @@
 
 #include "include/GameParser.h"
 
-
-
-
 GameParser::GameParser() {};
-
-
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
     for (auto& fields : gameJson.items()) {
 
@@ -59,6 +54,7 @@ void GameParser::handleOtherFields(const std::string& nonRules) {
 void GameParser::processRuleField(const nlohmann::json& singleRule) {
     auto ruleMap = GameSpecification::BaseRule::rulemap;
     GameSpecification::RuleType rule = ruleMap[ singleRule.begin().key()];
+    //TODO investigate stl functions
     for (auto& fields : singleRule.items()) {
          if(fields.key().compare("rules") == 0) {
           parseRules(fields.value());
@@ -68,18 +64,16 @@ void GameParser::processRuleField(const nlohmann::json& singleRule) {
     }
     
      
-     
 }
-
 void GameParser::parseRules(const nlohmann::json& rules) {
     if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
 
+        //TODO turn this into find if. 
         for (auto& field : rules.items()) {
         
             //TODO: use debugger to check the fields
             if( field.key().compare("rules") == 0 || field.key().compare("cases") == 0) {
                 processRuleField(field.value());
-
             } else {
                 handleOtherFields(field.value());
             }
