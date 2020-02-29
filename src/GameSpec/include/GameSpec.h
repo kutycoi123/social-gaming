@@ -12,6 +12,8 @@
 #include "GameGeneralConfig.h"
 #include <memory>
 
+#include "GameState.h"
+
 using GameSpecification::AbstractSpec;
 using GameSpecification::BaseRule;
 using GameSpecification::GameGeneralConfig;

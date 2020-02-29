@@ -3,6 +3,14 @@
 
 #include "GameSpec.h"
 
+// Forward declaration required due to circular reference between GameSpec and GameState
+// https://stackoverflow.com/questions/2133250/x-does-not-name-a-type-error-in-c/2133260
+// https://stackoverflow.com/questions/19001700/how-to-forward-declare-a-class-which-is-in-a-namespace
+namespace GameSpecification {
+    class AbstractSpec;
+    class GameSpec;
+}
+
 class GameState {
 public:
     explicit GameState(GameSpecification::GameSpec&);
