@@ -4,11 +4,16 @@
 #include <fstream>
 #include <string>
 #include "BaseRule.h"
+#include "Add.h"
+#include "Deal.h"
+#include "GlobalMessage.h"
 #include "IncludeChoice.h"
 #include "IncludeText.h"
 #include "InputVote.h"
+#include "Message.h"
 #include "Reverse.h"
 #include "Scores.h"
+#include "Sort.h"
 #include <iostream>
 
 std::vector<GameSpecification::BaseRule> jsonToGameSpec (nlohmann::json jsonRules){
@@ -30,10 +35,17 @@ std::vector<GameSpecification::BaseRule> jsonToGameSpec (nlohmann::json jsonRule
 
         }
         else if (element["rule"] == "add"){
-
+            std::string to = element["to"];
+            SpecValue value = element["value"];
+            GameSpecification::Add add {to, value};
+            rules.push_back(add);
         }
         else if(element["rule"] == "deal"){
-
+            std::string from = element["from"];
+            SpecValue to = element["to"];
+            int count = element["count"];
+            GameSpecification::Deal deal{from, to, count};
+            rules.push_back(deal);
         }
         else if(element["rule"] == "discard"){
             std::string from = element["from"];
@@ -42,7 +54,10 @@ std::vector<GameSpecification::BaseRule> jsonToGameSpec (nlohmann::json jsonRule
             rules.push_back(discard);
         }
         else if(element["rule"] == "extend"){
-
+            std::string target = element["target"];
+            SpecValue list = element["list"];
+            GameSpecification::Extend extend{target, list};
+            rules.add(extend);
         }
         else if(element["rule"] == "global-message"){
             std::string value = element["value"];
@@ -77,7 +92,10 @@ std::vector<GameSpecification::BaseRule> jsonToGameSpec (nlohmann::json jsonRule
             rules.push_back(inputVote);
         }
         else if(element["rule"] == "message"){
-            
+            SpecValue to = element["to"];
+			std::string	messValue = element["value"];
+            GameSpecification::Message message{to, value};
+            rules.push_back(message);
         }
         else if(element["rule"] == "reverse"){
             std::string list = element["list"];
@@ -94,7 +112,10 @@ std::vector<GameSpecification::BaseRule> jsonToGameSpec (nlohmann::json jsonRule
 
         }
         else if(element["rule"] == "sort"){
-
+            std::string list = element["sort"];
+            std::string key = element["key"];
+            GameSpecification::Sort sort{list, key};
+            rules.push_back(sort);
         }
         return rules;
     }
