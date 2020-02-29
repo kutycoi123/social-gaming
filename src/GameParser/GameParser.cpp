@@ -1,4 +1,3 @@
-#include <iostream>
 #include <map>
 #include "include/GameParser.h"
 
@@ -7,7 +6,7 @@
 
 GameParser::GameParser() {};
 
-StatusCode GameParser::validGameJson(std::string& jsonstr){
+GameParser::StatusCode GameParser::validGameJson(std::string& jsonstr){
     nlohmann::json jsonObject = nlohmann::json::parse(jsonstr);
     size_t jsonGameSpecificationMapSize = jsonGameSpecification.size();
     if(jsonGameSpecificationMapSize!=jsonObject.size())
@@ -26,7 +25,7 @@ StatusCode GameParser::validGameJson(std::string& jsonstr){
     return StatusCode::VALID;
 }
 
-StatusCode GameParser::validateConfiguration(nlohmann::json& json){
+GameParser::StatusCode GameParser::validateConfiguration(nlohmann::json& json){
     nlohmann::json config = json.at(CONFIGURATION);
     auto i = std::find_if(config.items().begin(), config.items().end(), [&](auto& elem){
         return (jsonGameConfiguration.find(elem.key()) == jsonGameConfiguration.end()) ;
@@ -42,7 +41,7 @@ StatusCode GameParser::validateConfiguration(nlohmann::json& json){
 }
 
 
-StatusCode GameParser::validatePlayerNumber(nlohmann::json& jsonObject){
+GameParser::StatusCode GameParser::validatePlayerNumber(nlohmann::json& jsonObject){
     nlohmann::json player = jsonObject.at(PLAYER_COUNT);
     nlohmann::json minPlayerCount = player.at(MIN);
     nlohmann::json maxPlayerCount = player.at(MAX);
@@ -56,10 +55,11 @@ StatusCode GameParser::validatePlayerNumber(nlohmann::json& jsonObject){
     if(maxPlayerCount < minPlayerCount){
         return StatusCode::INVALID;
     }
+
     return StatusCode::VALID;
 }
 
-StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
+GameParser::StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
     auto ruleMap = GameSpecification::BaseRule::rulemap;
 
     auto result = std::find_if(incomingRules.items().begin(), incomingRules.items().end(), [&](auto& elem){

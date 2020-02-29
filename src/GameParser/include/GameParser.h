@@ -22,10 +22,7 @@ enum GameConfiguration {NAME,
     MIN_PLAYER,
     MAX_PLAYER
 };
-enum StatusCode {
-  VALID,
-  INVALID
-};
+
 
 struct Config {
   std::string name;
@@ -41,6 +38,12 @@ class GameParser{
     void createGame();
     void parseJSON(const nlohmann::json& gameConfiguration);
     void validator(const nlohmann::json& gameConfiguration);
+
+    enum StatusCode {
+        VALID,
+        INVALID
+    };
+
     StatusCode rulesValidation(const nlohmann::json& gameConfiguration);
     nlohmann::json fileToJson(const std::string& pathName);
     StatusCode validGameJson(std::string& );
