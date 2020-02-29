@@ -99,7 +99,7 @@ void GameParser::processRuleField(const std::string& singleRule) {
 }
 
 void GameParser::parseRules(const nlohmann::json& rules) {
-    //if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
+    if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
         for (nlohmann::json::iterator field = rules.begin(); field != rules.end(); ++field) {
             //TODO: use debugger to check the fields
             if( field->find("rules")!= field->end() || field->find("cases")!= field->end()) {
@@ -112,7 +112,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
                 handleOtherFields(field.value());
             }
         }
-    //}  
+    }  
 }
 
 void GameParser::setConstants(const nlohmann::json& constants) {
