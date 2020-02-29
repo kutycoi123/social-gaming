@@ -1,11 +1,57 @@
-add_subdirectory(GameSession)
 add_subdirectory(Invitation)
-add_subdirectory(Command)
 add_subdirectory(User)
 add_subdirectory(GameState)
 add_subdirectory(GameSpec)
 add_subdirectory(UserList)
+add_subdirectory(GameSession)
 add_subdirectory(GameSessionManager)
 add_subdirectory(GameServerConfiguration)
 add_subdirectory(GameServer)
 add_subdirectory(GameParser)
+
+################################
+
+add_executable(GameServer
+  main.cpp
+)
+
+set_target_properties(GameServer
+                      PROPERTIES
+                      LINKER_LANGUAGE CXX
+                      CXX_STANDARD 17
+                      PREFIX ""
+)
+
+find_package(Threads REQUIRED)
+
+target_link_libraries(GameServer
+  networking
+  nlohmann_json::nlohmann_json
+  ${CMAKE_THREAD_LIBS_INIT}
+  
+  gameServer
+  session
+  user
+  GameSpec
+  GameSessionManager
+  gameParser
+  GameServerConfiguration
+)
+
+add_custom_command(TARGET GameServer POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       ${CMAKE_CURRENT_SOURCE_DIR}/ServerProperties.json
+                       ${PROJECT_BINARY_DIR}/config/ServerProperties.json
+                   )
+
+add_custom_command(TARGET GameServer POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       ${CMAKE_CURRENT_SOURCE_DIR}/socialapp.html
+                       ${PROJECT_BINARY_DIR}/socialapp.html
+                   )
+
+install(FILES ServerProperties.json DESTINATION config)
+
+install(TARGETS GameServer
+  RUNTIME DESTINATION bin
+)

@@ -3,11 +3,11 @@
 
 UserList::UserList(): idToUserMap(std::unordered_map<UserId, User, UserIdHash>()) {};
 
-bool UserList::onConnect(const UserId& id) {
+bool UserList::add(const UserId& id) {
     auto user = getUser(id);
 
     if (user.has_value()) {
-        std::cout << " Error, Connecting user is already in UserList." << '\n';
+        std::cout << " Error, user is already in UserList." << '\n';
         return false;
     }
 
@@ -15,11 +15,11 @@ bool UserList::onConnect(const UserId& id) {
     return true;
 }
 
-bool UserList::onDisconnect(const UserId& id) {
+bool UserList::remove(const UserId& id) {
     auto user = getUser(id);
 
     if (!user.has_value()) {
-        std::cout << " Error, Disconnecting user does not exist in the UserList." << '\n';
+        std::cout << " Error, user does not exist in the UserList." << '\n';
         return false;
     }
 

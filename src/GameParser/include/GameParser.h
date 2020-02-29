@@ -1,12 +1,11 @@
- 
+#ifndef GAME_PARSER_H
+#define GAME_PARSER_H
+
 #include <list>
 #include <nlohmann/json.hpp>
 #include <cassert>
 #include <fstream>
 #include <string>
-#include<map>
-#ifndef GAME_PARSER_H
-#define GAME_PARSER_H
 
 enum GameSpecificationJSON{CONFIGURATION,
     CONSTANTS,
