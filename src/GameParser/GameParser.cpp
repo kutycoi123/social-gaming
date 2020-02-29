@@ -1,15 +1,15 @@
-#include <map>
+
 #include "include/GameParser.h"
 
-#include "BaseRule.h"
+
 
 
 GameParser::GameParser() {};
 
 
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
+    for (auto& fields : gameJson.items()) {
 
-    for (nlohmann::json::iterator fields = gameJson.begin(); fields != gameJson.end(); ++fields) {
         std::string jsonKey = fields.key();
         auto enumKey = jsonGameSpecification.find(jsonKey);
         switch(enumKey->second) {
@@ -56,31 +56,31 @@ void GameParser::handleOtherFields(const std::string& nonRules) {
 }
 
 
-void GameParser::processRuleField(nlohmann::json::iterator singleRule) {
+void GameParser::processRuleField(const nlohmann::json& singleRule) {
     auto ruleMap = GameSpecification::BaseRule::rulemap;
-    GameSpecification::RuleType rule = ruleMap[singleRule->begin().key()];
-    for(nlohmann::json::iterator ruleFields = singleRule->begin();ruleFields!= singleRule->end(); ruleFields++ ) {
-        //TODO: handle Other fields. 
-        if(ruleFields->contains("rules")) {
-          parseRules(ruleFields.value());
+    GameSpecification::RuleType rule = ruleMap[ singleRule.begin().key()];
+    for (auto& fields : singleRule.items()) {
+         if(fields.key().compare("rules") == 0) {
+          parseRules(fields.value());
+        }else{
+            handleOtherFields("fields");
         }
     }
+    
+     
      
 }
 
 void GameParser::parseRules(const nlohmann::json& rules) {
     if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
 
-
-        for (nlohmann::json::iterator field = rules.begin(); field != rules.end(); ++field) {
+        for (auto& field : rules.items()) {
+        
             //TODO: use debugger to check the fields
-            if( field->find("rules")!= field->end() || field->find("cases")!= field->end()) {
-                parseRules(field.value());
+            if( field.key().compare("rules") == 0 || field.key().compare("cases") == 0) {
+                processRuleField(field.value());
 
-            }else if (field->find("rule") != field->end()) {
-                processRuleField(field);
-                
-            }else {
+            } else {
                 handleOtherFields(field.value());
             }
         }
