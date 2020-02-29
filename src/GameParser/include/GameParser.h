@@ -1,19 +1,27 @@
+
 #ifndef GAME_PARSER_H
 #define GAME_PARSER_H
-
+ 
 #include <list>
 #include <nlohmann/json.hpp>
+
 #include <cassert>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include <cassert>
+#include<map>
 
-enum GameSpecificationJSON{CONFIGURATION,
+enum GameSpecificationJSON{
+    CONFIGURATION,
     CONSTANTS,
     VARIABLES,
     PER_PLAYER,
     PER_AUDIENCE,
     RULES
 };
+ 
 enum GameConfiguration {NAME,
     PLAYER_COUNT,
     AUDIENCE,
@@ -31,22 +39,29 @@ struct Config {
   nlohmann::json setup;
 };
 
+
 class GameParser{
   public:
-    GameParser();
-    void createGame();
-    void parseJSON(const nlohmann::json& gameConfiguration);
-    void validator(const nlohmann::json& gameConfiguration);
-
     enum StatusCode {
         VALID,
         INVALID
     };
-
-    StatusCode rulesValidation(const nlohmann::json& gameConfiguration);
+    GameParser();
+    void createGame();
+    
+    void configValidator(const nlohmann::json& configs);
+    StatusCode rulesValidation(const nlohmann::json& incomingRules);
     nlohmann::json fileToJson(const std::string& pathName);
+    void parseEntireGameJson(const nlohmann::json& gameJson);
+   
+    
+    void validator(const nlohmann::json& gameConfiguration);
+
+  
+  
     StatusCode validGameJson(std::string& );
-    StatusCode validateConfiguration(nlohmann::json&);
+    
+    StatusCode validateConfiguration(const nlohmann::json&);
     StatusCode validatePlayerNumber(nlohmann::json&);
 
     std::map<std::string, GameSpecificationJSON> jsonGameSpecification =
@@ -71,17 +86,28 @@ class GameParser{
 
 
   private:
+      void handleOtherFields(const std::string& nonRules);
+      void processRuleField(nlohmann::json::iterator singleRule);
+       
+      void parseRules(const nlohmann::json& rules);
+      void parseConfiguration(const nlohmann::json& gameConfiguration);
+      void setPerAudience(const nlohmann::json& perAudience);
+      void setPerPlayer(const nlohmann::json& perPlayer);
+      void setVariables(const nlohmann::json& variables);
+      void setConstants(const nlohmann::json& constants);
+      
       nlohmann::json constants;
       nlohmann::json variables;
       nlohmann::json perAudience;
+      nlohmann::json perPlayer;
       nlohmann::json gameConfiguration;
       std::string gameName;
       nlohmann::json rules;
       Config configSettings;
-      std::string CONFIGURATION = "configuration";
-      std::string PLAYER_COUNT = "player count";
-      std::string MIN = "min";
-      std::string MAX = "max";
-      std::string NUMBER = "number";
+      const std::string CONFIGURATION_STRING = "configuration";
+      const std::string PLAYER_COUNT = "player count";
+      const std::string MIN = "min";
+      const std::string MAX = "max";
+      const std::string NUMBER = "number";
 };
 #endif
