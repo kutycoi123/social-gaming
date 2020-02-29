@@ -1,18 +1,10 @@
+#ifndef GAMESERVER_H
+#define GAMESERVER_H
+
 #include "Server.h"
 #include "GameSessionManager.h"
 #include "GameServerConfiguration.h"
 #include "User.h"
-
-#include <deque>
-#include <queue>
-#include <iostream>
-#include <functional>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
-#include <unistd.h>
 
 struct GlobalMessage{
 	std::string message;
@@ -45,3 +37,5 @@ private:
     std::deque<networking::Message> getGlobalMessages();
 
 };
+
+#endif
