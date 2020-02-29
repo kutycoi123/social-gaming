@@ -1,6 +1,6 @@
 #include "include/GameSessionManager.h"
 
-GameSession GameSessionManager::createGameSession(User& owner){
+std::optional<GameSession> GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     sessionsList.insert(gameSession);
     invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
@@ -19,6 +19,17 @@ std::optional<GameSession> GameSessionManager::joinGameSession(std::reference_wr
     return gameSession;
 }
 
+bool GameSessionManager::leaveGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation){
+    auto gameSession = findGameSession(invitation);
+
+    if (gameSession && !gameSession.value().isGameStarted()) {
+        userRef.get().setCurrentGameSessionInvitationCode(std::string());
+        return true;
+    }
+
+    return false;
+}
+
 // Finds corresponding game session to provided Invitation code
 // Returns the GameSession if one is found or an empty optional if none is found 
 std::optional<GameSession> GameSessionManager::findGameSession(const Invitation& invitation){
@@ -30,20 +41,31 @@ std::optional<GameSession> GameSessionManager::findGameSession(const Invitation&
     return std::optional<GameSession>{gameSession};
 }
 
-void GameSessionManager::startGameInGameSession(const Invitation& invitation){
-    auto gameSession = findGameSession(invitation);
-    if (gameSession){
-        gameSession.value().startGame();
-    }
+std::optional<std::reference_wrapper<GameSession>> GameSessionManager::findGameSessionRef(const Invitation& invitation) {
+    auto iterator = invitationToGameSessionMap.find(invitation);
+    return std::optional<std::reference_wrapper<GameSession>>{iterator->second};
 }
 
-void GameSessionManager::endGameSession(const Invitation& invitation, UserList& users){
+bool GameSessionManager::startGameInGameSession(const Invitation& invitation){
+    auto gameSession = findGameSessionRef(invitation);
+    if (gameSession){
+        gameSession.value().get().startGame();
+        return true;
+    }
+
+    return false;
+}
+
+bool GameSessionManager::endGameSession(const Invitation& invitation, UserList& users){
     auto gameSession = findGameSession(invitation);
     if (gameSession){
         users.removeUsersFromGameSession(invitation);
         invitationToGameSessionMap.erase(invitation);
         sessionsList.erase(gameSession.value());
+        return true;
     }
+
+    return false;
 }
 
 size_t GameSessionManager::totalSessionCount(){
