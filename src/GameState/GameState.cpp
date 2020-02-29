@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include <optional>
+#include <boost/variant.hpp>
 
 GameState::GameState(GameSpecification::GameSpec& gameSpec) :
     gameSpec(gameSpec),
@@ -16,6 +17,15 @@ void GameState::startGame() {
 
 bool GameState::isGameStarted() const {
     return gameStarted;
+}
+
+// TODO: Find a better way to handle wrapping and unwrapping of boost::variants
+void GameState::setVariable(const std::string& key, boost::variant<std::string, int, bool, double> newValue) {
+    auto it = variablesMap.find(key);
+    if (it != variablesMap.end()) {
+        auto retrievedValue = boost::get<int>(newValue);
+        it->second.value = retrievedValue;
+    }
 }
 
 std::optional<std::reference_wrapper<GameSpecification::SpecValue>> GameState::getConstant(const std::string& key) {

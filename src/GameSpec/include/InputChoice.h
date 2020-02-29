@@ -31,7 +31,7 @@ namespace GameSpecification{
 			std::string getTimeout() const;
 			Message getPrompt() const;
 			SpecValue getChoices() const;
-			void process() override; 
+			void process(GameState&) override; 
 		private:
 			std::string to;	//represents field "to" in input choice rule
 			Message prompt; 

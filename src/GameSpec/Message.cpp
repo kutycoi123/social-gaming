@@ -13,7 +13,7 @@ std::string Message::getValue() const{
 	return messValue;
 }
 
-void Message::process(){
+void Message::process(GameState& gameState){
 	//TODO: Add code to process message rule
 }
 

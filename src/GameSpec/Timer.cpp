@@ -16,7 +16,7 @@ std::string  Timer::getMode() const{
 bool Timer::getFlag() const{
     return flag;
 }
-void Timer::process(){
+void Timer::process(GameState& gameState){
 
 
 }

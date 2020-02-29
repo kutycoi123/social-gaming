@@ -10,7 +10,7 @@ class GlobalMessage : public BaseRule{
 		GlobalMessage();
         GlobalMessage(const std::string& value);
         std::string getValue() const;
-		void process() override;
+		void process(GameState&) override;
     private:
         std::string value;
 };

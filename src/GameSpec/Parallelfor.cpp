@@ -15,6 +15,6 @@ std::string Parallelfor::getElement() const{
     return element;
 }
 
-void Parallelfor::process(){
+void Parallelfor::process(GameState& gameState){
 	//TODO: Add code to process Parallelfor
 }

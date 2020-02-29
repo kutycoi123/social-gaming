@@ -11,7 +11,7 @@ class Add : public BaseRule{
         Add(const std::string& to, const SpecValue& value);
         std::string getTo() const;
         SpecValue getValue() const;
-		void process() override;
+		void process(GameState&) override;
     private:
         std::string to;
         SpecValue value;

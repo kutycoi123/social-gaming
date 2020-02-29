@@ -14,6 +14,6 @@ std::string Sort::getKey() const{
     return key;
 }
 
-void Sort::process(){
+void Sort::process(GameState& gameState){
 
 }

@@ -10,7 +10,7 @@ std::string Reverse::getList() const{
     return list;
 }
 
-void Reverse::process() {
+void Reverse::process(GameState& gameState) {
 	//TODO: Add code to process reverse rule
 }
 

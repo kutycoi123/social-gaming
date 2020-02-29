@@ -12,7 +12,7 @@ class ForEach : public ControlStructRule{
         ForEach(const SpecValue& list, const std::string& element);
         SpecValue getList() const;
         std::string getElement() const;
-       	void process() override; 
+       	void process(GameState&) override; 
     private:
         //spec value take all value
         SpecValue list;

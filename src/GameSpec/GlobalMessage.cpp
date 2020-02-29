@@ -10,6 +10,6 @@ std::string GlobalMessage::getValue() const{
     return value;
 }
 
-void GlobalMessage::process(){
+void GlobalMessage::process(GameState& gameState){
     
 }

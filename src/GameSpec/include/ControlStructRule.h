@@ -13,7 +13,7 @@ namespace GameSpecification{
 			ControlStructRule(const std::string&);
 			std::vector<std::shared_ptr<BaseRule>> getSubRules() const;
 			void addSubRule(std::shared_ptr<BaseRule>);
-			virtual void process() = 0;
+			virtual void process(GameState&) = 0;
 		private:
 			std::vector<std::shared_ptr<BaseRule>> subRules;
 	};

@@ -11,7 +11,7 @@ class Scores : public BaseRule{
         Scores(const double score, const bool ascending);
         double getScore() const;
         bool getAscending() const;
-		void process() override;
+		void process(GameState&) override;
     private:
         double score;
         bool ascending;

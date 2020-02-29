@@ -23,7 +23,7 @@ using GameSpecification::Message;
 		return choices;
 	}	
 
-	void InputChoice::process(){
+	void InputChoice::process(GameState& gameState){
 		//TODO: add logic for this rule
 	}
 
