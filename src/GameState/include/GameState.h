@@ -22,6 +22,8 @@ public:
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getVariables(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerPlayerValue(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerAudienceValue(const std::string&);
+
+    void setVariable(const std::string&, boost::variant<std::string, int, bool, double>);
 private:
     GameSpecification::GameSpec& gameSpec;
     bool gameStarted;

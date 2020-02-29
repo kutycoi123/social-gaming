@@ -11,7 +11,8 @@ namespace GameSpecification{
 	};
 	
 	struct SpecValue{
-	    boost::variant<std::vector<std::string>, std::string, bool, double, NestedMap> value;//TODO: may need to add more types when more details are provided
+		// TODO: may need to add more types when more details are provided
+	    boost::variant<std::string, int, bool, double> value;
 	};
 	
 	class AbstractSpec{
