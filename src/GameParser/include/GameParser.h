@@ -40,7 +40,7 @@ class GameParser{
     void configValidator(const nlohmann::json& configs);
     StatusCode rulesValidation(const nlohmann::json& gameConfiguration);
     nlohmann::json fileToJson(const std::string& pathName);
-    void GameParser::parseEntireGameJson(const nlohmann::json& gameJson);
+    void parseEntireGameJson(const nlohmann::json& gameJson);
     const std::unordered_map<std::string, gameJsonFields> gameJsonMap{
         {
           {"configuration", gameJsonFields::CONFIGURATION},
@@ -54,8 +54,8 @@ class GameParser{
     };
 
   private:
-      void GameParser::handleOtherFields(const std::string& nonRules);
-      void GameParser::processRuleField(const std::string& singleRule);
+      void handleOtherFields(const std::string& nonRules);
+      void processRuleField(const std::string& singleRule);
       void dealWithNestedRules(const nlohmann::json& rules);
       void parseRules(const nlohmann::json& rules);
       void parseConfiguration(const nlohmann::json& gameConfiguration);

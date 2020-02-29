@@ -59,28 +59,47 @@ void GameParser::processRuleField(const std::string& singleRule) {
     switch(rule) {
 
       case GameSpecification::RuleType::ForEachType:
+        break;
       case GameSpecification::RuleType::LoopType:
+        break;
       case GameSpecification::RuleType::InparallelType:
+        break;
       case GameSpecification::RuleType::ParallelforType:
+        break;
       case GameSpecification::RuleType::SwitchType:
+        break;
       case GameSpecification::RuleType::WhenType:
+        break;
       case GameSpecification::RuleType::ExtendType:
+        break;
       case GameSpecification::RuleType::ReverseType:
+        break;
       case GameSpecification::RuleType::ShuffleType:
+        break;
       case GameSpecification::RuleType::SortType:
+        break;
       case GameSpecification::RuleType::DealType:
+        break;
       case GameSpecification::RuleType::DiscardType:
+        break;
       case GameSpecification::RuleType::TimerType:
+        break;
       case GameSpecification::RuleType::InputChoiceType:
+        break;
       case GameSpecification::RuleType::InputTextType:
+        break;
       case GameSpecification::RuleType::InputVoteType:
+        break;
       case GameSpecification::RuleType::ScoresType:
+        break;
+      default:
+        assert(false);
 
     }
 }
 
 void GameParser::parseRules(const nlohmann::json& rules) {
-    if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
+    //if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
         for (nlohmann::json::iterator field = rules.begin(); field != rules.end(); ++field) {
             //TODO: use debugger to check the fields
             if( field->find("rules")!= field->end() || field->find("cases")!= field->end()) {
@@ -93,7 +112,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
                 handleOtherFields(field.value());
             }
         }
-    }  
+    //}  
 }
 
 void GameParser::setConstants(const nlohmann::json& constants) {
