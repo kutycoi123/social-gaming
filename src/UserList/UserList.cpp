@@ -47,15 +47,14 @@ std::optional<std::reference_wrapper<User>> UserList::getUserRef(const UserId& i
 void UserList::removeUsersFromGameSession(const Invitation& code) {
     auto usersInSession = getUsersInSession(code);
     for (auto& user : usersInSession) {
-        user.get().setCurrentGameSessionInvitationCode(std::string());
+        user.get().setCurrentGameSessionInvitationCode(Invitation::createInvitationFromStringInput(std::string()));
     }
 }
 
 std::vector<std::reference_wrapper<User>> UserList::getUsersInSession(const Invitation& code) {
-    std::string codeString = code.toString();
     std::vector<std::reference_wrapper<User>> users;
     for (auto& entry : idToUserMap) {
-        if (entry.second.isUserInGameSession(codeString)) {
+        if (entry.second.isUserInGameSession(code)) {
             users.emplace_back(entry.second);
         }
     }
