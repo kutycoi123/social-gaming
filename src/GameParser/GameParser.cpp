@@ -1,6 +1,8 @@
-#include <iostream>
+#include <map>
 #include "include/GameParser.h"
+
 #include "BaseRule.h"
+
 
 GameParser::GameParser() {};
 
@@ -9,7 +11,7 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
     for (nlohmann::json::iterator fields = gameJson.begin(); fields != gameJson.end(); ++fields) {
         std::string jsonKey = fields.key();
-        auto enumKey = gameJsonMap.find(jsonKey);
+        auto enumKey = jsonGameSpecification.find(jsonKey);
         switch(enumKey->second) {
             case CONFIGURATION:
                 parseConfiguration(fields.value());
@@ -23,10 +25,10 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
             case VARIABLES:
                 setVariables(fields.value());
                 break;
-            case PERPLAYER:
+            case PER_PLAYER:
                 setPerPlayer(fields.value());
                 break;
-            case PERAUDIENCE:
+            case PER_AUDIENCE:
                 setPerAudience(fields.value());
                 break;
             default:
@@ -38,7 +40,7 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
      
 void GameParser::parseConfiguration(const nlohmann::json& configs) {
   // TODO: Refactor based on Hunars changes for validating game configurations
-    configValidator(configs);
+    validateConfiguration(configs);
     this->configSettings.name = configs["name"];
     this->configSettings.audience = configs["audience"];
     this->configSettings.maxPlayercount = configs["player count"]["max"];
@@ -97,34 +99,78 @@ void GameParser::setPerAudience(const nlohmann::json& perAudience) {
     this->perAudience = perAudience;
 }
 
-// TODO: Refactor based on Hunars changes for validating game configurations
-void GameParser::configValidator(const nlohmann::json& configs){
-    assert(configs.contains("configuration"));
-    assert(configs.contains("constants"));
-    assert(configs.contains("variables"));
-    assert(configs.contains("per-audience"));
-    assert(configs.contains("per-player"));
-    assert(configs.contains("rules"));
+ 
+GameParser::StatusCode GameParser::validGameJson(std::string& jsonstr){
+    nlohmann::json jsonObject = nlohmann::json::parse(jsonstr);
+    size_t jsonGameSpecificationMapSize = jsonGameSpecification.size();
+    if(jsonGameSpecificationMapSize!=jsonObject.size())
+    {
+        return StatusCode::INVALID;
+    }
+    auto i = std::find_if(jsonObject.items().begin(), jsonObject.items().end(), [&](auto& elem){
+        return (jsonGameSpecification.find(elem.key()) == jsonGameSpecification.end()) ;
+    });
+    if (i != jsonObject.items().end()){
+        return StatusCode::INVALID;
+    }
+    if(validateConfiguration(jsonObject) != StatusCode::VALID){
+        return StatusCode::INVALID;
+    }
+    return StatusCode::VALID;
 }
-// END-TODO
 
-StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
-  auto ruleMap = GameSpecification::BaseRule::rulemap;
+GameParser::StatusCode GameParser::validateConfiguration(const nlohmann::json& json){
+    nlohmann::json config = json.at(CONFIGURATIONString);
+    auto i = std::find_if(config.items().begin(), config.items().end(), [&](auto& elem){
+        return (jsonGameConfiguration.find(elem.key()) == jsonGameConfiguration.end()) ;
+    });
 
-  auto result = std::find_if(incomingRules.items().begin(), incomingRules.items().end(), [&](auto& elem){
-    return ruleMap.find(elem.key()) == ruleMap.end();
-  });
+    if (i != config.items().end()){
+        return StatusCode::INVALID;
+    }
+    if(validatePlayerNumber(config) != StatusCode::VALID){
+        return StatusCode::INVALID;
+    }
+    return StatusCode::VALID;
+}
 
-  if (result == incomingRules.items().end()) {
-    return StatusCode::INVALID;
-  }
 
-  return StatusCode::VALID;
+GameParser::StatusCode GameParser::validatePlayerNumber(nlohmann::json& jsonObject){
+    nlohmann::json player = jsonObject.at(PLAYER_COUNT);
+    nlohmann::json minPlayerCount = player.at(MIN);
+    nlohmann::json maxPlayerCount = player.at(MAX);
+
+    if(minPlayerCount.type_name() != NUMBER || maxPlayerCount.type_name() != NUMBER){
+        return StatusCode::INVALID;
+    }
+    if(maxPlayerCount < 0 || minPlayerCount < 0){
+        return StatusCode::INVALID;
+    }
+    if(maxPlayerCount < minPlayerCount){
+        return StatusCode::INVALID;
+    }
+
+    return StatusCode::VALID;
+}
+ 
+ 
+GameParser::StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
+    auto ruleMap = GameSpecification::BaseRule::rulemap;
+
+    auto result = std::find_if(incomingRules.items().begin(), incomingRules.items().end(), [&](auto& elem){
+        return ruleMap.find(elem.key()) == ruleMap.end();
+    });
+
+    if (result == incomingRules.items().end()) {
+        return StatusCode::INVALID;
+    }
+
+    return StatusCode::VALID;
 }
 
 nlohmann::json GameParser::fileToJson(const std::string& pathName) {
-  std::ifstream i(pathName);
-  nlohmann::json JsonConfig;
-  i >> JsonConfig;
-  return JsonConfig;
+    std::ifstream i(pathName);
+    nlohmann::json JsonConfig;
+    i >> JsonConfig;
+    return JsonConfig;
 }
