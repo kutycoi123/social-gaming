@@ -47,7 +47,7 @@ class GameParser{
     };
     GameParser();
     void createGame();
-    void parseJSON(const nlohmann::json& gameConfiguration);
+    
     void configValidator(const nlohmann::json& configs);
     StatusCode rulesValidation(const nlohmann::json& incomingRules);
     nlohmann::json fileToJson(const std::string& pathName);

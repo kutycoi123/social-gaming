@@ -92,7 +92,7 @@ void GameParser::setVariables(const nlohmann::json& variables) {
     this->variables = variables;
 }
 void GameParser::setPerPlayer(const nlohmann::json& perPlayer) {
-    this->perAudience = perPlayer;
+    this->perPlayer = perPlayer;
 }
 
 void GameParser::setPerAudience(const nlohmann::json& perAudience) {
