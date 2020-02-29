@@ -10,7 +10,7 @@ class Sort : public BaseRule{
         Sort(const std::string& list, const std::string& _key);
         std::string getList() const;
         std::string getKey() const;
-       	void process() override; 
+       	void process(GameState&) override; 
     private:
         std::string list;
         std::string key;

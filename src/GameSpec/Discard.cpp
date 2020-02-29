@@ -13,6 +13,6 @@ int Discard::getCount() const{
     return count;
 }
 
-void Discard::process() {
+void Discard::process(GameState& gameState) {
 	//TODO: Add code to process discard rule
 }

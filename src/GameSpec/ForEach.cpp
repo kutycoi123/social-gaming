@@ -18,6 +18,6 @@ std::string ForEach::getElement() const{
 
 
 
-void ForEach::process(){
+void ForEach::process(GameState& gameState){
 	//TODO: Add code to process foreach rule
 }

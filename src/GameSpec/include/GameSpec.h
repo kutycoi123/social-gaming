@@ -14,6 +14,11 @@
 
 #include "GameState.h"
 
+// TODO: Remove when circular dependency between GameState and GameSpec is resolved
+namespace GameSpecification {
+    class BaseRule;
+}
+
 using GameSpecification::AbstractSpec;
 using GameSpecification::BaseRule;
 using GameSpecification::GameGeneralConfig;

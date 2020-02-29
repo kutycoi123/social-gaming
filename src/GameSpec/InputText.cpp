@@ -23,6 +23,6 @@ double InputText::getTimeOut() const{
     return timeout;
 }
 
-void process(){
+void InputText::process(GameState& gameState){
        
 }

@@ -27,6 +27,6 @@ double InputVote::getTimeOut() const{
     return timeout;
 }
 
-void InputVote::process(){
+void InputVote::process(GameState& gameState){
 
 }

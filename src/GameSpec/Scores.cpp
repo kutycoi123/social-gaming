@@ -14,6 +14,6 @@ bool Scores::getAscending() const{
     return ascending;
 }
 
-void Scores::process(){
+void Scores::process(GameState& gameState){
     
 }

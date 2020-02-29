@@ -15,6 +15,6 @@ SpecValue Extend::getList() const{
     return list;
 }
 
-void Extend::process(){
+void Extend::process(GameState& gameState){
 	//TODO: Add code to process extend rule
 }

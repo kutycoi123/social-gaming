@@ -13,6 +13,6 @@ SpecValue Add::getValue() const{
     return value;
 }
 
-void Add::process(){
+void Add::process(GameState&){
 	//TODO: Add code to process add rule
 }

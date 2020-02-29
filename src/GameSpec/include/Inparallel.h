@@ -9,7 +9,7 @@ namespace GameSpecification{
 class Inparallel : public ControlStructRule{
     public:
         Inparallel();
-		void process() override;
+		void process(GameState&) override;
     private:
 };
 }

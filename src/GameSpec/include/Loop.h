@@ -12,7 +12,7 @@ class Loop : public ControlStructRule{
         Loop(const std::string& loopType, const std::string& failCondition);
         std::string getLoopType() const;
         std::string getFailCondition() const;
-		void process() override;
+		void process(GameState&) override;
     private:
         std::string loopType;
         std::string failCondition;

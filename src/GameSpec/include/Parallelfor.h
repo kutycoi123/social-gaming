@@ -12,7 +12,7 @@ class Parallelfor : public ControlStructRule{
         Parallelfor(std::vector<std::string> list, const std::string& element);
         std::vector<std::string> getList() const;
         std::string getElement() const;
-		void process() override;        
+		void process(GameState&) override;        
     private:
         std::vector<std::string> list;
         std::string element;

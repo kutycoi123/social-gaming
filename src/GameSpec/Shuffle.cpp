@@ -10,7 +10,7 @@ std::string Shuffle::getList() const{
     return list;
 }
 
-void Shuffle::process(){
+void Shuffle::process(GameState& gameState){
 	//TODO: Add code to process shuffle rule
 }
 
