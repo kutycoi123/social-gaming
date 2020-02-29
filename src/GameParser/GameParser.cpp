@@ -4,34 +4,120 @@
 
 GameParser::GameParser() {};
 
-void GameParser::parseJSON(const nlohmann::json& gameConfiguration) {
+
+void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
+
+    for (nlohmann::json::iterator fields = gameJson.begin(); fields != gameJson.end(); ++fields) {
+        std::string jsonKey = fields.key();
+        auto enumKey = gameJsonMap.find(jsonKey);
+        switch(enumKey->second) {
+            case CONFIGURATION:
+                parseConfiguration(fields.value());
+                break;
+            case RULES:
+                parseRules(fields.value());
+                break;
+            case CONSTANTS:
+                setConstants(fields.value());
+                break;
+            case VARIABLES:
+                setVariables(fields.value());
+                break;
+            case PERPLAYER:
+                setPerPlayer(fields.value());
+                break;
+            case PERAUDIENCE:
+                setPerAudience(fields.value());
+                break;
+            default:
+                assert(false);
+        }
+    }
+}
+
+     
+void GameParser::parseConfiguration(const nlohmann::json& configs) {
   // TODO: Refactor based on Hunars changes for validating game configurations
-  if(gameConfiguration.find("gameConfiguration") != gameConfiguration.end()) {
-    nlohmann::json configs = gameConfiguration["gameConfiguration"];
-
-    configSettings.name = configs["name"];
-    configSettings.audience = configs["audience"];
-    configSettings.maxPlayercount = configs["player count"]["max"];
-    configSettings.minPlayercount = configs["player count"]["in"];
-    configSettings.setup = configs["setup"];
-  }
-  constants = gameConfiguration["constants"];
-  variables = gameConfiguration["variables"];
-  perAudience = gameConfiguration["per-audience"];
+    configValidator(configs);
+    this->configSettings.name = configs["name"];
+    this->configSettings.audience = configs["audience"];
+    this->configSettings.maxPlayercount = configs["player count"]["max"];
+    this->configSettings.minPlayercount = configs["player count"]["in"];
+    this->configSettings.setup = configs["setup"];
+    //TODO: integrate with GeneralGameConfigClass
+}
   // END-TODO
+ 
+void GameParser::handleOtherFields(const std::string& nonRules) {
+  //TODO: create tables and classes for non rules in json. 
+}
 
-  if (GameParser::rulesValidation(gameConfiguration["rules"]) == StatusCode::VALID) {
-    rules = gameConfiguration["rules"];
-  }
+
+void GameParser::processRuleField(const std::string& singleRule) {
+    auto ruleMap = GameSpecification::BaseRule::rulemap;
+    GameSpecification::RuleType rule = ruleMap[singleRule];
+    switch(rule) {
+
+      case GameSpecification::RuleType::ForEachType:
+      case GameSpecification::RuleType::LoopType:
+      case GameSpecification::RuleType::InparallelType:
+      case GameSpecification::RuleType::ParallelforType:
+      case GameSpecification::RuleType::SwitchType:
+      case GameSpecification::RuleType::WhenType:
+      case GameSpecification::RuleType::ExtendType:
+      case GameSpecification::RuleType::ReverseType:
+      case GameSpecification::RuleType::ShuffleType:
+      case GameSpecification::RuleType::SortType:
+      case GameSpecification::RuleType::DealType:
+      case GameSpecification::RuleType::DiscardType:
+      case GameSpecification::RuleType::TimerType:
+      case GameSpecification::RuleType::InputChoiceType:
+      case GameSpecification::RuleType::InputTextType:
+      case GameSpecification::RuleType::InputVoteType:
+      case GameSpecification::RuleType::ScoresType:
+
+    }
+}
+
+void GameParser::parseRules(const nlohmann::json& rules) {
+    if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
+        for (nlohmann::json::iterator field = rules.begin(); field != rules.end(); ++field) {
+            //TODO: use debugger to check the fields
+            if( field->find("rules")!= field->end() || field->find("cases")!= field->end()) {
+                parseRules(field.value());
+
+            }else if (field->find("rule") != field->end()) {
+                processRuleField(field.value());
+                
+            }else {
+                handleOtherFields(field.value());
+            }
+        }
+    }  
+}
+
+void GameParser::setConstants(const nlohmann::json& constants) {
+    this->constants = constants;
+}
+void GameParser::setVariables(const nlohmann::json& variables) {
+    this->variables = variables;
+}
+void GameParser::setPerPlayer(const nlohmann::json& perPlayer) {
+    this->perAudience = perPlayer;
+}
+
+void GameParser::setPerAudience(const nlohmann::json& perAudience) {
+    this->perAudience = perAudience;
 }
 
 // TODO: Refactor based on Hunars changes for validating game configurations
-void GameParser::validator(const nlohmann::json& gameConfiguration){
-    assert(gameConfiguration.contains("gameConfiguration"));
-    assert(gameConfiguration.contains("constants"));
-    assert(gameConfiguration.contains("variables"));
-    assert(gameConfiguration.contains("per-audience"));
-    assert(gameConfiguration.contains("rules"));
+void GameParser::configValidator(const nlohmann::json& configs){
+    assert(configs.contains("configuration"));
+    assert(configs.contains("constants"));
+    assert(configs.contains("variables"));
+    assert(configs.contains("per-audience"));
+    assert(configs.contains("per-player"));
+    assert(configs.contains("rules"));
 }
 // END-TODO
 
