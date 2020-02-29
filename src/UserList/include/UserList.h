@@ -20,8 +20,8 @@ struct UserIdHash
 class UserList {
 public:
     UserList();
-    bool onConnect(const UserId& id);
-    bool onDisconnect(const UserId& id);
+    bool add(const UserId& id);
+    bool remove(const UserId& id);
 
     std::optional<User> getUser(const UserId& id);
     std::optional<std::reference_wrapper<User>> getUserRef(const UserId& id);

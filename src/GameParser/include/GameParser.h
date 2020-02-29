@@ -1,3 +1,6 @@
+
+#ifndef GAME_PARSER_H
+#define GAME_PARSER_H
  
 #include <list>
 #include <nlohmann/json.hpp>
@@ -9,8 +12,6 @@
 #include <unordered_map>
 #include <cassert>
 #include<map>
-#ifndef GAME_PARSER_H
-#define GAME_PARSER_H
 
 enum GameSpecificationJSON{
     CONFIGURATION,
@@ -98,6 +99,7 @@ class GameParser{
       nlohmann::json constants;
       nlohmann::json variables;
       nlohmann::json perAudience;
+      nlohmann::json perPlayer;
       nlohmann::json gameConfiguration;
       std::string gameName;
       nlohmann::json rules;

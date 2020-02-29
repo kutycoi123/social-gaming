@@ -2,6 +2,10 @@ add_library(user
     User.cpp
 )
 
+target_link_libraries(user
+  invitation
+)
+
 target_include_directories(user
   PUBLIC
     $<INSTALL_INTERFACE:include>

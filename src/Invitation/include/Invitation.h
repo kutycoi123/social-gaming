@@ -26,10 +26,10 @@ private:
     Invitation();
     explicit Invitation(const std::string& invitationCode);
     static unsigned long count;
-    const std::string SEPARATOR = "x";
-    const size_t MINIMUM_COUNT_STRING_LENGTH = 3;
-    const size_t RANDOM_CODE_LENGTH = 3;
-    const size_t MINIMUM_LENGTH = MINIMUM_COUNT_STRING_LENGTH + RANDOM_CODE_LENGTH + SEPARATOR.length();
+    std::string SEPARATOR = "x";
+    size_t MINIMUM_COUNT_STRING_LENGTH = 3;
+    size_t RANDOM_CODE_LENGTH = 3;
+    size_t MINIMUM_LENGTH = MINIMUM_COUNT_STRING_LENGTH + RANDOM_CODE_LENGTH + SEPARATOR.length();
     std::string invitationCode;
     std::string generateInvitationCode();
 };
