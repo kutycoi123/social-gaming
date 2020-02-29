@@ -8,7 +8,7 @@
 #ifndef GAME_PARSER_H
 #define GAME_PARSER_H
 
-enum GameSpecification{CONFIGURATION,
+enum GameSpecificationJSON{CONFIGURATION,
     CONSTANTS,
     VARIABLES,
     PER_PLAYER,
@@ -47,14 +47,14 @@ class GameParser{
     StatusCode validateConfiguration(nlohmann::json&);
     StatusCode validatePlayerNumber(nlohmann::json&);
 
-    std::map<std::string, GameSpecification> jsonGameSpecification =
+    std::map<std::string, GameSpecificationJSON> jsonGameSpecification =
             {
-                    {"configuration", GameSpecification::CONFIGURATION},
-                    {"constants", GameSpecification::CONSTANTS},
-                    {"variables", GameSpecification::VARIABLES},
-                    {"per-player", GameSpecification::PER_PLAYER},
-                    {"per-audience", GameSpecification::PER_AUDIENCE},
-                    {"rules", GameSpecification::RULES}
+                    {"configuration", GameSpecificationJSON::CONFIGURATION},
+                    {"constants", GameSpecificationJSON::CONSTANTS},
+                    {"variables", GameSpecificationJSON::VARIABLES},
+                    {"per-player", GameSpecificationJSON::PER_PLAYER},
+                    {"per-audience", GameSpecificationJSON::PER_AUDIENCE},
+                    {"rules", GameSpecificationJSON::RULES}
             };
 
     std::map<std::string, GameConfiguration> jsonGameConfiguration =
