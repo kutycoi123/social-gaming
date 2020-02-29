@@ -34,7 +34,7 @@ namespace GameSessionManager{
         static std::unordered_map<Invitation, GameSession, InvitationHash> invitationToGameSessionMap;
     }
 
-    std::optional<GameSession> createGameSession(User& owner);
+    GameSession createGameSession(User& owner);
 
     void mapUserIDToInvitation(uintptr_t id,const Invitation &invitation);
      

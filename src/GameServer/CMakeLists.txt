@@ -1,45 +1,25 @@
-add_executable(GameServer
-  GameServer.cpp
-)
+add_library(gameServer GameServer.cpp)
 
-set_target_properties(GameServer
+set_target_properties(gameServer
                       PROPERTIES
                       LINKER_LANGUAGE CXX
                       CXX_STANDARD 17
                       PREFIX ""
 )
 
-find_package(Threads REQUIRED)
+target_include_directories(gameServer
+  PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
-target_link_libraries(GameServer
+target_link_libraries(gameServer
   networking
-  session
   user
-  GameSpec
   
-  nlohmann_json::nlohmann_json
-  command
   GameSessionManager
-  gameParser
   GameServerConfiguration
   ${CMAKE_THREAD_LIBS_INIT}
 )
-
-add_custom_command(TARGET GameServer POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       ${CMAKE_CURRENT_SOURCE_DIR}/ServerProperties.json
-                       ${PROJECT_BINARY_DIR}/config/ServerProperties.json
-                   )
-
-add_custom_command(TARGET GameServer POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       ${CMAKE_CURRENT_SOURCE_DIR}/socialapp.html
-                       ${PROJECT_BINARY_DIR}/socialapp.html
-                   )
-
-install(FILES ServerProperties.json DESTINATION config)
-
-install(TARGETS GameServer
-  RUNTIME DESTINATION bin
-)
-

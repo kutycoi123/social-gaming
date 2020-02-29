@@ -3,7 +3,7 @@ add_library(user
 )
 
 target_link_libraries(user
-        invitation
+  invitation
 )
 
 target_include_directories(user

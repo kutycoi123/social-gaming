@@ -1,6 +1,6 @@
 #include "include/GameSessionManager.h"
 
-std::optional<GameSession> GameSessionManager::createGameSession(User& owner){
+GameSession GameSessionManager::createGameSession(User& owner){
     GameSession gameSession{owner};
     sessionsList.insert(gameSession);
     invitationToGameSessionMap.insert(std::make_pair(gameSession.getInvitationCode(), gameSession));
@@ -23,7 +23,7 @@ bool GameSessionManager::leaveGameSession(std::reference_wrapper<User>& userRef,
     auto gameSession = findGameSession(invitation);
 
     if (gameSession && !gameSession.value().isGameStarted()) {
-        userRef.get().setCurrentGameSessionInvitationCode(std::string());
+        userRef.get().setCurrentGameSessionInvitationCode(invitation);
         return true;
     }
 
