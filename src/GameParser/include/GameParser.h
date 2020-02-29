@@ -55,7 +55,7 @@ class GameParser{
 
   private:
       void handleOtherFields(const std::string& nonRules);
-      void processRuleField(const std::string& singleRule);
+      void processRuleField(nlohmann::json::iterator singleRule)
       void dealWithNestedRules(const nlohmann::json& rules);
       void parseRules(const nlohmann::json& rules);
       void parseConfiguration(const nlohmann::json& gameConfiguration);
@@ -63,6 +63,7 @@ class GameParser{
       void setPerPlayer(const nlohmann::json& perPlayer);
       void setVariables(const nlohmann::json& variables);
       void setConstants(const nlohmann::json& constants);
+      
       nlohmann::json constants;
       nlohmann::json variables;
       nlohmann::json perAudience;

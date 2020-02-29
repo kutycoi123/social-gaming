@@ -49,53 +49,21 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
   // END-TODO
  
 void GameParser::handleOtherFields(const std::string& nonRules) {
+    
   //TODO: create tables and classes for non rules in json. 
 }
 
 
-void GameParser::processRuleField(const std::string& singleRule) {
+void GameParser::processRuleField(nlohmann::json::iterator singleRule) {
     auto ruleMap = GameSpecification::BaseRule::rulemap;
-    GameSpecification::RuleType rule = ruleMap[singleRule];
-    switch(rule) {
-
-      case GameSpecification::RuleType::ForEachType:
-        break;
-      case GameSpecification::RuleType::LoopType:
-        break;
-      case GameSpecification::RuleType::InparallelType:
-        break;
-      case GameSpecification::RuleType::ParallelforType:
-        break;
-      case GameSpecification::RuleType::SwitchType:
-        break;
-      case GameSpecification::RuleType::WhenType:
-        break;
-      case GameSpecification::RuleType::ExtendType:
-        break;
-      case GameSpecification::RuleType::ReverseType:
-        break;
-      case GameSpecification::RuleType::ShuffleType:
-        break;
-      case GameSpecification::RuleType::SortType:
-        break;
-      case GameSpecification::RuleType::DealType:
-        break;
-      case GameSpecification::RuleType::DiscardType:
-        break;
-      case GameSpecification::RuleType::TimerType:
-        break;
-      case GameSpecification::RuleType::InputChoiceType:
-        break;
-      case GameSpecification::RuleType::InputTextType:
-        break;
-      case GameSpecification::RuleType::InputVoteType:
-        break;
-      case GameSpecification::RuleType::ScoresType:
-        break;
-      default:
-        assert(false);
-
+    GameSpecification::RuleType rule = ruleMap[singleRule->begin().key()];
+    for(nlohmann::json::iterator ruleFields = singleRule->begin();ruleFields!= singleRule->end(); ruleFields++ ) {
+        //TODO: handle Other fields. 
+        if(ruleFields->contains("rules")) {
+          parseRules(ruleFields.value());
+        }
     }
+     
 }
 
 void GameParser::parseRules(const nlohmann::json& rules) {
@@ -106,7 +74,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
                 parseRules(field.value());
 
             }else if (field->find("rule") != field->end()) {
-                processRuleField(field.value());
+                processRuleField(field);
                 
             }else {
                 handleOtherFields(field.value());
