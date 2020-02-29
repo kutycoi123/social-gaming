@@ -104,10 +104,10 @@ class GameParser{
       std::string gameName;
       nlohmann::json rules;
       Config configSettings;
-      std::string CONFIGURATIONString = "configuration";
-      std::string PLAYER_COUNT = "player count";
-      std::string MIN = "min";
-      std::string MAX = "max";
-      std::string NUMBER = "number";
+      const std::string CONFIGURATION_STRING = "configuration";
+      const std::string PLAYER_COUNT = "player count";
+      const std::string MIN = "min";
+      const std::string MAX = "max";
+      const std::string NUMBER = "number";
 };
 #endif
