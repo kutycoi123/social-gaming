@@ -16,6 +16,6 @@ std::string Loop::getFailCondition() const{
     return failCondition;
 }
 
-void Loop::process(){
+void Loop::process(GameState& gameState){
 	//TODO: add code to process loop rule
 }

@@ -20,7 +20,7 @@ int Deal::getCount() const{
     return count;
 }
 
-void Deal::process() {
+void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule
 }
 

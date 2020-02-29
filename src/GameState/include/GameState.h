@@ -3,6 +3,16 @@
 
 #include "GameSpec.h"
 
+// Forward declaration required due to circular reference between GameSpec and GameState
+// TODO: Remove when circular dependency between GameState and GameSpec is resolved
+// https://stackoverflow.com/questions/2133250/x-does-not-name-a-type-error-in-c/2133260
+// https://stackoverflow.com/questions/19001700/how-to-forward-declare-a-class-which-is-in-a-namespace
+namespace GameSpecification {
+    class AbstractSpec;
+    class GameSpec;
+    class BaseRule;
+}
+
 class GameState {
 public:
     explicit GameState(GameSpecification::GameSpec&);
@@ -12,6 +22,8 @@ public:
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getVariables(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerPlayerValue(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerAudienceValue(const std::string&);
+
+    void setVariable(const std::string&, boost::variant<std::string, int, bool, double>);
 private:
     GameSpecification::GameSpec& gameSpec;
     bool gameStarted;

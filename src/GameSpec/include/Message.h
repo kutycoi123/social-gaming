@@ -22,7 +22,7 @@ namespace GameSpecification{
 						: to(to), messValue(val){}
 			SpecValue getTo() const;
 			std::string getValue() const;	
-			void process() override;
+			void process(GameState&) override;
 		private:
 			SpecValue to;
 			std::string	messValue;

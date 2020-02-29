@@ -10,7 +10,7 @@ class Discard : public BaseRule{
         Discard(const std::string& from, const int count);
         std::string getFrom() const;
         int getCount() const;
-       	void process() override; 
+       	void process(GameState&) override; 
     private:
         std::string from;
         int count;

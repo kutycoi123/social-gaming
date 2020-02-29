@@ -5,6 +5,13 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+
+#include "GameState.h"
+
+// Forward dependancy declaration
+// TODO: Remove when circular dependency between GameState and GameSpec is resolved
+class GameState;
+
 namespace GameSpecification{
 enum RuleType{
 	ForEachType,LoopType,InparallelType,ParallelforType,
@@ -23,7 +30,7 @@ enum RuleType{
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
 			void setRuleName(const std::string&);
-			virtual void process() = 0;
+			virtual void process(GameState& gameState) = 0;
 
 		private:
 			RuleType ruleType;

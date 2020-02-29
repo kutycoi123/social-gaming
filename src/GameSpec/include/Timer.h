@@ -11,7 +11,7 @@ class Timer : public BaseRule{
         double getDuration() const;
         std::string getMode() const;
         bool getFlag() const;
-       	void process() override; 
+       	void process(GameState&) override; 
     private:
         double duration;
         std::string mode;

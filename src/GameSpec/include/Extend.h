@@ -11,7 +11,7 @@ class Extend : public BaseRule{
         Extend(const std::string& target, const SpecValue& list);
         std::string getTarget() const;
         SpecValue getList() const;
-       	void process() override; 
+       	void process(GameState&) override; 
     private:
         std::string target;
         SpecValue list;

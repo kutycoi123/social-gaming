@@ -12,7 +12,7 @@ class Deal : public BaseRule{
         std::string getFrom() const;
         SpecValue getTo() const;
         int getCount() const;
-		void process() override;
+		void process(GameState&) override;
     private:
         std::string from;
         SpecValue to;
