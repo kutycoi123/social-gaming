@@ -11,6 +11,8 @@ bool GameSessionList::joinGameSession(std::reference_wrapper<User>& userRef, con
     //if session exists and the game has not started, then user can join
     if(gameSession != sessionList.end() && !gameSession->isGameStarted()){
         userRef.get().setCurrentGameSessionInvitationCode(invitation);
+        gameSession->addPlayer(userRef.get());
+        addToUserInviteCodeMaps(userRef.get().getUserId(), invitation);
         return true;
     }
 
@@ -22,6 +24,8 @@ bool GameSessionList::leaveGameSession(std::reference_wrapper<User>& userRef, co
 
     if(gameSession != sessionList.end() && !gameSession->isGameStarted()){
         userRef.get().clearInvitation();
+        gameSession->removePlayer(userRef.get());
+        removeFromUserInviteCodeMaps(userRef.get().getUserId(), invitation);
         return true;
     }
 
@@ -42,10 +46,45 @@ void GameSessionList::destroyGameSession(const Invitation& invitation) noexcept{
     }
 }
 
-std::deque<networking::Message> GameSessionList::getAllSessionMessages() const noexcept{
-    return {};
+void GameSessionList::addMessages(const std::list<Message> messages) noexcept{
+    messageBuffer.insert(messageBuffer.end(), messages.begin(), messages.end());
 }
 
+std::list<Message> GameSessionList::updateAndGetAllMessages() noexcept{
+
+    for(auto& message : messageBuffer){
+        addMessageToCorrectSession(message);
+    }
+
+    messageBuffer.clear();
+
+    std::list<std::pair<UserId, std::string>> messages {};
+
+    for(auto& session : sessionList){
+        auto message = session.updateAndGetAllMessages();
+        messages.insert(messages.end(), message.begin(), message.end());
+    }
+    
+    std::list<Message> result {};
+    
+    std::transform(messages.begin(), messages.end(), std::back_inserter(result), [](std::pair<UserId, std::string>& message){
+        return Message{User(message.first), message.second};
+    });
+
+    return result;
+}
+
+void GameSessionList::addMessageToCorrectSession(const Message& message) noexcept{
+	auto userIterator =  user2InviteCode.find(message.user.getUserId());
+
+	if(userIterator != user2InviteCode.end()) {
+        auto sessionIterator = findGameSession(userIterator->second);
+                            
+        if(sessionIterator != sessionList.end()) {
+            sessionIterator->addMessages(message.payload);
+        }
+    }
+}
 
 bool GameSessionList::startGameInGameSession(const Invitation& invitation){
     auto gameSession = findGameSession(invitation);
@@ -60,7 +99,7 @@ bool GameSessionList::startGameInGameSession(const Invitation& invitation){
 
 // Finds corresponding game session to provided Invitation code
 // Returns the GameSession if one is found or an empty optional if none is found 
-std::list<GameSession>::iterator GameSessionList::findGameSession(const Invitation& invitation){
+std::list<GameSession>::iterator GameSessionList::findGameSession(const Invitation& invitation) noexcept{
     return std::find_if(sessionList.begin(), sessionList.end(), [invitation](const GameSession& session){
         return session.getInvitationCode().toString() == invitation.toString();
     });
@@ -97,8 +136,7 @@ void GameSessionList::removeFromUserInviteCodeMaps(const UserId& id, const Invit
     }
     else {
         userList->second.erase(std::find(userList->second.begin(), userList->second.end(), id));
-    }
-    
+    }  
 
 }
     

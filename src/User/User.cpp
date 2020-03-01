@@ -34,8 +34,8 @@ void User::clearInvitation() noexcept {
     currentGameSessionInvitation = std::nullopt;
 }
 
-bool User::isUserInGameSession(const Invitation& invite) const {
-    return currentGameSessionInvitation.has_value() && currentGameSessionInvitation == invite;
+bool User::isUserInGameSession() const {
+    return currentGameSessionInvitation.has_value();
 }
 
 std::string User::getUserNameValue() const {

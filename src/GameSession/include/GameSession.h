@@ -6,34 +6,41 @@
 #include <list>
 #include "Invitation.h"
 #include "GameState.h"
-#include "User.h"
-#include <queue>
+#include "UserList.h"
+#include <list>
 #include <GameSpec.h>
 
 class GameSession {
-    
-public:
-    explicit GameSession(User& owner);
-    Invitation getInvitationCode() const;
-    bool isGameStarted() const;
-    void startGame();
-    void clearMessages();
+    public:
+        explicit GameSession(User& owner);
 
-    bool operator==(const GameSession& gameSession ) const {
-        return invitationCode == gameSession.invitationCode;
-    }
+        bool operator==(const GameSession& gameSession ) const {
+            return invitationCode == gameSession.invitationCode;
+        }
 
-    void addMessages(const std::string &message);
+        Invitation getInvitationCode() const;
+        bool isGameStarted() const;
+        void startGame();
 
-    std::queue<std::string> getMessages();
-    bool doesUserOwnGame(const User& user) const;
+        bool isOwner(const User& user) const;
 
-private:
-    std::queue<std::string> messages;
-    Invitation invitationCode;
-    GameSpecification::GameSpec gameSpec;
-    GameState gameState;
-    User& owner;
+        void addMessages(const std::string &message) noexcept;
+
+        std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
+
+        void addPlayer(const User& player) noexcept;
+        void removePlayer(const User& player) noexcept;
+
+    private:
+        std::list<std::string> messages;
+        Invitation invitationCode;
+        GameSpecification::GameSpec gameSpec;
+        GameState gameState;
+        User& owner;
+        UserList playerList;
+
+        void clearMessages() noexcept;
+        std::list<std::pair<UserId, std::string>> getLobbyMessages() noexcept;
 };
 
 #endif

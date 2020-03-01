@@ -8,7 +8,10 @@
 #include <sstream>
 #include <algorithm>
 
-#include <Server.h> //for networking::Message
+struct Message {
+    User user;
+    std::string payload;
+};
 
 class GameSessionList {
     public:
@@ -22,12 +25,9 @@ class GameSessionList {
 
         bool startGameInGameSession(const Invitation& invitation);
 
-        //bool processGameInGameSession(const Invitation& invitation) noexcept;
-
-        std::deque<networking::Message> getAllSessionMessages() const noexcept;
-
-        size_t totalSessionCount() const noexcept;
-
+        void addMessages(const std::list<Message> messages) noexcept;
+        std::list<Message> updateAndGetAllMessages() noexcept;
+    
     private:
 	    struct InvitationHash {
             std::size_t operator()(const Invitation& invitation) const {
@@ -46,12 +46,14 @@ class GameSessionList {
         };
 
         std::list<GameSession> sessionList;
+        std::list<Message> messageBuffer;
 
         std::unordered_map<UserId, Invitation, UserIdHash> user2InviteCode;
         std::unordered_map<Invitation, std::vector<UserId>, InvitationHash> inviteCode2User;
 
-        std::list<GameSession>::iterator findGameSession(const Invitation& invitation);
+
+        std::list<GameSession>::iterator findGameSession(const Invitation&) noexcept;
         void addToUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
         void removeFromUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
-
+        void addMessageToCorrectSession(const Message&) noexcept;
 };

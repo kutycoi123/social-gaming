@@ -33,7 +33,7 @@ public:
     void setCurrentGameSessionInvitationCode(const Invitation& invite);
     void clearInvitation() noexcept;
 
-    [[nodiscard]] bool isUserInGameSession(const Invitation& invite) const;
+    [[nodiscard]] bool isUserInGameSession() const;
 
     [[nodiscard]] std::string getUserNameValue() const;
     [[nodiscard]] UserId getUserId() const;

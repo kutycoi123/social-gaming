@@ -54,7 +54,7 @@ void UserList::removeUsersFromGameSession(const Invitation& code) {
 std::vector<std::reference_wrapper<User>> UserList::getUsersInSession(const Invitation& code) {
     std::vector<std::reference_wrapper<User>> users;
     for (auto& entry : idToUserMap) {
-        if (entry.second.isUserInGameSession(code)) {
+        if (entry.second.isUserInGameSession() && entry.second.getCurrentGameSessionInvitation() == code) {
             users.emplace_back(entry.second);
         }
     }
