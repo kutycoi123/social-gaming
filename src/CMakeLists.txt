@@ -2,7 +2,7 @@ add_subdirectory(Invitation)
 add_subdirectory(User)
 add_subdirectory(GameState)
 add_subdirectory(GameSpec)
-add_subdirectory(UserList)
+add_subdirectory(UserManager)
 add_subdirectory(GameSession)
 add_subdirectory(GameSessionList)
 add_subdirectory(GameServerConfiguration)
@@ -28,7 +28,7 @@ target_link_libraries(GameServer
   ${CMAKE_THREAD_LIBS_INIT}
   
   gameServer
-  GameServerConfiguration
+  gameServerConfiguration
 )
 
 add_custom_command(TARGET GameServer POST_BUILD

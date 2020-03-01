@@ -15,10 +15,12 @@ target_include_directories(gameServer
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+find_package(Threads REQUIRED)
+
 target_link_libraries(gameServer
-  networking
-  user
-  gameSessionList
-  GameServerConfiguration
   ${CMAKE_THREAD_LIBS_INIT}
+
+  networking
+  gameSessionList
+  gameServerConfiguration
 )

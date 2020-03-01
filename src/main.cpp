@@ -1,6 +1,4 @@
-#include <nlohmann/json.hpp>
 #include "GameServer.h"
-
 #include "GameServerConfiguration.h"
 
 #include <atomic>
@@ -50,14 +48,10 @@ int main(int argc, char* argv[]){
 }
 
 static void setupServers(int argumentCount, char* argumentVector[]){
-	//Setting up Configurations
 	std::string configurationFilePath = getConfigurationFilePath(argumentCount, argumentVector);
-	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
-	nlohmann::json configuration = nlohmann::json::parse(configurationFile);
-
-	//Setting up Server
-	std::unique_ptr<GameServerConfiguration> serverConfiguration(new GameServerConfiguration(configuration));
-	std::unique_ptr<UserList> users(new UserList());
+	std::unique_ptr<GameServerConfiguration> serverConfiguration(new GameServerConfiguration(configurationFilePath));
+	
+	std::unique_ptr<UserManager> users(new UserManager());
 
 	unsigned short port = serverConfiguration->getPort();
 	std::string htmlContents = serverConfiguration->getHtmlFileContent();
@@ -66,6 +60,10 @@ static void setupServers(int argumentCount, char* argumentVector[]){
 	std::unique_ptr<GameServer> mainServer(new GameServer(server, serverConfiguration, users));
 
 	servers.push_back(std::move(mainServer));
+
+	std::cout << "Setup Server on Port: " << port << '\n';
+
+	//if there are multiple servers, repeat
 }
 
 static std::string getConfigurationFilePath(int argumentCount, char* argumentVector[]){
@@ -93,18 +91,14 @@ static void startServer(GameServer& server){
 static void OnConnect(networking::Connection c) {
 	std::cout << "New connection found: " << c.id << "\n";
 
-	UserId id(c.id);
-
 	//if multiple servers, need to find correct server first
-	servers.at(0)->addUser(id);
+	servers.at(0)->addUser(c);
 }
 
 //teacher provided functions
 static void OnDisconnect(networking::Connection c) {
 	std::cout << "Connection lost: " << c.id << "\n";
-	
-	UserId id(c.id);
-	
+		
 	//if multiple servers, need to find correct server first
-	servers.at(0)->removeUser(id);
+	servers.at(0)->removeUser(c);
 }

@@ -8,15 +8,8 @@
 
 #include <unistd.h> //for json verification
 #include <fstream> //for json verification
-
+#include <string> //for file paths
 #include <iostream> //for error logging
-
-/*
-#include <vector>
-#include <iterator>
-#include <algorithm>
-#include <iostream>
-*/
 
 namespace ConfigurationCommandTags{
     const std::string PORT = "Default Port";
@@ -47,7 +40,7 @@ class GameServerConfiguration{
             LAST,
         };
 
-        GameServerConfiguration(const nlohmann::json&);
+        GameServerConfiguration(const std::string&);
 
         unsigned short getPort() const noexcept;
         std::string getHtmlFileContent() const noexcept;

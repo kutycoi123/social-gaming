@@ -5,35 +5,33 @@ GameSessionList::GameSessionList() :
     user2InviteCode({}),
     inviteCode2User({}) {}
 
-bool GameSessionList::joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation) noexcept{
+bool GameSessionList::joinGameSession(std::weak_ptr<User>& userRef, const Invitation& invitation) noexcept{
     auto gameSession = findGameSession(invitation);
 
     //if session exists and the game has not started, then user can join
     if(gameSession != sessionList.end() && !gameSession->isGameStarted()){
-        userRef.get().setCurrentGameSessionInvitationCode(invitation);
-        gameSession->addPlayer(userRef.get());
-        addToUserInviteCodeMaps(userRef.get().getUserId(), invitation);
+        gameSession->addPlayer(userRef);
+        addToUserInviteCodeMaps(userRef.lock()->getUserId(), invitation);
         return true;
     }
 
     return false;
 }
 
-bool GameSessionList::leaveGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation) noexcept{
+bool GameSessionList::leaveGameSession(std::weak_ptr<User>& userRef, const Invitation& invitation) noexcept{
     auto gameSession = findGameSession(invitation);
 
     if(gameSession != sessionList.end() && !gameSession->isGameStarted()){
-        userRef.get().clearInvitation();
-        gameSession->removePlayer(userRef.get());
-        removeFromUserInviteCodeMaps(userRef.get().getUserId(), invitation);
+        gameSession->removePlayer(userRef);
+        removeFromUserInviteCodeMaps(userRef.lock()->getUserId(), invitation);
         return true;
     }
 
     return false;
 }
 
-Invitation GameSessionList::createGameSession(User& owner) noexcept{
-    GameSession gameSession{owner};
+Invitation GameSessionList::createGameSession(std::weak_ptr<User>& owner) noexcept{
+    GameSession gameSession(owner);
     sessionList.push_back(gameSession);
     return gameSession.getInvitationCode();
 }
@@ -104,6 +102,17 @@ std::list<GameSession>::iterator GameSessionList::findGameSession(const Invitati
         return session.getInvitationCode().toString() == invitation.toString();
     });
 }
+
+bool GameSessionList::isUserInSession(const std::weak_ptr<User>& user) const noexcept{
+    try{
+        auto invite = user2InviteCode.at(user.lock()->getUserId());
+        return true;
+    }
+    catch (std::out_of_range){
+        return false;
+    }
+}
+
 
 void GameSessionList::addToUserInviteCodeMaps(const UserId& id, const Invitation& invite) noexcept{
     user2InviteCode.insert(std::make_pair(id, invite));

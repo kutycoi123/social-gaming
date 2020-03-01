@@ -1,4 +1,4 @@
-add_library(GameSpec
+add_library(gameSpec
 			GameSpec.cpp
 			GameGeneralConfig.cpp
 			Add.cpp
@@ -23,14 +23,14 @@ add_library(GameSpec
 			GlobalMessage.cpp
 )
 
-set_target_properties(GameSpec
+set_target_properties(gameSpec
                       PROPERTIES
                       LINKER_LANGUAGE CXX
                       CXX_STANDARD 17
                       PREFIX ""
 )
 
-target_include_directories(GameSpec 
+target_include_directories(gameSpec 
 	PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>
@@ -38,7 +38,7 @@ target_include_directories(GameSpec
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(GameSpec
-	GameState
+target_link_libraries(gameSpec
+	gameState
 	nlohmann_json::nlohmann_json
 )

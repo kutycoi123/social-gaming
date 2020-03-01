@@ -4,15 +4,18 @@
 #include <iostream> 
 #include <string>
 #include <list>
-#include "Invitation.h"
 #include "GameState.h"
-#include "UserList.h"
+#include "UserManager.h"
+#include "Invitation.h"
 #include <list>
-#include <GameSpec.h>
 
 class GameSession {
+    struct UserList{
+        std::list<std::weak_ptr<User>> users;
+    };
+
     public:
-        explicit GameSession(User& owner);
+        explicit GameSession(std::weak_ptr<User>& owner);
 
         bool operator==(const GameSession& gameSession ) const {
             return invitationCode == gameSession.invitationCode;
@@ -22,22 +25,22 @@ class GameSession {
         bool isGameStarted() const;
         void startGame();
 
-        bool isOwner(const User& user) const;
+        bool isOwner(const UserId& user) const;
 
         void addMessages(const std::string &message) noexcept;
 
         std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
 
-        void addPlayer(const User& player) noexcept;
-        void removePlayer(const User& player) noexcept;
-
+        void addPlayer(const std::weak_ptr<User>& player) noexcept;
+        void removePlayer(const std::weak_ptr<User>& player) noexcept;
+        
     private:
         std::list<std::string> messages;
         Invitation invitationCode;
         GameSpecification::GameSpec gameSpec;
         GameState gameState;
-        User& owner;
-        UserList playerList;
+        std::weak_ptr<User>& owner;
+        GameSession::UserList playerList;
 
         void clearMessages() noexcept;
         std::list<std::pair<UserId, std::string>> getLobbyMessages() noexcept;

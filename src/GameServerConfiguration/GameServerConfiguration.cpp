@@ -1,7 +1,9 @@
 #include "GameServerConfiguration.h"
 
-GameServerConfiguration::GameServerConfiguration(const nlohmann::json &configurationFile){
-    configureServer(configurationFile);
+GameServerConfiguration::GameServerConfiguration(const std::string &configurationFilePath){
+	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
+	nlohmann::json configuration = nlohmann::json::parse(configurationFile);
+    configureServer(configuration);
 }
 
 unsigned short GameServerConfiguration::getPort() const noexcept{

@@ -1,6 +1,6 @@
 #include "GameSession.h"
 
-GameSession::GameSession(User& owner) : 
+GameSession::GameSession(std::weak_ptr<User>& owner) : 
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
     gameSpec{},
@@ -12,8 +12,8 @@ Invitation GameSession::getInvitationCode() const {
     return invitationCode;
 }
 
-bool GameSession::isOwner(const User& user) const {
-    return (user == owner);
+bool GameSession::isOwner(const UserId& user) const {
+    return (user == owner.lock()->getUserId());
 }
 
 bool GameSession::isGameStarted() const {
@@ -33,14 +33,10 @@ std::list<std::pair<UserId, std::string>> GameSession::getLobbyMessages() noexce
 
     for(auto& message : messages){
         
-        auto playerListIterator = playerList.begin();
-
-        while(playerListIterator != playerList.end()){
-            result.push_back(std::make_pair(playerListIterator->first, message));
-            playerListIterator++;
+       for(auto& player : playerList.users){
+            result.push_back(std::make_pair(player.lock()->getUserId(), message));
         }
-    }
-    
+    }    
 
     return result;
 }
@@ -60,9 +56,17 @@ std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages()
     return messages;
 }
 
-void GameSession::addPlayer(const User& player) noexcept{
-    playerList.add(player.getUserId());
+void GameSession::addPlayer(const std::weak_ptr<User>& player) noexcept{
+    playerList.users.push_back(player);
 }
-void GameSession::removePlayer(const User& player) noexcept{
-    playerList.remove(player.getUserId());
+
+void GameSession::removePlayer(const std::weak_ptr<User>& player) noexcept{
+    
+    auto playerIterator = std::find_if(playerList.users.begin(), playerList.users.end(), [player](std::weak_ptr<User> listMember){
+        return player.lock()->getUserId() == listMember.lock()->getUserId();
+    });
+    
+    if(playerIterator != playerList.users.end()){
+        playerList.users.erase(playerIterator);
+    }
 }

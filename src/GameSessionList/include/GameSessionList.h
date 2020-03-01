@@ -1,7 +1,6 @@
 #include "GameSession.h"
 #include "Invitation.h"
-#include "User.h"
-#include "UserList.h"
+#include "UserManager.h"
 #include <unordered_map>
 #include <list>
 #include <optional>
@@ -17,16 +16,18 @@ class GameSessionList {
     public:
         GameSessionList();
         
-        bool joinGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation) noexcept;
-        bool leaveGameSession(std::reference_wrapper<User>& userRef, const Invitation& invitation) noexcept;
+        bool joinGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
+        bool leaveGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         
-        Invitation createGameSession(User& owner) noexcept;
-        void destroyGameSession(const Invitation& invitation) noexcept;
+        Invitation createGameSession(std::weak_ptr<User>&) noexcept;
+        void destroyGameSession(const Invitation&) noexcept;
 
-        bool startGameInGameSession(const Invitation& invitation);
+        bool startGameInGameSession(const Invitation&);
 
-        void addMessages(const std::list<Message> messages) noexcept;
+        void addMessages(const std::list<Message>) noexcept;
         std::list<Message> updateAndGetAllMessages() noexcept;
+
+        bool isUserInSession(const std::weak_ptr<User>&) const noexcept;
     
     private:
 	    struct InvitationHash {

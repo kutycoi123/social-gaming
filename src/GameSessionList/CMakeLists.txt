@@ -19,7 +19,7 @@ target_include_directories(gameSessionList
 )
 
 target_link_libraries (gameSessionList
-    networking
-    session
-    userlist
+    invitation
+    gameSession
+    userManager
 )

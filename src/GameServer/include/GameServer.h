@@ -4,7 +4,7 @@
 #include "Server.h"
 #include "GameSessionList.h"
 #include "GameServerConfiguration.h"
-#include "User.h"
+#include "list"
 
 struct GlobalMessage{
 	std::string message;
@@ -14,16 +14,16 @@ struct GlobalMessage{
 
 class GameServer{
 public:
-    GameServer(std::unique_ptr<networking::Server>&, std::unique_ptr<GameServerConfiguration>&, std::unique_ptr<UserList>&);
+    GameServer(std::unique_ptr<networking::Server>&, std::unique_ptr<GameServerConfiguration>&, std::unique_ptr<UserManager>&);
     void tick();
     void setGlobalMessage(const GlobalMessage& messages) noexcept;
-    void addUser(const UserId&) noexcept;
-    void removeUser(const UserId&) noexcept;
+    void addUser(const networking::Connection&) noexcept;
+    void removeUser(const networking::Connection&) noexcept;
 
 private:
     std::unique_ptr<networking::Server> server;
     std::unique_ptr<GameServerConfiguration> serverConfiguration;
-    std::unique_ptr<UserList> users;
+    std::unique_ptr<UserManager> users;
     
     GlobalMessage globalMessage;
     GameSessionList sessionList;
@@ -33,8 +33,8 @@ private:
     std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
     //helper methods
-    std::pair<bool, Invitation> createSession(networking::Message, User);
-    bool joinSession(const std::string&, User);
+    std::pair<bool, Invitation> createSession(networking::Message, std::weak_ptr<User>&);
+    bool joinSession(const std::string&, std::weak_ptr<User>&);
     void AddMessageToCorrectSession(const uintptr_t, const std::string&);
     std::deque<networking::Message> getGlobalMessages();
 
