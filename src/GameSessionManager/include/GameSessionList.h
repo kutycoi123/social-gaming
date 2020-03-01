@@ -3,7 +3,7 @@
 #include "User.h"
 #include "UserList.h"
 #include <unordered_map>
-#include <vector>
+#include <list>
 #include <optional>
 #include <sstream>
 #include <algorithm>
@@ -45,12 +45,12 @@ class GameSessionList {
             }
         };
 
-        std::vector<GameSession> sessionList;
+        std::list<GameSession> sessionList;
 
         std::unordered_map<UserId, Invitation, UserIdHash> user2InviteCode;
         std::unordered_map<Invitation, std::vector<UserId>, InvitationHash> inviteCode2User;
 
-        std::vector<GameSession>::iterator findGameSession(const Invitation& invitation);
+        std::list<GameSession>::iterator findGameSession(const Invitation& invitation);
         void addToUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
         void removeFromUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
 

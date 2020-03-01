@@ -38,7 +38,7 @@ void GameSessionList::destroyGameSession(const Invitation& invitation) noexcept{
     auto session = findGameSession(invitation);
     
     if (session != sessionList.end()){
-        //sessionList.erase(session);
+        sessionList.erase(session);
     }
 }
 
@@ -60,7 +60,7 @@ bool GameSessionList::startGameInGameSession(const Invitation& invitation){
 
 // Finds corresponding game session to provided Invitation code
 // Returns the GameSession if one is found or an empty optional if none is found 
-std::vector<GameSession>::iterator GameSessionList::findGameSession(const Invitation& invitation){
+std::list<GameSession>::iterator GameSessionList::findGameSession(const Invitation& invitation){
     return std::find_if(sessionList.begin(), sessionList.end(), [invitation](const GameSession& session){
         return session.getInvitationCode().toString() == invitation.toString();
     });
