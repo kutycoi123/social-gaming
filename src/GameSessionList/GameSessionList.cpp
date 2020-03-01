@@ -30,13 +30,13 @@ bool GameSessionList::leaveGameSession(std::weak_ptr<User>& userRef, const Invit
     return false;
 }
 
-Invitation GameSessionList::createGameSession(std::weak_ptr<User>& owner) noexcept{
+Invitation GameSessionList::commenceGameSession(std::weak_ptr<User>& owner) noexcept{
     GameSession gameSession(owner);
     sessionList.push_back(gameSession);
     return gameSession.getInvitationCode();
 }
 
-void GameSessionList::destroyGameSession(const Invitation& invitation) noexcept{
+void GameSessionList::concludeGameSession(const Invitation& invitation) noexcept{
     auto session = findGameSession(invitation);
     
     if (session != sessionList.end()){
@@ -121,6 +121,8 @@ void GameSessionList::addToUserInviteCodeMaps(const UserId& id, const Invitation
         return val.first.toString() == invite.toString();
     });
 
+    userList = inviteCode2User.find(invite);
+
     if(userList == inviteCode2User.end()){
         inviteCode2User.insert(std::make_pair(invite, std::vector<UserId>({id})));
     }
@@ -134,11 +136,15 @@ void GameSessionList::removeFromUserInviteCodeMaps(const UserId& id, const Invit
         return entry.first.getId() == id.getId();
     });
 
+    userId = user2InviteCode.find(id);
+
     user2InviteCode.erase(userId);
 
     auto userList = std::find_if(inviteCode2User.begin(), inviteCode2User.end(), [invite](const std::pair<Invitation, std::vector<UserId>>& val){
         return val.first.toString() == invite.toString();
     });
+
+    userList = inviteCode2User.find(invite);
 
     if(userList->second.size() <= 1){
         inviteCode2User.erase(userList);

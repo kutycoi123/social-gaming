@@ -19,8 +19,8 @@ class GameSessionList {
         bool joinGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         bool leaveGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         
-        Invitation createGameSession(std::weak_ptr<User>&) noexcept;
-        void destroyGameSession(const Invitation&) noexcept;
+        Invitation commenceGameSession(std::weak_ptr<User>&) noexcept;
+        void concludeGameSession(const Invitation&) noexcept;
 
         bool startGameInGameSession(const Invitation&);
 

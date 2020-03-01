@@ -169,7 +169,7 @@ std::deque<networking::Message> GameServer::getGlobalMessages(){
 }
 
 std::pair<bool, Invitation> GameServer::createSession(networking::Message m, std::weak_ptr<User>& user){
-	Invitation code = sessionList.createGameSession(user);
+	Invitation code = sessionList.commenceGameSession(user);
 	//TODO: add mapUserIDToInvitation
 
 	//investigate  GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(userProvidedCode, session)); why doesn't it update invitation code
