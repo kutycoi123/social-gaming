@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <optional>
 
 class UserName {
 public:
@@ -30,6 +31,7 @@ public:
 
     void setUserName(const UserName& name);
     void setCurrentGameSessionInvitationCode(const Invitation& invite);
+    void clearInvitation() noexcept;
 
     [[nodiscard]] bool isUserInGameSession(const Invitation& invite) const;
 
@@ -45,7 +47,7 @@ public:
 private:
     UserId userId;
     UserName userName;
-    Invitation currentGameSessionInvitation;
+    std::optional<Invitation> currentGameSessionInvitation;
 };
 
 

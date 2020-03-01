@@ -14,3 +14,9 @@ target_include_directories(user
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+set_target_properties(user
+                      PROPERTIES
+                      LINKER_LANGUAGE CXX
+                      CXX_STANDARD 17
+                      PREFIX ""
+)

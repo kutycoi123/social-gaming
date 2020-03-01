@@ -30,7 +30,7 @@ public:
 
 private:
     std::queue<std::string> messages;
-    const Invitation invitationCode;
+    Invitation invitationCode;
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
     User& owner;

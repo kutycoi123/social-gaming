@@ -1,9 +1,11 @@
 #include "GameServer.h"
 
-GameServer::GameServer(std::unique_ptr<networking::Server>& server, std::unique_ptr<GameServerConfiguration> &configuration, std::unique_ptr<UserList> &users) : 
+GameServer::GameServer(std::unique_ptr<networking::Server>& server, std::unique_ptr<GameServerConfiguration> &configuration, std::unique_ptr<UserList> &users) :
 	server(std::move(server)),
 	serverConfiguration(std::move(configuration)),
-	users(std::move(users)) {}
+	users(std::move(users)),
+	sessionList(GameSessionList()) 
+	{}	
 
 void GameServer::tick(){
 	try {
@@ -34,11 +36,11 @@ void GameServer::removeUser(const UserId& id) noexcept{
 	users->remove(id);
 }
 
-
+/*
 std::deque<networking::Message> GameServer::SendMessageToSession() {
 	std::deque<networking::Message> commandResult;
 
-    for (auto& inviteGameElement : GameSessionManager::invitationToGameSessionMap) {
+    for (auto& inviteGameElement : sessionList.invitationToGameSessionMap) {
         for (auto& user : users->getUsersInSession(inviteGameElement.second.getInvitationCode())) {
             std::queue messages = inviteGameElement.second.getMessages();
 
@@ -54,20 +56,22 @@ std::deque<networking::Message> GameServer::SendMessageToSession() {
  
 	return commandResult;
 }
-	 
+*/
+
+/*
 //paramters connection Id message
 void GameServer::AddMessageToCorrectSession(const uintptr_t userID, const std::string &message) {
 
-	auto iter =  GameSessionManager::userToInviteCode.find(userID);
+	auto iter =  sessionList.user2InviteCode.find(userID);
 	std::cout<<"looking for invitation"<<"\n";
-	if(iter != GameSessionManager::userToInviteCode.end()) {
+	if(iter != sessionList.user2InviteCode.end()) {
 			std::cout<<"found invitation"<<"\n";
 
-			auto it = GameSessionManager::invitationToGameSessionMap.find(iter->second);
+			auto it = sessionList.invitationToGameSessionMap.find(iter->second);
 				
 			std::cout<<iter->second.toString()<<std::endl;
 				
-			if(it == GameSessionManager::invitationToGameSessionMap.end()) {
+			if(it == sessionList.invitationToGameSessionMap.end()) {
 					std::cout<<"can't find session of user"<<"\n";
 			}
 				else {
@@ -77,10 +81,10 @@ void GameServer::AddMessageToCorrectSession(const uintptr_t userID, const std::s
 
 		} 
  }
+ */
 
 std::deque<networking::Message> GameServer::processMessages(networking::Server& server, const std::deque<networking::Message>& incoming) {
 	std::deque<networking::Message> commandResult;
-	
 	
 	for (networking::Message message : incoming) {
 
@@ -106,8 +110,6 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 				{
 					//print out those string games.
 					//find gameSession based on code, push back message to queue
-
-
 
 					//AddMessageToCorrectSession(message.connection.id, "start game\n");
 					std::cout << "start game\n";
@@ -189,14 +191,11 @@ std::deque<networking::Message> GameServer::getGlobalMessages(){
 }
 
 std::pair<bool, Invitation> GameServer::createSession(networking::Message m, User user){
-	GameSession init = GameSessionManager::createGameSession(user);
-	GameSession &initRef = init;
-
-	Invitation code = initRef.getInvitationCode();
+	Invitation code = sessionList.createGameSession(user);
 	//TODO: add mapUserIDToInvitation
 
 	//investigate  GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(userProvidedCode, session)); why doesn't it update invitation code
-	AddMessageToCorrectSession(m.connection.id,  "joining lobby: " + code.toString());
+	//AddMessageToCorrectSession(m.connection.id,  "joining lobby: " + code.toString());
 	return std::make_pair(true, code);
  }
 
@@ -207,7 +206,7 @@ bool GameServer::joinSession(const std::string& command, User user){
 		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(params.at(0));
 		auto userRef = users->getUserRef(user.getUserId());
 		if (userRef.has_value()) {
-            if (GameSessionManager::joinGameSession(userRef.value(), userProvidedCode)) {
+            if (sessionList.joinGameSession(userRef.value(), userProvidedCode)) {
                 //AddMessageToCorrectSession(m.connection.id,m.text);
                 return true;
             }
@@ -229,11 +228,8 @@ std::deque<networking::Message> GameServer::gameServerUpdate(networking::Server&
 
 	//TODO: update all games based on game logic (probs in gamesessionmanager)
 
-	std::deque<networking::Message> gameMessages = GameSessionManager::getAllGameMessages();
+	std::deque<networking::Message> gameMessages = sessionList.getAllSessionMessages();
 	allMessages.insert(allMessages.end(), gameMessages.begin(), gameMessages.end());
-	
-	std::deque<networking::Message> lobbyMessages = GameSessionManager::getAllLobbyMessages();
-	allMessages.insert(allMessages.end(), lobbyMessages.begin(), lobbyMessages.end());
 
 	return allMessages;
 }

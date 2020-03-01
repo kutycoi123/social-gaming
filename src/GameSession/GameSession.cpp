@@ -1,5 +1,4 @@
 #include "GameSession.h"
-#include "GameSessionManager.h"
 
 GameSession::GameSession(User& owner) : 
     invitationCode (Invitation::createNewInvitation()),
@@ -29,7 +28,7 @@ void GameSession::addMessages(const std::string &message) {
 }
 
 std::queue<std::string> GameSession::getMessages() {
-     return messages;
+    return messages;
  }
 
  void GameSession::clearMessages() {

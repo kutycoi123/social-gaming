@@ -18,8 +18,7 @@ target_include_directories(gameServer
 target_link_libraries(gameServer
   networking
   user
-  
-  GameSessionManager
+  gameSessionList
   GameServerConfiguration
   ${CMAKE_THREAD_LIBS_INIT}
 )

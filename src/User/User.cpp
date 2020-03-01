@@ -20,7 +20,7 @@ bool UserId::operator==(const UserId& id) const {
 // ***********************
 User::User(const UserId& userId):   userId(userId),
                                     userName(UserName("user"+std::to_string(userId.getId()))),
-                                    currentGameSessionInvitation(Invitation::createInvitationFromStringInput(std::string())) {};
+                                    currentGameSessionInvitation(std::nullopt) {};
 
 void User::setUserName(const UserName& name){
 	userName = name;
@@ -30,8 +30,12 @@ void User::setCurrentGameSessionInvitationCode(const Invitation& invite) {
     currentGameSessionInvitation = invite;
 }
 
+void User::clearInvitation() noexcept {
+    currentGameSessionInvitation = std::nullopt;
+}
+
 bool User::isUserInGameSession(const Invitation& invite) const {
-    return !currentGameSessionInvitation.toString().empty() && currentGameSessionInvitation == invite;
+    return currentGameSessionInvitation.has_value() && currentGameSessionInvitation == invite;
 }
 
 std::string User::getUserNameValue() const {
@@ -47,6 +51,6 @@ uintptr_t User::getUserIdValue() const {
 }
 
 Invitation User::getCurrentGameSessionInvitation() const {
-    return currentGameSessionInvitation;
+    return currentGameSessionInvitation.value();
 }
 

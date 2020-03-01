@@ -2,7 +2,7 @@
 #define GAMESERVER_H
 
 #include "Server.h"
-#include "GameSessionManager.h"
+#include "GameSessionList.h"
 #include "GameServerConfiguration.h"
 #include "User.h"
 
@@ -23,8 +23,10 @@ public:
 private:
     std::unique_ptr<networking::Server> server;
     std::unique_ptr<GameServerConfiguration> serverConfiguration;
-    GlobalMessage globalMessage;
     std::unique_ptr<UserList> users;
+    
+    GlobalMessage globalMessage;
+    GameSessionList sessionList;
 
     std::deque<networking::Message> gameServerUpdate(networking::Server&, const std::deque<networking::Message>&);
     std::deque<networking::Message> SendMessageToSession();

@@ -25,16 +25,9 @@ set_target_properties(GameServer
 find_package(Threads REQUIRED)
 
 target_link_libraries(GameServer
-  networking
-  nlohmann_json::nlohmann_json
   ${CMAKE_THREAD_LIBS_INIT}
   
   gameServer
-  session
-  user
-  GameSpec
-  GameSessionManager
-  gameParser
   GameServerConfiguration
 )
 
