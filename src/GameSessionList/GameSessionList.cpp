@@ -8,7 +8,6 @@ GameSessionList::GameSessionList() :
 bool GameSessionList::joinGameSession(std::weak_ptr<User>& userRef, const Invitation& invitation) noexcept{
     auto gameSession = findGameSession(invitation);
 
-    //if session exists and the game has not started, then user can join
     if(gameSession != sessionList.end() && !gameSession->isGameStarted()){
         gameSession->addPlayer(userRef);
         addToUserInviteCodeMaps(userRef.lock()->getUserId(), invitation);
@@ -36,12 +35,15 @@ Invitation GameSessionList::commenceGameSession(std::weak_ptr<User>& owner) noex
     return gameSession.getInvitationCode();
 }
 
-void GameSessionList::concludeGameSession(const Invitation& invitation) noexcept{
+bool GameSessionList::concludeGameSession(const Invitation& invitation) noexcept{
     auto session = findGameSession(invitation);
     
     if (session != sessionList.end()){
         sessionList.erase(session);
+        return true;
     }
+
+    return false;
 }
 
 void GameSessionList::addMessages(const std::list<Message> messages) noexcept{
@@ -84,11 +86,22 @@ void GameSessionList::addMessageToCorrectSession(const Message& message) noexcep
     }
 }
 
-bool GameSessionList::startGameInGameSession(const Invitation& invitation){
+bool GameSessionList::startGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation) {
     auto gameSession = findGameSession(invitation);
     
-    if (gameSession != sessionList.end()){
+    if (gameSession != sessionList.end() && gameSession->isOwner(user.lock()->getUserId())){
         gameSession->startGame();
+        return true;
+    }
+
+    return false;
+}
+
+bool GameSessionList::endGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation) {
+    auto gameSession = findGameSession(invitation);
+
+    if (gameSession != sessionList.end() && gameSession->isOwner(user.lock()->getUserId())){
+        gameSession->endGame();
         return true;
     }
 
@@ -108,7 +121,7 @@ bool GameSessionList::isUserInSession(const std::weak_ptr<User>& user) const noe
         auto invite = user2InviteCode.at(user.lock()->getUserId());
         return true;
     }
-    catch (std::out_of_range){
+    catch (std::out_of_range&) {
         return false;
     }
 }

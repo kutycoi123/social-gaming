@@ -15,6 +15,10 @@ void GameState::startGame() {
     gameStarted = true;
 }
 
+void GameState::endGame() {
+    gameStarted = false;
+}
+
 bool GameState::isGameStarted() const {
     return gameStarted;
 }

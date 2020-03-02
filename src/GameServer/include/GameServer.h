@@ -32,9 +32,7 @@ private:
     std::deque<networking::Message> SendMessageToSession();
     std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
-    //helper methods
-    std::pair<bool, Invitation> createSession(networking::Message, std::weak_ptr<User>&);
-    bool joinSession(const std::string&, std::weak_ptr<User>&);
+    // Helper methods
     void AddMessageToCorrectSession(const uintptr_t, const std::string&);
     std::deque<networking::Message> getGlobalMessages();
 

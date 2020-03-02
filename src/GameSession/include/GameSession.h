@@ -24,6 +24,7 @@ class GameSession {
         Invitation getInvitationCode() const;
         bool isGameStarted() const;
         void startGame();
+        void endGame();
 
         bool isOwner(const UserId& user) const;
 

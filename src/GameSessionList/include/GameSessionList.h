@@ -20,9 +20,10 @@ class GameSessionList {
         bool leaveGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         
         Invitation commenceGameSession(std::weak_ptr<User>&) noexcept;
-        void concludeGameSession(const Invitation&) noexcept;
+        bool concludeGameSession(const Invitation&) noexcept;
 
-        bool startGameInGameSession(const Invitation&);
+        bool startGameInGameSession(std::weak_ptr<User>& user, const Invitation&);
+        bool endGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation);
 
         void addMessages(const std::list<Message>) noexcept;
         std::list<Message> updateAndGetAllMessages() noexcept;

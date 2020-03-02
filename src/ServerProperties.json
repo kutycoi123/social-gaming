@@ -9,56 +9,56 @@
         "User Commands": [
           "disconnect"
         ],
-        "Description": "Disconnects from the server"
+        "Description": " /disconnect: Disconnects from the server."
       },
       {
         "Type": "SHUTDOWN",
         "User Commands": [
           "shutdown"
         ],
-        "Description": "Shuts down the provided game session if you are the owner"
+        "Description": " /shutdown X: Shuts down the provided game session X if you are the owner."
       },
       {
         "Type": "START_GAME",
         "User Commands": [
           "startgame"
         ],
-        "Description": "Starts the game within the provided game session"
+        "Description": " /startgame X: Starts the game within the provided game session X."
       },
       {
         "Type": "CREATE_SESSION",
         "User Commands": [
           "createsession"
         ],
-        "Description": "Creates a new session given a game and a game json and returns the invitation code"
+        "Description": " /createsession: Creates a new session given a game and a game json and returns the invitation code."
       },
       {
         "Type": "JOIN_SESSION",
         "User Commands": [
           "joinsession"
         ],
-        "Description": "Join a game session with the provided invitation cod"
+        "Description": " /joinsession X: Joins a game session with the provided invitation code X."
       },
       {
         "Type": "LEAVE_SESSION",
         "User Commands": [
           "leavesession"
         ],
-        "Description": "Leaves your current game session if you are in one"
+        "Description": " /leavesession: Leaves your current game session if you are in one."
       },
       {
         "Type": "USERNAME",
         "User Commands": [
           "setname"
         ],
-        "Description": "Changes the current user's username"
+        "Description": " /setname X: Changes your current username to X."
       },
       {
         "Type": "HELP",
         "User Commands": [
           "help"
         ],
-        "Description": "Provides a list of valid commands"
+        "Description": " /help: Provides a list of valid commands."
       }
     ]
   }

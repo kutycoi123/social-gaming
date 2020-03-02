@@ -41,80 +41,101 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 	
 	for (networking::Message message : incoming) {
 
-		std::string text = message.text;
-
 		UserId id(message.connection.id);
-        std::optional<std::weak_ptr<User>> user = users->getUserRef(id); //doesn't make sense for user to not be found, additional check later?
+        std::optional<std::weak_ptr<User>> user = users->getUserRef(id);
+        if (!user.has_value()) continue; // Unlikely to fail, but avoid processing commands from invalid connections.
 
-		auto commandType = GameServerConfiguration::getCommandTypeFromString(*serverConfiguration, text);
+		auto commandType = GameServerConfiguration::getCommandTypeFromString(*serverConfiguration, message.text);
+        std::vector<std::string> commandParams = GameServerConfiguration::getCommandArgumentsFromString(message.text);
 		
 		switch (commandType)
 		{
 			case GameServerConfiguration::CommandType::DISCONNECT:
 				{
+				    // TODO: Disallow users from disconnecting during games
+				    // Alongside handling disconnects during games (as per requirements)
 					server.disconnect(message.connection);
-					
-					message.text.append("\nDisconnected");
-
-					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
 				}
 			break;
 			case GameServerConfiguration::CommandType::SHUTDOWN:
 				{
-					std::cout << "shutdown game\n";
-					// TODO: Requires Matthew's User MR
+                    if (!commandParams.empty()) {
+                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+                        if (sessionList.endGameInGameSession(user.value(), userProvidedCode)) {
+                            message.text.append("\n Ending Game.");
+                        }
+                        else
+                        {
+                            message.text.append("\n Unable to end Game. Are you the owner of the lobby?");
+                        }
+                    }
+
+                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
 				}
 			break;
 			case GameServerConfiguration::CommandType::START_GAME:
 				{
-					std::cout << "start game\n";
-					// TODO: swap gamesession's gamestate gamestarted flag
-				}
+                    if (!commandParams.empty()) {
+                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+                        if (sessionList.startGameInGameSession(user.value(), userProvidedCode)) {
+                            message.text.append("\n Starting Game.");
+                        }
+                        else
+                        {
+                            message.text.append("\n Unable to start Game. Are you the owner of the lobby?");
+                        }
+                    }
+
+                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
+                }
 			break;
 			case GameServerConfiguration::CommandType::CREATE_SESSION:
 				{
-					std::cout << "creating lobby\n";
-
-					if(user.has_value()){
-						std::pair<bool, Invitation> session = createSession(message, user.value());
-						if (!session.first){
-							message.text.append("\nError, Could not create lobby!");
-						}
-						else
-						{
-							message.text.append("\nCreated Lobby with Invitation code: ");
-							message.text.append(session.second.toString());
-
-							std::cout << "Created Lobby " << session.second.toString() << '\n';
-						}
-					}
+                    auto createdSessionInvitation = sessionList.commenceGameSession(user.value());
+                    message.text.append("\n Created Lobby with Invitation code: ");
+                    message.text.append(createdSessionInvitation.toString());
 
 					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
 				}
 			break;
 			case GameServerConfiguration::CommandType::JOIN_SESSION:
 				{
-					if(!joinSession(text, user.value())){
-						message.text.append("\nError, cannot join lobby!");
-					}
-					else{
-					    std::vector<std::string> params = GameServerConfiguration::getCommandArgumentsFromString(text);
-
-						message.text.append("\nJoined lobby ");
-						message.text.append(params.at(0));
-					}
+                    if (!commandParams.empty()) {
+                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+                        if (sessionList.joinGameSession(user.value(), userProvidedCode)) {
+                            message.text.append("\n Joining Lobby.");
+                        }
+                        else
+                        {
+                            message.text.append("\n Unable to join Lobby.");
+                        }
+                    }
 
 					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
 				}
 			break;
+		    case GameServerConfiguration::CommandType::LEAVE_SESSION:
+                {
+                    if (!commandParams.empty()) {
+                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+                        if (sessionList.leaveGameSession(user.value(), userProvidedCode)) {
+                            message.text.append("\n Leaving Lobby.");
+                        }
+                        else
+                        {
+                            message.text.append("\n Unable to leave Lobby. Have you joined one yet?");
+                        }
+                    }
+
+                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
+                }
+            break;
 			case GameServerConfiguration::CommandType::USERNAME:
 				{
-					//TODO: add user friendly response
-
-					auto name = GameServerConfiguration::getCommandArgumentsFromString(text);
-					auto userRef = users->getUserRef(id);
-					if (!name.empty() && userRef.has_value()) {
-						userRef.value().lock()->setUserName(UserName(name.at(0)));
+					if (!commandParams.empty()) {
+					    auto name = commandParams.at(0);
+						user.value().lock()->setUserName(UserName(name));
+                        message.text.append("\n Changing name to: " + name);
 					}
 
 					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
@@ -122,8 +143,6 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 			break;
 			case GameServerConfiguration::CommandType::HELP:
 				{
-					//TODO: fix printing
-
 					message.text.append("\n List of user commands: \n");
 					message.text.append(GameServerConfiguration::getAllCommandDescriptions(*serverConfiguration));
 					
@@ -132,12 +151,12 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 			break;
 			case GameServerConfiguration::CommandType::NULL_COMMAND:
 				{
-					//if user in session
-					if(sessionList.isUserInSession(user.value())){
-					sessionList.addMessages(std::list<Message>{Message{*(user.value().lock()), message.text}});
+					if (sessionList.isUserInSession(user.value())){
+					    sessionList.addMessages(std::list<Message>{Message{*(user.value().lock()), message.text}});
 					}
-					else {
-						std::cout << "unrecognized command from a user that is not in a session\n";
+					else
+                    {
+						std::cout << "Unrecognized command from User not in session. \n";
 					}		
 				}
 			break;
@@ -155,7 +174,7 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 std::deque<networking::Message> GameServer::getGlobalMessages(){
 	std::deque<networking::Message> result {};
 	
-	if(globalMessage.message != ""){
+	if(!globalMessage.message.empty()){
 
 		for(auto& entry : *users){
 			User user = *(entry.second);
@@ -166,29 +185,6 @@ std::deque<networking::Message> GameServer::getGlobalMessages(){
 	}
 
 	return result;
-}
-
-std::pair<bool, Invitation> GameServer::createSession(networking::Message m, std::weak_ptr<User>& user){
-	Invitation code = sessionList.commenceGameSession(user);
-	//TODO: add mapUserIDToInvitation
-
-	//investigate  GameSessionManager::_invitationToGameSessionMap.insert(std::make_pair(userProvidedCode, session)); why doesn't it update invitation code
-	//AddMessageToCorrectSession(m.connection.id,  "joining lobby: " + code.toString());
-	return std::make_pair(true, code);
- }
-
-bool GameServer::joinSession(const std::string& command, std::weak_ptr<User>& user){
-    std::vector<std::string> params = GameServerConfiguration::getCommandArgumentsFromString(command);
-
-    if (params.size() > 0) {
-		Invitation userProvidedCode = Invitation::createInvitationFromStringInput(params.at(0));
-		if (sessionList.joinGameSession(user, userProvidedCode)) {
-			//AddMessageToCorrectSession(m.connection.id,m.text);
-			return true;
-		}
-        
-	}
-	return false;
 }
 
 std::deque<networking::Message> GameServer::gameServerUpdate(networking::Server& server, const std::deque<networking::Message>& incoming) {
