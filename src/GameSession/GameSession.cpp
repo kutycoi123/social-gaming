@@ -12,6 +12,7 @@ Invitation GameSession::getInvitationCode() const {
     return invitationCode;
 }
 
+//TODO: Check for owner, sessionList.IsOwner currently crashes program.
 bool GameSession::isOwner(const UserId& user) const {
     return (user == owner.lock()->getUserId());
 }

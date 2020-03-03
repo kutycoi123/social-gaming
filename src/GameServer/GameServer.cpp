@@ -45,127 +45,45 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
         std::optional<std::weak_ptr<User>> user = users->getUserRef(id);
         if (!user.has_value()) continue; // Unlikely to fail, but avoid processing commands from invalid connections.
 
-		auto commandType = GameServerConfiguration::getCommandTypeFromString(*serverConfiguration, message.text);
+        auto commandType = GameServerConfiguration::getCommandTypeFromString(*serverConfiguration, message.text);
         std::vector<std::string> commandParams = GameServerConfiguration::getCommandArgumentsFromString(message.text);
-		
-		switch (commandType)
-		{
-			case GameServerConfiguration::CommandType::DISCONNECT:
-				{
-				    // TODO: Disallow users from disconnecting during games
-				    // Alongside handling disconnects during games (as per requirements)
-					server.disconnect(message.connection);
-				}
-			break;
-			case GameServerConfiguration::CommandType::SHUTDOWN:
-				{
-                    if (!commandParams.empty()) {
-                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
-                        if (sessionList.endGameInGameSession(user.value(), userProvidedCode)) {
-                            message.text.append("\n Ending Game.");
-                        }
-                        else
-                        {
-                            message.text.append("\n Unable to end Game. Are you the owner of the lobby?");
-                        }
-                    }
 
-                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
-				}
-			break;
-			case GameServerConfiguration::CommandType::START_GAME:
-				{
-                    if (!commandParams.empty()) {
-                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
-                        if (sessionList.startGameInGameSession(user.value(), userProvidedCode)) {
-                            message.text.append("\n Starting Game.");
-                        }
-                        else
-                        {
-                            message.text.append("\n Unable to start Game. Are you the owner of the lobby?");
-                        }
-                    }
+        switch (commandType) {
+            case GameServerConfiguration::CREATE_SESSION:
+                message.text.append(commandCREATE_SESSION(user.value()));
+                break;
+            case GameServerConfiguration::HELP:
+                message.text.append(commandHELP());
+                break;
+            case GameServerConfiguration::JOIN_SESSION:
+                message.text.append(commandJOIN_SESSION(commandParams, user.value()));
+                break;
+            case GameServerConfiguration::LEAVE_SESSION:
+                message.text.append(commandLEAVE_SESSION(commandParams, user.value()));
+                break;
+            case GameServerConfiguration::SHUTDOWN:
+                message.text.append(commandSHUTDOWN(commandParams, user.value()));
+                break;
+            case GameServerConfiguration::START_GAME:
+                message.text.append(commandSTART_GAME(commandParams, user.value()));
+                break;
+            case GameServerConfiguration::USERNAME:
+                message.text.append(commandUSERNAME(commandParams, user.value()));
+                break;
+            case GameServerConfiguration::NULL_COMMAND:
+                commandNULL_COMMAND(user.value(), message.text);
+                break;
+            case GameServerConfiguration::DISCONNECT:
+                server.disconnect(message.connection);
+                break;
+            default:
+                std::cout << "Unable to process command, something went horribly wrong.\n";
+                break;
+        }
 
-                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
-                }
-			break;
-			case GameServerConfiguration::CommandType::CREATE_SESSION:
-				{
-                    auto createdSessionInvitation = sessionList.commenceGameSession(user.value());
-                    message.text.append("\n Created Lobby with Invitation code: ");
-                    message.text.append(createdSessionInvitation.toString());
-
-					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
-				}
-			break;
-			case GameServerConfiguration::CommandType::JOIN_SESSION:
-				{
-                    if (!commandParams.empty()) {
-                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
-                        if (sessionList.joinGameSession(user.value(), userProvidedCode)) {
-                            message.text.append("\n Joining Lobby.");
-                        }
-                        else
-                        {
-                            message.text.append("\n Unable to join Lobby.");
-                        }
-                    }
-
-					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
-				}
-			break;
-		    case GameServerConfiguration::CommandType::LEAVE_SESSION:
-                {
-                    if (!commandParams.empty()) {
-                        Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
-                        if (sessionList.leaveGameSession(user.value(), userProvidedCode)) {
-                            message.text.append("\n Leaving Lobby.");
-                        }
-                        else
-                        {
-                            message.text.append("\n Unable to leave Lobby. Have you joined one yet?");
-                        }
-                    }
-
-                    commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
-                }
-            break;
-			case GameServerConfiguration::CommandType::USERNAME:
-				{
-					if (!commandParams.empty()) {
-					    auto name = commandParams.at(0);
-						user.value().lock()->setUserName(UserName(name));
-                        message.text.append("\n Changing name to: " + name);
-					}
-
-					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
-				}
-			break;
-			case GameServerConfiguration::CommandType::HELP:
-				{
-					message.text.append("\n List of user commands: \n");
-					message.text.append(GameServerConfiguration::getAllCommandDescriptions(*serverConfiguration));
-					
-					commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});    
-				}
-			break;
-			case GameServerConfiguration::CommandType::NULL_COMMAND:
-				{
-					if (sessionList.isUserInSession(user.value())){
-					    sessionList.addMessages(std::list<Message>{Message{*(user.value().lock()), message.text}});
-					}
-					else
-                    {
-						std::cout << "Unrecognized command from User not in session. \n";
-					}		
-				}
-			break;
-			default:
-				{
-					std::cout << "Problem command, something went horribly wrong\n";
-				}
-			break;
-		}
+        if (commandReturnsResponse(commandType)) {
+            commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
+        }
 	}
 	
 	return commandResult;
@@ -211,3 +129,117 @@ std::deque<networking::Message> GameServer::gameServerUpdate(networking::Server&
 
 	return allMessages;
 }
+
+//region Commands
+#pragma region Commands
+bool GameServer::commandReturnsResponse(const GameServerConfiguration::CommandType& command) {
+    switch(command) {
+        case GameServerConfiguration::CREATE_SESSION:
+        case GameServerConfiguration::HELP:
+        case GameServerConfiguration::JOIN_SESSION:
+        case GameServerConfiguration::LEAVE_SESSION:
+        case GameServerConfiguration::SHUTDOWN:
+        case GameServerConfiguration::START_GAME:
+        case GameServerConfiguration::USERNAME:
+            return true;
+    }
+
+    return false;
+}
+
+std::string GameServer::commandCREATE_SESSION(std::weak_ptr<User>& user) {
+    std::string response;
+    auto createdSessionInvitation = sessionList.commenceGameSession(user);
+
+    response.append("\n Created Lobby with Invitation code: ");
+    response.append(createdSessionInvitation.toString());
+    return response;
+}
+
+std::string GameServer::commandHELP() {
+    std::string response;
+    response.append("\n List of user commands: \n");
+    response.append(GameServerConfiguration::getAllCommandDescriptions(*serverConfiguration));
+    return response;
+}
+
+std::string GameServer::commandJOIN_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user) {
+    std::string response;
+
+    if (commandParams.empty()) {
+        response.append("\n Unable to join Session. Parameter formatting is incorrect.");
+        return response;
+    }
+
+    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    sessionList.joinGameSession(user, userProvidedCode) ? response.append("\n Joining Session.") : response.append("\n Unable to join Session. Does the Session exist?");
+
+    return response;
+}
+
+std::string GameServer::commandLEAVE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user) {
+    std::string response;
+
+    if (commandParams.empty()) {
+        response.append("\n Unable to leave Session. Parameter formatting is incorrect.");
+        return response;
+    }
+
+    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    sessionList.leaveGameSession(user, userProvidedCode) ? response.append("\n Leaving Session.") : response.append("\n Unable to leave Session. Has the Game already started?");
+
+    return response;
+}
+
+std::string GameServer::commandSHUTDOWN(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user) {
+    std::string response;
+
+    if (commandParams.empty()) {
+        response.append("\n Unable to shutdown Game. Parameter formatting is incorrect.");
+        return response;
+    }
+
+    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    sessionList.endGameInGameSession(user, userProvidedCode) ? response.append("\n Ending Game.") : response.append("\n Unable to end Game. Are you the owner?");
+
+    return response;
+}
+
+std::string GameServer::commandSTART_GAME(const std::vector<std::string> &commandParams, std::weak_ptr<User> &user) {
+    std::string response;
+
+    if (commandParams.empty()) {
+        response.append("\n Unable to start Game. Parameter formatting is incorrect.");
+        return response;
+    }
+
+    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    sessionList.startGameInGameSession(user, userProvidedCode) ? response.append("\n Starting Game.") : response.append("\n Unable to start Game. Are you the owner?");
+
+    return response;
+}
+
+std::string GameServer::commandUSERNAME(const std::vector<std::string> &commandParams, std::weak_ptr<User> &user) {
+    std::string response;
+
+    if (commandParams.empty()) {
+        response.append("\n Unable to change name. Parameter formatting is incorrect.");
+        return response;
+    }
+
+    auto name = commandParams.at(0);
+    user.lock()->setUserName(UserName(name));
+    response.append("\n Changing name to: " + name);
+    return response;
+}
+
+void GameServer::commandNULL_COMMAND(std::weak_ptr<User> &user, const std::string& text) {
+    if (sessionList.isUserInSession(user)) {
+        sessionList.addMessages(std::list<Message>{Message{*(user.lock()), text}});
+    } else {
+        std::cout << "Unrecognized command from User not in session. \n";
+    }
+}
+
+#pragma endregion Commands
+//endregion

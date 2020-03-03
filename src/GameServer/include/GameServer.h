@@ -32,6 +32,20 @@ private:
     std::deque<networking::Message> SendMessageToSession();
     std::deque<networking::Message> processMessages(networking::Server& server, const std::deque<networking::Message>& incoming);
 
+    // Commands
+    static bool commandReturnsResponse(const GameServerConfiguration::CommandType& command);
+    std::string commandCREATE_SESSION(std::weak_ptr<User>& user);
+    std::string commandHELP();
+    std::string commandJOIN_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
+    std::string commandLEAVE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
+    std::string commandSHUTDOWN(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
+    std::string commandSTART_GAME(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
+    std::string commandUSERNAME(const std::vector<std::string> &commandParams, std::weak_ptr<User> &user);
+
+    // Server Commands
+    void commandNULL_COMMAND(std::weak_ptr<User> &user, const std::string& text);
+
+
     // Helper methods
     void AddMessageToCorrectSession(const uintptr_t, const std::string&);
     std::deque<networking::Message> getGlobalMessages();

@@ -88,8 +88,9 @@ void GameSessionList::addMessageToCorrectSession(const Message& message) noexcep
 
 bool GameSessionList::startGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation) {
     auto gameSession = findGameSession(invitation);
-    
-    if (gameSession != sessionList.end() && gameSession->isOwner(user.lock()->getUserId())){
+
+    //TODO: Check for owner, sessionList.IsOwner currently crashes program.
+    if (gameSession != sessionList.end()){
         gameSession->startGame();
         return true;
     }
@@ -100,7 +101,8 @@ bool GameSessionList::startGameInGameSession(std::weak_ptr<User>& user, const In
 bool GameSessionList::endGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation) {
     auto gameSession = findGameSession(invitation);
 
-    if (gameSession != sessionList.end() && gameSession->isOwner(user.lock()->getUserId())){
+    //TODO: Check for owner, sessionList.IsOwner currently crashes program.
+    if (gameSession != sessionList.end()) {
         gameSession->endGame();
         return true;
     }
