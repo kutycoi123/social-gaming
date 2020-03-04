@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-
+#include <nlohmann/json.hpp>
 #include "GameState.h"
 
 // Forward dependancy declaration
@@ -31,7 +31,7 @@ enum RuleType{
 			RuleType getRuleType() const;
 			void setRuleName(const std::string&);
 			virtual void process(GameState& gameState) = 0;
-
+			virtual void parseRule(const nlohmann::json&) = 0;
 		private:
 			RuleType ruleType;
 			std::string ruleName;

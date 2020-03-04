@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <nlohmann/json.hpp>
 #include "AbstractSpec.h"
 
 namespace GameSpecification{
@@ -29,6 +30,7 @@ class GameGeneralConfig{
         void setAudience(bool );
         void setSetup(const Setup& );
 
+        void parseConifg(const nlohmann::json&_);
     private:
         std::string name;
         PlayerCount playerCount;
