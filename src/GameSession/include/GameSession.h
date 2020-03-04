@@ -4,9 +4,9 @@
 #include <iostream> 
 #include <string>
 #include <list>
-#include "GameState.h"
 #include "UserManager.h"
 #include "Invitation.h"
+#include "Game.h"
 #include <list>
 
 class GameSession {
@@ -37,8 +37,7 @@ class GameSession {
     private:
         std::list<std::string> messages;
         Invitation invitationCode;
-        GameSpecification::GameSpec gameSpec;
-        GameState gameState;
+        Game game;
         std::weak_ptr<User>& owner;
         GameSession::UserList playerList;
 

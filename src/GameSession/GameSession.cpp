@@ -3,8 +3,8 @@
 GameSession::GameSession(std::weak_ptr<User>& owner) : 
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
-    gameSpec{},
-    gameState{gameSpec},
+    // TODO: Replace blank GameSpec/GameState params with actual impl
+    game{GameSpecification::GameSpec(), GameState{}},
     owner (owner)
 {}
 
@@ -17,11 +17,11 @@ bool GameSession::isOwner(const UserId& user) const {
 }
 
 bool GameSession::isGameStarted() const {
-    return gameState.isGameStarted();
+    return game.isGameStarted();
 }
 
 void GameSession::startGame() {
-    gameState.startGame();
+    game.startGame();
 }
 
 void GameSession::addMessages(const std::string &message) noexcept{
