@@ -34,7 +34,6 @@ std::optional<User> UserManager::getUser(const UserId& id) {
     return std::optional<User>(*userRef.value().lock());
 }
 
-// The returned pointer should never outlive the scope of the caller function
 std::optional<std::weak_ptr<User>> UserManager::getUserRef(const UserId& id) {
     auto iterator = idToUserMap.find(id);
     if (iterator == idToUserMap.end()) {

@@ -18,6 +18,7 @@ public:
     explicit GameState(GameSpecification::GameSpec&);
     bool isGameStarted() const;
     void startGame();
+    void endGame();
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getConstant(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getVariables(const std::string&);
     std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerPlayerValue(const std::string&);

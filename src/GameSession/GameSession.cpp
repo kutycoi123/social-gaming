@@ -12,6 +12,7 @@ Invitation GameSession::getInvitationCode() const {
     return invitationCode;
 }
 
+//TODO: Check for owner, sessionList.IsOwner currently crashes program.
 bool GameSession::isOwner(const UserId& user) const {
     return (user == owner.lock()->getUserId());
 }
@@ -22,6 +23,10 @@ bool GameSession::isGameStarted() const {
 
 void GameSession::startGame() {
     gameState.startGame();
+}
+
+void GameSession::endGame() {
+    gameState.endGame();
 }
 
 void GameSession::addMessages(const std::string &message) noexcept{

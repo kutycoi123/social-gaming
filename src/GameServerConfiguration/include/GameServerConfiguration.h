@@ -24,6 +24,7 @@ namespace ConfigurationCommandTags{
 
 class GameServerConfiguration{
     public:
+        // Commands need to be implemented and added in GameServer.cpp
         enum CommandType{
             FIRST,
             
