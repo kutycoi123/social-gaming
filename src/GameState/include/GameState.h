@@ -15,7 +15,7 @@ namespace GameSpecification {
 
 class GameState {
 public:
-    explicit GameState(GameSpecification::GameSpec&);
+    GameState();
     bool isGameStarted() const;
     void startGame();
     void endGame();
@@ -26,7 +26,6 @@ public:
 
     void setVariable(const std::string&, boost::variant<std::string, int, bool, double>);
 private:
-    GameSpecification::GameSpec& gameSpec;
     bool gameStarted;
     std::unordered_map<std::string, GameSpecification::SpecValue> constantsMap;
     std::unordered_map<std::string, GameSpecification::SpecValue> variablesMap;

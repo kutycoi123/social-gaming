@@ -2,13 +2,8 @@
 #include <optional>
 #include <boost/variant.hpp>
 
-GameState::GameState(GameSpecification::GameSpec& gameSpec) :
-    gameSpec(gameSpec),
-    gameStarted(false),
-    constantsMap(gameSpec.getConstants()),
-    variablesMap(gameSpec.getVariables()),
-    perPlayerMap(gameSpec.getPerPlayer()),
-    perAudienceMap(gameSpec.getPerAudience())
+GameState::GameState() :
+    gameStarted(false)
     {}
 
 void GameState::startGame() {
