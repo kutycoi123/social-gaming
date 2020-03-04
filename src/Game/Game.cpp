@@ -14,3 +14,7 @@ bool Game::isGameStarted() const {
 void Game::startGame() {
     return gameState.startGame();
 }
+
+void Game::endGame() {
+    return gameState.endGame();
+}
