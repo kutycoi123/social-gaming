@@ -9,6 +9,7 @@ public:
     Game(GameSpecification::GameSpec spec, GameState state);
     bool isGameStarted() const;
     void startGame();
+    void endGame();
 private:
     GameSpecification::GameSpec gameSpec;
     GameState gameState;

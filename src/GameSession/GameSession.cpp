@@ -26,7 +26,7 @@ void GameSession::startGame() {
 }
 
 void GameSession::endGame() {
-    gameState.endGame();
+    game.endGame();
 }
 
 void GameSession::addMessages(const std::string &message) noexcept{
