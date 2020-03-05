@@ -18,11 +18,7 @@ namespace GameSpecification{
 		private:
 			SpecValue to;
 			std::string	messValue;
-
 	};
-
-
-
 }
 
 #endif

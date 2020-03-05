@@ -1,7 +1,7 @@
 #include "GlobalMessage.h"
 
 using GameSpecification::GlobalMessage;
-
+using json = nlohmann::json;
 GlobalMessage::GlobalMessage(): BaseRule("global-message"), value(""){}
 
 GlobalMessage::GlobalMessage(const std::string& value): value(value){}
@@ -14,6 +14,10 @@ void GlobalMessage::process(GameState& gameState){
     
 }
 
-void GlobalMessage::parseRule(const nlohmann::json &json){
-    //TODO: ADd parsing logic
+void GlobalMessage::parseRule(const json &ruleJson){
+    try{
+       value = ruleJson.at("value").get<std::string>(); 
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

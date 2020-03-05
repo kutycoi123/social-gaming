@@ -6,6 +6,7 @@
 #include <memory>
 #include <unordered_map>
 #include <nlohmann/json.hpp>
+#include <iostream>
 #include "GameState.h"
 
 // Forward dependancy declaration

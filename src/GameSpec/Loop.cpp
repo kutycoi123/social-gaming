@@ -2,7 +2,7 @@
 
 using GameSpecification::ControlStructRule;
 using GameSpecification::Loop;
-
+using json = nlohmann::json;
 Loop::Loop() : ControlStructRule("loop"){}
 
 Loop::Loop(const std::string& loopType, const std::string& failCondition) : ControlStructRule("loop"), 
@@ -20,6 +20,10 @@ void Loop::process(GameState& gameState){
 	//TODO: add code to process loop rule
 }
 
-void Loop::parseRule(const nlohmann::json &json){
-    //TODO: Add parsing logic
+void Loop::parseRule(const json &ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

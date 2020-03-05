@@ -9,7 +9,7 @@
 namespace GameSpecification{
 class Loop : public ControlStructRule{
     public:
-		    Loop();
+		Loop();
         Loop(const std::string& loopType, const std::string& failCondition);
         std::string getLoopType() const;
         std::string getFailCondition() const;

@@ -3,6 +3,7 @@
 using GameSpecification::ForEach;
 using GameSpecification::SpecValue;
 using GameSpecification::ControlStructRule;
+using json = nlohmann::json;
 ForEach::ForEach() : ControlStructRule("foreach"), element(""){}
 
 ForEach::ForEach(const SpecValue& list, const std::string& element) : ControlStructRule("foreach"), 
@@ -22,6 +23,10 @@ void ForEach::process(GameState& gameState){
 	//TODO: Add code to process foreach rule
 }
 
-void ForEach::parseRule(const nlohmann::json &json){
-    //TODO: Add parsing logic
+void ForEach::parseRule(const json &ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

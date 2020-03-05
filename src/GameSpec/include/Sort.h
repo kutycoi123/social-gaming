@@ -3,6 +3,7 @@
 
 #include "BaseRule.h"
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <string>
 namespace GameSpecification{
 class Sort : public BaseRule{
@@ -15,7 +16,7 @@ class Sort : public BaseRule{
         void parseRule(const nlohmann::json&) override;
     private:
         std::string list;
-        std::string key;
+        std::optional<std::string> key;
 };
 }
 #endif

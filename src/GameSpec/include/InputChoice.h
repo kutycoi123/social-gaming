@@ -11,12 +11,12 @@ namespace GameSpecification{
 		public:
 			InputChoice() : BaseRule("input-choice") {}
 			InputChoice(const std::string& to, const Message& prompt, const SpecValue& choices, 
-							const std::string& result, const std::string& timeout) 
+							const std::string& result, double timeout) 
 							:  BaseRule("input-choice"), to(to), prompt(prompt), choices(choices), 
 							   result(result), timeout(timeout) {}
 			std::string getTo() const;
 			std::string getResult() const;	
-			std::string getTimeout() const;
+			std::optional<double> getTimeout() const;
 			Message getPrompt() const;
 			SpecValue getChoices() const;
 			void process(GameState&) override; 
@@ -26,7 +26,7 @@ namespace GameSpecification{
 			Message prompt; 
 			SpecValue choices;
 			std::string result; //represents field "result" in input choice rule
-			std::string timeout;
+			std::optional<double> timeout;
 			
 	};
 

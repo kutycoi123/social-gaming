@@ -2,6 +2,7 @@
 
 using GameSpecification::Reverse;
 using GameSpecification::BaseRule;
+using json = nlohmann::json;
 Reverse::Reverse() : BaseRule("reverse"), list(""){}
 
 Reverse::Reverse(const std::string& list) : BaseRule("reverse"), list(list) {}
@@ -15,5 +16,9 @@ void Reverse::process(GameState& gameState) {
 }
 
 void Reverse::parseRule(const nlohmann::json& json){
-    //TODO: Add parsing logic
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

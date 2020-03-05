@@ -8,11 +8,11 @@
 namespace GameSpecification{
 class Scores : public BaseRule{
     public:
-		    Scores();
-        Scores(const double score, const bool ascending);
+		Scores();
+        Scores(double score, bool ascending);
         double getScore() const;
         bool getAscending() const;
-		    void process(GameState&) override;
+		void process(GameState&) override;
         void parseRule(const nlohmann::json&) override;
     private:
         double score;

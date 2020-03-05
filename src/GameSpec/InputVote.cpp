@@ -1,7 +1,7 @@
 #include "InputVote.h"
 
 using GameSpecification::InputVote;
-
+using json = nlohmann::json;
 InputVote::InputVote(): BaseRule("input-vote"), user(NULL), prompt(""), choices(""), result(""), timeout(0){}
 
 InputVote::InputVote(const std::string& user,const std::string& prompt, const std::string& choices, const std::string& result, const double timeout): 
@@ -31,6 +31,10 @@ void InputVote::process(GameState& gameState){
 
 }
 
-void InputVote::parseRule(const nlohmann::json &json){
-    //TODO: Add parsing logic
+void InputVote::parseRule(const json &ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

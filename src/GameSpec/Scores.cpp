@@ -1,10 +1,10 @@
 #include "Scores.h"
 
 using GameSpecification::Scores;
-
+using json = nlohmann::json;
 Scores::Scores(): BaseRule("scores"), score(0), ascending(false){}
 
-Scores::Scores(const double score, const bool ascending): BaseRule("scores"), score(score), ascending(ascending){}
+Scores::Scores(double score, bool ascending): BaseRule("scores"), score(score), ascending(ascending){}
 
 double Scores::getScore() const{
     return score;
@@ -18,6 +18,11 @@ void Scores::process(GameState& gameState){
     
 }
 
-void Scores::parseRule(const nlohmann::json &json){
-    //TODO: Add parsing logic
+void Scores::parseRule(const json &ruleJson){
+    try{
+        score = ruleJson.at("score").get<int>();
+        ascending = ruleJson.at("ascending").get<bool>();
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

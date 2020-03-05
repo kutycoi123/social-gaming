@@ -1,7 +1,7 @@
 #include "InputText.h"
 
 using GameSpecification::InputText;
-
+using json = nlohmann::json;
 InputText::InputText(): BaseRule("input-text"), user(NULL), prompt(""), result(""), timeout(0){}
 
 InputText::InputText(const std::string& user, const std::string& prompt, const std::string& result, const double timeout): 
@@ -27,6 +27,10 @@ void InputText::process(GameState& gameState){
        
 }
 
-void InputText::parseRule(const nlohmann::json &json){
-    //TODO: Add parsing rule
+void InputText::parseRule(const json &ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }

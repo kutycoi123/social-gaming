@@ -2,6 +2,7 @@
 
 using GameSpecification::Add;
 using GameSpecification::SpecValue;
+using json = nlohmann::json;
 Add::Add() : BaseRule("add"), to(""){}
 
 Add::Add(const std::string& to, const SpecValue& value) : BaseRule("add"), to(to), value(value){}
@@ -29,6 +30,10 @@ void Add::process(GameState& gameState){
         gameState.setVariable(to, result);
     }
 }
-void Add::parseRule(const nlohmann::json& json){
-    //TODO: Add parsing logic 
+void Add::parseRule(const json& ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
+    }
 }
