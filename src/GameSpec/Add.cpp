@@ -29,3 +29,6 @@ void Add::process(GameState& gameState){
         gameState.setVariable(to, result);
     }
 }
+void Add::parseRule(const nlohmann::json& json){
+    //TODO: Add parsing logic 
+}

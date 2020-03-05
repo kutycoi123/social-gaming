@@ -9,3 +9,6 @@ void Inparallel::process(GameState& gameState){
 	//TODO: Add code to process inparallel
 }
 
+void Inparallel::parseRule(const nlohmann::json &json){
+	//TODO: Add parsing rule
+}

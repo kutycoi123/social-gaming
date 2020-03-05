@@ -19,3 +19,7 @@ std::string Loop::getFailCondition() const{
 void Loop::process(GameState& gameState){
 	//TODO: add code to process loop rule
 }
+
+void Loop::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

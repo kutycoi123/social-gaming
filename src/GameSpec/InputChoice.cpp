@@ -6,25 +6,28 @@ using GameSpecification::SpecValue;
 using GameSpecification::InputChoice;
 using GameSpecification::Message;
 
-	std::string InputChoice::getTo() const{
-		return to;
-	}
-	std::string InputChoice::getResult() const{
-		return result;
-	}
-	std::string InputChoice::getTimeout() const{
-		return timeout;
-	}
-	Message InputChoice::getPrompt() const{
-		return prompt;
-	}
+std::string InputChoice::getTo() const{
+	return to;
+}
+std::string InputChoice::getResult() const{
+	return result;
+}
+std::string InputChoice::getTimeout() const{
+	return timeout;
+}
+Message InputChoice::getPrompt() const{
+	return prompt;
+}
 	
-	SpecValue InputChoice::getChoices() const{
-		return choices;
-	}	
+SpecValue InputChoice::getChoices() const{
+	return choices;
+}	
 
-	void InputChoice::process(GameState& gameState){
-		//TODO: add logic for this rule
-	}
+void InputChoice::process(GameState& gameState){
+	//TODO: add logic for this rule
+}
 
+void InputChoice::parseRule(const nlohmann::json &json){
+	//TODO: Add parsing logic
+}
 

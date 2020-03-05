@@ -13,3 +13,7 @@ std::string GlobalMessage::getValue() const{
 void GlobalMessage::process(GameState& gameState){
     
 }
+
+void GlobalMessage::parseRule(const nlohmann::json &json){
+    //TODO: ADd parsing logic
+}

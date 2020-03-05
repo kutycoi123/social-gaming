@@ -17,3 +17,7 @@ bool Scores::getAscending() const{
 void Scores::process(GameState& gameState){
     
 }
+
+void Scores::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

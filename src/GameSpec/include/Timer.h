@@ -2,6 +2,7 @@
 #define TIMER_H
 
 #include "BaseRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Timer : public BaseRule{
@@ -12,6 +13,7 @@ class Timer : public BaseRule{
         std::string getMode() const;
         bool getFlag() const;
        	void process(GameState&) override; 
+        void parseRule(const nlohmann::json&) override;
     private:
         double duration;
         std::string mode;

@@ -30,3 +30,7 @@ double InputVote::getTimeOut() const{
 void InputVote::process(GameState& gameState){
 
 }
+
+void InputVote::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

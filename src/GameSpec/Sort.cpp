@@ -17,3 +17,7 @@ std::string Sort::getKey() const{
 void Sort::process(GameState& gameState){
 
 }
+
+void Sort::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

@@ -18,5 +18,8 @@ bool Timer::getFlag() const{
 }
 void Timer::process(GameState& gameState){
 
+}
 
+void Timer::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
 }

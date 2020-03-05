@@ -14,3 +14,6 @@ void Reverse::process(GameState& gameState) {
 	//TODO: Add code to process reverse rule
 }
 
+void Reverse::parseRule(const nlohmann::json& json){
+    //TODO: Add parsing logic
+}

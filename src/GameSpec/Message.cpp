@@ -17,3 +17,6 @@ void Message::process(GameState& gameState){
 	//TODO: Add code to process message rule
 }
 
+void Message::parseRule(const nlohmann::json &json){
+	//TODO: Add parsing logic
+}

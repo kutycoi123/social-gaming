@@ -3,17 +3,8 @@
 #include <string>
 #include "BaseRule.h"
 #include "AbstractSpec.h"
+#include <nlohmann/json.hpp>
 
-
-/*
-
-	{ "rule": "message",
-	  "to": << list of recipients or a single player or audience member >>,
-	  "value": << Message to send. Python style {} variable accesses are permitted.
-	             E.g. "Great job, {player.name}!"  >>
-	}
-
-*/
 namespace GameSpecification{
 	class Message: public BaseRule{
 		public:
@@ -23,6 +14,7 @@ namespace GameSpecification{
 			SpecValue getTo() const;
 			std::string getValue() const;	
 			void process(GameState&) override;
+			void parseRule(const nlohmann::json&) override;
 		private:
 			SpecValue to;
 			std::string	messValue;

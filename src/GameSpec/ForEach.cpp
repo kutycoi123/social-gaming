@@ -21,3 +21,7 @@ std::string ForEach::getElement() const{
 void ForEach::process(GameState& gameState){
 	//TODO: Add code to process foreach rule
 }
+
+void ForEach::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

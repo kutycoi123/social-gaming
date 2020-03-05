@@ -14,4 +14,6 @@ void Shuffle::process(GameState& gameState){
 	//TODO: Add code to process shuffle rule
 }
 
-
+void Shuffle::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

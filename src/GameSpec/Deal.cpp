@@ -24,3 +24,6 @@ void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule
 }
 
+void Deal::parseRule(const nlohmann::json& json){
+    //TODO: Add parsing logic 
+}

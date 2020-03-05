@@ -2,6 +2,7 @@
 #define SORT_H
 
 #include "BaseRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Sort : public BaseRule{
@@ -11,6 +12,7 @@ class Sort : public BaseRule{
         std::string getList() const;
         std::string getKey() const;
        	void process(GameState&) override; 
+        void parseRule(const nlohmann::json&) override;
     private:
         std::string list;
         std::string key;

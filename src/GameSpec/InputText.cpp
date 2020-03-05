@@ -26,3 +26,7 @@ double InputText::getTimeOut() const{
 void InputText::process(GameState& gameState){
        
 }
+
+void InputText::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing rule
+}

@@ -18,3 +18,7 @@ std::string Parallelfor::getElement() const{
 void Parallelfor::process(GameState& gameState){
 	//TODO: Add code to process Parallelfor
 }
+
+void Parallelfor::parseRule(const nlohmann::json &json){
+    //TODO: Add parsing logic
+}

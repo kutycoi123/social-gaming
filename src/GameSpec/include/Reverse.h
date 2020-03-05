@@ -2,6 +2,7 @@
 #define REVERSE_H
 
 #include "BaseRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Reverse : public BaseRule{
@@ -10,6 +11,7 @@ class Reverse : public BaseRule{
         Reverse(const std::string& list);
         std::string getList() const;
 		void process(GameState&) override;
+        void parseRule(const nlohmann::json&) override;
     private:
         std::string list;
 };

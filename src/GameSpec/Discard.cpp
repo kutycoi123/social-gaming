@@ -16,3 +16,7 @@ int Discard::getCount() const{
 void Discard::process(GameState& gameState) {
 	//TODO: Add code to process discard rule
 }
+
+void Discard::parseRule(const nlohmann::json& json){
+    //TODO: Add parsing logic
+}

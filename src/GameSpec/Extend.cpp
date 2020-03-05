@@ -18,3 +18,7 @@ SpecValue Extend::getList() const{
 void Extend::process(GameState& gameState){
 	//TODO: Add code to process extend rule
 }
+
+void Extend::parseRule(const nlohmann::json& json){
+    //TODO: Add parsing logic
+}

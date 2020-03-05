@@ -3,6 +3,7 @@
 
 #include "AbstractSpec.h"
 #include "ControlStructRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
 namespace GameSpecification{
@@ -13,6 +14,7 @@ class ForEach : public ControlStructRule{
         SpecValue getList() const;
         std::string getElement() const;
        	void process(GameState&) override; 
+        void parseRule(const nlohmann::json&) override;
     private:
         //spec value take all value
         SpecValue list;
