@@ -45,3 +45,19 @@ std::optional<std::weak_ptr<StateValue::PerAudienceValue>> GameState::getPerAudi
            std::make_optional(std::weak_ptr(it->second)) :
            std::nullopt;
 }
+
+void GameState::addConstant(const std::string &key, const ValueType& value) {
+    constantsMap.insert({key, std::make_shared<StateValue::ConstantValue>(StateValue::ConstantValue(value))});
+}
+
+void GameState::addVariable(const std::string &key, const ValueType& value) {
+    variablesMap.insert({key, std::make_shared<StateValue::VariableValue>(StateValue::VariableValue(value))});
+}
+
+void GameState::addPerPlayer(const std::string &key, const ValueType& value) {
+    perPlayerMap.insert({key, std::make_shared<StateValue::PerPlayerValue>(StateValue::PerPlayerValue(value))});
+}
+
+void GameState::addPerAudience(const std::string &key, const ValueType& value) {
+    perAudienceMap.insert({key, std::make_shared<StateValue::PerAudienceValue>(StateValue::PerAudienceValue(value))});
+}
