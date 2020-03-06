@@ -2,9 +2,11 @@
 
 using GameSpecification::Sort;
 using json = nlohmann::json;
-Sort::Sort(): BaseRule("sort"), list(""), key("") {}
 
-Sort::Sort(const std::string& list, const std::string& key): list(list), key(key){}
+Sort::Sort(): BaseRule(RuleType::SortType), list(""), key("") {}
+
+Sort::Sort(const std::string& list, const std::string& key)
+    : BaseRule(RuleType::SortType), list(list), key(key){}
 
 std::string Sort::getList() const{
     return list;

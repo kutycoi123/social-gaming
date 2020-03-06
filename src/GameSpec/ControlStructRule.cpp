@@ -5,7 +5,7 @@ using GameSpecification::BaseRule;
 
 ControlStructRule::ControlStructRule() : BaseRule(){}
 
-ControlStructRule::ControlStructRule(const std::string& name ) : BaseRule(name){}
+ControlStructRule::ControlStructRule(RuleType ruleType ) : BaseRule(ruleType){}
 void ControlStructRule::addSubRule(std::shared_ptr<BaseRule> rule){
 	subRules.push_back(rule);
 }

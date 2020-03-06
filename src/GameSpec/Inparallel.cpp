@@ -3,7 +3,7 @@
 using GameSpecification::Inparallel;
 using GameSpecification::ControlStructRule;
 using json = nlohmann::json;
-Inparallel::Inparallel() : ControlStructRule("inparallel"){}
+Inparallel::Inparallel() : ControlStructRule(RuleType::InparallelType){}
 
 void Inparallel::process(GameState& gameState){
 	//TODO: Add code to process inparallel

@@ -2,9 +2,11 @@
 
 using GameSpecification::Scores;
 using json = nlohmann::json;
-Scores::Scores(): BaseRule("scores"), score(0), ascending(false){}
 
-Scores::Scores(double score, bool ascending): BaseRule("scores"), score(score), ascending(ascending){}
+Scores::Scores(): BaseRule(RuleType::ScoresType), score(0), ascending(false){}
+
+Scores::Scores(double score, bool ascending)
+        : BaseRule(RuleType::ScoresType), score(score), ascending(ascending){}
 
 double Scores::getScore() const{
     return score;

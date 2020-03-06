@@ -3,9 +3,10 @@
 using GameSpecification::Reverse;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
-Reverse::Reverse() : BaseRule("reverse"), list(""){}
 
-Reverse::Reverse(const std::string& list) : BaseRule("reverse"), list(list) {}
+Reverse::Reverse() : BaseRule(RuleType::ReverseType), list(""){}
+
+Reverse::Reverse(const std::string& list) : BaseRule(RuleType::ReverseType), list(list) {}
 
 std::string Reverse::getList() const{
     return list;

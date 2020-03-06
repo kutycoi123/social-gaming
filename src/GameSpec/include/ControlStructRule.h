@@ -10,7 +10,7 @@ namespace GameSpecification{
 	class ControlStructRule : public BaseRule{
 		public:
 			ControlStructRule();
-			ControlStructRule(const std::string&);
+			ControlStructRule(RuleType);
 			std::vector<std::shared_ptr<BaseRule>> getSubRules() const;
 			void addSubRule(std::shared_ptr<BaseRule>);
 			virtual void process(GameState&) = 0;

@@ -23,10 +23,10 @@ enum RuleType{
 };
 	class BaseRule{
 		public:
-			static std::unordered_map<std::string, RuleType> rulemap;
+			static std::unordered_map<RuleType, std::string> rulemap;
 
 			BaseRule();
-			BaseRule(const std::string&); 
+			BaseRule(RuleType); 
 
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
@@ -34,10 +34,6 @@ enum RuleType{
 			virtual void parseRule(const nlohmann::json&) = 0;
 		private:
 			RuleType ruleType;
-			std::string ruleName;
-			
-			RuleType getRuleTypeFromName(const std::string&);
-	
 	};
 }
 #endif

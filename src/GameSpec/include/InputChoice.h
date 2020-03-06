@@ -9,10 +9,10 @@ namespace GameSpecification{
 	class InputChoice: public BaseRule{
 		
 		public:
-			InputChoice() : BaseRule("input-choice") {}
+			InputChoice() : BaseRule(RuleType::InputChoiceType) {}
 			InputChoice(const std::string& to, const Message& prompt, const SpecValue& choices, 
 							const std::string& result, double timeout) 
-							:  BaseRule("input-choice"), to(to), prompt(prompt), choices(choices), 
+							:  BaseRule(RuleType::InputChoiceType), to(to), prompt(prompt), choices(choices), 
 							   result(result), timeout(timeout) {}
 			std::string getTo() const;
 			std::string getResult() const;	

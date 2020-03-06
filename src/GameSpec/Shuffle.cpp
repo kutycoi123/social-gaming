@@ -3,9 +3,10 @@
 using GameSpecification::Shuffle;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
-Shuffle::Shuffle() : BaseRule("shuffle"), list(""){}
 
-Shuffle::Shuffle(const std::string& list): BaseRule("shuffle"), list(list){}
+Shuffle::Shuffle() : BaseRule(RuleType::ShuffleType), list(""){}
+
+Shuffle::Shuffle(const std::string& list): BaseRule(RuleType::ShuffleType), list(list){}
 
 std::string Shuffle::getList() const{
     return list;
