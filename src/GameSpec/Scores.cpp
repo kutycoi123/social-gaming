@@ -23,6 +23,7 @@ void Scores::parseRule(const json &ruleJson){
         score = ruleJson.at("score").get<int>();
         ascending = ruleJson.at("ascending").get<bool>();
     }catch(json::exception &e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

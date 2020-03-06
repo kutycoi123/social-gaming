@@ -33,11 +33,6 @@ std::string BaseRule::getRuleName() const{
 	return ruleName;
 }
 
-void BaseRule::setRuleName(const std::string& ruleName){
-	this-> ruleName = ruleName;
-	ruleType = getRuleTypeFromName(ruleName);
-}
-
 RuleType BaseRule::getRuleType() const{
 	return ruleType;
 }

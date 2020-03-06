@@ -11,7 +11,7 @@ class Sort : public BaseRule{
         Sort();
         Sort(const std::string& list, const std::string& _key);
         std::string getList() const;
-        std::string getKey() const;
+        std::optional<std::string> getKey() const;
        	void process(GameState&) override; 
         void parseRule(const nlohmann::json&) override;
     private:
@@ -20,5 +20,3 @@ class Sort : public BaseRule{
 };
 }
 #endif
-
-// sort, time, input text, input vote, globalmessage, score

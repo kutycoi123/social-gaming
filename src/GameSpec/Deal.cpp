@@ -25,7 +25,6 @@ void Deal::process(GameState& gameState) {
 }
 
 void Deal::parseRule(const json& ruleJson){
-    //TODO: Add parsing logic 
     try{
         from = ruleJson.at("from").get<std::string>();
         count = ruleJson.at("count").get<int>();
@@ -36,6 +35,7 @@ void Deal::parseRule(const json& ruleJson){
             this->to.value = to.get<std::vector<std::string>>();
         }
     }catch(json::exception &e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

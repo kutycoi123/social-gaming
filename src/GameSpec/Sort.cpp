@@ -10,10 +10,8 @@ std::string Sort::getList() const{
     return list;
 }
 
-std::string Sort::getKey() const{
-    if(key.has_value())
-        return key.value();
-    return "";
+std::optional<std::string> Sort::getKey() const{
+    return key;
 }
 
 void Sort::process(GameState& gameState){
@@ -26,6 +24,7 @@ void Sort::parseRule(const json &ruleJson){
         if(ruleJson.find("key") != ruleJson.end())
             key = std::optional<std::string>{ruleJson.at("key").get<std::string>()};
     }catch(json::exception &e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

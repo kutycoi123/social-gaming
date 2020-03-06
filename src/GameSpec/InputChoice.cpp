@@ -42,6 +42,7 @@ void InputChoice::parseRule(const json &ruleJson){
 		}
 		prompt.parseRule(ruleJson.at("prompt"));
 	}catch(json::exception &e){
+		//TODO: Handle exception more properly
 		std::cout << e.what() << "\n";
 	}
 }

@@ -23,6 +23,7 @@ void Parallelfor::parseRule(const json &ruleJson){
     try{
 
     }catch(json::exception &e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

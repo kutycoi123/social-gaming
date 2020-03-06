@@ -23,6 +23,7 @@ void Discard::parseRule(const json& ruleJson){
        this->from = ruleJson.at("from").get<std::string>();
        this->count = ruleJson.at("count").get<int>();
     }catch(json::exception& e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

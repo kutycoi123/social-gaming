@@ -19,6 +19,7 @@ void Reverse::parseRule(const nlohmann::json& json){
     try{
 
     }catch(json::exception &e){
+        //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
 }

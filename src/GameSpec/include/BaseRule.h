@@ -30,7 +30,6 @@ enum RuleType{
 
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
-			void setRuleName(const std::string&);
 			virtual void process(GameState& gameState) = 0;
 			virtual void parseRule(const nlohmann::json&) = 0;
 		private:
