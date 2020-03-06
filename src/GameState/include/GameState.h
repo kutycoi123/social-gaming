@@ -2,30 +2,27 @@
 #define GAMESTATE_H
 
 #include <boost/variant.hpp>
+#include "User.h"
 
 namespace StateValue {
+    using valueType = boost::make_recursive_variant<std::string, int,
+            bool, double, std::vector<boost::recursive_variant_>,
+            std::unordered_map<std::string, boost::recursive_variant_>>::type;
+
     struct ConstantValue{
-        const boost::variant<std::string, int,
-                bool, double, std::vector<std::string>,
-                std::unordered_map<std::string, std::string>> value;
+        const valueType value;
     };
 
     struct VariableValue{
-        boost::variant<std::string, int,
-                bool, double, std::vector<std::string>,
-                std::unordered_map<std::string, std::string>> value;
+        valueType value;
     };
 
     struct PerPlayerValue{
-        boost::variant<std::string, int,
-                bool, double, std::vector<std::string>,
-                std::unordered_map<std::string, std::string>> value;
+        valueType value;
     };
 
     struct PerAudienceValue{
-        boost::variant<std::string, int,
-                bool, double, std::vector<std::string>,
-                std::unordered_map<std::string, std::string>> value;
+        valueType value;
     };
 }
 
@@ -35,10 +32,10 @@ public:
     bool isGameStarted() const;
     void startGame();
     void endGame();
-    std::optional<std::weak_ptr<StateValue::ConstantValue>> getConstant(const std::string &key);
-    std::optional<std::weak_ptr<StateValue::VariableValue>> getVariable(const std::string &key);
-    std::optional<std::weak_ptr<StateValue::PerPlayerValue>> getPerPlayerValue(const std::string&);
-    std::optional<std::weak_ptr<StateValue::PerAudienceValue>> getPerAudienceValue(const std::string&);
+    std::optional<std::weak_ptr<StateValue::ConstantValue>> getConstant(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::VariableValue>> getVariable(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::PerPlayerValue>> getPerPlayerValue(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::PerAudienceValue>> getPerAudienceValue(const std::string& key);
 private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<StateValue::ConstantValue>> constantsMap;
