@@ -2,9 +2,12 @@
 
 using GameSpecification::Add;
 using GameSpecification::SpecValue;
-Add::Add() : BaseRule("add"), to(""){}
+using json = nlohmann::json;
 
-Add::Add(const std::string& to, const SpecValue& value) : BaseRule("add"), to(to), value(value){}
+Add::Add() : BaseRule(RuleType::AddType), to(""){}
+
+Add::Add(const std::string& to, const SpecValue& value) 
+    : BaseRule(RuleType::AddType), to(to), value(value){}
 
 std::string Add::getTo() const{
     return to;
@@ -27,5 +30,12 @@ void Add::process(GameState& gameState){
         boost::variant<std::string, int, bool, double> result = newValue + existingValue;
 
         gameState.setVariable(to, result);
+    }
+}
+void Add::parseRule(const json& ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        std::cout << e.what() << "\n";
     }
 }

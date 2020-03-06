@@ -12,6 +12,7 @@ class Add : public BaseRule{
         std::string getTo() const;
         SpecValue getValue() const;
 		void process(GameState&) override;
+        void parseRule(const nlohmann::json&) override;
     private:
         std::string to;
         SpecValue value;

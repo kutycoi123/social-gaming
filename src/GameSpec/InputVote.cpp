@@ -1,11 +1,12 @@
 #include "InputVote.h"
 
 using GameSpecification::InputVote;
-
-InputVote::InputVote(): BaseRule("input-vote"), user(NULL), prompt(""), choices(""), result(""), timeout(0){}
+using json = nlohmann::json;
+InputVote::InputVote(): 
+    BaseRule(RuleType::InputVoteType), user(NULL), prompt(""), choices(""), result(""), timeout(0){}
 
 InputVote::InputVote(const std::string& user,const std::string& prompt, const std::string& choices, const std::string& result, const double timeout): 
-    BaseRule("input-vote"), user(user), prompt(prompt), choices(choices), result(result), timeout(timeout){}
+    BaseRule(RuleType::InputVoteType), user(user), prompt(prompt), choices(choices), result(result), timeout(timeout){}
 
 std::string InputVote::getUser() const{
     return user;
@@ -29,4 +30,13 @@ double InputVote::getTimeOut() const{
 
 void InputVote::process(GameState& gameState){
 
+}
+
+void InputVote::parseRule(const json &ruleJson){
+    try{
+
+    }catch(json::exception &e){
+        //TODO: Handle exception more properly
+        std::cout << e.what() << "\n";
+    }
 }

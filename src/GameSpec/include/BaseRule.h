@@ -5,7 +5,8 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-
+#include <nlohmann/json.hpp>
+#include <iostream>
 #include "GameState.h"
 
 // Forward dependancy declaration
@@ -22,22 +23,17 @@ enum RuleType{
 };
 	class BaseRule{
 		public:
-			static std::unordered_map<std::string, RuleType> rulemap;
+			static std::unordered_map<RuleType, std::string> rulemap;
 
 			BaseRule();
-			BaseRule(const std::string&); 
+			BaseRule(RuleType); 
 
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
-			void setRuleName(const std::string&);
 			virtual void process(GameState& gameState) = 0;
-
+			virtual void parseRule(const nlohmann::json&) = 0;
 		private:
 			RuleType ruleType;
-			std::string ruleName;
-			
-			RuleType getRuleTypeFromName(const std::string&);
-	
 	};
 }
 #endif

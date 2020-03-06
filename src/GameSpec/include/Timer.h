@@ -2,20 +2,24 @@
 #define TIMER_H
 
 #include "BaseRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
+#include <optional>
 namespace GameSpecification{
 class Timer : public BaseRule{
     public:
         Timer();
-        Timer(const double duration, const std::string& mode, const bool flag);
+        Timer(double duration, const std::string& mode, bool flag);
         double getDuration() const;
         std::string getMode() const;
-        bool getFlag() const;
+        std::optional<bool> getFlag() const;
        	void process(GameState&) override; 
+        void parseRule(const nlohmann::json&) override;
     private:
         double duration;
         std::string mode;
-        bool flag;
+        std::optional<bool> flag;
+        //TODO: Add "rules" field when more details are provided
 };
 }
 #endif

@@ -3,6 +3,7 @@
 
 #include "BaseRule.h"
 #include "AbstractSpec.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Deal : public BaseRule{
@@ -13,6 +14,7 @@ class Deal : public BaseRule{
         SpecValue getTo() const;
         int getCount() const;
 		void process(GameState&) override;
+        void parseRule(const nlohmann::json&) override;
     private:
         std::string from;
         SpecValue to;

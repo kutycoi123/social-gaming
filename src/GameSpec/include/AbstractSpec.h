@@ -5,14 +5,16 @@
 #include <vector>
 #include <boost/variant.hpp>
 namespace GameSpecification{
-
+	/*
 	struct NestedMap{
 	    std::unordered_map<std::string, std::string> map;
 	};
-	
+	*/	
 	struct SpecValue{
 		// TODO: may need to add more types when more details are provided
-	    boost::variant<std::string, int, bool, double> value;
+	    boost::variant<std::string, int, 
+						bool, double, std::vector<std::string>,
+						std::unordered_map<std::string, std::string>> value;
 	};
 	
 	class AbstractSpec{

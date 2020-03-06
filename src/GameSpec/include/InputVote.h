@@ -3,6 +3,7 @@
 
 #include "BaseRule.h"
 #include "ControlStructRule.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class InputVote : public BaseRule{
@@ -15,6 +16,7 @@ class InputVote : public BaseRule{
 		std::string getResult() const;
 		double getTimeOut() const;
     	void process(GameState&) override;
+		void parseRule(const nlohmann::json&) override;
 	private:
 		std::string user;
 		std::string prompt;
