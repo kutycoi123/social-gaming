@@ -14,11 +14,11 @@ std::string Shuffle::getList() const{
 }
 
 void Shuffle::process(GameState& gameState){
-    auto variables = gameState.getVariables(list);
-    auto test = boost::get<std::unordered_map<std::string, std::string>>(variables.value().get().value);
-    unsigned seed = 0;
-    auto varList = test.find(list);
-    std::shuffle(varList->second.begin(), varList->second.end(), std::default_random_engine(seed));
+    //auto variables = gameState.getVariable(list);
+//    auto test = boost::get<std::unordered_map<std::string, std::string>>(variables.value().lock()->value);
+//    unsigned seed = 0;
+//    auto varList = test.find(list);
+//    std::shuffle(varList->second.begin(), varList->second.end(), std::default_random_engine(seed));
 
 }
 

@@ -13,10 +13,13 @@ std::string Reverse::getList() const{
 }
 
 void Reverse::process(GameState& gameState) {
-    auto variables = gameState.getVariables(list);
-    auto test = boost::get<std::unordered_map<std::string, std::string>>(variables.value().get().value);
-    auto varList = test.find(list);
-    std::reverse(varList->second.begin(), varList->second.end());
+    auto variables = gameState.getVariable(list);
+    auto retrievedValue = variables->lock();
+    type value = boost::apply_visitor(Visit_Expression(), retrievedValue.get()->value);
+    //auto test = boost::get<std::unordered_map<std::string, ValueType>>(variables.value().lock().get()->value);
+    //apply_visitor(ReverseVisitor(), test);
+    //auto varList = test.find(list);
+    //std::reverse(varList->second.begin(), varList->second.end());
 }
 
 void Reverse::parseRule(const nlohmann::json& json){
