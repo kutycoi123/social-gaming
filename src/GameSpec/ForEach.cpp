@@ -4,9 +4,9 @@ using GameSpecification::ForEach;
 using GameSpecification::SpecValue;
 using GameSpecification::ControlStructRule;
 using json = nlohmann::json;
-ForEach::ForEach() : ControlStructRule(RuleType::ForEachType), element(""){}
+ForEach::ForEach() : BaseRule(RuleType::ForEachType), element(""){}
 
-ForEach::ForEach(const SpecValue& list, const std::string& element) : ControlStructRule(RuleType::ForEachType), 
+ForEach::ForEach(const SpecValue& list, const std::string& element) : BaseRule(RuleType::ForEachType),
     list(list), element(element){}
 
 SpecValue ForEach::getList() const{

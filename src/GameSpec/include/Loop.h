@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 namespace GameSpecification{
-class Loop : public ControlStructRule{
+class Loop : public BaseRule{
     public:
 		Loop();
         Loop(const std::string& loopType, const std::string& failCondition);

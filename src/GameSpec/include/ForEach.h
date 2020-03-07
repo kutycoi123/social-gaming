@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 namespace GameSpecification{
-class ForEach : public ControlStructRule{
+class ForEach : public BaseRule{
     public:
         ForEach();
         ForEach(const SpecValue& list, const std::string& element);
