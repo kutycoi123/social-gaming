@@ -17,6 +17,10 @@ std::optional<std::string> Sort::getKey() const{
 }
 
 void Sort::process(GameState& gameState){
+    auto variables = gameState.getVariables(list);
+    auto test = boost::get<std::unordered_map<std::string, std::string>>(variables.value().get().value);
+    auto varList = test.find(list);
+    std::sort(varList->second.begin(), varList->second.end());
 
 }
 
