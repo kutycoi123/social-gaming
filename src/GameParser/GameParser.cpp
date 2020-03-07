@@ -1,7 +1,10 @@
 
+#include <Scores.h>
 #include "include/GameParser.h"
 
+
 GameParser::GameParser() {};
+
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
     for (auto& fields : gameJson.items()) {
 
@@ -44,42 +47,117 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
     //TODO: integrate with GeneralGameConfigClass
 }
   // END-TODO
- 
-void GameParser::handleOtherFields(const std::string& nonRules) {
-    
-  //TODO: create tables and classes for non rules in json. 
-}
 
 
-void GameParser::processRuleField(const nlohmann::json& singleRule) {
-    auto ruleMap = GameSpecification::BaseRule::rulemap;
-    GameSpecification::RuleType rule = ruleMap[ singleRule.begin().key()];
-    //TODO investigate stl functions
-    for (auto& fields : singleRule.items()) {
-         if(fields.key().compare("rules") == 0) {
-          parseRules(fields.value());
-        }else{
-            handleOtherFields("fields");
-        }
+
+void GameParser::parseRules(const nlohmann::json& rule) {
+
+    GameSpecification::RuleType ruleType = stringRuleMap.at(rule.begin().key());
+    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr;
+
+    if(ruleType == GameSpecification::RuleType::AddType ) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Add());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::LoopType) {
+
+        auto loop = std::make_shared<GameSpecification::Loop>();
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Loop());
+        loop->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::InparallelType) {
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Inparallel());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+
+    }else if(ruleType == GameSpecification::RuleType::ParallelforType) {
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Parallelfor());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+
+    }else if(ruleType == GameSpecification::RuleType::ExtendType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Extend());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+
+    }else if(ruleType == GameSpecification::RuleType::ReverseType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Reverse());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::ShuffleType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Shuffle());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::SortType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Sort());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::DealType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Deal());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::DiscardType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Discard());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::InputChoiceType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputChoice());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+
+    }else if(ruleType == GameSpecification::RuleType::InputTextType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputText());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::InputVoteType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputVote());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::MessageType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Message());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::ScoresType) {
+
+        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Scores());
+        baseRulePtr->parseRule(rule);
+        this->gameSpecifications.addRule(baseRulePtr);
+
+    }else if(ruleType == GameSpecification::RuleType::Unknown) {
+        assert(false);
+    }else {
+        assert(false);
     }
-    
-     
-}
-void GameParser::parseRules(const nlohmann::json& rules) {
-    if (GameParser::rulesValidation(rules) == StatusCode::VALID) {
 
-        //TODO turn this into find if. 
-        for (auto& field : rules.items()) {
-        
-            //TODO: use debugger to check the fields
-            if( field.key().compare("rules") == 0 || field.key().compare("cases") == 0) {
-                processRuleField(field.value());
-            } else {
-                handleOtherFields(field.value());
-            }
-        }
-    }  
+
 }
+
+
 
 void GameParser::setConstants(const nlohmann::json& constants) {
     this->constants = constants;
@@ -169,4 +247,8 @@ nlohmann::json GameParser::fileToJson(const std::string& pathName) {
     nlohmann::json JsonConfig;
     i >> JsonConfig;
     return JsonConfig;
+}
+
+const GameSpecification::GameSpec &GameParser::getGameSpecifications() const {
+    return gameSpecifications;
 }

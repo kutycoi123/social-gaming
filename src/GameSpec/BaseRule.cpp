@@ -37,6 +37,13 @@ std::string BaseRule::getRuleName() const{
 RuleType BaseRule::getRuleType() const{
 	return ruleType;
 }
+void BaseRule::addSubRule(std::shared_ptr<BaseRule> rule){
+    subRules.push_back(rule);
+}
+
+std::vector<std::shared_ptr<BaseRule>> BaseRule::getSubRules() const{
+    return subRules;
+}
 
 	
 

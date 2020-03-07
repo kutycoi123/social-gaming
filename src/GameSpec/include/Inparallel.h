@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 namespace GameSpecification{
-class Inparallel : public ControlStructRule{
+class Inparallel : public BaseRule{
     public:
         Inparallel();
 		void process(GameState&) override;
