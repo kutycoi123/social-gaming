@@ -9,43 +9,26 @@
 
 namespace GameSpecification{
 
-    struct type{
-        std::string a;
-        int;
-        bool;
-        double;
-        std::vector<ValueType>;
-        std::unordered_map<std::string, ValueType> mapp;
+    struct Type{
+        std::string str;
+        int i;
+        bool b;
+        double d;
+        std::vector<ValueType> vect;
+        std::unordered_map<std::string, ValueType> map;
     };
 
-    struct Visit_Expression : public boost::static_visitor<>{
-//        void operator()(int& existing) const {
-//            // Do something
-//            std::cout << "Int\n";
-//        };
-//        void operator()(double& d) const{
-//            // Do something
-//            std::cout << "Double Visitor\n";
-//        };
-//        void operator()(std::string& s) const{
-//            std::cout << "std::string Visitor\n";
-//        }
-//        void operator()(bool& b) const{
-//            std::cout << "Bool Visitor\n";
-//        };
-//        void operator()(std::vector<std::string>& sv) const{
-//            std::cout << "String Vector Visitor\n";
-//        };
-//        void operator()(std::unordered_map<std::string, std::string>& um) const{
-//            std::cout << "UMap Visitor\n";
-//        };
-//        void operator()(std::vector<ValueType>& vvt) const{
-//            std::cout << "Unordered Variant Vector Visitor\n";
-//        };
+    struct Visit_Type : public boost::static_visitor<>{
 
-        type operator()(std::unordered_map<std::string, ValueType> const& umvt) const {
-            type a;
-            a.mapp = umvt;
+        void operator()(std::vector<ValueType>& vvt) const{
+            Type a;
+            a.vect = vvt;
+            std::cout << "Unordered Variant Vector Visitor\n";
+        };
+
+        Type operator()(std::unordered_map<std::string, ValueType> const& umvt) const {
+            Type a;
+            a.map = umvt;
             return a;
         };
     };

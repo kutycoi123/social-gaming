@@ -14,8 +14,9 @@ std::string Reverse::getList() const{
 
 void Reverse::process(GameState& gameState) {
     auto variables = gameState.getVariable(list);
-    auto retrievedValue = variables->lock();
-    type value = boost::apply_visitor(Visit_Expression(), retrievedValue.get()->value);
+    if(auto retrievedValue = variables->lock()){
+//        Type value = boost::apply_visitor(Visit_Type(), gameState.getVariable(list).value().lock()->value);
+    }
     //auto test = boost::get<std::unordered_map<std::string, ValueType>>(variables.value().lock().get()->value);
     //apply_visitor(ReverseVisitor(), test);
     //auto varList = test.find(list);
