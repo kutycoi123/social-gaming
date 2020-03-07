@@ -129,7 +129,8 @@ class GameParser{
             {"scores",GameSpecification::RuleType::ScoresType, },
             {"unknown",GameSpecification::RuleType::Unknown, }
     };
-
+ 
+    const GameSpecification::GameSpec &getGameSpecifications() const;
 
   private:
       void handleOtherFields(const std::string& nonRules);
@@ -156,7 +157,6 @@ class GameParser{
       const std::string MAX = "max";
       const std::string NUMBER = "number";
       GameSpecification::GameSpec gameSpecifications;
-public:
-    const GameSpecification::GameSpec &getGameSpecifications() const;
+
 };
 #endif
