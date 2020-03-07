@@ -4,10 +4,10 @@ using GameSpecification::ControlStructRule;
 using GameSpecification::Loop;
 using json = nlohmann::json;
 
-Loop::Loop() : ControlStructRule(RuleType::LoopType){}
+Loop::Loop() : BaseRule(RuleType::LoopType){}
 
 Loop::Loop(const std::string& loopType, const std::string& failCondition) 
-    : ControlStructRule(RuleType::LoopType), loopType(loopType), failCondition(failCondition){}
+    : BaseRule(RuleType::LoopType), loopType(loopType), failCondition(failCondition){}
 
 std::string Loop::getLoopType() const{
     return loopType;

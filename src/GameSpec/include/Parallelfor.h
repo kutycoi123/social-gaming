@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 namespace GameSpecification{
-class Parallelfor : public ControlStructRule{
+class Parallelfor : public BaseRule{
     public:
 		    Parallelfor();
         Parallelfor(std::vector<std::string> list, const std::string& element);

@@ -14,6 +14,29 @@
 #include <map>
 #include "BaseRule.h"
 
+#include "GameSpec.h"
+
+#include "Add.h"
+#include "ForEach.h"
+#include "Deal.h"
+#include "Discard.h"
+#include "Extend.h"
+#include "ForEach.h"
+#include "GlobalMessage.h"
+#include "Inparallel.h"
+
+#include "InputChoice.h"
+#include "InputText.h"
+#include "InputVote.h"
+#include "Loop.h"
+#include "Message.h"
+#include "Parallelfor.h"
+#include "Reverse.h"
+
+#include "Shuffle.h"
+#include "Sort.h"
+#include "Timer.h"
+
 enum GameSpecificationJSON{
     CONFIGURATION,
     CONSTANTS,
@@ -54,7 +77,7 @@ class GameParser{
     StatusCode rulesValidation(const nlohmann::json& incomingRules);
     nlohmann::json fileToJson(const std::string& pathName);
     void parseEntireGameJson(const nlohmann::json& gameJson);
-   
+
     
     void validator(const nlohmann::json& gameConfiguration);
 
@@ -84,6 +107,28 @@ class GameParser{
                     {"max", GameConfiguration::MAX_PLAYER},
                     {"min", GameConfiguration::MIN_PLAYER}
             };
+    std::unordered_map<std::string,GameSpecification::RuleType> stringRuleMap = {
+            {"foreach", GameSpecification::RuleType::ForEachType},
+            {"loop", GameSpecification::RuleType::LoopType,},
+            {"inparallel",GameSpecification::RuleType::InparallelType,},
+            {"parallelfor",GameSpecification::RuleType::ParallelforType,},
+            {"switch",GameSpecification::RuleType::SwitchType,},
+            {"when",GameSpecification::RuleType::WhenType,},
+            {"extend", GameSpecification::RuleType::ExtendType, },
+            {"reverse",GameSpecification::RuleType::ReverseType, },
+            {"shuffle",GameSpecification::RuleType::ShuffleType, },
+            {"sort",GameSpecification::RuleType::SortType, },
+            {"deal",GameSpecification::RuleType::DealType, },
+            {"discard",GameSpecification::RuleType::DiscardType, },
+            {"add",GameSpecification::RuleType::AddType, },
+            {"timer",GameSpecification::RuleType::TimerType,},
+            {"input-choice",GameSpecification::RuleType::InputChoiceType, },
+            {"input-text",GameSpecification::RuleType::InputTextType, },
+            {"message",GameSpecification::RuleType::MessageType, },
+            {"global-message",GameSpecification::RuleType::GlobalMessageType, },
+            {"scores",GameSpecification::RuleType::ScoresType, },
+            {"unknown",GameSpecification::RuleType::Unknown, }
+    };
 
 
   private:
@@ -110,5 +155,8 @@ class GameParser{
       const std::string MIN = "min";
       const std::string MAX = "max";
       const std::string NUMBER = "number";
+      GameSpecification::GameSpec gameSpecifications;
+public:
+    const GameSpecification::GameSpec &getGameSpecifications() const;
 };
 #endif

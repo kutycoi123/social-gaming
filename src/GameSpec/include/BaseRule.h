@@ -33,6 +33,7 @@ enum RuleType{
 			virtual void process(GameState& gameState) = 0;
 			virtual void parseRule(const nlohmann::json&) = 0;
 		private:
+            std::vector<std::shared_ptr<BaseRule>> subRules;
 			RuleType ruleType;
 	};
 }
