@@ -20,16 +20,16 @@ void Add::process(GameState& gameState){
 	// TODO: Add code to process add rule
     // TODO: Find a better way to wrap and unwrap boost variant
     // TODO: Handle cases not just for int
-    auto a = gameState.getVariables(to);
-
-    if (a.has_value()) {
-        auto retrievedValue = a.value().get().value;
-
+    auto a = gameState.getVariable(to);
+    if (!a.has_value()){
+        return;
+    }
+    if (auto retrievedValue = a->lock()) {
         auto existingValue = boost::get<int>(this->value.value);
-        auto newValue = boost::get<int>(retrievedValue);
+        auto newValue = boost::get<int>(retrievedValue->value);
         boost::variant<std::string, int, bool, double> result = newValue + existingValue;
 
-        gameState.setVariable(to, result);
+        retrievedValue->value = result;
     }
 }
 void Add::parseRule(const json& ruleJson){

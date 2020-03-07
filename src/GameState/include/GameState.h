@@ -1,16 +1,38 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "GameSpec.h"
+#include <utility>
+#include <boost/variant.hpp>
+#include "User.h"
 
-// Forward declaration required due to circular reference between GameSpec and GameState
-// TODO: Remove when circular dependency between GameState and GameSpec is resolved
-// https://stackoverflow.com/questions/2133250/x-does-not-name-a-type-error-in-c/2133260
-// https://stackoverflow.com/questions/19001700/how-to-forward-declare-a-class-which-is-in-a-namespace
-namespace GameSpecification {
-    class AbstractSpec;
-    class GameSpec;
-    class BaseRule;
+using ValueType = boost::make_recursive_variant<std::string, int,
+        bool, double, std::vector<boost::recursive_variant_>,
+        std::unordered_map<std::string, boost::recursive_variant_>>::type;
+
+namespace StateValue {
+    struct ConstantValue{
+        explicit ConstantValue(ValueType value) : value(std::move(value))
+        {}
+        const ValueType value;
+    };
+
+    struct VariableValue{
+        explicit VariableValue(ValueType value) : value(std::move(value))
+        {}
+        ValueType value;
+    };
+
+    struct PerPlayerValue{
+        explicit PerPlayerValue(ValueType value) : value(std::move(value))
+        {}
+        ValueType value;
+    };
+
+    struct PerAudienceValue{
+        explicit PerAudienceValue(ValueType value) : value(std::move(value))
+        {}
+        ValueType value;
+    };
 }
 
 class GameState {
@@ -19,19 +41,25 @@ public:
     bool isGameStarted() const;
     void startGame();
     void endGame();
-    std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getConstant(const std::string&);
-    std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getVariables(const std::string&);
-    std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerPlayerValue(const std::string&);
-    std::optional<std::reference_wrapper<GameSpecification::SpecValue>> getPerAudienceValue(const std::string&);
 
-    void setVariable(const std::string&, boost::variant<std::string, int, bool, double>);
+    std::optional<std::weak_ptr<StateValue::ConstantValue>> getConstant(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::VariableValue>> getVariable(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::PerPlayerValue>> getPerPlayerValue(const std::string& key);
+    std::optional<std::weak_ptr<StateValue::PerAudienceValue>> getPerAudienceValue(const std::string& key);
+
+    // These methods should only be called when GameState is begin constructed in the parser
+    // TODO: Find a way to enforce this (maybe with a design pattern)
+    void addConstant(const std::string& key, const ValueType& value);
+    void addVariable(const std::string& key, const ValueType& value);
+    void addPerPlayer(const std::string& key, const ValueType& value);
+    void addPerAudience(const std::string& key, const ValueType& value);
 private:
     bool gameStarted;
-    std::unordered_map<std::string, GameSpecification::SpecValue> constantsMap;
-    std::unordered_map<std::string, GameSpecification::SpecValue> variablesMap;
+    std::unordered_map<std::string, std::shared_ptr<StateValue::ConstantValue>> constantsMap;
+    std::unordered_map<std::string, std::shared_ptr<StateValue::VariableValue>> variablesMap;
     // TODO: Will change perPlayer/perAudience impl to be different from constantsMap/variablesMap
-    std::unordered_map<std::string, GameSpecification::SpecValue> perPlayerMap;
-    std::unordered_map<std::string, GameSpecification::SpecValue> perAudienceMap;
+    std::unordered_map<std::string, std::shared_ptr<StateValue::PerPlayerValue>> perPlayerMap;
+    std::unordered_map<std::string, std::shared_ptr<StateValue::PerAudienceValue>> perAudienceMap;
 };
 
 #endif
