@@ -31,7 +31,7 @@ std::optional<User> UserManager::getUser(const UserId& id) {
     if (!userRef.has_value()){
         return std::nullopt;
     }
-    return std::optional<User>(*userRef.value().lock());
+    return std::make_optional(*userRef.value().lock());
 }
 
 std::optional<std::weak_ptr<User>> UserManager::getUserRef(const UserId& id) {
@@ -40,7 +40,7 @@ std::optional<std::weak_ptr<User>> UserManager::getUserRef(const UserId& id) {
         return std::nullopt;
     }
 
-    return  std::optional<std::weak_ptr<User>>(std::weak_ptr(iterator->second));
+    return std::make_optional(std::weak_ptr(iterator->second));
 }
 
 std::unordered_map<UserId, std::shared_ptr<User>, UserIdHash>::iterator UserManager::begin() {
