@@ -26,10 +26,11 @@ enum RuleType{
 			static std::unordered_map<RuleType, std::string> rulemap;
 
 			BaseRule();
-			BaseRule(RuleType); 
-
+			BaseRule(RuleType);
 			std::string getRuleName() const;
 			RuleType getRuleType() const;
+            std::vector<std::shared_ptr<BaseRule>> getSubRules() const ;
+            void addSubRule(std::shared_ptr<BaseRule> rule);
 			virtual void process(GameState& gameState) = 0;
 			virtual void parseRule(const nlohmann::json&) = 0;
 		private:

@@ -129,7 +129,7 @@ class GameParser{
             {"scores",GameSpecification::RuleType::ScoresType, },
             {"unknown",GameSpecification::RuleType::Unknown, }
     };
- 
+
     const GameSpecification::GameSpec &getGameSpecifications() const;
 
   private:
