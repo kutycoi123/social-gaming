@@ -18,12 +18,37 @@ namespace GameSpecification{
         std::unordered_map<std::string, ValueType> map;
     };
 
-    struct Visit_Type : public boost::static_visitor<>{
+    struct Visit_Type : public boost::static_visitor<Type>{
 
-        void operator()(std::vector<ValueType>& vvt) const{
+        Type operator()(int& existing) const {
+            Type a;
+            a.i = existing;
+            return a;
+
+        };
+
+        Type operator()(double& d) const{
+            Type a;
+            a.d = d;
+            return a;
+        };
+
+        Type operator()(std::string& s) const{
+            Type a;
+            a.str = s;
+            return a;
+        };
+
+        Type operator()(bool& b) const{
+            Type a;
+            a.b = b;
+            return a;
+        };
+
+        Type operator()(std::vector<ValueType>& vvt) const{
             Type a;
             a.vect = vvt;
-            std::cout << "Unordered Variant Vector Visitor\n";
+            return a;
         };
 
         Type operator()(std::unordered_map<std::string, ValueType> const& umvt) const {

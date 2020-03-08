@@ -1,4 +1,7 @@
 #include "Reverse.h"
+#include <boost/range/algorithm/reverse.hpp>
+#include <iterator>
+#include <algorithm>
 
 using GameSpecification::Reverse;
 using GameSpecification::BaseRule;
@@ -15,12 +18,12 @@ std::string Reverse::getList() const{
 void Reverse::process(GameState& gameState) {
     auto variables = gameState.getVariable(list);
     if(auto retrievedValue = variables->lock()){
-//        Type value = boost::apply_visitor(Visit_Type(), gameState.getVariable(list).value().lock()->value);
+        auto value = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
+        auto varList = value.map;
+        auto getList = varList.find(list);
+        auto val = boost::apply_visitor(Visit_Type(), getList->second);
+        boost::range::reverse(val.vect);
     }
-    //auto test = boost::get<std::unordered_map<std::string, ValueType>>(variables.value().lock().get()->value);
-    //apply_visitor(ReverseVisitor(), test);
-    //auto varList = test.find(list);
-    //std::reverse(varList->second.begin(), varList->second.end());
 }
 
 void Reverse::parseRule(const nlohmann::json& json){
