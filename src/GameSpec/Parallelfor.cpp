@@ -4,10 +4,10 @@ using GameSpecification::Parallelfor;
 using GameSpecification::ControlStructRule;
 using json = nlohmann::json;
 
-Parallelfor::Parallelfor() : ControlStructRule(RuleType::ParallelforType) {}
+Parallelfor::Parallelfor() : BaseRule(RuleType::ParallelforType) {}
 
 Parallelfor::Parallelfor(std::vector<std::string> list, const std::string& element) 
-    : ControlStructRule(RuleType::ParallelforType), list(list), element(element){}
+    : BaseRule(RuleType::ParallelforType), list(list), element(element){}
 
 std::vector<std::string> Parallelfor::getList() const{
     return list;
