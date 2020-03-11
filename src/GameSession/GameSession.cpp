@@ -4,7 +4,7 @@ GameSession::GameSession(std::weak_ptr<User>& owner) :
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
     // TODO: Replace blank GameSpec/GameState params with actual impl
-    game{GameSpecification::GameSpec(), GameState{}},
+    game{GameSpecification::GameSpec(), GameState{}, playerList.users},
     owner (owner)
 {}
 
@@ -33,13 +33,19 @@ void GameSession::addMessages(const std::string &message) noexcept{
     messages.push_back(message);
 }
 
+void GameSession::addMessagesToGame(const std::string &message) noexcept{
+    if (isGameStarted()) {
+        game.addMessages(message);
+    }
+}
+
 std::list<std::pair<UserId, std::string>> GameSession::getLobbyMessages() noexcept{
     std::list<std::pair<UserId, std::string>> result = {};
 
     for(auto& message : messages){
         
        for(auto& player : playerList.users){
-            result.push_back(std::make_pair(player.lock()->getUserId(), message));
+            result.emplace_back(player.lock()->getUserId(), message);
         }
     }    
 
@@ -53,8 +59,10 @@ void GameSession::clearMessages() noexcept {
 std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages() noexcept{
 
     auto messages = getLobbyMessages();
-
-    //TODO: if game started, do something else
+    if (game.isGameStarted()) {
+        auto lobbyMessages = game.updateAndGetAllMessages();
+        messages.insert(messages.end(), lobbyMessages.begin(), lobbyMessages.end());
+    }
 
     clearMessages();
 
