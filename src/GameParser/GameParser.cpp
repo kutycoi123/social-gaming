@@ -1,5 +1,4 @@
 
-#include <Scores.h>
 #include "include/GameParser.h"
 
 using stringRuleMap = GameSpecification::BaseRule.stringRuleMap;
@@ -53,7 +52,7 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
 void GameParser::parseRules(const nlohmann::json& rule) {
 
     GaeSpecification::RuleType ruleType = stringRuleMap.at(rule.at("rule").get<std::string>());
-    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr = GameSpecification::getRulePtrFromJson(rule);
+    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
 	baseRulePtr->parseRule(rule);
 	this->gameSpecifications.addRule(baseRulePtr);
 

@@ -5,28 +5,7 @@
 #include <algorithm>
 #include "AbstractSpec.h"
 #include "BaseRule.h"
-/*
-#include "Add.h"
-#include "Deal.h"
-#include "Discard.h"
-#include "Extend.h"
-#include "ForEach.h"
-#include "GlobalMessage.h"
-#include "Inparallel.h"
 
-#include "InputChoice.h"
-#include "InputText.h"
-#include "InputVote.h"
-#include "Loop.h"
-#include "Message.h"
-#include "Parallelfor.h"
-#include "Reverse.h"
-
-#include "Shuffle.h"
-#include "Sort.h"
-#include "Timer.h"
-#include "Scores.h"
-*/
 using nlohmann::json;
 class Add;
 class Deal;
@@ -45,7 +24,7 @@ class Scores;
 namespace GameSpecification{
 //Note: This function are not dealing with ForEach, ParallelFor, Loop, Inparallelfor
 //		because when calling this function inside those classes, it would cause "invalid use of incomplete type"
-static std::shared_ptr<BaseRule> getRulePtrFromJson(RuleType ruleType){
+static std::shared_ptr<BaseRule> getRulePtrFromRuleType(RuleType ruleType){
 	switch(ruleType){
 		case RuleType::AddType: 
 			return std::shared_ptr<BaseRule>(new Add());

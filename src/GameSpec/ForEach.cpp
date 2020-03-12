@@ -37,7 +37,7 @@ void ForEach::parseRule(const json &ruleJson){
 		for(auto& it : subRulesJson.items()){
 			auto rule = it.value();
 			auto ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
-			auto baseRulePtr = getRulePtrFromJson(ruleType);
+			auto baseRulePtr = getRulePtrFromRuleType(ruleType);
 			if(!baseRulePtr){
 				switch(ruleType){
 					case RuleType::ForEachType:

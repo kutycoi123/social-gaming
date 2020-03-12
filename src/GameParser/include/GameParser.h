@@ -36,8 +36,8 @@
 #include "Shuffle.h"
 #include "Sort.h"
 #include "Timer.h"
-#include <Scores.h>
-
+#include "Scores.h"
+#include "GameSpecHelper.h"
 enum GameSpecificationJSON{
     CONFIGURATION,
     CONSTANTS,
