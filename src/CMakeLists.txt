@@ -1,6 +1,7 @@
 add_subdirectory(Invitation)
 add_subdirectory(User)
 add_subdirectory(Game)
+add_subdirectory(GameGeneralConfig)
 add_subdirectory(GameState)
 add_subdirectory(GameSpec)
 add_subdirectory(UserManager)

@@ -4,6 +4,7 @@
 #include <utility>
 #include <boost/variant.hpp>
 #include "User.h"
+#include "GameConfig.h"
 
 using ValueType = boost::make_recursive_variant<std::string, int,
         bool, double, std::vector<boost::recursive_variant_>,
@@ -47,6 +48,8 @@ public:
     std::optional<std::weak_ptr<StateValue::PerPlayerValue>> getPerPlayerValue(const std::string& key);
     std::optional<std::weak_ptr<StateValue::PerAudienceValue>> getPerAudienceValue(const std::string& key);
 
+    void addConfig(const GameConfig& config);
+
     // These methods should only be called when GameState is begin constructed in the parser
     // TODO: Find a way to enforce this (maybe with a design pattern)
     void addConstant(const std::string& key, const ValueType& value);
@@ -57,9 +60,10 @@ private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<StateValue::ConstantValue>> constantsMap;
     std::unordered_map<std::string, std::shared_ptr<StateValue::VariableValue>> variablesMap;
-    // TODO: Will change perPlayer/perAudience impl to be different from constantsMap/variablesMap
+    // TODO: Change perPlayer/perAudience impl to be different from constantsMap/variablesMap
     std::unordered_map<std::string, std::shared_ptr<StateValue::PerPlayerValue>> perPlayerMap;
     std::unordered_map<std::string, std::shared_ptr<StateValue::PerAudienceValue>> perAudienceMap;
+    GameConfig gameConfig;
 };
 
 #endif
