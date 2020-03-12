@@ -27,13 +27,19 @@ void Add::process(GameState& gameState){
         int v1 = boost::get<int>(existingValue);
         
         auto addedValue = getValue().value;
+        auto test = boost::get<std::string>(addedValue);
+
+        // Determine if value is int or string
+        int type = addedValue.which();
         int v2 = 0;
 
-        if (boost::get<int>(addedValue)) {
+        // TODO: Find potential way to handle type checking better
+        if (type == 1) {
             v2 = boost::get<int>(addedValue);
         } else {
             auto variableToAdd = gameState.getVariable(boost::get<std::string>(addedValue));
             auto constantToAdd = gameState.getConstant(boost::get<std::string>(addedValue));
+
             if (variableToAdd.has_value()) {
                 auto vValue = variableToAdd->lock();
                 v2 = boost::get<int>(vValue->value.value);
