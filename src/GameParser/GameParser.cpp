@@ -2,6 +2,11 @@
 #include "GameParser.h"
 
 using GameSpecification::stringToRuleType;
+using GameSpecification::ForEach;
+using GameSpecification::Inparallel;
+using GameSpecification::Loop;
+using GameSpecification::Parallelfor;
+using GameSpecification::RuleType;
 GameParser::GameParser() {};
 
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
@@ -52,7 +57,25 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
 void GameParser::parseRules(const nlohmann::json& rule) {
 
     GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
-    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
+    auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
+	if(!baseRulePtr){
+		switch(ruleType){
+			case RuleType::ForEachType:
+				baseRulePtr = std::shared_ptr<BaseRule>(new ForEach());
+				break;
+			case RuleType::InparallelType:
+				baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel());
+				break;
+			case RuleType::LoopType:
+				baseRulePtr = std::shared_ptr<BaseRule>(new Loop());
+				break;
+			case RuleType::ParallelforType:
+				baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor());
+				break;
+			default:
+				assert(false);
+		}
+	}
 	baseRulePtr->parseRule(rule);
 	this->gameSpecifications.addRule(baseRulePtr);
 
