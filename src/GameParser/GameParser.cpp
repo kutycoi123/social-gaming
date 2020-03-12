@@ -1,7 +1,7 @@
 
-#include "include/GameParser.h"
+#include "GameParser.h"
 
-using stringRuleMap = GameSpecification::BaseRule.stringRuleMap;
+using GameSpecification::stringToRuleType;
 GameParser::GameParser() {};
 
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
@@ -51,7 +51,7 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
 
 void GameParser::parseRules(const nlohmann::json& rule) {
 
-    GaeSpecification::RuleType ruleType = stringRuleMap.at(rule.at("rule").get<std::string>());
+    GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
     std::shared_ptr<GameSpecification::BaseRule> baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
 	baseRulePtr->parseRule(rule);
 	this->gameSpecifications.addRule(baseRulePtr);
@@ -130,16 +130,15 @@ GameParser::StatusCode GameParser::validatePlayerNumber(nlohmann::json& jsonObje
  
  
 GameParser::StatusCode GameParser::rulesValidation(const nlohmann::json& incomingRules) {
-    auto ruleMap = GameSpecification::BaseRule::rulemap;
-
+	
     auto result = std::find_if(incomingRules.items().begin(), incomingRules.items().end(), [&](auto& elem){
-        return ruleMap.find(elem.key()) == ruleMap.end();
+        return stringToRuleType.find(elem.key()) == stringToRuleType.end();
     });
 
     if (result == incomingRules.items().end()) {
         return StatusCode::INVALID;
     }
-
+	
     return StatusCode::VALID;
 }
 

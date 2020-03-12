@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <cassert>
 #include <map>
+#include "AbstractSpec.h"
 #include "BaseRule.h"
 
 #include "GameSpec.h"
