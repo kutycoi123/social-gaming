@@ -4,7 +4,7 @@ GameSession::GameSession(std::weak_ptr<User>& owner) :
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
     // TODO: Replace blank GameSpec/GameState params with actual impl
-    game{GameSpecification::GameSpec(), GameState{}, playerList.users},
+    game{GameSpecification::GameSpec(), GameState{}},
     owner (owner)
 {}
 
@@ -22,7 +22,7 @@ bool GameSession::isGameStarted() const {
 }
 
 void GameSession::startGame() {
-    game.startGame();
+    game.startGame(playerList.users);
 }
 
 void GameSession::endGame() {

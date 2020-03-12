@@ -6,9 +6,9 @@
 
 class Game {
 public:
-    Game(GameSpecification::GameSpec spec, GameState state, std::list<std::weak_ptr<User>>& users);
+    Game(GameSpecification::GameSpec spec, GameState state);
     bool isGameStarted() const;
-    void startGame();
+    void startGame(const std::list<std::weak_ptr<User>>& users);
     void endGame();
     void addMessages(const std::string &message) noexcept;
     std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
@@ -20,7 +20,7 @@ private:
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
-    const std::list<std::weak_ptr<User>>& gameSessionUsers;
+    std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };
 
