@@ -1,20 +1,20 @@
-add_library(gameState
-        GameState.cpp
-)
+add_library(gameConfig
+        GameConfig.cpp
+        )
 
-set_target_properties(gameState
+set_target_properties(gameConfig
         PROPERTIES
         LINKER_LANGUAGE CXX
         CXX_STANDARD 17
         PREFIX ""
-)
+        )
 
 target_include_directories(
-        gameState
+        gameConfig
         PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
-target_link_libraries(gameState
+target_link_libraries(
         gameConfig
-        user
-        )
+        nlohmann_json::nlohmann_json
+)

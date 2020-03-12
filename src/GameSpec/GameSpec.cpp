@@ -52,10 +52,6 @@ using GameSpecification::GameSpec;
 	void GameSpec::addPerAudienceSpec(const std::string& name, const SpecValue& val){
 	    perAudience[name] = val;
 	}
-	
-	void GameSpec::addConfig(const GameGeneralConfig& config){
-		this->config = config;	
-	}
 
     const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getConstants() const {
         return constants;
