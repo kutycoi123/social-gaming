@@ -2,36 +2,16 @@
 
 using GameSpecification::BaseRule;
 using GameSpecification::RuleType;
+using GameSpecification::ruleTypeToString;
+using nlohmann::json;
 
-std::unordered_map<RuleType, std::string> BaseRule::rulemap({
-	{RuleType::ForEachType,"foreach"},
-	{RuleType::LoopType,"loop"},
-	{RuleType::InparallelType,"inparallel"},
-	{RuleType::ParallelforType,"parallelfor"},
-	{RuleType::SwitchType,"switch"},
-	{RuleType::WhenType,"when"},
-	{RuleType::ExtendType, "extend"},
-	{RuleType::ReverseType, "reverse"},
-	{RuleType::ShuffleType, "shuffle"},
-	{RuleType::SortType, "sort"},
-	{RuleType::DealType, "deal"},
-	{RuleType::DiscardType, "discard"},
-	{RuleType::AddType, "add"},
-	{RuleType::TimerType, "timer"},
-	{RuleType::InputChoiceType, "input-choice"},
-	{RuleType::InputTextType, "input-text"},
-	{RuleType::MessageType, "message"},
-	{RuleType::GlobalMessageType, "global-message"},
-	{RuleType::ScoresType, "scores"},
-	{RuleType::Unknown, "unkown"}
-});
+BaseRule::BaseRule() : ruleType(RuleType::Unknown), next(nullptr), parent(nullptr){}
 
-BaseRule::BaseRule() : ruleType(RuleType::Unknown){}
 BaseRule::BaseRule(RuleType ruleType) : 
-	ruleType(ruleType){}
+	ruleType(ruleType), next(nullptr), parent(nullptr){}
 
 std::string BaseRule::getRuleName() const{
-	return rulemap[ruleType];
+	return ruleTypeToString[ruleType];
 }
 
 RuleType BaseRule::getRuleType() const{
@@ -45,5 +25,22 @@ std::vector<std::shared_ptr<BaseRule>> BaseRule::getSubRules() const{
     return subRules;
 }
 
+std::shared_ptr<BaseRule> BaseRule::getPtr() {
+	return shared_from_this();
+}
 	
+void BaseRule::setNextPtr(const std::shared_ptr<BaseRule>& ptr){
+	next = std::shared_ptr<BaseRule>(ptr);
+}
 
+std::shared_ptr<BaseRule> BaseRule::getNextPtr() const {
+	return next;	
+}
+
+void BaseRule::setParentPtr(const std::shared_ptr<BaseRule>& ptr) {
+	parent = std::shared_ptr<BaseRule>(ptr);
+}
+
+std::shared_ptr<BaseRule> BaseRule::getParentPtr() const{
+	return parent;
+}

@@ -36,6 +36,7 @@ using GameSpecification::GameSpec;
 	void GameSpec::parseGameSpec(const nlohmann::json& json){
 	    //TODO: add parsing code here
 	}
+<<<<<<< HEAD
 	
 	void GameSpec::addConstantSpec(const std::string& name, const SpecValue& val){
 	    constants[name] = val;
@@ -64,7 +65,6 @@ using GameSpecification::GameSpec;
     const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getPerPlayer() const {
         return perPlayer;
     }
+=======
+>>>>>>> Clean GameSpec
 
-    const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getPerAudience() const {
-        return perAudience;
-    }

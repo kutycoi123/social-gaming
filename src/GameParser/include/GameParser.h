@@ -36,6 +36,7 @@
 #include "Shuffle.h"
 #include "Sort.h"
 #include "Timer.h"
+#include <Scores.h>
 
 enum GameSpecificationJSON{
     CONFIGURATION,
@@ -107,29 +108,7 @@ class GameParser{
                     {"max", GameConfiguration::MAX_PLAYER},
                     {"min", GameConfiguration::MIN_PLAYER}
             };
-    std::unordered_map<std::string,GameSpecification::RuleType> stringRuleMap = {
-            {"foreach", GameSpecification::RuleType::ForEachType},
-            {"loop", GameSpecification::RuleType::LoopType,},
-            {"inparallel",GameSpecification::RuleType::InparallelType,},
-            {"parallelfor",GameSpecification::RuleType::ParallelforType,},
-            {"switch",GameSpecification::RuleType::SwitchType,},
-            {"when",GameSpecification::RuleType::WhenType,},
-            {"extend", GameSpecification::RuleType::ExtendType, },
-            {"reverse",GameSpecification::RuleType::ReverseType, },
-            {"shuffle",GameSpecification::RuleType::ShuffleType, },
-            {"sort",GameSpecification::RuleType::SortType, },
-            {"deal",GameSpecification::RuleType::DealType, },
-            {"discard",GameSpecification::RuleType::DiscardType, },
-            {"add",GameSpecification::RuleType::AddType, },
-            {"timer",GameSpecification::RuleType::TimerType,},
-            {"input-choice",GameSpecification::RuleType::InputChoiceType, },
-            {"input-text",GameSpecification::RuleType::InputTextType, },
-            {"message",GameSpecification::RuleType::MessageType, },
-            {"global-message",GameSpecification::RuleType::GlobalMessageType, },
-            {"scores",GameSpecification::RuleType::ScoresType, },
-            {"unknown",GameSpecification::RuleType::Unknown, }
-    };
-
+	
     const GameSpecification::GameSpec &getGameSpecifications() const;
 
   private:

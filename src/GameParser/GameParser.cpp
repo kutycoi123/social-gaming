@@ -2,7 +2,7 @@
 #include <Scores.h>
 #include "include/GameParser.h"
 
-
+using stringRuleMap = GameSpecification::BaseRule.stringRuleMap;
 GameParser::GameParser() {};
 
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
@@ -52,108 +52,10 @@ void GameParser::parseConfiguration(const nlohmann::json& configs) {
 
 void GameParser::parseRules(const nlohmann::json& rule) {
 
-    GameSpecification::RuleType ruleType = stringRuleMap.at(rule.begin().key());
-    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr;
-
-    if(ruleType == GameSpecification::RuleType::AddType ) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Add());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::LoopType) {
-
-        auto loop = std::make_shared<GameSpecification::Loop>();
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Loop());
-        loop->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::InparallelType) {
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Inparallel());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-
-    }else if(ruleType == GameSpecification::RuleType::ParallelforType) {
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Parallelfor());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-
-    }else if(ruleType == GameSpecification::RuleType::ExtendType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Extend());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-
-    }else if(ruleType == GameSpecification::RuleType::ReverseType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Reverse());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::ShuffleType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Shuffle());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::SortType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Sort());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::DealType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Deal());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::DiscardType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Discard());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::InputChoiceType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputChoice());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-
-    }else if(ruleType == GameSpecification::RuleType::InputTextType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputText());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::InputVoteType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::InputVote());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::MessageType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Message());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::ScoresType) {
-
-        baseRulePtr = std::shared_ptr<GameSpecification::BaseRule>(new GameSpecification::Scores());
-        baseRulePtr->parseRule(rule);
-        this->gameSpecifications.addRule(baseRulePtr);
-
-    }else if(ruleType == GameSpecification::RuleType::Unknown) {
-        assert(false);
-    }else {
-        assert(false);
-    }
-
+    GaeSpecification::RuleType ruleType = stringRuleMap.at(rule.at("rule").get<std::string>());
+    std::shared_ptr<GameSpecification::BaseRule> baseRulePtr = GameSpecification::getRulePtrFromJson(rule);
+	baseRulePtr->parseRule(rule);
+	this->gameSpecifications.addRule(baseRulePtr);
 
 }
 

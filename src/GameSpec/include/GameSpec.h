@@ -31,6 +31,7 @@ namespace GameSpecification{
 		    void setSpecFilePath(const std::string&);
 		    void readSpec() override; 
 		    void parseGameSpec(const nlohmann::json&); 
+<<<<<<< HEAD
 		    void addConstantSpec(const std::string&, const SpecValue& );
 		    void addVariableSpec(const std::string&, const SpecValue& );
 		    void addPerPlayerSpec(const std::string&, const SpecValue& );
@@ -46,6 +47,11 @@ namespace GameSpecification{
             std::unordered_map<std::string, SpecValue> variables;
 		    std::unordered_map<std::string, SpecValue> perPlayer;
 		    std::unordered_map<std::string, SpecValue> perAudience;
+=======
+		private:
+		    std::vector<std::shared_ptr<BaseRule>> rules; 
+		    std::string specFilePath;
+>>>>>>> Clean GameSpec
 	};
 	
 }
