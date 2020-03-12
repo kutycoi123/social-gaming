@@ -54,6 +54,7 @@ std::list<Message> GameSessionList::updateAndGetAllMessages() noexcept{
 
     for(auto& message : messageBuffer){
         addMessageToCorrectSession(message);
+        addMessageToCorrectGame(message);
     }
 
     messageBuffer.clear();
@@ -82,6 +83,18 @@ void GameSessionList::addMessageToCorrectSession(const Message& message) noexcep
                             
         if(sessionIterator != sessionList.end()) {
             sessionIterator->addMessages(message.payload);
+        }
+    }
+}
+
+void GameSessionList::addMessageToCorrectGame(const Message& message) noexcept {
+    auto userIterator =  user2InviteCode.find(message.user.getUserId());
+
+    if(userIterator != user2InviteCode.end()) {
+        auto sessionIterator = findGameSession(userIterator->second);
+
+        if(sessionIterator != sessionList.end()) {
+            sessionIterator->addMessagesToGame(message.payload);
         }
     }
 }

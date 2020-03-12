@@ -58,4 +58,5 @@ class GameSessionList {
         void addToUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
         void removeFromUserInviteCodeMaps(const UserId&, const Invitation&) noexcept;
         void addMessageToCorrectSession(const Message&) noexcept;
+        void addMessageToCorrectGame(const Message&) noexcept;
 };

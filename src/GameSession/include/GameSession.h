@@ -29,6 +29,7 @@ class GameSession {
         bool isOwner(const UserId& user) const;
 
         void addMessages(const std::string &message) noexcept;
+        void addMessagesToGame(const std::string &message) noexcept;
 
         std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
 
