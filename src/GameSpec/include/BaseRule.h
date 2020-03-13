@@ -14,6 +14,56 @@
 class GameState;
 
 namespace GameSpecification{
+
+    struct Type{
+        std::string str;
+        int i;
+        bool b;
+        double d;
+        std::vector<ValueType> vect;
+        std::unordered_map<std::string, ValueType> map;
+    };
+
+    struct Visit_Type : public boost::static_visitor<Type>{
+
+        Type operator()(int& existing) const {
+            Type a;
+            a.i = existing;
+            return a;
+
+        };
+
+        Type operator()(double& d) const{
+            Type a;
+            a.d = d;
+            return a;
+        };
+
+        Type operator()(std::string& s) const{
+            Type a;
+            a.str = s;
+            return a;
+        };
+
+        Type operator()(bool& b) const{
+            Type a;
+            a.b = b;
+            return a;
+        };
+
+        Type operator()(std::vector<ValueType>& vvt) const{
+            Type a;
+            a.vect =  vvt;
+            return a;
+        };
+
+        Type operator()(std::unordered_map<std::string, ValueType> const& umvt) const {
+            Type a;
+            a.map =  umvt;
+            return a;
+        };
+
+    };
 enum RuleType{
 	ForEachType,LoopType,InparallelType,ParallelforType,
 	SwitchType,WhenType,ExtendType,ReverseType,ShuffleType,
