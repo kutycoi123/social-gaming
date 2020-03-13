@@ -65,7 +65,7 @@ namespace GameSpecification{
    	 	{RuleType::MessageType, "message"},
    	 	{RuleType::GlobalMessageType, "global-message"},
    	 	{RuleType::ScoresType, "scores"},
-   	 	{RuleType::Unknown, "unkown"}
+   	 	{RuleType::Unknown, "unknown"}
 	};	
 	
 	class AbstractSpec{
