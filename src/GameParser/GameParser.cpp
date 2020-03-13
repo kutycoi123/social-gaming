@@ -12,9 +12,8 @@ GameParser::GameParser(const std::string& path){
     //opens the json file at the given path
     //parses, validates, and creates the 'game' object
     
-    //something along the lines of: 
-        //game = std::make_unique(Game(Gamespec, GameRule));
-    //to make the game
+    //temporary, fill in the gamespec and state with actual values
+    game = std::make_unique<Game> (Game(GameSpecification::GameSpec(), GameState{}));
 }
 
 std::unique_ptr<Game> GameParser::getGame() noexcept{

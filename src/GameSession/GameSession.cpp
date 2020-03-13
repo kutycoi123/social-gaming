@@ -7,9 +7,6 @@ GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFile
 {
     auto parser = GameParser(gameFilePath);
     game = parser.getGame();
-
-    //temporary
-    game = std::make_unique<Game> (Game(GameSpecification::GameSpec(), GameState{}));
 }
 
 Invitation GameSession::getInvitationCode() const {
