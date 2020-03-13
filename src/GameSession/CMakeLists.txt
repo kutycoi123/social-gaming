@@ -17,7 +17,7 @@ set_target_properties(gameSession
 )
 
 target_link_libraries(gameSession
-  game
+  gameParser
   userManager
   invitation
 )
