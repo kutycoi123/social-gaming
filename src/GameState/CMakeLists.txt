@@ -1,7 +1,6 @@
 add_library(gameState
         GameState.cpp
-        StateValue.cpp
-        )
+)
 
 set_target_properties(gameState
         PROPERTIES
