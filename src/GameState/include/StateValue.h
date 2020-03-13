@@ -14,19 +14,49 @@ public:
         STRING,
         INT,
         DOUBLE,
-        BOOLEAN
+        BOOLEAN,
+        LIST,
+        MAP
     };
-    explicit StateValue(const std::string& val);
-    explicit StateValue(int val);
-    explicit StateValue(double val);
-    explicit StateValue(bool val);
+    virtual ValueType getValueType();
+
+};
+
+// TODO: Break up into separate file
+class StateValueLiteral : public StateValue {
+public:
+    explicit StateValueLiteral(const std::string& val);
+    explicit StateValueLiteral(int val);
+    explicit StateValueLiteral(double val);
+    explicit StateValueLiteral(bool val);
     boost::variant<std::string, int,
             bool, double>& getValue();
-    ValueType getValueType();
+    StateValue::ValueType getValueType() override;
 private:
     boost::variant<std::string, int,
             bool, double> value;
-    ValueType valueType;
+    StateValue::ValueType valueType;
+};
+
+// TODO: Break up into separate file
+class StateValueList : public StateValue {
+public:
+    StateValueList();
+    StateValue::ValueType getValueType() override;
+private:
+    std::vector<StateValueLiteral> stateValueList;
+    StateValue::ValueType valueType;
+};
+
+// TODO: Break up into separate file
+class StateValueMap : public StateValue {
+public:
+    StateValueMap();
+    StateValue::ValueType getValueType() override;
+private:
+    std::unordered_map<std::string, StateValueLiteral> stateValueMap;
+    StateValue::ValueType valueType;
+
 };
 
 

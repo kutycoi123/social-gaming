@@ -1,30 +1,46 @@
 #include "StateValue.h"
 
-StateValue::StateValue(const std::string &val) :
+StateValueLiteral::StateValueLiteral(const std::string &val) :
     value(val),
-    valueType(STRING)
+    valueType(StateValue::STRING)
 {}
 
-StateValue::StateValue(int val) :
+StateValueLiteral::StateValueLiteral(int val) :
         value(val),
-        valueType(INT)
+        valueType(StateValue::INT)
 {}
 
-StateValue::StateValue(double val) :
+StateValueLiteral::StateValueLiteral(double val) :
     value(val),
-    valueType(DOUBLE)
+    valueType(StateValue::DOUBLE)
 {}
 
-StateValue::StateValue(bool val) :
+StateValueLiteral::StateValueLiteral(bool val) :
     value(val),
-    valueType(BOOLEAN)
+    valueType(StateValue::BOOLEAN)
 {}
 
-StateValue::ValueType StateValue::getValueType() {
-    return valueType;
+StateValue::ValueType StateValueLiteral::getValueType() {
+    return StateValue::getValueType();
 }
 
 boost::variant<std::string, int,
-        bool, double>& StateValue::getValue() {
+        bool, double> &StateValueLiteral::getValue() {
     return value;
+}
+
+StateValueList::StateValueList() :
+    valueType(StateValue::LIST)
+{}
+
+StateValue::ValueType StateValueList::getValueType() {
+    return valueType;
+}
+
+StateValueMap::StateValueMap() :
+        valueType(StateValue::MAP)
+{}
+
+StateValue::ValueType StateValueMap::getValueType() {
+    return valueType;
 }
