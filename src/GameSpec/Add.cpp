@@ -23,7 +23,7 @@ void Add::process(GameState& gameState){
     }
 
     if (auto gsValue = gameStateValue->lock()) {
-        auto existingValue = gsValue->value.value;
+        auto existingValue = gsValue->value;
         int v1 = boost::get<int>(existingValue);
         
         auto addedValue = getValue().value;
@@ -42,16 +42,16 @@ void Add::process(GameState& gameState){
 
             if (variableToAdd.has_value()) {
                 auto vValue = variableToAdd->lock();
-                v2 = boost::get<int>(vValue->value.value);
+                v2 = boost::get<int>(vValue->value);
             }
 
             if (constantToAdd.has_value()) {
                 auto cValue = variableToAdd->lock();
-                v2 = boost::get<int>(cValue->value.value);
+                v2 = boost::get<int>(cValue->value);
             }
         }
 
-        gsValue->value.value = v1 + v2;        
+        gsValue->value = v1 + v2;
     }
 
 }
