@@ -21,7 +21,7 @@ class GameSession {
             return invitationCode == gameSession.invitationCode;
         }
 
-        void setgame(const std::string&);
+        void setGame(const std::string&);
         Invitation getInvitationCode() const;
         bool isGameStarted() const;
         void startGame();
