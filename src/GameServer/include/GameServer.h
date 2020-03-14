@@ -34,7 +34,7 @@ private:
 
     // Commands
     static bool commandReturnsResponse(const GameServerConfiguration::CommandType& command);
-    std::string commandCREATE_SESSION(std::weak_ptr<User>& user);
+    std::string commandCREATE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
     std::string commandHELP();
     std::string commandJOIN_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
     std::string commandLEAVE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);

@@ -1,12 +1,13 @@
 #include "GameSession.h"
 
-GameSession::GameSession(std::weak_ptr<User>& owner) : 
+GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) : 
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
-    // TODO: Replace blank GameSpec/GameState params with actual impl
-    game{GameSpecification::GameSpec(), GameState{}},
     owner (owner)
-{}
+{
+    auto parser = GameParser(gameFilePath);
+    game = parser.getGame();
+}
 
 Invitation GameSession::getInvitationCode() const {
     return invitationCode;
@@ -18,15 +19,15 @@ bool GameSession::isOwner(const UserId& user) const {
 }
 
 bool GameSession::isGameStarted() const {
-    return game.isGameStarted();
+    return game->isGameStarted();
 }
 
 void GameSession::startGame() {
-    game.startGame(playerList.users);
+    game->startGame(playerList.users);
 }
 
 void GameSession::endGame() {
-    game.endGame();
+    game->endGame();
 }
 
 void GameSession::addMessages(const std::string &message) noexcept{
@@ -35,7 +36,7 @@ void GameSession::addMessages(const std::string &message) noexcept{
 
 void GameSession::addMessagesToGame(const std::string &message) noexcept{
     if (isGameStarted()) {
-        game.addMessages(message);
+        game->addMessages(message);
     }
 }
 
@@ -59,8 +60,8 @@ void GameSession::clearMessages() noexcept {
 std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages() noexcept{
 
     auto messages = getLobbyMessages();
-    if (game.isGameStarted()) {
-        auto lobbyMessages = game.updateAndGetAllMessages();
+    if (game->isGameStarted()) {
+        auto lobbyMessages = game->updateAndGetAllMessages();
         messages.insert(messages.end(), lobbyMessages.begin(), lobbyMessages.end());
     }
 

@@ -15,7 +15,7 @@
 #include "AbstractSpec.h"
 #include "BaseRule.h"
 
-#include "GameSpec.h"
+#include "Game.h"
 
 #include "Add.h"
 #include "ForEach.h"
@@ -72,7 +72,14 @@ class GameParser{
         VALID,
         INVALID
     };
-    GameParser();
+
+    //The constructor should take in a string which is the filepath of the appropriate Game JSON, create the game, and store the game in a member variable
+    GameParser(const std::string&);
+
+    //This returns the Game object that was created by the Constructor
+    //Unique ptr gets returned and reset so this object should be deleted after because it should be useless
+    std::unique_ptr<Game> getGame() noexcept;
+
     void createGame();
     
     void configValidator(const nlohmann::json& configs);
@@ -137,6 +144,6 @@ class GameParser{
       const std::string MAX = "max";
       const std::string NUMBER = "number";
       GameSpecification::GameSpec gameSpecifications;
-
+      std::unique_ptr<Game> game;
 };
 #endif

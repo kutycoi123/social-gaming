@@ -17,5 +17,5 @@ set_target_properties(gameParser
 
 target_link_libraries(gameParser
   nlohmann_json::nlohmann_json
-  gameSpec
+  game
 )

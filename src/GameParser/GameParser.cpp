@@ -7,7 +7,18 @@ using GameSpecification::Inparallel;
 using GameSpecification::Loop;
 using GameSpecification::Parallelfor;
 using GameSpecification::RuleType;
-GameParser::GameParser() {};
+
+GameParser::GameParser(const std::string& path){
+    //opens the json file at the given path
+    //parses, validates, and creates the 'game' object
+    
+    //temporary, fill in the gamespec and state with actual values
+    game = std::make_unique<Game> (Game(GameSpecification::GameSpec(), GameState{}));
+}
+
+std::unique_ptr<Game> GameParser::getGame() noexcept{
+    return std::move(game);
+}
 
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
     for (auto& fields : gameJson.items()) {
@@ -157,6 +168,7 @@ GameParser::StatusCode GameParser::rulesValidation(const nlohmann::json& incomin
     auto result = std::find_if(incomingRules.items().begin(), incomingRules.items().end(), [&](auto& elem){
         return stringToRuleType.find(elem.key()) == stringToRuleType.end();
     });
+
 
     if (result == incomingRules.items().end()) {
         return StatusCode::INVALID;
