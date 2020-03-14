@@ -12,7 +12,7 @@ class Switch : public BaseRule{
         Switch(const std::vector<Case>& cases);
         std::vector<Cases> getCases() const;
         void process(GameState&) override;
-		void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&) override;
     private:
         std::vector<Case> cases;
 };
