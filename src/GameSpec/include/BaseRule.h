@@ -65,7 +65,7 @@ namespace GameSpecification{
         };
 
     };
-	class BaseRule{
+	class BaseRule : public std::enable_shared_from_this<BaseRule>{
 		public:
 			BaseRule();
 			BaseRule(RuleType);
