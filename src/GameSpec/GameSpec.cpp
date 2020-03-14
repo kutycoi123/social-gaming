@@ -36,39 +36,4 @@ using GameSpecification::GameSpec;
 	void GameSpec::parseGameSpec(const nlohmann::json& json){
 	    //TODO: add parsing code here
 	}
-	
-	void GameSpec::addConstantSpec(const std::string& name, const SpecValue& val){
-	    constants[name] = val;
-	}
-	
-	void GameSpec::addVariableSpec(const std::string& name, const SpecValue& val){
-	    variables[name] = val;
-	}
-	
-	void GameSpec::addPerPlayerSpec(const std::string& name, const SpecValue& val){
-	    perPlayer[name] = val;
-	}
-	
-	void GameSpec::addPerAudienceSpec(const std::string& name, const SpecValue& val){
-	    perAudience[name] = val;
-	}
-	
-	void GameSpec::addConfig(const GameGeneralConfig& config){
-		this->config = config;	
-	}
 
-    const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getConstants() const {
-        return constants;
-    }
-
-    const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getVariables() const {
-        return variables;
-    }
-
-    const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getPerPlayer() const {
-        return perPlayer;
-    }
-
-    const std::unordered_map<std::string, GameSpecification::SpecValue>& GameSpecification::GameSpec::getPerAudience() const {
-        return perAudience;
-    }

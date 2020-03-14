@@ -1,6 +1,5 @@
 add_library(gameSpec
 			GameSpec.cpp
-			GameGeneralConfig.cpp
 			Add.cpp
 			Deal.cpp
 			Discard.cpp

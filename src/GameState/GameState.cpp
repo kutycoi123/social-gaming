@@ -61,3 +61,7 @@ void GameState::addPerPlayer(const std::string &key, const ValueType& value) {
 void GameState::addPerAudience(const std::string &key, const ValueType& value) {
     perAudienceMap.insert({key, std::make_shared<StateValue::PerAudienceValue>(StateValue::PerAudienceValue(value))});
 }
+
+void GameState::addConfig(const GameConfig& gameConfig){
+    this->gameConfig = gameConfig;
+}
