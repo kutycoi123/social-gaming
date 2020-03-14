@@ -34,17 +34,12 @@ void InputVote::process(GameState& gameState){
 
 void InputVote::parseRule(const json &ruleJson){
     try{
-        to = ruleJson.at("to").get<std::string>();
-        prompt.parseRule(ruleJson.at("prompt"));
-        json choices = ruleJson.at("choices");
-		if(choices.is_string()){
-			this->choices.value = choices.get<std::string>();
-		}else{
-			this->choices.value = choices.get<std::vector<std::string>>();
-		}
+        user = ruleJson.at("user").get<std::string>();
+        prompt = ruleJson.at("prompt").get<std::string>();
+        choices = ruleJson.at("choices").get<std::string>();
 		result = ruleJson.at("result").get<std::string>();
 		if(ruleJson.find("timeout") != ruleJson.end())
-			timeout = std::optional<double>{ruleJson.at("timeout").get<double>()};
+			timeout = ruleJson.at("timeout").get<double>();
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
