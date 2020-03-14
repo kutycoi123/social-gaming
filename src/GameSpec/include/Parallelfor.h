@@ -9,7 +9,7 @@
 namespace GameSpecification{
 class Parallelfor : public BaseRule{
     public:
-		    Parallelfor();
+		Parallelfor();
         Parallelfor(std::vector<std::string> list, const std::string& element);
         std::vector<std::string> getList() const;
         std::string getElement() const;

@@ -58,7 +58,6 @@ void Add::process(GameState& gameState){
 void Add::parseRule(const json& ruleJson){
     try{
         to = ruleJson.at("to").get<std::string>();
-        
     }catch(json::exception &e){
         std::cout << e.what() << "\n";
     }

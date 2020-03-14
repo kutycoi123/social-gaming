@@ -37,9 +37,9 @@ void InputVote::parseRule(const json &ruleJson){
         user = ruleJson.at("user").get<std::string>();
         prompt = ruleJson.at("prompt").get<std::string>();
         choices = ruleJson.at("choices").get<std::string>();
-		result = ruleJson.at("result").get<std::string>();
-		if(ruleJson.find("timeout") != ruleJson.end())
-			timeout = ruleJson.at("timeout").get<double>();
+        result = ruleJson.at("result").get<std::string>();
+        if(ruleJson.find("timeout") != ruleJson.end())
+            timeout = ruleJson.at("timeout").get<double>();
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
