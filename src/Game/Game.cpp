@@ -26,8 +26,8 @@ void Game::addMessages(const std::string &message) noexcept{
     messages.push_back(message);
 }
 
-std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexcept{
-    auto gameMessages = getGameMessages();
+std::list<std::string> Game::updateAndGetAllMessages() noexcept{
+    auto gameMessages = messages;
     clearMessages();
 
     return gameMessages;
@@ -35,16 +35,4 @@ std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexce
 
 void Game::clearMessages() noexcept {
     messages = {};
-}
-
-std::list<std::pair<UserId, std::string>> Game::getGameMessages() noexcept{
-    std::list<std::pair<UserId, std::string>> result = {};
-
-    for(auto& message : messages){
-        for(auto& player : gameSessionUsers){
-            result.emplace_back(player.lock()->getUserId(), message);
-        }
-    }
-
-    return result;
 }

@@ -11,12 +11,11 @@ public:
     void startGame(const std::list<std::weak_ptr<User>>& users);
     void endGame();
     void addMessages(const std::string &message) noexcept;
-    std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
+    std::list<std::string> updateAndGetAllMessages() noexcept;
 
 
 private:
     void clearMessages() noexcept;
-    std::list<std::pair<UserId, std::string>> getGameMessages() noexcept;
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
