@@ -28,12 +28,12 @@ void Extend::process(GameState& gameState){
 void Extend::parseRule(const json& ruleJson){
     try{
         target = ruleJson.at("target").get<std::string>();
-        json list = ruleJson.at("list");
-        if(list.is_string()){
-            this->list.value = list.get<std::string>();
-        }else{
-            this->list.value = list.get<std::vector<std::string>>();
-            }
+        // json list = ruleJson.at("list");
+        // if(list.is_string()){
+        //     this->list.value = list.get<std::string>();
+        // }else{
+        //     this->list.value = list.get<std::vector<std::string>>();
+        // }
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
