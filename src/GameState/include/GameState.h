@@ -7,11 +7,9 @@
 #include "GameConfig.h"
 
 
-struct ValueType {
-    boost::make_recursive_variant<std::string, int,
+using ValueType = boost::make_recursive_variant<std::string, int,
         bool, double, std::vector<boost::recursive_variant_>,
-        std::unordered_map<std::string, boost::recursive_variant_>>::type value;
-};
+        std::unordered_map<std::string, boost::recursive_variant_>>::type;
 
 namespace StateValue {
     struct ConstantValue{
