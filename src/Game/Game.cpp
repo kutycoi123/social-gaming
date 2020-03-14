@@ -36,3 +36,20 @@ std::list<std::string> Game::updateAndGetAllMessages() noexcept{
 void Game::clearMessages() noexcept {
     messages = {};
 }
+
+void Game::executeCurrentRule() {
+    auto rules = programCounter.top();
+    for (auto& rule : rules) {
+        rule.lock()->process(gameState);
+    }
+
+    programCounter.pop();
+}
+
+void Game::getNextRule() {
+
+}
+
+void Game::importAllRules() {
+
+}

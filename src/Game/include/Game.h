@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "GameSpec.h"
+#include <stack>
 
 class Game {
 public:
@@ -17,8 +18,14 @@ public:
 private:
     void clearMessages() noexcept;
 
+    // Rule Processor Methods
+    void executeCurrentRule();
+    void getNextRule();
+    void importAllRules();
+
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
+    std::stack<std::vector<std::weak_ptr<GameSpecification::BaseRule>>> programCounter;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };
