@@ -28,7 +28,6 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(GameServer
   ${CMAKE_THREAD_LIBS_INIT}
-  
   gameServer
   gameServerConfiguration
 )
@@ -43,6 +42,12 @@ add_custom_command(TARGET GameServer POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                        ${CMAKE_CURRENT_SOURCE_DIR}/socialapp.html
                        ${PROJECT_BINARY_DIR}/socialapp.html
+                   )
+
+add_custom_command(TARGET GameServer POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_CURRENT_SOURCE_DIR}/Games
+                       ${PROJECT_BINARY_DIR}/Games
                    )
 
 install(FILES ServerProperties.json DESTINATION config)

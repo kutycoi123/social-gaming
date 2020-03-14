@@ -34,7 +34,7 @@ private:
 
     // Commands
     static bool commandReturnsResponse(const GameServerConfiguration::CommandType& command);
-    std::string commandCREATE_SESSION(std::weak_ptr<User>& user);
+    std::string commandCREATE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
     std::string commandHELP();
     std::string commandJOIN_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
     std::string commandLEAVE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user);
@@ -49,6 +49,7 @@ private:
     // Helper methods
     void AddMessageToCorrectSession(const uintptr_t, const std::string&);
     std::deque<networking::Message> getGlobalMessages();
+    std::string formatMessageWithUserName(const std::string& text, const std::string& username);
 
 };
 
