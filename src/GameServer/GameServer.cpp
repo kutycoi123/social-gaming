@@ -82,7 +82,7 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
         }
 
         if (commandReturnsResponse(commandType)) {
-            commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
+            commandResult.push_back(networking::Message{message.connection, formatMessageWithUserName(message.text, user->lock()->getUserNameValue())});
         }
 	}
 	
@@ -235,10 +235,16 @@ std::string GameServer::commandUSERNAME(const std::vector<std::string> &commandP
 
 void GameServer::commandNULL_COMMAND(std::weak_ptr<User> &user, const std::string& text) {
     if (sessionList.isUserInSession(user)) {
-        sessionList.addMessages(std::list<Message>{Message{*(user.lock()), text}});
+        sessionList.addMessages(std::list<Message>{Message{*(user.lock()), formatMessageWithUserName(text, user.lock()->getUserNameValue())}});
     } else {
         std::cout << "Unrecognized command from User not in session. \n";
     }
+}
+
+std::string GameServer::formatMessageWithUserName(const std::string &text, const std::string &username){
+    std::string formattedMessage = text;
+    formattedMessage.insert(0, username + ": ");
+    return formattedMessage;
 }
 
 #pragma endregion Commands

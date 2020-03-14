@@ -39,8 +39,13 @@ void GameSession::addMessagesToGame(const std::string &message) noexcept{
     }
 }
 
-std::list<std::pair<UserId, std::string>> GameSession::getLobbyMessages() noexcept{
+std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages() noexcept{
     std::list<std::pair<UserId, std::string>> result = {};
+
+    if (game.isGameStarted()) {
+        auto gameMessages = game.updateAndGetAllMessages();
+        messages.insert(messages.end(), gameMessages.begin(), gameMessages.end());
+    }
 
     for(auto& message : messages){
         
@@ -58,11 +63,7 @@ void GameSession::clearMessages() noexcept {
 
 std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages() noexcept{
 
-    auto messages = getLobbyMessages();
-    if (game.isGameStarted()) {
-        auto lobbyMessages = game.updateAndGetAllMessages();
-        messages.insert(messages.end(), lobbyMessages.begin(), lobbyMessages.end());
-    }
+    auto messages = getLobbyAndGameMessages();
 
     clearMessages();
 

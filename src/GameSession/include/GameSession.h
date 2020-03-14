@@ -44,7 +44,7 @@ class GameSession {
         GameSession::UserList playerList;
 
         void clearMessages() noexcept;
-        std::list<std::pair<UserId, std::string>> getLobbyMessages() noexcept;
+        std::list<std::pair<UserId, std::string>> getLobbyAndGameMessages() noexcept;
 };
 
 #endif
