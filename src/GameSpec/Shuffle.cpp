@@ -31,7 +31,7 @@ void Shuffle::process(GameState& gameState) {
 
 void Shuffle::parseRule(const json &ruleJson){
     try{
-
+        list = ruleJson.at("list").get<std::string>();
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
