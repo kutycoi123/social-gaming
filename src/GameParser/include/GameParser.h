@@ -127,6 +127,11 @@ class GameParser{
           const std::string MIN = "min";
           const std::string MAX = "max";
           const std::string NUMBER = "number";
+          const std::string NAME = "name";
+          const std::string AUDIENCE = "audience";
+          const std::string SETUP = "setup";
+
+
 
           GameSpecification::GameSpec gameSpecifications;
 

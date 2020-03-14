@@ -12,8 +12,8 @@ using GameSpecification::RuleType;
 GameParser::GameParser(const std::string& path){
     nlohmann::json gameJson = fileToJson(path);
     parseEntireGameJson(gameJson);
-    GameState newGame;
-    game = std::make_unique<Game> (Game(getGameSpecifications(), newGame));
+    GameState gameState;
+    game = std::make_unique<Game> (Game(getGameSpecifications(), gameState));
 }
 
 std::unique_ptr<Game> GameParser::getGame() noexcept{
@@ -58,11 +58,11 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 void GameParser::parseConfiguration(const nlohmann::json& configs) {
 
     validateConfiguration(configs);
-    this->configSettings.name = configs["name"];
-    this->configSettings.audience = configs["audience"];
-    this->configSettings.maxPlayercount = configs["player count"]["max"];
-    this->configSettings.minPlayercount = configs["player count"]["in"];
-    this->configSettings.setup = configs["setup"];
+    this->configSettings.name = configs[NAME];
+    this->configSettings.audience = configs[AUDIENCE];
+    this->configSettings.maxPlayercount = configs[PLAYER_COUNT][MAX];
+    this->configSettings.minPlayercount = configs[PLAYER_COUNT][MIN];
+    this->configSettings.setup = configs[SETUP];
 
 }
   // END-TODO
