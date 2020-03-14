@@ -16,9 +16,9 @@ void Reverse::process(GameState& gameState) {
 	//TODO: Add code to process reverse rule
 }
 
-void Reverse::parseRule(const nlohmann::json& json){
+void Reverse::parseRule(const json& ruleJson){
     try{
-
+        list = ruleJson.at("list").get<std::string>();
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";

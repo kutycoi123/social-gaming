@@ -9,6 +9,11 @@ GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFile
     game = parser.getGame();
 }
 
+void GameSession::setgame(const std::string& gameFilePath){
+    auto parser = GameParser(gameFilePath);
+    game = parser.getGame();
+}
+
 Invitation GameSession::getInvitationCode() const {
     return invitationCode;
 }

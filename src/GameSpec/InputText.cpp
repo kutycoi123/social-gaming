@@ -31,7 +31,11 @@ void InputText::process(GameState& gameState){
 
 void InputText::parseRule(const json &ruleJson){
     try{
-
+        user = ruleJson.at("to").get<std::string>();
+        prompt = ruleJson.at("prompt").get<std::string>();
+        result = ruleJson.at("result").get<std::string>();
+        if(ruleJson.find("timeout") != ruleJson.end())
+			timeout = ruleJson.at("timeout").get<double>();
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";

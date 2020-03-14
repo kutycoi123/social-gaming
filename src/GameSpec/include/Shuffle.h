@@ -14,7 +14,6 @@ class Shuffle :public BaseRule{
         void parseRule(const nlohmann::json&) override;
     private:
         std::string list;
-        std::string key;
 };
 }
 #endif
