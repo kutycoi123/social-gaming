@@ -34,6 +34,7 @@ void Deal::parseRule(const json& ruleJson){
         }else{
             this->to.value = to.get<std::vector<std::string>>();
         }
+        
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";

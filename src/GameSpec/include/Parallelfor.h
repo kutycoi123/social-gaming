@@ -9,11 +9,11 @@
 namespace GameSpecification{
 class Parallelfor : public BaseRule{
     public:
-		    Parallelfor();
+        Parallelfor();
         Parallelfor(std::vector<std::string> list, const std::string& element);
         std::vector<std::string> getList() const;
         std::string getElement() const;
-		    void process(GameState&) override;        
+        void process(GameState&) override;        
         void parseRule(const nlohmann::json&) override;
     private:
         std::vector<std::string> list;

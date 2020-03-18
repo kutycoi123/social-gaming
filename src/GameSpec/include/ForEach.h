@@ -2,10 +2,32 @@
 #define FOREACH_H
 
 #include "AbstractSpec.h"
-#include "ControlStructRule.h"
+#include "BaseRule.h"
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
+#include <cassert>
+#include "Add.h"
+#include "Deal.h"
+#include "Discard.h"
+#include "Extend.h"
+#include "GlobalMessage.h"
+#include "Inparallel.h"
+
+#include "InputChoice.h"
+#include "InputText.h"
+#include "InputVote.h"
+#include "Loop.h"
+#include "Message.h"
+#include "Parallelfor.h"
+#include "Reverse.h"
+
+#include "Shuffle.h"
+#include "Sort.h"
+#include "Timer.h"
+#include "Scores.h"
+#include "GameSpecHelper.h"
+
 namespace GameSpecification{
 class ForEach : public BaseRule{
     public:

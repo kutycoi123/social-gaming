@@ -38,6 +38,7 @@ void GameServerConfiguration::configureServer(const nlohmann::json &configuratio
     verifyJSON(configurationFile);
     GameServerConfiguration::port.id = configurationFile[ConfigurationCommandTags::PORT];
     GameServerConfiguration::htmlFile.path = configurationFile[ConfigurationCommandTags::HTML_PAGE];
+    GameServerConfiguration::gameFolder.path = configurationFile[ConfigurationCommandTags::GAME_FOLDER];
 
     std::string commandPrefix = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL];
     nlohmann::json commandList = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_LIST];
@@ -154,4 +155,14 @@ GameServerConfiguration::CommandType GameServerConfiguration::getCommandTypeFrom
     std::string commandWithoutParameters = commandParts.at(0);
 
     return configuration.string2Command(commandWithoutParameters);
+}
+
+std::vector<std::string> GameServerConfiguration::getGameFileList() const noexcept{
+    std::vector<std::string> result {};
+    
+    for(auto& file : std::experimental::filesystem::directory_iterator(gameFolder.path)){
+        result.push_back(file.path().string());
+    }
+
+    return result;
 }

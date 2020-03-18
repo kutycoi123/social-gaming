@@ -50,7 +50,7 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
 
         switch (commandType) {
             case GameServerConfiguration::CREATE_SESSION:
-                message.text.append(commandCREATE_SESSION(user.value()));
+                message.text.append(commandCREATE_SESSION(commandParams, user.value()));
                 break;
             case GameServerConfiguration::HELP:
                 message.text.append(commandHELP());
@@ -82,7 +82,7 @@ std::deque<networking::Message> GameServer::processMessages(networking::Server& 
         }
 
         if (commandReturnsResponse(commandType)) {
-            commandResult.push_back(networking::Message{message.connection, message.text.insert(0, user.value().lock()->getUserNameValue() + ": ")});
+            commandResult.push_back(networking::Message{message.connection, formatMessageWithUserName(message.text, user->lock()->getUserNameValue())});
         }
 	}
 	
@@ -142,15 +142,40 @@ bool GameServer::commandReturnsResponse(const GameServerConfiguration::CommandTy
         case GameServerConfiguration::START_GAME:
         case GameServerConfiguration::USERNAME:
             return true;
+        case GameServerConfiguration::FIRST:
+        case GameServerConfiguration::LAST:
+        case GameServerConfiguration::NULL_COMMAND:
+        case GameServerConfiguration::DISCONNECT:
+        default:
+            return false;
     }
-
-    return false;
 }
 
-std::string GameServer::commandCREATE_SESSION(std::weak_ptr<User>& user) {
-    std::string response;
-    auto createdSessionInvitation = sessionList.commenceGameSession(user);
+std::string GameServer::commandCREATE_SESSION(const std::vector<std::string>& commandParams, std::weak_ptr<User>& user) {
 
+    if(commandParams.empty()){
+        return "\n Unable to create GameSession, please enter a game\n";
+    }
+
+    std::string gameName = commandParams.at(0);
+    std::vector<std::string> gameFileList = serverConfiguration->getGameFileList();
+
+    auto gameFileIterator = std::find_if(gameFileList.begin(), gameFileList.end(), [gameName](const std::string& fileName){
+        if (gameName.size() > fileName.size()) {
+            return false;
+        }
+        else {   
+            return std::equal(gameName.rbegin(), gameName.rend(), fileName.rbegin());
+        }
+    });
+
+    if(gameFileIterator == gameFileList.end()){
+        return "\n Unable to create GameSession: Game " + gameName + " does not exist";
+    }
+    
+    auto createdSessionInvitation = sessionList.commenceGameSession(user, *gameFileIterator);
+
+    std::string response;
     response.append("\n Created Lobby with Invitation code: ");
     response.append(createdSessionInvitation.toString());
     return response;
@@ -235,10 +260,17 @@ std::string GameServer::commandUSERNAME(const std::vector<std::string> &commandP
 
 void GameServer::commandNULL_COMMAND(std::weak_ptr<User> &user, const std::string& text) {
     if (sessionList.isUserInSession(user)) {
-        sessionList.addMessages(std::list<Message>{Message{*(user.lock()), text}});
+        sessionList.addMessages(std::list<Message>{Message{*(user.lock()), formatMessageWithUserName(text, user.lock()->getUserNameValue())}});
     } else {
         std::cout << "Unrecognized command from User not in session. \n";
+        serverConfiguration->getGameFileList();
     }
+}
+
+std::string GameServer::formatMessageWithUserName(const std::string &text, const std::string &username){
+    std::string formattedMessage = text;
+    formattedMessage.insert(0, username + ": ");
+    return formattedMessage;
 }
 
 #pragma endregion Commands

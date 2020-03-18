@@ -17,4 +17,4 @@ target_include_directories(
 target_link_libraries (game
         gameSpec
         gameState
-        )
+)

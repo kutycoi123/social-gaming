@@ -14,8 +14,17 @@ std::string Message::getValue() const{
 }
 
 void Message::process(GameState& gameState){
-	//TODO: Add code to process message rule
-}
+    auto variables = gameState.getVariable(messValue);
+    if (auto retrievedValue = variables->lock()) {
+        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
+
+//        if(val.i){
+//            //add message to the game
+//        }
+//        if(val.str.size()>0){
+//            //add message to the game
+//        }
+    }}
 
 void Message::parseRule(const json &ruleJson){
 	try{

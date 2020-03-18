@@ -2,10 +2,11 @@
 #define GAME_SERVER_CONFIGURATION_H
 
 #include <string>
-#include <sstream>
+#include <sstream> //for HTML File Parsing
 #include <nlohmann/json.hpp>
 #include <map>
-
+#include <vector>
+#include <experimental/filesystem>
 #include <unistd.h> //for json verification
 #include <fstream> //for json verification
 #include <string> //for file paths
@@ -14,12 +15,13 @@
 namespace ConfigurationCommandTags{
     const std::string PORT = "Default Port";
     const std::string HTML_PAGE = "HTML Location";
+    const std::string GAME_FOLDER = "Game Location";
     const std::string COMMAND_CONFIGURATION = "Commands Configuration";
     const std::string COMMAND_PREFIX_SYMBOL = "Prefix Symbol";
     const std::string COMMAND_LIST = "Command List";
     const std::string COMMAND_TYPE = "Type";
     const std::string COMMAND_DESCRIPTION = "Description";
-    const std::string COMMAND_TRIGGER = "User Commands"; 
+    const std::string COMMAND_TRIGGER = "User Commands";
 };
 
 class GameServerConfiguration{
@@ -45,6 +47,7 @@ class GameServerConfiguration{
 
         unsigned short getPort() const noexcept;
         std::string getHtmlFileContent() const noexcept;
+        std::vector<std::string> getGameFileList() const noexcept;
         CommandType string2Command(const std::string&) const noexcept;
         std::string command2Description(const CommandType&) const noexcept;
 
