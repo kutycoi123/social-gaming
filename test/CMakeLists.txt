@@ -3,6 +3,7 @@ add_subdirectory(lib)
 # Add your test file here
 add_executable(runAllTests
     UserTest.cpp
+    InvitationTest.cpp
 )
 
 # Link the appropriate library
@@ -11,6 +12,7 @@ target_link_libraries(runAllTests
         gtest
         gtest_main
         user
+        invitation
 )
 
 add_test(NAME AllTests COMMAND runAllTests)
