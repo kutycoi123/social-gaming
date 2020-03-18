@@ -19,13 +19,13 @@ private:
     void clearMessages() noexcept;
 
     // Rule Processor Methods
-    void executeCurrentRule();
-    void getNextRule();
-    void importAllRules();
+    void importGameSpecRules();
+    void processRule(std::shared_ptr<BaseRule>& rule);
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
-    std::stack<std::vector<std::weak_ptr<GameSpecification::BaseRule>>> programCounter;
+    std::vector<std::shared_ptr<BaseRule>> program;
+    std::stack<std::shared_ptr<BaseRule>> programCounter;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };

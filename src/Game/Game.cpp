@@ -14,8 +14,18 @@ bool Game::isGameStarted() const {
 
 void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
+    importGameSpecRules();
+
     addMessages(" User has started the game...\n");
-    return gameState.startGame();
+
+    while (!program.empty()) {
+        programCounter.push(program.at(0));
+        processRule(programCounter.top());
+        programCounter.pop();
+        program.erase(program.begin()+0);
+    }
+
+    gameState.endGame();
 }
 
 void Game::endGame() {
@@ -37,19 +47,16 @@ void Game::clearMessages() noexcept {
     messages = {};
 }
 
-void Game::executeCurrentRule() {
-    auto rules = programCounter.top();
-    for (auto& rule : rules) {
-        rule.lock()->process(gameState);
+void Game::importGameSpecRules() {
+    program.clear();
+    program = gameSpec.getRules();
+}
+
+void Game::processRule(std::shared_ptr<BaseRule>& rule) {
+    rule->process(gameState);
+
+    rule = rule->getNextPtr();
+    if (rule != nullptr) {
+        processRule(rule);
     }
-
-    programCounter.pop();
-}
-
-void Game::getNextRule() {
-
-}
-
-void Game::importAllRules() {
-
 }
