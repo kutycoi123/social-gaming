@@ -21,7 +21,7 @@ private:
 
     // Rule Processor Methods
     void importGameSpecRules();
-    void processRule(std::shared_ptr<BaseRule>& rule);
+    bool processRule(std::shared_ptr<BaseRule>& rule);
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;

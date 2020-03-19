@@ -17,7 +17,7 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     addMessages(" User has started the game...\n");
     importGameSpecRules();
 
-    // Once the game has started, gameTick will end up being called and processes the rules.
+    // Once the game has started, gameTick will end up being called.
     gameState.startGame();
 }
 
@@ -43,8 +43,8 @@ void Game::clearMessages() noexcept {
 void Game::gameTick() {
     bool isProgramCounterWithinRange = currentRuleIndex < gameRules.size();
     if (isProgramCounterWithinRange) {
-        processRule(gameRules.at(currentRuleIndex));
-        currentRuleIndex += 1;
+        bool isCurrentRuleFullyProcessed = processRule(gameRules.at(currentRuleIndex));
+        if (isCurrentRuleFullyProcessed) currentRuleIndex += 1;
     } else {
         endGame();
     }
@@ -55,11 +55,12 @@ void Game::importGameSpecRules() {
     gameRules = gameSpec.getRules();
 }
 
-void Game::processRule(std::shared_ptr<BaseRule>& rule) {
-    rule->process(gameState);
-
-    rule = rule->getNextPtr();
+bool Game::processRule(std::shared_ptr<BaseRule>& rule) {
     if (rule != nullptr) {
-        processRule(rule);
+        rule->process(gameState);
+        rule = rule->getNextPtr();
+        return false;
     }
+
+    return true;
 }
