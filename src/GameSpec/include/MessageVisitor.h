@@ -1,11 +1,15 @@
-#ifndef SOCIALGAMING_ADDVISITOR_H
-#define SOCIALGAMING_ADDVISITOR_H
+//
+// Created by josh on 2020-03-19.
+//
+
+#ifndef SOCIALGAMING_MESSAGEVISITOR_H
+#define SOCIALGAMING_MESSAGEVISITOR_H
 
 #include "GameStateVisitor.h"
 
-class AddVisitor : public GameStateVisitor {
+class MessageVisitor : public GameStateVisitor {
 public:
-    AddVisitor(){
+    MessageVisitor(){
 
     }
 
@@ -23,7 +27,6 @@ public:
     }
 
     void visit(StateValueList &stateValue) override {
-        // TODO: How we do want to handle errors here?
         return;
     }
 
@@ -34,4 +37,4 @@ public:
 
 };
 
-#endif //SOCIALGAMING_ADDVISITOR_H
+#endif //SOCIALGAMING_MESSAGEVISITOR_H

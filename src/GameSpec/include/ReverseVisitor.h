@@ -1,11 +1,12 @@
-#ifndef SOCIALGAMING_ADDVISITOR_H
-#define SOCIALGAMING_ADDVISITOR_H
+#ifndef SOCIALGAMING_REVERSEVISITOR_H
+#define SOCIALGAMING_REVERSEVISITOR_H
 
 #include "GameStateVisitor.h"
+#include <boost/range/algorithm/reverse.hpp>
 
-class AddVisitor : public GameStateVisitor {
+class ReverseVisitor : public GameStateVisitor {
 public:
-    AddVisitor(){
+    ReverseVisitor(){
 
     }
 
@@ -24,6 +25,7 @@ public:
 
     void visit(StateValueList &stateValue) override {
         // TODO: How we do want to handle errors here?
+//        boost::range::reverse(stateValue.getList());
         return;
     }
 
@@ -34,4 +36,4 @@ public:
 
 };
 
-#endif //SOCIALGAMING_ADDVISITOR_H
+#endif //SOCIALGAMING_REVERSEVISITOR_H

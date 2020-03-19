@@ -20,6 +20,7 @@ std::optional<std::string> Sort::getKey() const{
 void Sort::process(GameState& gameState){
     auto variables = gameState.getVariable(list);
     if (auto retrievedValue = variables->lock()) {
+        // TODO: Finish sort visitor implementation
         SortVisitor visitor;
         retrievedValue->accept(visitor);
     }

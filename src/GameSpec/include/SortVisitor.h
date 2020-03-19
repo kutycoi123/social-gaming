@@ -26,7 +26,7 @@ public:
 
     void visit(StateValueList &stateValue) override {
         // TODO: How we do want to handle errors here?
-        std::sort(std::sort(stateValue.get.begin(),val.str.end()))
+//        std::sort(stateValue.getList().begin(), stateValue.getList().end());
         return;
     }
 

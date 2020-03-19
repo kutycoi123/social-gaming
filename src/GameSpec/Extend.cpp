@@ -1,4 +1,5 @@
 #include "Extend.h"
+#include "ExtendVisitor.h"
 
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
@@ -6,22 +7,23 @@ using GameSpecification::SpecValue;
 using json = nlohmann::json;
 Extend::Extend() : BaseRule(RuleType::ExtendType), target(""){}
 
-Extend::Extend(const std::string& target, const ValueType& list) : BaseRule(RuleType::ExtendType), target(target), list(list){}
+Extend::Extend(const std::string& target, const SpecValue& list) : BaseRule(RuleType::ExtendType), target(target), list(list){}
 
 std::string Extend::getTarget() const{
     return target;
 }
 
-ValueType Extend::getList() const{
+SpecValue Extend::getList() const{
     return list;
 }
 
 void Extend::process(GameState& gameState){
     auto variables = gameState.getVariable(target);
     if(auto retrievedValue = variables->lock()){
-        auto targetValue = boost::apply_visitor(Visit_Type(), retrievedValue->value);
-        auto listValue = boost::apply_visitor(Visit_Type(), list);
-        listValue.vect.insert(listValue.vect.end(), targetValue.vect.begin(), targetValue.vect.end());
+        // TODO: Implement ExtendVisitor
+        ExtendVisitor visitor;
+        retrievedValue->accept(visitor);
+//        listValue.vect.insert(listValue.vect.end(), targetValue.vect.begin(), targetValue.vect.end());
     }
 }
 

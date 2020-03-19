@@ -1,11 +1,11 @@
-#ifndef SOCIALGAMING_ADDVISITOR_H
-#define SOCIALGAMING_ADDVISITOR_H
+#ifndef SOCIALGAMING_EXTENDVISITOR_H
+#define SOCIALGAMING_EXTENDVISITOR_H
 
 #include "GameStateVisitor.h"
 
-class AddVisitor : public GameStateVisitor {
+class ExtendVisitor : public GameStateVisitor {
 public:
-    AddVisitor(){
+    ExtendVisitor(){
 
     }
 
@@ -33,5 +33,4 @@ public:
 //    }
 
 };
-
-#endif //SOCIALGAMING_ADDVISITOR_H
+#endif //SOCIALGAMING_EXTENDVISITOR_H

@@ -16,6 +16,7 @@ std::string GlobalMessage::getValue() const{
 void GlobalMessage::process(GameState& gameState) {
     auto variables = gameState.getVariable(value);
     if (auto retrievedValue = variables->lock()) {
+        // TODO: Finish global message visitor implementation
         GlobalMessageVisitor visitor{};
         retrievedValue->accept(visitor);
 //        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
