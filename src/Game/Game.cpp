@@ -14,11 +14,11 @@ bool Game::isGameStarted() const {
 
 void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
+    addMessages(" User has started the game...\n");
     importGameSpecRules();
 
-    addMessages(" User has started the game...\n");
-
-    //
+    // Once the game as started, gameTick will end up being called with processes the rules.
+    gameState.startGame();
 }
 
 void Game::endGame() {
