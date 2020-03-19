@@ -11,13 +11,17 @@ StateValue::ValueType StateValueList::getValueType() {
     return valueType;
 }
 
-StateValueMap::StateValueMap() :
-        valueType(StateValue::MAP)
-{}
-
-StateValue::ValueType StateValueMap::getValueType() {
-    return valueType;
+std::vector<StateValue>& StateValueList::getList() {
+    return stateValueList;
 }
+
+//StateValueMap::StateValueMap() :
+//        valueType(StateValue::MAP)
+//{}
+//
+//StateValue::ValueType StateValueMap::getValueType() {
+//    return valueType;
+//}
 
 StateValueString::StateValueString(std::string val) :
     value(std::move(val)),

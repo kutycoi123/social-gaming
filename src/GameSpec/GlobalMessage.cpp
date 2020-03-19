@@ -1,5 +1,6 @@
 #include "GlobalMessage.h"
 #include "../Game/include/Game.h"
+#include "GlobalMessageVisitor.h"
 
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
@@ -15,13 +16,15 @@ std::string GlobalMessage::getValue() const{
 void GlobalMessage::process(GameState& gameState) {
     auto variables = gameState.getVariable(value);
     if (auto retrievedValue = variables->lock()) {
-        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
-        if(val.i){
-            //add message to the game
-        }
-        if(val.str.size()>0){
-            //add message to the game
-        }
+        GlobalMessageVisitor visitor{};
+        retrievedValue->accept(visitor);
+//        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
+//        if(val.i){
+//            //add message to the game
+//        }
+//        if(val.str.size()>0){
+//            //add message to the game
+//        }
     }
 }
 void GlobalMessage::parseRule(const json &ruleJson){

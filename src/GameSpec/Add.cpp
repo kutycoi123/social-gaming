@@ -1,4 +1,5 @@
 #include "Add.h"
+#include "AddVisitor.h"
 
 using GameSpecification::Add;
 using GameSpecification::SpecValue;

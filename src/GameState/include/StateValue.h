@@ -1,8 +1,10 @@
 #ifndef SOCIALGAMING_STATEVALUE_H
 #define SOCIALGAMING_STATEVALUE_H
 
-#import <string>
-#import <boost/variant.hpp>
+#include <string>
+#include <vector>
+
+class GameStateVisitor;
 
 class StateValue {
 public:
@@ -13,7 +15,9 @@ public:
         LIST,
         MAP
     };
-    virtual ValueType getValueType();
+    virtual ValueType getValueType() = 0;
+    virtual void accept(GameStateVisitor& visitor) = 0;
+};
 
 class StateValueString : public StateValue {
 public:
@@ -51,21 +55,21 @@ class StateValueList : public StateValue {
 public:
     StateValueList();
     StateValue::ValueType getValueType() override;
+    std::vector<StateValue>& getList();
 private:
     std::vector<StateValue> stateValueList;
     StateValue::ValueType valueType;
 };
 
-// TODO: Break up into separate file
-class StateValueMap : public StateValue {
-public:
-    StateValueMap();
-    StateValue::ValueType getValueType() override;
-private:
-    std::unordered_map<std::string, StateValue> stateValueMap;
-    StateValue::ValueType valueType;
-
-};
+// TODO: Implement unordered_map hash function
+//class StateValueMap : public StateValue {
+//public:
+//    StateValueMap();
+//    StateValue::ValueType getValueType() override;
+//private:
+//    std::unordered_map<std::string, StateValue> stateValueMap;
+//    StateValue::ValueType valueType;
+//};
 
 
 #endif //SOCIALGAMING_STATEVALUE_H

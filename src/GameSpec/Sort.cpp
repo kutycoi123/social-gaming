@@ -1,4 +1,5 @@
 #include "Sort.h"
+#include "SortVisitor.h"
 
 using GameSpecification::Sort;
 using json = nlohmann::json;
@@ -19,11 +20,8 @@ std::optional<std::string> Sort::getKey() const{
 void Sort::process(GameState& gameState){
     auto variables = gameState.getVariable(list);
     if (auto retrievedValue = variables->lock()) {
-        auto value = boost::apply_visitor(Visit_Type(), retrievedValue->value);
-        auto varList = value.map;
-        auto getList = varList.find(list);
-        auto val = boost::apply_visitor(Visit_Type(), getList->second);
-        std::sort(val.str.begin(),val.str.end());
+        SortVisitor visitor;
+        retrievedValue->accept(visitor);
     }
 }
 
