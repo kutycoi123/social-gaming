@@ -17,7 +17,7 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     addMessages(" User has started the game...\n");
     importGameSpecRules();
 
-    // Once the game as started, gameTick will end up being called with processes the rules.
+    // Once the game has started, gameTick will end up being called and processes the rules.
     gameState.startGame();
 }
 
