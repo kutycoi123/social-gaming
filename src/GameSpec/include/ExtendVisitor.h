@@ -23,12 +23,10 @@ public:
     }
 
     void visit(StateValueList &stateValue) override {
-        // TODO: How we do want to handle errors here?
         return;
     }
 
 //    void visit(StateValueMap &stateValue) override {
-//        // TODO: How we do want to handle errors here?
 //        return;
 //    }
 

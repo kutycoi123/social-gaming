@@ -4,6 +4,7 @@
 #include "GameStateVisitor.h"
 #include <boost/range/algorithm/reverse.hpp>
 
+// TODO Implement methods and add error handling
 class ReverseVisitor : public GameStateVisitor {
 public:
     ReverseVisitor(){
@@ -11,7 +12,6 @@ public:
     }
 
     void visit(StateValueBoolean &stateValue) override {
-        // TODO: How we do want to handle errors here?
         return;
     }
 
@@ -24,13 +24,11 @@ public:
     }
 
     void visit(StateValueList &stateValue) override {
-        // TODO: How we do want to handle errors here?
 //        boost::range::reverse(stateValue.getList());
         return;
     }
 
 //    void visit(StateValueMap &stateValue) override {
-//        // TODO: How we do want to handle errors here?
 //        return;
 //    }
 

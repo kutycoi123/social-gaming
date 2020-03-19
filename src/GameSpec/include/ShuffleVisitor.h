@@ -7,6 +7,7 @@
 #include <boost/range/algorithm/random_shuffle.hpp>
 #include <random>
 
+// TODO Implement methods and add error handling
 class ShuffleVisitor : public GameStateVisitor {
 public:
     ShuffleVisitor(){
@@ -14,7 +15,6 @@ public:
     }
 
     void visit(StateValueBoolean &stateValue) override {
-        // TODO: How we do want to handle errors here?
         return;
     }
 
@@ -37,7 +37,6 @@ public:
     }
 
 //    void visit(StateValueMap &stateValue) override {
-//        // TODO: How we do want to handle errors here?
 //        return;
 //    }
 

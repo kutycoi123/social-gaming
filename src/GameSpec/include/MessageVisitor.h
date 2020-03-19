@@ -7,6 +7,7 @@
 
 #include "GameStateVisitor.h"
 
+// TODO Implement methods and add error handling
 class MessageVisitor : public GameStateVisitor {
 public:
     MessageVisitor(){
@@ -14,7 +15,6 @@ public:
     }
 
     void visit(StateValueBoolean &stateValue) override {
-        // TODO: How we do want to handle errors here?
         return;
     }
 
@@ -31,7 +31,6 @@ public:
     }
 
 //    void visit(StateValueMap &stateValue) override {
-//        // TODO: How we do want to handle errors here?
 //        return;
 //    }
 
