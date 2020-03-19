@@ -5,21 +5,22 @@
 Game::Game(GameSpecification::GameSpec spec, GameState state) :
     gameSpec{std::move(spec)},
     gameState{std::move(state)},
-    messages{}
+    messages{},
+    isGameStarted(false)
 {}
 
 bool Game::isGameStarted() const {
-    return gameState.isGameStarted();
+    return isGameStarted();
 }
 
 void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
     addMessages(" User has started the game...\n");
-    return gameState.startGame();
+    isGameStarted = true;
 }
 
 void Game::endGame() {
-    return gameState.endGame();
+    isGameStarted = false;
 }
 
 void Game::addMessages(const std::string &message) noexcept{

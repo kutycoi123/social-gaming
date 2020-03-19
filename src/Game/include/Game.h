@@ -28,6 +28,7 @@ private:
     std::stack<std::vector<std::weak_ptr<GameSpecification::BaseRule>>> programCounter;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
+    bool isGameStarted;
 };
 
 #endif //GAME_H
