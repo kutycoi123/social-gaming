@@ -3,13 +3,13 @@
 
 #include "Invitation.h"
 
-TEST(InvitationTest, toStringTest){
+TEST(InvitationTest, toString){
     const std::string invitationString = "001x256";
     Invitation invitation { Invitation::createInvitationFromString(invitationString) };
     EXPECT_EQ(invitation.toString(), invitationString);
 }
 
-TEST(InvitationTest, noRandomDuplicatesTest){
+TEST(InvitationTest, noRandomDuplicates){
     Invitation invitation1 { Invitation::createNewInvitation() };
     Invitation invitation2 { Invitation::createNewInvitation() };
     ASSERT_NE(&invitation1, &invitation2);
