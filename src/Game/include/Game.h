@@ -13,6 +13,7 @@ public:
     void endGame();
     void addMessages(const std::string &message) noexcept;
     std::list<std::string> updateAndGetAllMessages() noexcept;
+    void gameTick();
 
 
 private:
@@ -25,7 +26,7 @@ private:
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
     std::vector<std::shared_ptr<BaseRule>> gameRules;
-    std::stack<std::shared_ptr<BaseRule>> ruleCounter;
+    unsigned int currentRuleIndex;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };
