@@ -1,7 +1,3 @@
-//
-// Created by josh on 2020-03-13.
-//
-
 #ifndef SOCIALGAMING_STATEVALUE_H
 #define SOCIALGAMING_STATEVALUE_H
 
@@ -12,29 +8,41 @@ class StateValue {
 public:
     enum ValueType {
         STRING,
-        INT,
-        DOUBLE,
+        NUMBER,
         BOOLEAN,
         LIST,
         MAP
     };
     virtual ValueType getValueType();
 
-};
-
-// TODO: Break up into separate file
-class StateValueLiteral : public StateValue {
+class StateValueString : public StateValue {
 public:
-    explicit StateValueLiteral(const std::string& val);
-    explicit StateValueLiteral(int val);
-    explicit StateValueLiteral(double val);
-    explicit StateValueLiteral(bool val);
-    boost::variant<std::string, int,
-            bool, double>& getValue();
+    explicit StateValueString(std::string val);
+    std::string& getValue();
     StateValue::ValueType getValueType() override;
 private:
-    boost::variant<std::string, int,
-            bool, double> value;
+    std::string value;
+    StateValue::ValueType valueType;
+};
+
+class StateValueNumber : public StateValue {
+public:
+    explicit StateValueNumber(int val);
+    explicit StateValueNumber(double val);
+    double& getValue();
+    StateValue::ValueType getValueType() override;
+private:
+    double value;
+    StateValue::ValueType valueType;
+};
+
+class StateValueBoolean : public StateValue {
+public:
+    explicit StateValueBoolean(bool val);
+    bool& getValue();
+    StateValue::ValueType getValueType() override;
+private:
+    bool value;
     StateValue::ValueType valueType;
 };
 
@@ -44,7 +52,7 @@ public:
     StateValueList();
     StateValue::ValueType getValueType() override;
 private:
-    std::vector<StateValueLiteral> stateValueList;
+    std::vector<StateValue> stateValueList;
     StateValue::ValueType valueType;
 };
 
@@ -54,7 +62,7 @@ public:
     StateValueMap();
     StateValue::ValueType getValueType() override;
 private:
-    std::unordered_map<std::string, StateValueLiteral> stateValueMap;
+    std::unordered_map<std::string, StateValue> stateValueMap;
     StateValue::ValueType valueType;
 
 };

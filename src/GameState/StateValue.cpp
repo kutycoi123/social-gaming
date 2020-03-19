@@ -1,33 +1,7 @@
 #include "StateValue.h"
 
-StateValueLiteral::StateValueLiteral(const std::string &val) :
-    value(val),
-    valueType(StateValue::STRING)
-{}
+#include <utility>
 
-StateValueLiteral::StateValueLiteral(int val) :
-        value(val),
-        valueType(StateValue::INT)
-{}
-
-StateValueLiteral::StateValueLiteral(double val) :
-    value(val),
-    valueType(StateValue::DOUBLE)
-{}
-
-StateValueLiteral::StateValueLiteral(bool val) :
-    value(val),
-    valueType(StateValue::BOOLEAN)
-{}
-
-StateValue::ValueType StateValueLiteral::getValueType() {
-    return StateValue::getValueType();
-}
-
-boost::variant<std::string, int,
-        bool, double> &StateValueLiteral::getValue() {
-    return value;
-}
 
 StateValueList::StateValueList() :
     valueType(StateValue::LIST)
@@ -42,5 +16,49 @@ StateValueMap::StateValueMap() :
 {}
 
 StateValue::ValueType StateValueMap::getValueType() {
+    return valueType;
+}
+
+StateValueString::StateValueString(std::string val) :
+    value(std::move(val)),
+    valueType(STRING)
+{}
+
+std::string& StateValueString::getValue() {
+    return value;
+}
+
+StateValue::ValueType StateValueString::getValueType() {
+    return valueType;
+}
+
+StateValueNumber::StateValueNumber(int val) :
+    value(val),
+    valueType(NUMBER)
+{}
+
+StateValueNumber::StateValueNumber(double val) :
+        value(val),
+        valueType(NUMBER)
+{}
+
+double& StateValueNumber::getValue() {
+    return value;
+}
+
+StateValue::ValueType StateValueNumber::getValueType() {
+    return valueType;
+}
+
+StateValueBoolean::StateValueBoolean(bool val) :
+        value(val),
+        valueType(BOOLEAN)
+{}
+
+bool& StateValueBoolean::getValue() {
+    return value;
+}
+
+StateValue::ValueType StateValueBoolean::getValueType() {
     return valueType;
 }
