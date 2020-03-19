@@ -1,13 +1,13 @@
 #include "Parallelfor.h"
 
 using GameSpecification::Parallelfor;
-using GameSpecification::ControlStructRule;
 using json = nlohmann::json;
 
 Parallelfor::Parallelfor() : BaseRule(RuleType::ParallelforType) {}
 
-Parallelfor::Parallelfor(std::vector<std::string> list, const std::string& element) 
-    : BaseRule(RuleType::ParallelforType), list(list), element(element){}
+Parallelfor::Parallelfor(const json &ruleJson) : BaseRule(RuleType::ParallelforType){
+    parseRule(ruleJson);
+}
 
 std::vector<std::string> Parallelfor::getList() const{
     return list;

@@ -32,11 +32,11 @@ namespace GameSpecification{
 class ForEach : public BaseRule{
     public:
         ForEach();
-        ForEach(const SpecValue& list, const std::string& element);
+        ForEach(const nlohmann::json&);
         SpecValue getList() const;
         std::string getElement() const;
        	void process(GameState&) override; 
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         //spec value take all value
         SpecValue list;

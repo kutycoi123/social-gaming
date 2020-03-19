@@ -9,11 +9,11 @@ namespace GameSpecification{
 class Extend : public BaseRule{
     public:
         Extend();
-        Extend(const std::string& target, const ValueType& list);
+        Extend(const nlohmann::json&);
         std::string getTarget() const;
         ValueType getList() const;
        	void process(GameState&) override; 
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         std::string target;
         ValueType list;

@@ -7,15 +7,24 @@ using GameSpecification::InputChoice;
 using GameSpecification::Message;
 using json = nlohmann::json;
 
+InputChoice::InputChoice() : BaseRule(RuleType::InputChoiceType){}
+
+InputChoice::InputChoice(const json &ruleJson) : BaseRule(RuleType::InputChoiceType){
+	parseRule(ruleJson);
+}
+
 std::string InputChoice::getTo() const{
 	return to;
 }
+
 std::string InputChoice::getResult() const{
 	return result;
 }
+
 std::optional<double> InputChoice::getTimeout() const{
 	return timeout;
 }
+
 Message InputChoice::getPrompt() const{
 	return prompt;
 }

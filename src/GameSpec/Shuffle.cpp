@@ -11,7 +11,9 @@ using json = nlohmann::json;
 
 Shuffle::Shuffle() : BaseRule(RuleType::ShuffleType), list(""){}
 
-Shuffle::Shuffle(const std::string& list): BaseRule(RuleType::ShuffleType), list(list){}
+Shuffle::Shuffle(const json &ruleJson) : BaseRule(RuleType::ShuffleType){
+    parseRule(ruleJson);
+}
 
 std::string Shuffle::getList() const{
     return list;

@@ -16,10 +16,10 @@ class Reverse : public BaseRule{
             return string;
         }
         Reverse();
-        Reverse(const std::string& list);
+        Reverse(const nlohmann::json&);
         std::string getList() const;
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         std::string list;
 };
