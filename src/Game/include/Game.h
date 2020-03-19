@@ -24,8 +24,8 @@ private:
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
-    std::vector<std::shared_ptr<BaseRule>> program;
-    std::stack<std::shared_ptr<BaseRule>> programCounter;
+    std::vector<std::shared_ptr<BaseRule>> gameRules;
+    std::stack<std::shared_ptr<BaseRule>> ruleCounter;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };

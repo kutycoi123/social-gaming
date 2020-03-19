@@ -18,11 +18,19 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
 
     addMessages(" User has started the game...\n");
 
-    while (!program.empty()) {
-        programCounter.push(program.at(0));
-        processRule(programCounter.top());
-        programCounter.pop();
-        program.erase(program.begin()+0);
+    int currentRuleIndex = 0;
+    while (currentRuleIndex < gameRules.size()) {
+        // Push current rule onto stack
+        ruleCounter.push(gameRules.at(currentRuleIndex));
+
+        // Process current rule on stack
+        processRule(ruleCounter.top());
+
+        // Remove from stack
+        ruleCounter.pop();
+
+        // Increment PC Index
+        currentRuleIndex += 1;
     }
 
     gameState.endGame();
@@ -48,8 +56,8 @@ void Game::clearMessages() noexcept {
 }
 
 void Game::importGameSpecRules() {
-    program.clear();
-    program = gameSpec.getRules();
+    gameRules.clear();
+    gameRules = gameSpec.getRules();
 }
 
 void Game::processRule(std::shared_ptr<BaseRule>& rule) {
