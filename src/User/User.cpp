@@ -36,4 +36,3 @@ UserId User::getUserId() const {
 uintptr_t User::getUserIdValue() const {
     return userId.getId();
 }
-

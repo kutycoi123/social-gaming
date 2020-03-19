@@ -29,10 +29,11 @@ bool GameSessionList::leaveGameSession(std::weak_ptr<User>& userRef, const Invit
     return false;
 }
 
-Invitation GameSessionList::commenceGameSession(std::weak_ptr<User>& owner) noexcept{
-    GameSession gameSession(owner);
-    sessionList.push_back(gameSession);
-    return gameSession.getInvitationCode();
+Invitation GameSessionList::commenceGameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) noexcept{
+    GameSession gameSession(owner, gameFilePath);
+    auto inviteCode = gameSession.getInvitationCode();
+    sessionList.push_back(std::move(gameSession));
+    return inviteCode;
 }
 
 bool GameSessionList::concludeGameSession(const Invitation& invitation) noexcept{

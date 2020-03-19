@@ -12,31 +12,16 @@
 #include <unordered_map>
 #include <cassert>
 #include <map>
+#include "AbstractSpec.h"
 #include "BaseRule.h"
-
-#include "GameSpec.h"
-
-#include "Add.h"
+#include "Game.h"
 #include "ForEach.h"
-#include "Deal.h"
-#include "Discard.h"
-#include "Extend.h"
-#include "ForEach.h"
-#include "GlobalMessage.h"
 #include "Inparallel.h"
-
-#include "InputChoice.h"
-#include "InputText.h"
-#include "InputVote.h"
 #include "Loop.h"
-#include "Message.h"
 #include "Parallelfor.h"
 #include "Reverse.h"
 
-#include "Shuffle.h"
-#include "Sort.h"
-#include "Timer.h"
-
+#include "GameSpecHelper.h"
 enum GameSpecificationJSON{
     CONFIGURATION,
     CONSTANTS,
@@ -70,23 +55,16 @@ class GameParser{
         VALID,
         INVALID
     };
-    GameParser();
-    void createGame();
-    
-    void configValidator(const nlohmann::json& configs);
-    StatusCode rulesValidation(const nlohmann::json& incomingRules);
-    nlohmann::json fileToJson(const std::string& pathName);
-    void parseEntireGameJson(const nlohmann::json& gameJson);
+
+    //The constructor should take in a string which is the filepath of the appropriate Game JSON, create the game, and store the game in a member variable
+    GameParser(const std::string&);
+    //This returns the Game object that was created by the Constructor
+    //Unique ptr gets returned and reset so this object should be deleted after because it should be useless
+    std::unique_ptr<Game> getGame() noexcept;
+
 
     
-    void validator(const nlohmann::json& gameConfiguration);
 
-  
-  
-    StatusCode validGameJson(std::string& );
-    
-    StatusCode validateConfiguration(const nlohmann::json&);
-    StatusCode validatePlayerNumber(nlohmann::json&);
 
     std::map<std::string, GameSpecificationJSON> jsonGameSpecification =
             {
@@ -107,56 +85,56 @@ class GameParser{
                     {"max", GameConfiguration::MAX_PLAYER},
                     {"min", GameConfiguration::MIN_PLAYER}
             };
-    std::unordered_map<std::string,GameSpecification::RuleType> stringRuleMap = {
-            {"foreach", GameSpecification::RuleType::ForEachType},
-            {"loop", GameSpecification::RuleType::LoopType,},
-            {"inparallel",GameSpecification::RuleType::InparallelType,},
-            {"parallelfor",GameSpecification::RuleType::ParallelforType,},
-            {"switch",GameSpecification::RuleType::SwitchType,},
-            {"when",GameSpecification::RuleType::WhenType,},
-            {"extend", GameSpecification::RuleType::ExtendType, },
-            {"reverse",GameSpecification::RuleType::ReverseType, },
-            {"shuffle",GameSpecification::RuleType::ShuffleType, },
-            {"sort",GameSpecification::RuleType::SortType, },
-            {"deal",GameSpecification::RuleType::DealType, },
-            {"discard",GameSpecification::RuleType::DiscardType, },
-            {"add",GameSpecification::RuleType::AddType, },
-            {"timer",GameSpecification::RuleType::TimerType,},
-            {"input-choice",GameSpecification::RuleType::InputChoiceType, },
-            {"input-text",GameSpecification::RuleType::InputTextType, },
-            {"message",GameSpecification::RuleType::MessageType, },
-            {"global-message",GameSpecification::RuleType::GlobalMessageType, },
-            {"scores",GameSpecification::RuleType::ScoresType, },
-            {"unknown",GameSpecification::RuleType::Unknown, }
-    };
-
+	
     const GameSpecification::GameSpec &getGameSpecifications() const;
 
   private:
-      void handleOtherFields(const std::string& nonRules);
-      void processRuleField(const nlohmann::json& singleRule );
-       
-      void parseRules(const nlohmann::json& rules);
-      void parseConfiguration(const nlohmann::json& gameConfiguration);
-      void setPerAudience(const nlohmann::json& perAudience);
-      void setPerPlayer(const nlohmann::json& perPlayer);
-      void setVariables(const nlohmann::json& variables);
-      void setConstants(const nlohmann::json& constants);
-      
-      nlohmann::json constants;
-      nlohmann::json variables;
-      nlohmann::json perAudience;
-      nlohmann::json perPlayer;
-      nlohmann::json gameConfiguration;
-      std::string gameName;
-      nlohmann::json rules;
-      Config configSettings;
-      const std::string CONFIGURATION_STRING = "configuration";
-      const std::string PLAYER_COUNT = "player count";
-      const std::string MIN = "min";
-      const std::string MAX = "max";
-      const std::string NUMBER = "number";
-      GameSpecification::GameSpec gameSpecifications;
 
+        void configValidator(const nlohmann::json& configs);
+        StatusCode validateRules(const nlohmann::json& incomingRules);
+        nlohmann::json fileToJson(const std::string& pathName);
+        void parseEntireGameJson(const nlohmann::json& gameJson);
+
+
+        void validator(const nlohmann::json& gameConfiguration);
+
+
+
+        StatusCode validGameJson(const nlohmann::json& );
+
+        StatusCode validateConfiguration(const nlohmann::json&);
+        StatusCode validatePlayerNumber(nlohmann::json&);
+          void handleOtherFields(const std::string& nonRules);
+          void processRuleField(const nlohmann::json& singleRule );
+
+          void parseRules(const nlohmann::json& rules);
+          void parseConfiguration(const nlohmann::json& gameConfiguration);
+          void setPerAudience(const nlohmann::json& perAudience);
+          void setPerPlayer(const nlohmann::json& perPlayer);
+          void setVariables(const nlohmann::json& variables);
+          void setConstants(const nlohmann::json& constants);
+
+          nlohmann::json constants;
+          nlohmann::json variables;
+          nlohmann::json perAudience;
+          nlohmann::json perPlayer;
+          nlohmann::json gameConfiguration;
+          std::string gameName;
+          nlohmann::json rules;
+          Config configSettings;
+          const std::string CONFIGURATION_STRING = "configuration";
+          const std::string PLAYER_COUNT = "player count";
+          const std::string MIN = "min";
+          const std::string MAX = "max";
+          const std::string NUMBER = "number";
+          const std::string NAME = "name";
+          const std::string AUDIENCE = "audience";
+          const std::string SETUP = "setup";
+
+
+
+          GameSpecification::GameSpec gameSpecifications;
+
+          std::unique_ptr<Game> game;
 };
 #endif

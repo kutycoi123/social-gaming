@@ -15,4 +15,6 @@ target_include_directories(gameServerConfiguration
 
 target_link_libraries (gameServerConfiguration
   nlohmann_json::nlohmann_json
+  stdc++fs
+
 )

@@ -6,7 +6,7 @@
 #include <list>
 #include "UserManager.h"
 #include "Invitation.h"
-#include "Game.h"
+#include "GameParser.h"
 #include <list>
 
 class GameSession {
@@ -15,12 +15,13 @@ class GameSession {
     };
 
     public:
-        explicit GameSession(std::weak_ptr<User>& owner);
+        explicit GameSession(std::weak_ptr<User>&, const std::string&);
 
         bool operator==(const GameSession& gameSession ) const {
             return invitationCode == gameSession.invitationCode;
         }
 
+        void setGame(const std::string&);
         Invitation getInvitationCode() const;
         bool isGameStarted() const;
         void startGame();
@@ -39,12 +40,12 @@ class GameSession {
     private:
         std::list<std::string> messages;
         Invitation invitationCode;
-        Game game;
+        std::unique_ptr<Game> game;
         std::weak_ptr<User>& owner;
         GameSession::UserList playerList;
 
         void clearMessages() noexcept;
-        std::list<std::pair<UserId, std::string>> getLobbyMessages() noexcept;
+        std::list<std::pair<UserId, std::string>> getLobbyAndGameMessages() noexcept;
 };
 
 #endif
