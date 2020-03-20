@@ -6,7 +6,12 @@ using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
 
-Deal::Deal(const std::string& from, const SpecValue& to, const int count) : from(from), to(to), count(count){}
+Deal::Deal(const std::string& from, const SpecValue& to, const int count) : 
+    BaseRule({}), 
+    from(from), 
+    to(to), 
+    count(count) 
+    {}
 
 void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule

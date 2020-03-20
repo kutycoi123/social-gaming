@@ -8,8 +8,9 @@
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
 
-GlobalMessage::GlobalMessage(const std::string& value)
-            : value(value){}
+GlobalMessage::GlobalMessage(const std::string& value) : 
+    BaseRule({}), 
+    value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
     auto variables = gameState.getVariable(value);

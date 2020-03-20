@@ -5,8 +5,11 @@ using GameSpecification::Add;
 using GameSpecification::SpecValue;
 using json = nlohmann::json;
 
-Add::Add(const std::string& to, const SpecValue& value) 
-    : to(to), value(value){}
+Add::Add(const std::string& to, const SpecValue& value) : 
+    BaseRule({}), 
+    to(to), 
+    value(value) 
+    {}
 
 void Add::process(GameState& gameState){
         auto gameStateValue = gameState.getVariable(to);

@@ -3,7 +3,9 @@
 using GameSpecification::Inparallel;
 using json = nlohmann::json;
 
-Inparallel::Inparallel() {}
+Inparallel::Inparallel(const std::list<std::shared_ptr<BaseRule>>& childRules) :
+	BaseRule(childRules)
+	{}
 
 Inparallel::Inparallel(const json &ruleJson) : BaseRule(RuleType::InparallelType){
 	parseRule(ruleJson);

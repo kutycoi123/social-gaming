@@ -13,22 +13,22 @@ namespace RuleTags{
 	std::string Deal = "deal"; 
 	std::string Discard = "discard"; 
 	std::string Extend = "extend"; 
-	std::string ForEach = "foreach"; 
+	std::string ForEach = "foreach"; //contains child rules
 	std::string GlobalMessage = "global-message"; 
-	std::string Inparallel = "inparallel"; 
+	std::string Inparallel = "inparallel"; //contains child rules
 	std::string InputChoice = "input-choice"; 
 	std::string InputText = "input-text";
 	std::string InputVote = "input-vote";
-	std::string Loop = "loop"; 
-	std::string Message = "message"; 
-	std::string Parallelfor = "parallelfor"; 
+	std::string Loop = "loop"; //contains child rules
+	std::string Message = "message"; //missing cmake target
+	std::string Parallelfor = "parallelfor"; //contains child rules
 	std::string Reverse = "reverse"; 
 	std::string Scores = "scores"; 
 	std::string Shuffle = "shuffle"; 
 	std::string Sort = "sort"; 
-	std::string Switch = "switch"; 
-	std::string Timer = "timer"; 
-	std::string When = "when"; 
+	std::string Switch = "switch"; //contains child rules //missing cmake target
+	std::string Timer = "timer"; //contains child rules
+	std::string When = "when"; //contains child rules //missing cmake target
 }
 
 GameSpec::GameSpec(const nlohmann::json& fullFileJson) : rules({}){
@@ -53,21 +53,22 @@ void GameSpec::processSpec(const nlohmann::json& ruleJson){
 	std::vector<nlohmann::json> ruleList = ruleJson.get<std::vector<nlohmann::json>>();
 
 	for(auto& rule : ruleList){
-		//recursively parse
+		auto parsedRule = recursivelyParseSpec(rule);
+		addRule(parsedRule);
 	}
 }
 
-std::list<std::shared_ptr<BaseRule>> GameSpec::recursivelyParseSpec(const nlohmann::json& currentRuleJson){
+std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& currentRuleJson){
 	std::string ruleType = currentRuleJson
 		.at(SpecTags::RULE_NAME)
 		.get<std::string>();	
 
-	std::list<std::shared_ptr<BaseRule>> result {};
+	std::shared_ptr<BaseRule> result;
 
 	if(currentRuleJson.contains(SpecTags::RULE_LIST)){
 		//these rules have child rules so we need to do more complex processing
 
-		std::list<std::shared_ptr<BaseRule>> childNodes {};
+		std::list<std::shared_ptr<BaseRule>> childRules {};
 		
 		//every rule list has an array of rules
 		std::list<nlohmann::json> subrules = currentRuleJson
@@ -76,8 +77,8 @@ std::list<std::shared_ptr<BaseRule>> GameSpec::recursivelyParseSpec(const nlohma
 		
 		//recursively parse every rule in the array of rules
 		for (auto& subrule : subrules){
-			auto ruleList = recursivelyParseSpec(subrule);
-			childNodes.insert(childNodes.end(), ruleList.begin(), ruleList.end());
+			auto singleChildrule = recursivelyParseSpec(subrule);
+			childRules.push_back(singleChildrule);
 		} 
 
 		if(ruleType == RuleTags::ForEach){

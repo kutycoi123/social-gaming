@@ -1,7 +1,6 @@
 #include "Message.h"
 #include "MessageVisitor.h"
 
-
 using GameSpecification::Message;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;

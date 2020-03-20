@@ -4,12 +4,7 @@ using GameSpecification::BaseRule;
 using GameSpecification::Case;
 using json = nlohmann::json;
 
-<<<<<<< HEAD
-Switch::Switch() : BaseRule(RuleType::SwitchType){}
-=======
-/*
-Switch::Switch(){};
->>>>>>> working on centralized parsing
+Switch::Switch() {}
 
 Switch::Switch(const json &ruleJson) : BaseRule(RuleType::SwitchType){
     parseRule(ruleJson);

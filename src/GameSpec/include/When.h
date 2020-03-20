@@ -5,6 +5,7 @@
 #include "Case.h"
 #include <nlohmann/json.hpp>
 #include <string>
+/*
 namespace GameSpecification{
     class When : public BaseRule{
         public:
@@ -15,4 +16,5 @@ namespace GameSpecification{
             std::vector<Case> cases;
     };
 }
+*/
 #endif

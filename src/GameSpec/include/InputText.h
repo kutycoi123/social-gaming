@@ -2,11 +2,6 @@
 #define INPUTTEXT_H
 
 #include "BaseRule.h"
-<<<<<<< HEAD
-#include <nlohmann/json.hpp>
-=======
-#include "ControlStructRule.h"
->>>>>>> working on centralized parsing
 #include <string>
 namespace GameSpecification{
 class InputText : public BaseRule{

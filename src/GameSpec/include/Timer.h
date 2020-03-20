@@ -7,7 +7,7 @@
 namespace GameSpecification{
 class Timer : public BaseRule{
     public:
-        Timer(double duration, const std::string& mode, bool flag);
+        Timer(const std::list<std::shared_ptr<BaseRule>>&, double duration, const std::string& mode, bool flag);
 
        	void process(GameState&) override; 
 

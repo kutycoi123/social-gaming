@@ -12,16 +12,8 @@
 #include <unordered_map>
 #include <cassert>
 #include <map>
-#include "AbstractSpec.h"
-#include "BaseRule.h"
 #include "Game.h"
-#include "ForEach.h"
-#include "Inparallel.h"
-#include "Loop.h"
-#include "Parallelfor.h"
-#include "Reverse.h"
 
-#include "GameSpecHelper.h"
 enum GameSpecificationJSON{
     CONFIGURATION,
     CONSTANTS,
@@ -61,10 +53,6 @@ class GameParser{
     //This returns the Game object that was created by the Constructor
     //Unique ptr gets returned and reset so this object should be deleted after because it should be useless
     std::unique_ptr<Game> getGame() noexcept;
-
-
-    
-
 
     std::map<std::string, GameSpecificationJSON> jsonGameSpecification =
             {
@@ -130,10 +118,6 @@ class GameParser{
           const std::string NAME = "name";
           const std::string AUDIENCE = "audience";
           const std::string SETUP = "setup";
-
-
-
-          GameSpecification::GameSpec gameSpecifications;
 
           std::unique_ptr<Game> game;
 };

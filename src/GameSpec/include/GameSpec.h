@@ -45,7 +45,7 @@ namespace GameSpecification{
 
 		    nlohmann::json readSpec(const nlohmann::json&); 
 		    void processSpec(const nlohmann::json&);
-			std::list<std::shared_ptr<BaseRule>> recursivelyParseSpec(const nlohmann::json&);
+			std::shared_ptr<BaseRule> recursivelyParseSpec(const nlohmann::json&);
 		    void addRule(std::shared_ptr<BaseRule>); 
 
 	};	

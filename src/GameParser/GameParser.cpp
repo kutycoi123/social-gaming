@@ -1,20 +1,12 @@
-
 #include "GameParser.h"
-
-using GameSpecification::stringToRuleType;
-using GameSpecification::ForEach;
-using GameSpecification::Inparallel;
-using GameSpecification::Loop;
-using GameSpecification::Parallelfor;
-using GameSpecification::RuleType;
 
 ////public methods
 GameParser::GameParser(const std::string& path){
 
     nlohmann::json gameJson = fileToJson(path);
-    parseEntireGameJson(gameJson);
-    GameState gameState;
-    game = std::make_unique<Game> (Game(getGameSpecifications(), gameState));
+    GameSpecification::GameSpec gameSpec(gameJson);
+    GameState gameState; //GameState(gameJson)
+    game = std::make_unique<Game> (gameSpec, gameState);
 }
 
 std::unique_ptr<Game> GameParser::getGame() noexcept{
@@ -76,7 +68,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
 void GameParser::parseRules(const nlohmann::json& rule) {
     StatusCode status = validateRules(rule); //validation can probably happen when doing the polymorphic parsing
     if (status == StatusCode::VALID) {
-        /*
+        
         GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
 >>>>>>> initial removals
 
@@ -105,7 +97,7 @@ void GameParser::parseRules(const nlohmann::json& rule) {
         }
 
         this->gameSpecifications.addRule(baseRulePtr);
-        */
+        
     }
 
 }
@@ -191,14 +183,25 @@ GameParser::StatusCode GameParser::validateRules(const nlohmann::json& incomingR
     }
 	
     return StatusCode::VALID;
+<<<<<<< HEAD
 }
 
 nlohmann::json GameParser::fileToJson(const std::string& pathName) {
     std::ifstream ifs(pathName);
     nlohmann::json JsonConfig = nlohmann::json::parse(ifs);
     return JsonConfig;
+=======
+    
+>>>>>>> fixing gamerule construcotrs and refactoring gameParser
 }
 
 const GameSpecification::GameSpec &GameParser::getGameSpecifications() const {
-    return gameSpecifications;
+//    return gameSpecifications;
+}
+*/
+
+nlohmann::json GameParser::fileToJson(const std::string& pathName) {
+    std::ifstream jsonStream(pathName);
+    nlohmann::json JsonConfig = nlohmann::json::parse(jsonStream);    
+    return JsonConfig;
 }

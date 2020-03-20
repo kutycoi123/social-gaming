@@ -6,8 +6,12 @@ using GameSpecification::Extend;
 using GameSpecification::SpecValue;
 using json = nlohmann::json;
 
-Extend::Extend(const std::string& target, const ValueType& list) : target(target), list(list){}
-
+Extend::Extend(const std::string& target, const ValueType& list) : 
+    BaseRule({}), 
+    target(target), 
+    list(list)
+    {}
+    
 void Extend::process(GameState& gameState){
     auto variables = gameState.getVariable(target);
     if(auto retrievedValue = variables->lock()){

@@ -5,6 +5,7 @@
 #include "Message.h"
 
 namespace GameSpecification{
+/*
 	class InputChoice: public BaseRule{
 		
 		public:
@@ -18,7 +19,7 @@ namespace GameSpecification{
 			std::optional<double> timeout;
 			
 	};
-
+*/
 }
 
 #endif

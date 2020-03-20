@@ -3,6 +3,7 @@
 #include <string>
 #include "BaseRule.h"
 
+/*
 namespace GameSpecification{
 	class Message: public BaseRule{
 		public:
@@ -15,5 +16,6 @@ namespace GameSpecification{
 			std::string	messValue;
 	};
 }
+*/
 
 #endif

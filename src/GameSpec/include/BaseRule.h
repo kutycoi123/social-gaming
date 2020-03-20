@@ -13,16 +13,16 @@ class GameState;
 namespace GameSpecification{
 	class BaseRule : public std::enable_shared_from_this<BaseRule>{
 		public:
-            BaseRule(); //to be removed later
-			BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
-
-            std::shared_ptr<BaseRule> getCurrentPtr() const noexcept;
+			explicit BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
+            
+            void setNextPtr(const std::list<std::shared_ptr<BaseRule>>& ptr);
 			std::shared_ptr<BaseRule> getNextPtr() const noexcept;
 
-			virtual void process(GameState& gameState) = 0;
+			virtual void process(GameState& gameState) = 0;           
 
 		protected:
 			std::list<std::shared_ptr<BaseRule>> childRules;
-	};
+            std::list<std::shared_ptr<BaseRule>> next;	
+        };
 }
 #endif

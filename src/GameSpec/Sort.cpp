@@ -4,8 +4,11 @@
 using GameSpecification::Sort;
 using json = nlohmann::json;
 
-Sort::Sort(const std::string& list, const std::string& key)
-    : list(list), key(key){}
+Sort::Sort(const std::string& list, const std::string& key) : 
+    BaseRule({}), 
+    list(list), 
+    key(key)
+    {}
 
 void Sort::process(GameState& gameState){
     auto variables = gameState.getVariable(list);

@@ -5,12 +5,11 @@
 #include <string>
 #include <vector>
 #include <cassert>
-#include "GameSpecHelper.h"
 
 namespace GameSpecification{
     class ForEach : public BaseRule{
         public:
-            ForEach(const SpecValue& list, const std::string& element);
+            ForEach(const std::list<std::shared_ptr<BaseRule>>&,const SpecValue& list, const std::string& element);
 
             void process(GameState&) override; 
         
