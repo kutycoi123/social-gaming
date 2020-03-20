@@ -24,36 +24,36 @@ class Scores;
 namespace GameSpecification{
 //Note: This function are not dealing with ForEach, ParallelFor, Loop, Inparallelfor
 //		because when calling this function inside those classes, it would cause "invalid use of incomplete type"
-static std::shared_ptr<BaseRule> getRulePtrFromRuleType(RuleType ruleType){
+static std::shared_ptr<BaseRule> getRulePtrFromRuleType(RuleType ruleType, const json &ruleJson){
 	switch(ruleType){
 		case RuleType::AddType: 
-			return std::shared_ptr<BaseRule>(new Add());
+			return std::shared_ptr<BaseRule>(new Add(ruleJson));
 		case RuleType::ExtendType:
-			return std::shared_ptr<BaseRule>(new Extend());
+			return std::shared_ptr<BaseRule>(new Extend(ruleJson));
 		case RuleType::ReverseType:
-			return std::shared_ptr<BaseRule>(new Reverse());
+			return std::shared_ptr<BaseRule>(new Reverse(ruleJson));
 		case RuleType::ShuffleType:
-			return std::shared_ptr<BaseRule>(new Shuffle());
+			return std::shared_ptr<BaseRule>(new Shuffle(ruleJson));
 		case RuleType::SortType:
-			return std::shared_ptr<BaseRule>(new Sort());
+			return std::shared_ptr<BaseRule>(new Sort(ruleJson));
 		case RuleType::DealType:
-			return std::shared_ptr<BaseRule>(new Deal());
+			return std::shared_ptr<BaseRule>(new Deal(ruleJson));
 		case RuleType::DiscardType:
-			return std::shared_ptr<BaseRule>(new Discard());
+			return std::shared_ptr<BaseRule>(new Discard(ruleJson));
 		case RuleType::InputChoiceType:
-			return std::shared_ptr<BaseRule>(new InputChoice());
+			return std::shared_ptr<BaseRule>(new InputChoice(ruleJson));
 		case RuleType::InputTextType:
-			return std::shared_ptr<BaseRule>(new InputText());
+			return std::shared_ptr<BaseRule>(new InputText(ruleJson));
 		case RuleType::InputVoteType:
-			return std::shared_ptr<BaseRule>(new InputVote());
+			return std::shared_ptr<BaseRule>(new InputVote(ruleJson));
 		case RuleType::MessageType:
-			return std::shared_ptr<BaseRule>(new Message());
+			return std::shared_ptr<BaseRule>(new Message(ruleJson));
 		case RuleType::ScoresType:
-			return std::shared_ptr<BaseRule>(new Scores());
+			return std::shared_ptr<BaseRule>(new Scores(ruleJson));
 		case RuleType::TimerType:
-			return std::shared_ptr<BaseRule>(new Timer());
+			return std::shared_ptr<BaseRule>(new Timer(ruleJson));
 		case RuleType::GlobalMessageType:
-			return std::shared_ptr<BaseRule>(new GlobalMessage());
+			return std::shared_ptr<BaseRule>(new GlobalMessage(ruleJson));
 		default:
 			return nullptr;
 	}

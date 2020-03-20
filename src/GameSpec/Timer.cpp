@@ -5,8 +5,9 @@ using json = nlohmann::json;
 
 Timer::Timer() : BaseRule(RuleType::TimerType), duration(0), mode(""), flag(false){}
 
-Timer::Timer(double duration, const std::string& mode, bool flag)
-    : BaseRule(RuleType::TimerType), duration(duration), mode(mode), flag(flag){}
+Timer::Timer(const json &ruleJson) : BaseRule(RuleType::TimerType){
+    parseRule(ruleJson);
+}
 
 double Timer::getDuration() const{
     return duration;

@@ -7,8 +7,9 @@ using json = nlohmann::json;
 
 ForEach::ForEach() : BaseRule(RuleType::ForEachType), element(""){}
 
-ForEach::ForEach(const SpecValue& list, const std::string& element) : BaseRule(RuleType::ForEachType),
-    list(list), element(element){}
+ForEach::ForEach(const json& ruleJson) : BaseRule(RuleType::ForEachType){
+	parseRule(ruleJson);
+}
 
 SpecValue ForEach::getList() const{
     return list;
@@ -37,26 +38,25 @@ void ForEach::parseRule(const json &ruleJson){
 		for(auto& it : subRulesJson.items()){
 			auto rule = it.value();
 			auto ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
-			auto baseRulePtr = getRulePtrFromRuleType(ruleType);
+			auto baseRulePtr = getRulePtrFromRuleType(ruleType, rule);
 			if(!baseRulePtr){
 				switch(ruleType){
 					case RuleType::ForEachType:
-						baseRulePtr = std::shared_ptr<BaseRule>(new ForEach());
+						baseRulePtr = std::shared_ptr<BaseRule>(new ForEach(rule));
 						break;
 					case RuleType::InparallelType:
-						baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel());
+						baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel(rule));
 						break;
 					case RuleType::LoopType:
-						baseRulePtr = std::shared_ptr<BaseRule>(new Loop());
+						baseRulePtr = std::shared_ptr<BaseRule>(new Loop(rule));
 						break;
 					case RuleType::ParallelforType:
-						baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor());
+						baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor(rule));
 						break;
 					default:
 						assert(false);
 				}
 			}
-			baseRulePtr->parseRule(rule);
 			baseRulePtr->setParentPtr(this->getPtr());
 			this->subRules.push_back(baseRulePtr);
 		}

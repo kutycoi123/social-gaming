@@ -3,18 +3,18 @@
 
 #include "BaseRule.h"
 #include "AbstractSpec.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
-class Case{
+class Case : BaseRule{
     public:
         Case();
-        Case(const std::string& value, const std::vector<BaseRule>&);
+        Case(const nlohmann::json&);
         std::string getValue();
-        std::vector<BaseRule> getRules() const;
-        std::string getValue();
+        void process(GameState&) override;
+        void parseRule(const nlohmann::json&);
     private:
         std::string value;
-        std::vector<BaseRule> rules;
 };
 }
 #endif

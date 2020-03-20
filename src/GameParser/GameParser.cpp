@@ -74,26 +74,25 @@ void GameParser::parseRules(const nlohmann::json& rule) {
     if (status == StatusCode::VALID) {
         GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
 
-        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
+        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType, rule);
         if(!baseRulePtr){
             switch(ruleType){
                 case RuleType::ForEachType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new ForEach());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new ForEach(rule));
                     break;
                 case RuleType::InparallelType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel(rule));
                     break;
                 case RuleType::LoopType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Loop());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Loop(rule));
                     break;
                 case RuleType::ParallelforType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor(rule));
                     break;
                 default:
                     assert(false);
             }
         }
-        baseRulePtr->parseRule(rule);
         this->gameSpecifications.addRule(baseRulePtr);
     }
 

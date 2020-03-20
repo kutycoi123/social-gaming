@@ -8,13 +8,13 @@
 namespace GameSpecification{
 class GlobalMessage : public BaseRule{
     public:
-		GlobalMessage();
-    GlobalMessage(const std::string& value);
-    std::string getValue() const;
-		void process(GameState&) override;
-    void parseRule(const nlohmann::json&) override;
+		  GlobalMessage();
+      GlobalMessage(const nlohmann::json&);
+      std::string getValue() const;
+		  void process(GameState&) override;
+      void parseRule(const nlohmann::json&);
     private:
-        std::string value;
+      std::string value;
 };
 }
 #endif

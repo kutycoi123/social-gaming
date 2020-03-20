@@ -9,12 +9,12 @@ namespace GameSpecification{
 class Deal : public BaseRule{
     public:
         Deal();
-        Deal(const std::string& from, const SpecValue& to, const int count);
+        Deal(const nlohmann::json&);
         std::string getFrom() const;
         SpecValue getTo() const;
         int getCount() const;
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         std::string from;
         SpecValue to;

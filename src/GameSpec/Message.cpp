@@ -5,6 +5,13 @@ using GameSpecification::Message;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
+
+Message::Message() : BaseRule(RuleType::MessageType){}
+
+Message::Message(const json &ruleJson) : BaseRule(RuleType::MessageType){
+	parseRule(ruleJson);
+}
+
 SpecValue Message::getTo() const{
 	return to;
 }

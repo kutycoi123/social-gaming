@@ -11,7 +11,6 @@ add_library(gameSpec
 			Reverse.cpp
 			Shuffle.cpp
 			BaseRule.cpp
-			ControlStructRule.cpp
 			InputChoice.cpp
 			Message.cpp
 			Timer.cpp
