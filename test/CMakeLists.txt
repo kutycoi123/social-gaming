@@ -4,6 +4,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 # Add your test file here
 add_executable(runAllTests
     UserTest.cpp
+    InvitationTest.cpp
     UserManagerTest.cpp
 )
 
@@ -13,6 +14,7 @@ target_link_libraries(runAllTests
         gtest
         gtest_main
         user
+        invitation
         userManager
 )
 

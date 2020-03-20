@@ -196,7 +196,7 @@ std::string GameServer::commandJOIN_SESSION(const std::vector<std::string>& comm
         return response;
     }
 
-    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    Invitation userProvidedCode = Invitation::createInvitationFromString(commandParams.at(0));
     sessionList.joinGameSession(user, userProvidedCode) ? response.append("\n Joining Session.") : response.append("\n Unable to join Session. Does the Session exist?");
 
     return response;
@@ -210,7 +210,7 @@ std::string GameServer::commandLEAVE_SESSION(const std::vector<std::string>& com
         return response;
     }
 
-    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    Invitation userProvidedCode = Invitation::createInvitationFromString(commandParams.at(0));
     sessionList.leaveGameSession(user, userProvidedCode) ? response.append("\n Leaving Session.") : response.append("\n Unable to leave Session. Has the Game already started?");
 
     return response;
@@ -224,7 +224,7 @@ std::string GameServer::commandSHUTDOWN(const std::vector<std::string>& commandP
         return response;
     }
 
-    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    Invitation userProvidedCode = Invitation::createInvitationFromString(commandParams.at(0));
     sessionList.endGameInGameSession(user, userProvidedCode) ? response.append("\n Ending Game.") : response.append("\n Unable to end Game. Are you the owner?");
 
     return response;
@@ -238,7 +238,7 @@ std::string GameServer::commandSTART_GAME(const std::vector<std::string> &comman
         return response;
     }
 
-    Invitation userProvidedCode = Invitation::createInvitationFromStringInput(commandParams.at(0));
+    Invitation userProvidedCode = Invitation::createInvitationFromString(commandParams.at(0));
     sessionList.startGameInGameSession(user, userProvidedCode) ? response.append("\n Starting Game.") : response.append("\n Unable to start Game. Are you the owner?");
 
     return response;
