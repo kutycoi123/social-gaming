@@ -49,6 +49,8 @@ std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages()
     std::list<std::pair<UserId, std::string>> result = {};
 
     if (game->isGameStarted()) {
+        game->gameTick();
+
         auto gameMessages = game->updateAndGetAllMessages();
         messages.insert(messages.end(), gameMessages.begin(), gameMessages.end());
     }
