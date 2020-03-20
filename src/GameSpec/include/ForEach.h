@@ -2,9 +2,6 @@
 #define FOREACH_H
 
 #include "GameSpec.h"
-#include <string>
-#include <vector>
-#include <cassert>
 
 namespace GameSpecification{
     class ForEach : public BaseRule{

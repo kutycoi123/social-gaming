@@ -2,8 +2,7 @@
 #define INPARALLEL_H
 
 #include "BaseRule.h"
-#include <string>
-#include <vector>
+
 namespace GameSpecification{
 class Inparallel : public BaseRule{
     public:

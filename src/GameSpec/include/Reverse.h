@@ -2,12 +2,9 @@
 #define REVERSE_H
 
 #include "BaseRule.h"
-#include <string>
-#include "GameState.h"
 #include <boost/range/algorithm/reverse.hpp>
 #include <iterator>
 #include <algorithm>
-
 
 namespace GameSpecification{
 

@@ -2,8 +2,6 @@
 #define LOOP_H
 
 #include "BaseRule.h"
-#include <string>
-#include <vector>
 
 namespace GameSpecification{
     class Loop : public BaseRule{

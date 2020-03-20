@@ -2,7 +2,6 @@
 #define EXTEND_H
 
 #include "BaseRule.h"
-#include <string>
 namespace GameSpecification{
     class Extend : public BaseRule{
         public:

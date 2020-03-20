@@ -2,7 +2,6 @@
 #define INPUTVOTE_H
 
 #include "BaseRule.h"
-#include <string>
 namespace GameSpecification{
 class InputVote : public BaseRule{
   	public:

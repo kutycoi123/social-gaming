@@ -2,7 +2,6 @@
 #define SCORES_H
 
 #include "BaseRule.h"
-#include <string>
 namespace GameSpecification{
 class Scores : public BaseRule{
     public:

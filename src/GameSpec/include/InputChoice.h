@@ -2,7 +2,6 @@
 #define INPUTCHOICERULE_H
 
 #include "GameSpec.h"
-#include "Message.h"
 
 namespace GameSpecification{
 /*

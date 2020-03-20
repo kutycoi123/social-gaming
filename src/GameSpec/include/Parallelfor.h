@@ -2,8 +2,7 @@
 #define PARALLELFOR_H
 
 #include "BaseRule.h"
-#include <string>
-#include <vector>
+
 namespace GameSpecification{
 class Parallelfor : public BaseRule{
     public:

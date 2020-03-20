@@ -30,8 +30,6 @@
 #include "Timer.h"
 #include "When.h"
 
-#include "GameState.h"
-
 using GameSpecification::BaseRule;
 
 namespace GameSpecification{

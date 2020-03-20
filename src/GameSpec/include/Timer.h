@@ -2,7 +2,6 @@
 #define TIMER_H
 
 #include "BaseRule.h"
-#include <string>
 #include <optional>
 namespace GameSpecification{
 class Timer : public BaseRule{

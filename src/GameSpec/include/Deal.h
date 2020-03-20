@@ -2,7 +2,6 @@
 #define DEAL_H
 
 #include "BaseRule.h"
-#include <string>
 
 namespace GameSpecification{
     class Deal : public BaseRule{

@@ -2,7 +2,7 @@
 #define INPUTTEXT_H
 
 #include "BaseRule.h"
-#include <string>
+
 namespace GameSpecification{
 class InputText : public BaseRule{
     public:

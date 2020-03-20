@@ -3,7 +3,6 @@
 
 #include "BaseRule.h"
 #include <optional>
-#include <string>
 namespace GameSpecification{
 class Sort : public BaseRule{
     public:

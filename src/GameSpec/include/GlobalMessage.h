@@ -2,7 +2,6 @@
 #define GLOBALMESSAGE_H
 
 #include "BaseRule.h"
-#include <string>
 namespace GameSpecification{
 class GlobalMessage : public BaseRule{
     public:

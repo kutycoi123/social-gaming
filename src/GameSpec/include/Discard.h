@@ -2,7 +2,6 @@
 #define DISCARD_H
 
 #include "BaseRule.h"
-#include <string>
 namespace GameSpecification{
     class Discard : public BaseRule{
         public:

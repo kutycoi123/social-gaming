@@ -3,8 +3,6 @@
 
 #include "BaseRule.h"
 #include "Case.h"
-#include <nlohmann/json.hpp>
-#include <string>
 /*
 namespace GameSpecification{
     class When : public BaseRule{

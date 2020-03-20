@@ -3,7 +3,6 @@
 
 #include "BaseRule.h"
 #include "Case.h"
-#include <string>
 namespace GameSpecification{
 class Switch : public BaseRule{
     public:
