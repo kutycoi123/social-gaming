@@ -11,7 +11,6 @@ class Inparallel : public BaseRule{
         Inparallel();
         Inparallel(const nlohmann::json&);
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&);
     private:
 };
 }

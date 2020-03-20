@@ -5,21 +5,19 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include "GameState.h"
+#include <boost/range/algorithm/reverse.hpp>
+#include <iterator>
+#include <algorithm>
 
 
 namespace GameSpecification{
 
 class Reverse : public BaseRule{
     public:
-        std::string operator()(std::string const& str){
-            std::string string = str;
-            return string;
-        }
-        Reverse();
-        Reverse(const nlohmann::json&);
-        std::string getList() const;
+
+        Reverse(const std::string& list);
+
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&);
     private:
         std::string list;
 };

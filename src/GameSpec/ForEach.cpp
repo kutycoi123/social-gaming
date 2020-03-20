@@ -1,31 +1,20 @@
 #include "ForEach.h"
 
 using GameSpecification::ForEach;
-using GameSpecification::SpecValue;
-using GameSpecification::BaseRule;
+//using GameSpecification::SpecValue;
+//using GameSpecification::BaseRule;
 using json = nlohmann::json;
 
-ForEach::ForEach() : BaseRule(RuleType::ForEachType), element(""){}
+ForEach::ForEach(const SpecValue& list, const std::string& element) : 
+	list(list), element(element) {}
 
-ForEach::ForEach(const json& ruleJson) : BaseRule(RuleType::ForEachType){
-	parseRule(ruleJson);
-}
-
-SpecValue ForEach::getList() const{
-    return list;
-}
-
-std::string ForEach::getElement() const{
-    return element;
-}
+//TODO: Add code to process foreach rule
+void ForEach::process(GameState& gameState){}
 
 
-
-void ForEach::process(GameState& gameState){
-	//TODO: Add code to process foreach rule
-}
-
-void ForEach::parseRule(const json &ruleJson){
+/*
+void ForEach::parseRule(const json &ruleJson) {
+	
     try{
 
         auto el = ruleJson.find("element");
@@ -86,4 +75,7 @@ void ForEach::parseRule(const json &ruleJson){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
     }
+	
 }
+
+*/

@@ -7,21 +7,15 @@
 #include <unordered_map>
 #include <boost/variant.hpp>
 #include <nlohmann/json.hpp>
-#include "AbstractSpec.h"
 #include "BaseRule.h"
 #include <memory>
 
 #include "GameState.h"
 
-// TODO: Remove when circular dependency between GameState and GameSpec is resolved
-namespace GameSpecification {
-    class BaseRule;
-}
-
-using GameSpecification::AbstractSpec;
 using GameSpecification::BaseRule;
+
 namespace GameSpecification{
-	class GameSpec : public AbstractSpec{
+	class GameSpec{
 		public:
 		    GameSpec() : specFilePath(""){}
 		    explicit GameSpec(const std::string& path) : specFilePath(path) {}
@@ -29,7 +23,7 @@ namespace GameSpecification{
 		    std::string getSpecFilePath() const;	
 		    void addRule(std::shared_ptr<BaseRule>);
 		    void setSpecFilePath(const std::string&);
-		    void readSpec() override; 
+		    void readSpec(); 
 		    void parseGameSpec(const nlohmann::json&); 
 		private:
 		    std::vector<std::shared_ptr<BaseRule>> rules; 

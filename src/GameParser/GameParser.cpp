@@ -67,10 +67,18 @@ void GameParser::parseConfiguration(const nlohmann::json & configs) {
 }
   // END-TODO
 
+<<<<<<< HEAD
 
 
 void GameParser::parseRules(const nlohmann::json& rules) {
     for (auto& [key, value] : rules.items()) {
+=======
+void GameParser::parseRules(const nlohmann::json& rule) {
+    StatusCode status = validateRules(rule); //validation can probably happen when doing the polymorphic parsing
+    if (status == StatusCode::VALID) {
+        /*
+        GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
+>>>>>>> initial removals
 
         std::string jsonKey = key;
         GameSpecification::RuleType ruleType = GameSpecification::stringToRuleType[jsonKey];
@@ -97,6 +105,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
         }
 
         this->gameSpecifications.addRule(baseRulePtr);
+        */
     }
 
 }

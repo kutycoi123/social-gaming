@@ -5,17 +5,16 @@
 #include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
-class Discard : public BaseRule{
-    public:
-        Discard();
-        Discard(const nlohmann::json&);
-        std::string getFrom() const;
-        int getCount() const;
-       	void process(GameState&) override; 
-        void parseRule(const nlohmann::json&);
-    private:
-        std::string from;
-        int count;
-};
+    class Discard : public BaseRule{
+        public:
+
+            Discard(const std::string& from, const int count);
+
+            void process(GameState&) override; 
+
+        private:
+            std::string from;
+            int count;
+    };
 }
 #endif

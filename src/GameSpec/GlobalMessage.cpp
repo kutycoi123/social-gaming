@@ -1,18 +1,15 @@
 #include "GlobalMessage.h"
+<<<<<<< HEAD
 #include "../Game/include/Game.h"
 #include "GlobalMessageVisitor.h"
+=======
+>>>>>>> initial removals
 
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
-GlobalMessage::GlobalMessage(): BaseRule(RuleType::GlobalMessageType), value(""){}
 
-GlobalMessage::GlobalMessage(const json &ruleJson) : BaseRule(RuleType::GlobalMessageType){
-    parseRule(ruleJson);
-}
-
-std::string GlobalMessage::getValue() const{
-    return value;
-}
+GlobalMessage::GlobalMessage(const std::string& value)
+            : value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
     auto variables = gameState.getVariable(value);
@@ -29,6 +26,8 @@ void GlobalMessage::process(GameState& gameState) {
 //        }
     }
 }
+
+/*
 void GlobalMessage::parseRule(const json &ruleJson){
     try{
        value = ruleJson.at("value").get<std::string>(); 
@@ -37,3 +36,4 @@ void GlobalMessage::parseRule(const json &ruleJson){
         std::cout << e.what() << "\n";
     }
 }
+*/

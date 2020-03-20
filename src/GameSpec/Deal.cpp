@@ -5,23 +5,8 @@ using GameSpecification::Deal;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
-Deal::Deal() : BaseRule(RuleType::DealType), from(""), count(0){}
 
-Deal::Deal(const json& ruleJson) : BaseRule(RuleType::DealType){
-    parseRule(ruleJson);
-}
-
-std::string Deal::getFrom() const{
-    return from;
-}
-
-SpecValue Deal::getTo() const{
-    return to;
-}
-
-int Deal::getCount() const{
-    return count;
-}
+Deal::Deal(const std::string& from, const SpecValue& to, const int count) : from(from), to(to), count(count){}
 
 void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule
@@ -39,6 +24,7 @@ void Deal::process(GameState& gameState) {
     }
 }
 
+/*
 void Deal::parseRule(const json& ruleJson){
     try{
         from = ruleJson.at("from").get<std::string>();
@@ -55,3 +41,4 @@ void Deal::parseRule(const json& ruleJson){
         std::cout << e.what() << "\n";
     }
 }
+*/

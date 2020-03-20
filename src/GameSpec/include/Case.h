@@ -2,8 +2,6 @@
 #define CASE_H
 
 #include "BaseRule.h"
-#include "AbstractSpec.h"
-#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Case : BaseRule{

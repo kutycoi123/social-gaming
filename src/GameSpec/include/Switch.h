@@ -8,11 +8,8 @@
 namespace GameSpecification{
 class Switch : public BaseRule{
     public:
-        Switch();
-        Switch(const nlohmann::json&);
-        const std::vector<Case>& getCases() const;
+        Switch(const std::vector<Case>& cases);
         void process(GameState&) override;
-        void parseRule(const nlohmann::json&);
     private:
         std::vector<Case> cases;
 };

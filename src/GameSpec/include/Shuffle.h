@@ -4,12 +4,16 @@
 #include "BaseRule.h"
 #include <nlohmann/json.hpp>
 #include <string>
+#include <random>
+#include <boost/range/algorithm.hpp>
+#include <algorithm>
+#include <boost/range/algorithm/random_shuffle.hpp>
+
 namespace GameSpecification{
 class Shuffle :public BaseRule{
     public:
-        Shuffle();
-        Shuffle(const nlohmann::json&);
-        std::string getList() const;
+        Shuffle(const std::string& list);
+
 		void process(GameState&) override;
     private:
         std::string list;
