@@ -1,25 +1,11 @@
 #ifndef GAMESPECHELPER_H
 #define GAMESPECHELPER_H
-#include <nlohmann/json.hpp>
 #include <vector>
 #include <algorithm>
 #include "BaseRule.h"
 
 using nlohmann::json;
-class Add;
-class Deal;
-class Discard;
-class Extend;
-class GlobalMessage;
-class InputChoice;
-class InputText;
-class InputVote;
-class Message;
-class Reverse;
-class Shuffle;
-class Sort;
-class Timer;
-class Scores;
+
 namespace GameSpecification{
 <<<<<<< HEAD
 //Note: This function are not dealing with ForEach, ParallelFor, Loop, Inparallelfor

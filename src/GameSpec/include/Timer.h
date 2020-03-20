@@ -2,7 +2,6 @@
 #define TIMER_H
 
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
 #include <string>
 #include <optional>
 namespace GameSpecification{

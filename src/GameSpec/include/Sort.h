@@ -2,7 +2,6 @@
 #define SORT_H
 
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
 namespace GameSpecification{

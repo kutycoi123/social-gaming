@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <memory>
 #include <unordered_map>
 #include <iostream>
@@ -13,7 +14,7 @@ namespace GameSpecification{
 	class BaseRule : public std::enable_shared_from_this<BaseRule>{
 		public:
             BaseRule(); //to be removed later
-			BaseRule(std::shared_ptr<BaseRule>& parentRule, std::shared_ptr<BaseRule>& nextRule, const std::vector<std::shared_ptr<BaseRule>>& subRules);
+			BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
 
             std::shared_ptr<BaseRule> getCurrentPtr() const noexcept;
 			std::shared_ptr<BaseRule> getNextPtr() const noexcept;
@@ -21,10 +22,7 @@ namespace GameSpecification{
 			virtual void process(GameState& gameState) = 0;
 
 		protected:
-			std::shared_ptr<BaseRule> next;
-			std::shared_ptr<BaseRule> parent;
-            std::vector<std::shared_ptr<BaseRule>> subRules;
-
+			std::list<std::shared_ptr<BaseRule>> childRules;
 	};
 }
 #endif

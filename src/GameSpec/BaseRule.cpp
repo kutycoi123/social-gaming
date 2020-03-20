@@ -3,8 +3,8 @@
 using GameSpecification::BaseRule;
 using nlohmann::json;
 
-BaseRule::BaseRule(std::shared_ptr<BaseRule>& parentRule, std::shared_ptr<BaseRule>& nextRule, const std::vector<std::shared_ptr<BaseRule>>& subRules)
- : next(nextRule), parent(parentRule), subRules(subRules) {}
+BaseRule::BaseRule(const std::list<std::shared_ptr<BaseRule>>& childs)
+ : childRules(childs) {}
 
 /*
 std::shared_ptr<BaseRule> BaseRule::getPtr() {

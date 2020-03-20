@@ -2,7 +2,6 @@
 #define SHUFFLE_H
 
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
 #include <string>
 #include <random>
 #include <boost/range/algorithm.hpp>

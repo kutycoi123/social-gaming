@@ -2,7 +2,6 @@
 #define SWITCH_H
 
 #include "BaseRule.h"
-#include "AbstractSpec.h"
 #include "Case.h"
 #include <string>
 namespace GameSpecification{

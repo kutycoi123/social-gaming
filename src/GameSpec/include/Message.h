@@ -2,7 +2,6 @@
 #define MESSAGERULE_H
 #include <string>
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
 
 namespace GameSpecification{
 	class Message: public BaseRule{

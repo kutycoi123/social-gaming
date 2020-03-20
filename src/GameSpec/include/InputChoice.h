@@ -3,7 +3,6 @@
 
 #include "GameSpec.h"
 #include "Message.h"
-#include <nlohmann/json.hpp>
 
 namespace GameSpecification{
 	class InputChoice: public BaseRule{

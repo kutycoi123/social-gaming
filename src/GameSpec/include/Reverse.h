@@ -2,7 +2,6 @@
 #define REVERSE_H
 
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
 #include <string>
 #include "GameState.h"
 #include <boost/range/algorithm/reverse.hpp>
