@@ -10,4 +10,3 @@ using json = nlohmann::json;
 void InputChoice::process(GameState& gameState){
 	//TODO: add logic for this rule
 }
-
