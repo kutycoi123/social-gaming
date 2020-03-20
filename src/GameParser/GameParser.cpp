@@ -1,8 +1,9 @@
 #include "GameParser.h"
 
 ////public methods
-GameParser::GameParser(const std::string& path){
-
+GameParser::GameParser(const std::string& path) :
+    hasGame(true) 
+    {
     nlohmann::json gameJson = fileToJson(path);
     GameSpecification::GameSpec gameSpec(gameJson);
     GameState gameState; //GameState(gameJson)
@@ -10,8 +11,11 @@ GameParser::GameParser(const std::string& path){
 }
 
 std::unique_ptr<Game> GameParser::getGame() noexcept{
+    assert(hasGame);
+    hasGame = false;
     return std::move(game);
 }
+<<<<<<< HEAD
 //////private methods /createsession RockPaperScissors
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
@@ -199,9 +203,11 @@ const GameSpecification::GameSpec &GameParser::getGameSpecifications() const {
 //    return gameSpecifications;
 }
 */
+=======
+>>>>>>> refactoring GameParser
 
 nlohmann::json GameParser::fileToJson(const std::string& pathName) {
     std::ifstream jsonStream(pathName);
-    nlohmann::json JsonConfig = nlohmann::json::parse(jsonStream);    
-    return JsonConfig;
+    nlohmann::json jsonConfig = nlohmann::json::parse(jsonStream);    
+    return jsonConfig;
 }

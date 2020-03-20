@@ -67,6 +67,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
 	if(currentRuleJson.contains(SpecTags::RULE_LIST)){
 		//these rules have child rules so we need to do more complex processing
+		//this part is the recursive part
 
 		std::list<std::shared_ptr<BaseRule>> childRules {};
 		
@@ -81,7 +82,12 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 			childRules.push_back(singleChildrule);
 		} 
 
+		//configure make each (n)th childRule point to (n+1)th childRule, ignore last one
+
 		if(ruleType == RuleTags::ForEach){
+			//get params and setup rule with the child list, assign to result
+		}
+		else if(ruleType == RuleTags::Inparallel){
 			//get params and setup rule with the child list, assign to result
 		}
 		else{
@@ -93,6 +99,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 	}
 	else{
 		//these rules should not have childs, so their processing is quite simple
+		//these are the non-recursive parts
 
 		if(ruleType == RuleTags::Add){
 			//setup rule, assign to result
