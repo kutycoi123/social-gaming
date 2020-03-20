@@ -8,6 +8,6 @@ StateValue::ValueType StateValueList::getValueType() {
     return valueType;
 }
 
-std::vector<StateValue>& StateValueList::getList() {
+std::vector<std::shared_ptr<StateValue>>& StateValueList::getList() {
     return stateValueList;
 }
