@@ -14,19 +14,19 @@ public:
 
     }
 
-    void visit(StateValueBoolean &stateValue) override {
+    void visit(StateValueBoolean& stateValue) override {
         return;
     }
 
-    void visit(StateValueNumber &stateValue) override {
+    void visit(StateValueNumber& stateValue) override {
         return;
     }
 
-    void visit(StateValueString &stateValue) override {
+    void visit(StateValueString& stateValue) override {
         return;
     }
 
-    void visit(StateValueList &stateValue) override {
+    void visit(StateValueList& stateValue) override {
 //        auto value = boost::apply_visitor(Visit_Type(), retrievedValue->value);
 //        auto varList = value.map;
 //        auto getList = varList.find(list);
@@ -36,9 +36,9 @@ public:
         return;
     }
 
-//    void visit(StateValueMap &stateValue) override {
-//        return;
-//    }
+    void visit(StateValueMap& stateValue) override {
+        return;
+    }
 
 };
 

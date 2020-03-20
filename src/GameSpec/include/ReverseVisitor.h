@@ -11,26 +11,26 @@ public:
 
     }
 
-    void visit(StateValueBoolean &stateValue) override {
+    void visit(StateValueBoolean& stateValue) override {
         return;
     }
 
-    void visit(StateValueNumber &stateValue) override {
+    void visit(StateValueNumber& stateValue) override {
         return;
     }
 
-    void visit(StateValueString &stateValue) override {
+    void visit(StateValueString& stateValue) override {
         return;
     }
 
-    void visit(StateValueList &stateValue) override {
+    void visit(StateValueList& stateValue) override {
 //        boost::range::reverse(stateValue.getList());
         return;
     }
 
-//    void visit(StateValueMap &stateValue) override {
-//        return;
-//    }
+    void visit(StateValueMap& stateValue) override {
+        return;
+    }
 
 };
 
