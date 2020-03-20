@@ -15,29 +15,27 @@ public:
     }
 
     void visit(StateValueBoolean& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot shuffle");
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot shuffle");
     }
 
     void visit(StateValueString& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot shuffle");
     }
 
     void visit(StateValueList& stateValue) override {
-//        auto value = boost::apply_visitor(Visit_Type(), retrievedValue->value);
-//        auto varList = value.map;
-//        auto getList = varList.find(list);
-//        unsigned seed = 0;
-//        auto val = boost::apply_visitor(Visit_Type(), getList->second);
-//        std::shuffle(val.str.begin(), val.str.end(), std::default_random_engine(seed));
-        return;
+        unsigned seed = 0;
+        std::shuffle(stateValue.getList().begin(), stateValue.getList().end(), std::default_random_engine(seed));
     }
 
     void visit(StateValueMap& stateValue) override {
-        return;
+        auto a = stateValue.getMap();
+        unsigned seed = 0;
+        std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
+        std::shuffle(elems.begin(), elems.end(), std::default_random_engine(seed));
     }
 
 };
