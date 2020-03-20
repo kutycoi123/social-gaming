@@ -12,16 +12,16 @@ public:
     }
 
     void visit(StateValueBoolean& stateValue) override {
-        assert(false && "Invalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot reverse");
     }
 
     void visit(StateValueNumber& stateValue) override {
-        assert(false && "Invalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot reverse");
 
     }
 
     void visit(StateValueString& stateValue) override {
-        assert(false && "IInvalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot reverse");
 
     }
 
