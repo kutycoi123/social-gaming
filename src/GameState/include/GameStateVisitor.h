@@ -1,12 +1,12 @@
 #ifndef SOCIALGAMING_GAMESTATEVISITOR_H
 #define SOCIALGAMING_GAMESTATEVISITOR_H
 
+#include "StateValue.h"
 #include <StateValueBoolean.h>
 #include <StateValueNumber.h>
 #include <StateValueString.h>
 #include <StateValueList.h>
 #include <StateValueMap.h>
-#include "StateValue.h"
 
 class GameStateVisitor {
 public:

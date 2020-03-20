@@ -13,6 +13,9 @@ public:
     explicit StateValueNumber(double val);
     double& getValue();
     StateValue::ValueType getValueType() override;
+
+    void accept(GameStateVisitor &visitor) override;
+
 private:
     double value;
     StateValue::ValueType valueType;

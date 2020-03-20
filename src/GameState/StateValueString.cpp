@@ -1,4 +1,5 @@
 #include "StateValueString.h"
+#include "GameStateVisitor.h"
 
 StateValueString::StateValueString(std::string val) :
         value(std::move(val)),
@@ -11,4 +12,8 @@ std::string& StateValueString::getValue() {
 
 StateValue::ValueType StateValueString::getValueType() {
     return valueType;
+}
+
+void StateValueString::accept(GameStateVisitor &visitor) {
+    visitor.visit(*this);
 }

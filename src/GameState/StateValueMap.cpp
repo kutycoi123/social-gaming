@@ -1,8 +1,5 @@
-//
-// Created by josh on 2020-03-19.
-//
-
 #include "StateValueMap.h"
+#include "GameStateVisitor.h"
 
 StateValueMap::StateValueMap() :
         valueType(StateValue::MAP)
@@ -21,4 +18,8 @@ std::optional<std::weak_ptr<StateValue>> StateValueMap::getValue(const std::stri
     return (it != stateValueMap.end()) ?
            std::make_optional(std::weak_ptr(it->second)) :
            std::nullopt;
+}
+
+void StateValueMap::accept(GameStateVisitor &visitor) {
+    visitor.visit(*this);
 }

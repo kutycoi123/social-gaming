@@ -9,6 +9,9 @@ public:
     StateValueList();
     StateValue::ValueType getValueType() override;
     std::vector<std::shared_ptr<StateValue>>& getList();
+
+    void accept(GameStateVisitor &visitor) override;
+
 private:
     std::vector<std::shared_ptr<StateValue>> stateValueList;
     StateValue::ValueType valueType;

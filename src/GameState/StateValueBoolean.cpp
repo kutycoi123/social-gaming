@@ -1,4 +1,5 @@
 #include "StateValueBoolean.h"
+#include "GameStateVisitor.h"
 
 StateValueBoolean::StateValueBoolean(bool val) :
         value(val),
@@ -11,4 +12,8 @@ bool& StateValueBoolean::getValue() {
 
 StateValue::ValueType StateValueBoolean::getValueType() {
     return valueType;
+}
+
+void StateValueBoolean::accept(GameStateVisitor &visitor) {
+    visitor.visit(*this);
 }

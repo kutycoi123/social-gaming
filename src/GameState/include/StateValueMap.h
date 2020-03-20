@@ -12,6 +12,9 @@ public:
     StateValue::ValueType getValueType() override;
     std::unordered_map<std::string, std::shared_ptr<StateValue>>& getMap();
     std::optional<std::weak_ptr<StateValue>> getValue(const std::string&);
+
+    void accept(GameStateVisitor &visitor) override;
+
 private:
     std::unordered_map<std::string, std::shared_ptr<StateValue>> stateValueMap;
     StateValue::ValueType valueType;

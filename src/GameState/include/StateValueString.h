@@ -10,6 +10,9 @@ public:
     explicit StateValueString(std::string val);
     std::string& getValue();
     StateValue::ValueType getValueType() override;
+
+    void accept(GameStateVisitor &visitor) override;
+
 private:
     std::string value;
     StateValue::ValueType valueType;

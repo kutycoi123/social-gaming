@@ -1,4 +1,5 @@
 #include "StateValueNumber.h"
+#include "GameStateVisitor.h"
 
 StateValueNumber::StateValueNumber(int val) :
         value(val),
@@ -16,4 +17,8 @@ double& StateValueNumber::getValue() {
 
 StateValue::ValueType StateValueNumber::getValueType() {
     return valueType;
+}
+
+void StateValueNumber::accept(GameStateVisitor &visitor) {
+    visitor.visit(*this);
 }
