@@ -22,11 +22,11 @@ public:
     void addConfig(const GameConfig& config);
 
     // These methods should only be called when GameState is begin constructed in the parser
-    // TODO: Find a way to enforce this (maybe with a design pattern)
-//    void addConstant(const std::string& key, const StateValue& value);
-//    void addVariable(const std::string& key, const StateValue& value);
-//    void addPerPlayer(const std::string& key, const StateValue& value);
-//    void addPerAudience(const std::string& key, const StateValue& value);
+    // TODO: Find out to how set up state value objects
+    void addConstant(const std::string& key, const StateValue& value);
+    void addVariable(const std::string& key, const StateValue& value);
+    void addPerPlayer(const std::string& key, const StateValue& value);
+    void addPerAudience(const std::string& key, const StateValue& value);
 private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<StateValue>> constantsMap;

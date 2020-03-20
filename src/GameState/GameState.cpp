@@ -46,21 +46,21 @@ std::optional<std::weak_ptr<StateValue>> GameState::getPerAudienceValue(const st
            std::nullopt;
 }
 
-//void GameState::addConstant(const std::string &key, const StateValue& value) {
-//    constantsMap.insert({key, std::make_shared<StateValue>(StateValue{value})});
-//}
-//
-//void GameState::addVariable(const std::string &key, const StateValue& value) {
-//    variablesMap.insert({key, std::make_shared<StateValue>(value)});
-//}
-//
-//void GameState::addPerPlayer(const std::string &key, const StateValue& value) {
-//    perPlayerMap.insert({key, std::make_shared<StateValue>(value)});
-//}
-//
-//void GameState::addPerAudience(const std::string &key, const StateValue& value) {
-//    perAudienceMap.insert({key, std::make_shared<StateValue>(value)});
-//}
+void GameState::addConstant(const std::string &key, const StateValue& value) {
+    // TODO: Implement this method
+}
+
+void GameState::addVariable(const std::string &key, const StateValue& value) {
+    // TODO: Implement this method
+}
+
+void GameState::addPerPlayer(const std::string &key, const StateValue& value) {
+    // TODO: Implement this method
+}
+
+void GameState::addPerAudience(const std::string &key, const StateValue& value) {
+    // TODO: Implement this method
+}
 
 void GameState::addConfig(const GameConfig& gameConfig){
     this->gameConfig = gameConfig;
