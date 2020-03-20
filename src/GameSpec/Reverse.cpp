@@ -1,5 +1,5 @@
 #include "Reverse.h"
-#include <boost/range/algorithm/reverse.hpp>
+#include "ReverseVisitor.h"
 #include <iterator>
 #include <algorithm>
 
@@ -20,11 +20,8 @@ std::string Reverse::getList() const{
 void Reverse::process(GameState& gameState) {
     auto variables = gameState.getVariable(list);
     if(auto retrievedValue = variables->lock()){
-        auto value = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
-        auto varList = value.map;
-        auto getList = varList.find(list);
-        auto val = boost::apply_visitor(Visit_Type(), getList->second);
-        boost::range::reverse(val.vect);
+        ReverseVisitor visitor;
+        retrievedValue->accept(visitor);
     }
 }
 

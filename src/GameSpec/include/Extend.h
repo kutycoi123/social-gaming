@@ -11,12 +11,12 @@ class Extend : public BaseRule{
         Extend();
         Extend(const nlohmann::json&);
         std::string getTarget() const;
-        ValueType getList() const;
+        SpecValue getList() const;
        	void process(GameState&) override; 
         void parseRule(const nlohmann::json&);
     private:
         std::string target;
-        ValueType list;
+        SpecValue list;
 };
 }
 #endif

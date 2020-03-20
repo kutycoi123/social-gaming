@@ -1,4 +1,5 @@
 #include "Message.h"
+#include "MessageVisitor.h"
 
 
 using GameSpecification::Message;
@@ -23,14 +24,8 @@ std::string Message::getValue() const{
 void Message::process(GameState& gameState){
     auto variables = gameState.getVariable(messValue);
     if (auto retrievedValue = variables->lock()) {
-        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
-
-//        if(val.i){
-//            //add message to the game
-//        }
-//        if(val.str.size()>0){
-//            //add message to the game
-//        }
+        MessageVisitor visitor;
+        retrievedValue->accept(visitor);
     }}
 
 void Message::parseRule(const json &ruleJson){
