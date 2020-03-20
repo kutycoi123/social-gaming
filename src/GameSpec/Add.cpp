@@ -5,10 +5,9 @@ using GameSpecification::Add;
 using GameSpecification::SpecValue;
 using json = nlohmann::json;
 
-Add::Add() : BaseRule(RuleType::AddType), to(""){}
-
-Add::Add(const std::string& to, const SpecValue& value) 
-    : BaseRule(RuleType::AddType), to(to), value(value){}
+Add::Add(const json& ruleJson) : BaseRule(RuleType::AddType) {
+    parseRule(ruleJson);
+}
 
 std::string Add::getTo() const{
     return to;

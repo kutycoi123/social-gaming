@@ -3,16 +3,17 @@
 
 #include "BaseRule.h"
 #include "AbstractSpec.h"
+#include <nlohmann/json.hpp>
 #include <string>
 namespace GameSpecification{
 class Add : public BaseRule{
     public:
         Add();
-        Add(const std::string& to, const SpecValue& value);
+        Add(const nlohmann::json&);
         std::string getTo() const;
         SpecValue getValue() const;
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         std::string to;
         SpecValue value;

@@ -8,12 +8,12 @@ namespace GameSpecification{
 class Shuffle :public BaseRule{
     public:
         Shuffle();
-        Shuffle(const std::string& list);
+        Shuffle(const nlohmann::json&);
         std::string getList() const;
 		void process(GameState&) override;
-        void parseRule(const nlohmann::json&) override;
     private:
         std::string list;
+        void parseRule(const nlohmann::json&);
 };
 }
 #endif

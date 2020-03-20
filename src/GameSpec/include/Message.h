@@ -8,13 +8,12 @@
 namespace GameSpecification{
 	class Message: public BaseRule{
 		public:
-			Message() : BaseRule(RuleType::MessageType){}
-			Message(const SpecValue& to, const std::string& val)
-						: BaseRule(RuleType::MessageType), to(to), messValue(val){}
+			Message();
+			Message(const nlohmann::json&);
 			SpecValue getTo() const;
 			std::string getValue() const;	
 			void process(GameState&) override;
-			void parseRule(const nlohmann::json&) override;
+			void parseRule(const nlohmann::json&);
 		private:
 			SpecValue to;
 			std::string	messValue;

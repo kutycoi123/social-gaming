@@ -1,5 +1,17 @@
 #include "GameServerConfiguration.h"
 
+namespace ConfigurationCommandTags{
+    const std::string PORT = "Default Port";
+    const std::string HTML_PAGE = "HTML Location";
+    const std::string GAME_FOLDER = "Game Location";
+    const std::string COMMAND_CONFIGURATION = "Commands Configuration";
+    const std::string COMMAND_PREFIX_SYMBOL = "Prefix Symbol";
+    const std::string COMMAND_LIST = "Command List";
+    const std::string COMMAND_TYPE = "Type";
+    const std::string COMMAND_DESCRIPTION = "Description";
+    const std::string COMMAND_TRIGGER = "User Commands";
+};
+
 GameServerConfiguration::GameServerConfiguration(const std::string &configurationFilePath){
 	std::ifstream configurationFile(configurationFilePath, std::ifstream::in);
 	nlohmann::json configuration = nlohmann::json::parse(configurationFile);
@@ -36,12 +48,26 @@ std::string GameServerConfiguration::command2Description(const CommandType& inpu
 
 void GameServerConfiguration::configureServer(const nlohmann::json &configurationFile) noexcept{
     verifyJSON(configurationFile);
-    GameServerConfiguration::port.id = configurationFile[ConfigurationCommandTags::PORT];
-    GameServerConfiguration::htmlFile.path = configurationFile[ConfigurationCommandTags::HTML_PAGE];
-    GameServerConfiguration::gameFolder.path = configurationFile[ConfigurationCommandTags::GAME_FOLDER];
+    GameServerConfiguration::port.id = configurationFile
+        .at(ConfigurationCommandTags::PORT)
+        .get<unsigned short>();
 
-    std::string commandPrefix = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL];
-    nlohmann::json commandList = configurationFile[ConfigurationCommandTags::COMMAND_CONFIGURATION][ConfigurationCommandTags::COMMAND_LIST];
+    GameServerConfiguration::htmlFile.path = configurationFile
+        .at(ConfigurationCommandTags::HTML_PAGE)
+        .get<std::string>();
+
+    GameServerConfiguration::gameFolder.path = configurationFile
+        .at(ConfigurationCommandTags::GAME_FOLDER)
+        .get<std::string>();
+
+    std::string commandPrefix = configurationFile
+        .at(ConfigurationCommandTags::COMMAND_CONFIGURATION)
+        .at(ConfigurationCommandTags::COMMAND_PREFIX_SYMBOL)
+        .get<std::string>();
+
+    nlohmann::json commandList = configurationFile
+        .at(ConfigurationCommandTags::COMMAND_CONFIGURATION)
+        .at(ConfigurationCommandTags::COMMAND_LIST);
 
     configureCommands(commandPrefix, commandList);
 }
@@ -99,14 +125,22 @@ std::optional<GameServerConfiguration::CommandType> GameServerConfiguration::str
 
 void GameServerConfiguration::configureCommands(const std::string& commandPrefix, const nlohmann::json& commandList) {
     for(auto& command : commandList){
-        std::string commandTypeString = command.at(ConfigurationCommandTags::COMMAND_TYPE);
+        std::string commandTypeString = command
+            .at(ConfigurationCommandTags::COMMAND_TYPE)
+            .get<std::string>();
+
         std::optional<GameServerConfiguration::CommandType> type = string2CommandType(commandTypeString);
         
         if(type != std::nullopt){
-            std::string commandDescription = command.at(ConfigurationCommandTags::COMMAND_DESCRIPTION);
+            std::string commandDescription = command
+                .at(ConfigurationCommandTags::COMMAND_DESCRIPTION)
+                .get<std::string>();
+
             commandToDescriptionMap.insert(std::make_pair(type.value(), commandDescription));
 
-            std::vector<std::string> userCommands = command.at(ConfigurationCommandTags::COMMAND_TRIGGER);
+            std::vector<std::string> userCommands = command
+                .at(ConfigurationCommandTags::COMMAND_TRIGGER)
+                .get<std::vector<std::string>>();
 
             for(auto& commandString : userCommands){
                 stringToCommandMap.insert(std::make_pair(commandPrefix + commandString, type.value()));
@@ -125,8 +159,7 @@ void GameServerConfiguration::configureCommands(const std::string& commandPrefix
 
 std::vector<std::string> GameServerConfiguration::splitCommand(const std::string& command){
     std::istringstream iss(command);
-    std::vector<std::string> results((std::istream_iterator<std::string>(iss)),
-                                 std::istream_iterator<std::string>());
+    std::vector<std::string> results((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
     return results;
 }
 

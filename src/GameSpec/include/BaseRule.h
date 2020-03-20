@@ -27,7 +27,6 @@ namespace GameSpecification{
 			void setParentPtr(const std::shared_ptr<BaseRule>&);
 			std::shared_ptr<BaseRule> getParentPtr() const;
 			virtual void process(GameState& gameState) = 0;
-			virtual void parseRule(const nlohmann::json&) = 0;
 
 		protected:
 

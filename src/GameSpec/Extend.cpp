@@ -7,7 +7,9 @@ using GameSpecification::SpecValue;
 using json = nlohmann::json;
 Extend::Extend() : BaseRule(RuleType::ExtendType), target(""){}
 
-Extend::Extend(const std::string& target, const SpecValue& list) : BaseRule(RuleType::ExtendType), target(target), list(list){}
+Extend::Extend(const json& ruleJson) : BaseRule(RuleType::ExtendType){
+    parseRule(ruleJson);
+}
 
 std::string Extend::getTarget() const{
     return target;

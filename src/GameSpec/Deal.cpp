@@ -6,7 +6,9 @@ using GameSpecification::BaseRule;
 using json = nlohmann::json;
 Deal::Deal() : BaseRule(RuleType::DealType), from(""), count(0){}
 
-Deal::Deal(const std::string& from, const SpecValue& to, const int count) : BaseRule(RuleType::DealType), from(from), to(to), count(count){}
+Deal::Deal(const json& ruleJson) : BaseRule(RuleType::DealType){
+    parseRule(ruleJson);
+}
 
 std::string Deal::getFrom() const{
     return from;

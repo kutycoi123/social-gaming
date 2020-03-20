@@ -13,19 +13,20 @@ public:
     void endGame();
     void addMessages(const std::string &message) noexcept;
     std::list<std::string> updateAndGetAllMessages() noexcept;
+    void gameTick();
 
 
 private:
     void clearMessages() noexcept;
 
     // Rule Processor Methods
-    void executeCurrentRule();
-    void getNextRule();
-    void importAllRules();
+    void importGameSpecRules();
+    bool processRule(std::shared_ptr<BaseRule>& rule);
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
-    std::stack<std::vector<std::weak_ptr<GameSpecification::BaseRule>>> programCounter;
+    std::vector<std::shared_ptr<BaseRule>> gameRules;
+    unsigned int currentRuleIndex;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;
 };

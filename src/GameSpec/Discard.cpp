@@ -4,7 +4,9 @@ using GameSpecification::BaseRule;
 using json = nlohmann::json;
 Discard::Discard() : BaseRule(RuleType::DiscardType), from(""), count(0){}
 
-Discard::Discard(const std::string& from, const int count) : BaseRule(RuleType::DiscardType), from(from), count(count){}
+Discard::Discard(const json& ruleJson) : BaseRule(RuleType::DiscardType){
+    parseRule(ruleJson);
+}
 
 std::string Discard::getFrom() const{
     return from;
