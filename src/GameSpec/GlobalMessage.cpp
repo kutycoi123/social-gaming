@@ -5,8 +5,9 @@ using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
 GlobalMessage::GlobalMessage(): BaseRule(RuleType::GlobalMessageType), value(""){}
 
-GlobalMessage::GlobalMessage(const std::string& value)
-            : BaseRule(RuleType::GlobalMessageType), value(value){}
+GlobalMessage::GlobalMessage(const json &ruleJson) : BaseRule(RuleType::GlobalMessageType){
+    parseRule(ruleJson);
+}
 
 std::string GlobalMessage::getValue() const{
     return value;

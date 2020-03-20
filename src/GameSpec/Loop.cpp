@@ -1,13 +1,13 @@
 #include "Loop.h"
 
-using GameSpecification::ControlStructRule;
 using GameSpecification::Loop;
 using json = nlohmann::json;
 
-Loop::Loop() : BaseRule(RuleType::LoopType){}
+Loop::Loop() : BaseRule(RuleType::LoopType), loopType(""), failCondition(""){}
 
-Loop::Loop(const std::string& loopType, const std::string& failCondition) 
-    : BaseRule(RuleType::LoopType), loopType(loopType), failCondition(failCondition){}
+Loop::Loop(const json &ruleJson) : BaseRule(RuleType::LoopType){
+    parseRule(ruleJson);
+}
 
 std::string Loop::getLoopType() const{
     return loopType;

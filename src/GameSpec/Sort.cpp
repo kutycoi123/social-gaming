@@ -5,8 +5,9 @@ using json = nlohmann::json;
 
 Sort::Sort(): BaseRule(RuleType::SortType), list(""), key("") {}
 
-Sort::Sort(const std::string& list, const std::string& key)
-    : BaseRule(RuleType::SortType), list(list), key(key){}
+Sort::Sort(const json &ruleJson) : BaseRule(RuleType::SortType){
+    parseRule(ruleJson);
+}
 
 std::string Sort::getList() const{
     return list;

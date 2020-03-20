@@ -12,18 +12,6 @@
 #include <string> //for file paths
 #include <iostream> //for error logging
 
-namespace ConfigurationCommandTags{
-    const std::string PORT = "Default Port";
-    const std::string HTML_PAGE = "HTML Location";
-    const std::string GAME_FOLDER = "Game Location";
-    const std::string COMMAND_CONFIGURATION = "Commands Configuration";
-    const std::string COMMAND_PREFIX_SYMBOL = "Prefix Symbol";
-    const std::string COMMAND_LIST = "Command List";
-    const std::string COMMAND_TYPE = "Type";
-    const std::string COMMAND_DESCRIPTION = "Description";
-    const std::string COMMAND_TRIGGER = "User Commands";
-};
-
 class GameServerConfiguration{
     public:
         // Commands need to be implemented and added in GameServer.cpp

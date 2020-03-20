@@ -1,15 +1,26 @@
 #include "Case.h"
 
 using GameSpecification::Case;
-
+using GameSpecification::BaseRule;
+using nlohmann::json;
 Case::Case(){}
 
-Case::Case(const std::string& value, const std::vector<BaseRule>& rules): value(value), rules(rules){}
+Case::Case(const json& ruleJson) : BaseRule(RuleType::CaseType) {
 
-std::vector<BaseRule> Case::getRules(){
-    return rules;
 }
 
 std::string Case::getValue(){
     return value;
+}
+
+void Case::process(GameState& gameState){
+
+}
+void Case::parseRule(const json &ruleJson){
+    try{
+        //TODO: Add parse code
+    }catch(json::exception& e){
+        //TODO: Handle exception more properly
+        std::cout << e.what() << "\n";
+    }
 }

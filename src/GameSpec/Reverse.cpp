@@ -9,7 +9,9 @@ using json = nlohmann::json;
 
 Reverse::Reverse() : BaseRule(RuleType::ReverseType), list(""){}
 
-Reverse::Reverse(const std::string& list) : BaseRule(RuleType::ReverseType), list(list) {}
+Reverse::Reverse(const json &ruleJson) : BaseRule(RuleType::ReverseType){
+    parseRule(ruleJson);
+}
 
 std::string Reverse::getList() const{
     return list;

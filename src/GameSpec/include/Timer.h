@@ -9,12 +9,12 @@ namespace GameSpecification{
 class Timer : public BaseRule{
     public:
         Timer();
-        Timer(double duration, const std::string& mode, bool flag);
+        Timer(const nlohmann::json&);
         double getDuration() const;
         std::string getMode() const;
         std::optional<bool> getFlag() const;
        	void process(GameState&) override; 
-        void parseRule(const nlohmann::json&) override;
+        void parseRule(const nlohmann::json&);
     private:
         double duration;
         std::string mode;

@@ -5,8 +5,9 @@ using json = nlohmann::json;
 
 Scores::Scores(): BaseRule(RuleType::ScoresType), score(0), ascending(false){}
 
-Scores::Scores(double score, bool ascending)
-        : BaseRule(RuleType::ScoresType), score(score), ascending(ascending){}
+Scores::Scores(const json &ruleJson) : BaseRule(RuleType::ScoresType){
+    parseRule(ruleJson);
+}
 
 double Scores::getScore() const{
     return score;

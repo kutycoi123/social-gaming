@@ -21,7 +21,7 @@ namespace GameSpecification{
 		SwitchType,WhenType,ExtendType,ReverseType,ShuffleType,
 		SortType,DealType,DiscardType,AddType,TimerType,InputChoiceType,
 		InputTextType,InputVoteType,MessageType,GlobalMessageType,
-		ScoresType,Unknown
+		ScoresType,CaseType,Unknown
 	};
 	static std::unordered_map<std::string,GameSpecification::RuleType> stringToRuleType = {
             {"foreach", GameSpecification::RuleType::ForEachType},
@@ -43,6 +43,7 @@ namespace GameSpecification{
             {"message",GameSpecification::RuleType::MessageType, },
             {"global-message",GameSpecification::RuleType::GlobalMessageType, },
             {"scores",GameSpecification::RuleType::ScoresType, },
+			{"case", GameSpecification::RuleType::CaseType},
             {"unknown",GameSpecification::RuleType::Unknown, }
     };
 	static std::unordered_map<RuleType, std::string> ruleTypeToString = {
@@ -65,6 +66,7 @@ namespace GameSpecification{
    	 	{RuleType::MessageType, "message"},
    	 	{RuleType::GlobalMessageType, "global-message"},
    	 	{RuleType::ScoresType, "scores"},
+		{RuleType::CaseType, "case"},
    	 	{RuleType::Unknown, "unknown"}
 	};	
 	
