@@ -10,7 +10,10 @@ using GameSpecification::RuleType;
 
 ////public methods
 GameParser::GameParser(const std::string& path){
-    nlohmann::json gameJson = fileToJson(path);
+    std::string addedPath = "/home/jimmyz/Documents/cmpt373Project/parserIntegration/social-gaming/src/Games/RockPaperScissors.json";
+    std::string myPath = "./Games/RockPaperScissors.json";
+
+    nlohmann::json gameJson = fileToJson(addedPath);
     parseEntireGameJson(gameJson);
     GameState gameState;
     game = std::make_unique<Game> (Game(getGameSpecifications(), gameState));
@@ -19,33 +22,37 @@ GameParser::GameParser(const std::string& path){
 std::unique_ptr<Game> GameParser::getGame() noexcept{
     return std::move(game);
 }
-//////private methods
+//////private methods /createsession RockPaperScissors
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
-    StatusCode status = validGameJson(gameJson);
-    if (status == StatusCode::VALID) {
-        for (auto& fields : gameJson.items()) {
+    //StatusCode status = validGameJson(gameJson);
 
-            std::string jsonKey = fields.key();
+
+    if (true) {
+        for (auto& [key, value] : gameJson.items()) {
+            std::string jsonKey = key;
             auto enumKey = jsonGameSpecification.find(jsonKey);
+
+            auto test4 = gameJson.at(CONFIGURATION_STRING);
             switch(enumKey->second) {
-                case CONFIGURATION:
-                    parseConfiguration(fields.value());
-                    break;
                 case RULES:
-                    parseRules(fields.value());
+                    parseRules(value);
                     break;
+                case CONFIGURATION:
+                    parseConfiguration(value);
+                    break;
+
                 case CONSTANTS:
-                    setConstants(fields.value());
+                    setConstants(value);
                     break;
                 case VARIABLES:
-                    setVariables(fields.value());
+                    setVariables(value);
                     break;
                 case PER_PLAYER:
-                    setPerPlayer(fields.value());
+                    setPerPlayer(value);
                     break;
                 case PER_AUDIENCE:
-                    setPerAudience(fields.value());
+                    setPerAudience(value);
                     break;
                 default:
                     assert(false);
@@ -55,28 +62,30 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
 }
      
-void GameParser::parseConfiguration(const nlohmann::json& configs) {
+void GameParser::parseConfiguration(const nlohmann::json & configs) {
 
-    validateConfiguration(configs);
-    this->configSettings.name = configs[NAME];
-    this->configSettings.audience = configs[AUDIENCE];
-    this->configSettings.maxPlayercount = configs[PLAYER_COUNT][MAX];
-    this->configSettings.minPlayercount = configs[PLAYER_COUNT][MIN];
-    this->configSettings.setup = configs[SETUP];
+    //validateConfiguration(configs);
+    this->configSettings.name = configs.at(NAME);
+    this->configSettings.audience = configs.at(AUDIENCE);
+    this->configSettings.maxPlayercount = configs.at(PLAYER_COUNT).at(MAX);
+    this->configSettings.minPlayercount = configs.at(PLAYER_COUNT).at(MIN);
+    this->configSettings.setup = configs.at(SETUP);
 
 }
   // END-TODO
 
 
 
-void GameParser::parseRules(const nlohmann::json& rule) {
-    StatusCode status = validateRules(rule);
-    if (status == StatusCode::VALID) {
-        GameSpecification::RuleType ruleType = stringToRuleType.at(rule.at("rule").get<std::string>());
+void GameParser::parseRules(const nlohmann::json& rules) {
+    for (auto& [key, value] : rules.items()) {
 
-        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(rule);
-        if(!baseRulePtr){
-            switch(ruleType){
+        std::string jsonKey = key;
+        GameSpecification::RuleType ruleType = GameSpecification::stringToRuleType[jsonKey];
+
+        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType);
+
+        if (!baseRulePtr) {
+            switch (ruleType) {
                 case RuleType::ForEachType:
                     baseRulePtr = std::shared_ptr<BaseRule>(new ForEach());
                     break;
@@ -93,7 +102,7 @@ void GameParser::parseRules(const nlohmann::json& rule) {
                     assert(false);
             }
         }
-        baseRulePtr->parseRule(rule);
+        baseRulePtr->parseRule(value);
         this->gameSpecifications.addRule(baseRulePtr);
     }
 
@@ -133,8 +142,8 @@ GameParser::StatusCode GameParser::validGameJson(const nlohmann::json& jsonObjec
     return StatusCode::VALID;
 }
 
-GameParser::StatusCode GameParser::validateConfiguration(const nlohmann::json& json){
-    nlohmann::json config = json.at(CONFIGURATION_STRING);
+GameParser::StatusCode GameParser::validateConfiguration(const nlohmann::json& config){
+
     auto i = std::find_if(config.items().begin(), config.items().end(), [&](auto& elem){
         return (jsonGameConfiguration.find(elem.key()) == jsonGameConfiguration.end()) ;
     });
@@ -142,7 +151,7 @@ GameParser::StatusCode GameParser::validateConfiguration(const nlohmann::json& j
     if (i != config.items().end()){
         return StatusCode::INVALID;
     }
-    if(validatePlayerNumber(config) != StatusCode::VALID){
+    if(validatePlayerNumber(const_cast<json &>(config)) != StatusCode::VALID){
         return StatusCode::INVALID;
     }
     return StatusCode::VALID;
@@ -183,9 +192,8 @@ GameParser::StatusCode GameParser::validateRules(const nlohmann::json& incomingR
 }
 
 nlohmann::json GameParser::fileToJson(const std::string& pathName) {
-    std::ifstream i(pathName);
-    nlohmann::json JsonConfig;
-    i >> JsonConfig;
+    std::ifstream ifs(pathName);
+    nlohmann::json JsonConfig = nlohmann::json::parse(ifs);
     return JsonConfig;
 }
 
