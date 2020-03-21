@@ -75,7 +75,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
         std::string jsonKey = key;
         GameSpecification::RuleType ruleType = GameSpecification::stringToRuleType[jsonKey];
 
-        auto baseRulePtr = GameSpecificativalueon::getRulePtrFromRuleType(ruleType, value);
+        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType, value);
         if(!baseRulePtr){
             switch(ruleType){
 
