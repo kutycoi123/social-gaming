@@ -2,6 +2,7 @@
 #define SOCIALGAMING_EXTENDVISITOR_H
 
 #include "GameStateVisitor.h"
+#include "Extend.h"
 
 // TODO Implement methods and add error handling
 class ExtendVisitor : public GameStateVisitor {
@@ -11,23 +12,30 @@ public:
     }
 
     void visit(StateValueBoolean& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot extend");
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot extend");
     }
 
     void visit(StateValueString& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot extend");
     }
 
     void visit(StateValueList& stateValue) override {
-        return;
+        auto target = stateValue.getList();
+        //TODO How to get the other Vector of type SpecValue to extend with
+
+//        auto valueList = stateValue.getList();
+//        valueList.insert(valueList.end(), target.begin(), target.end());
     }
 
     void visit(StateValueMap& stateValue) override {
-        return;
+        auto target = stateValue.getMap();
+        //TODO How to get the other Map of type SpecValue to extend with
+        //auto valueList = stateValue.getMap();
+        //valueList.insert(target.begin(), target.end());
     }
 
 };

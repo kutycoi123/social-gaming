@@ -4,6 +4,11 @@
 #include "GameStateVisitor.h"
 
 // TODO Implement methods and add error handling
+
+bool comp(std::pair<std::string, std::shared_ptr<StateValue>> a, std::pair<std::string, std::shared_ptr<StateValue>> b) {
+    return a.second < b.second;
+}
+
 class SortVisitor : public GameStateVisitor {
 public:
     SortVisitor(){
@@ -11,24 +16,28 @@ public:
     }
 
     void visit(StateValueBoolean& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot sort");
+
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot sort");
+
     }
 
     void visit(StateValueString& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot reverse");
     }
 
     void visit(StateValueList& stateValue) override {
-//        std::sort(stateValue.getList().begin(), stateValue.getList().end());
-        return;
+        std::sort(stateValue.getList().begin(), stateValue.getList().end());
     }
-
+    
     void visit(StateValueMap& stateValue) override {
-        return;
+
+        auto a = stateValue.getMap();
+        std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
+        std::sort(elems.begin(), elems.end(), comp);
     }
 
 };
