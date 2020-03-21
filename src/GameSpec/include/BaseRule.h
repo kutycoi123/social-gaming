@@ -7,10 +7,20 @@
 #include <memory>
 #include <unordered_map>
 #include <iostream>
-
-class GameState;
+#include "GameState.h"
 
 namespace GameSpecification{
+    struct SpecValue{
+        // TODO: may need to add more types when more details are provided
+        boost::variant<
+            std::string, 
+            int, 
+            bool, 
+            double, 
+            std::vector<std::string>,
+            std::unordered_map<std::string, std::string>> value;
+    };
+
 	class BaseRule : public std::enable_shared_from_this<BaseRule>{
 		public:
 			explicit BaseRule(const std::list<std::shared_ptr<BaseRule>>&);

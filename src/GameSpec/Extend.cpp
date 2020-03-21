@@ -4,7 +4,6 @@
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
 using GameSpecification::SpecValue;
-using json = nlohmann::json;
 
 Extend::Extend(const std::string& target, const ValueType& list) : 
     BaseRule({}), 

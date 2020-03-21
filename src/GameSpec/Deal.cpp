@@ -4,7 +4,6 @@
 using GameSpecification::Deal;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
-using json = nlohmann::json;
 
 Deal::Deal(const std::string& from, const SpecValue& to, const int count) : 
     BaseRule({}), 

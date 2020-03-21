@@ -3,7 +3,6 @@
 
 using GameSpecification::Discard;
 using GameSpecification::BaseRule;
-using json = nlohmann::json;
 
 Discard::Discard(const std::string& from, const int count) : 
     BaseRule({}), 
