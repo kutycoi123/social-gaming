@@ -43,8 +43,10 @@ void Game::clearMessages() noexcept {
 void Game::gameTick() {
     bool isProgramCounterWithinRange = currentRuleIndex < gameRules.size();
     if (isProgramCounterWithinRange) {
+        /*
         bool isCurrentRuleFullyProcessed = processRule(gameRules.at(currentRuleIndex));
         if (isCurrentRuleFullyProcessed) currentRuleIndex += 1;
+        */
     } else {
         endGame();
     }
@@ -56,11 +58,13 @@ void Game::importGameSpecRules() {
 }
 
 bool Game::processRule(std::shared_ptr<BaseRule>& rule) {
+    /*
     if (rule != nullptr) {
         rule->process(gameState);
         rule = rule->getNextPtr();
         return false;
     }
+    */
 
     return true;
 }

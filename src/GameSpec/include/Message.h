@@ -3,12 +3,11 @@
 
 #include "BaseRule.h"
 
-/*
+
 namespace GameSpecification{
 	class Message: public BaseRule{
 		public:
-			Message(const SpecValue& to, const std::string& val)
-						: to(to), messValue(val){}
+			Message(const SpecValue&, const std::string&);
 
 			void process(GameState&) override;
 		private:
@@ -16,6 +15,6 @@ namespace GameSpecification{
 			std::string	messValue;
 	};
 }
-*/
+
 
 #endif

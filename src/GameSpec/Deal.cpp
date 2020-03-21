@@ -22,7 +22,7 @@ void Deal::process(GameState& gameState) {
             std::shared_ptr<StateValueList> valueList;
             valueList = std::static_pointer_cast<StateValueList>(toList);
 
-            DealVisitor visitor(getCount(), *valueList);
+            DealVisitor visitor(count, *valueList);
             fromList->accept(visitor);
         }
     }

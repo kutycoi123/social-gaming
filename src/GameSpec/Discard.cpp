@@ -16,7 +16,7 @@ void Discard::process(GameState& gameState) {
     
     if (auto fromList = gameStateValueFrom->lock()) {
 
-        DiscardVisitor visitor(getCount());
+        DiscardVisitor visitor(count);
         fromList->accept(visitor);
     }
 }

@@ -14,6 +14,7 @@ namespace GameSpecification{
             std::string from;
             SpecValue to;
             int count;
+            
     };
 }
 

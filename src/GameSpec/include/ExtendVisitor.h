@@ -2,7 +2,6 @@
 #define SOCIALGAMING_EXTENDVISITOR_H
 
 #include "GameStateVisitor.h"
-#include "Extend.h"
 
 // TODO Implement methods and add error handling
 class ExtendVisitor : public GameStateVisitor {

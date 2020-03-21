@@ -6,7 +6,7 @@
 namespace GameSpecification{
 class Parallelfor : public BaseRule{
     public:
-        Parallelfor(std::vector<std::string> list, const std::string& element);
+        Parallelfor(const std::list<std::shared_ptr<BaseRule>>&, std::vector<std::string> list, const std::string& element);
 
         void process(GameState&) override;        
     private:

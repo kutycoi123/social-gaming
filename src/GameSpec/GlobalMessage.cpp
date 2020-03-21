@@ -1,9 +1,4 @@
 #include "GlobalMessage.h"
-<<<<<<< HEAD
-#include "../Game/include/Game.h"
-#include "GlobalMessageVisitor.h"
-=======
->>>>>>> initial removals
 
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
@@ -13,6 +8,7 @@ GlobalMessage::GlobalMessage(const std::string& value) :
     value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
+    /*
     auto variables = gameState.getVariable(value);
     if (auto retrievedValue = variables->lock()) {
         // TODO: Finish global message visitor implementation
@@ -26,4 +22,5 @@ void GlobalMessage::process(GameState& gameState) {
 //            //add message to the game
 //        }
     }
+    */
 }

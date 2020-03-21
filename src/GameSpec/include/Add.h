@@ -13,6 +13,8 @@ namespace GameSpecification{
         private:
             std::string to;
             SpecValue value;
+
+            int determineAmountToAdd(const SpecValue &, GameState &);
     };
 }
 

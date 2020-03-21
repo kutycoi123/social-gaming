@@ -1,5 +1,4 @@
 #include "Extend.h"
-#include "ExtendVisitor.h"
 
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;

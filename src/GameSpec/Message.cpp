@@ -4,7 +4,12 @@
 using GameSpecification::Message;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
-using json = nlohmann::json;
+
+Message::Message(const SpecValue& to, const std::string& val) : 
+    BaseRule({}),
+    to(to), 
+    messValue(val)
+    {}
 
 void Message::process(GameState& gameState){
     auto variables = gameState.getVariable(messValue);
