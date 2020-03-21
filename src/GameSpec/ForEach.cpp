@@ -68,7 +68,7 @@ void ForEach::parseRule(const json &ruleJson){
                     }
                 }
                 //TODO: investigate CRASHES program.
-                //baseRulePtr->setParentPtr(this->getPtr());
+                baseRulePtr->setParentPtr(std::shared_ptr<BaseRule>(this));
                 this->subRules.push_back(baseRulePtr);
             }
 

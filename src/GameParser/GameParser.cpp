@@ -25,35 +25,34 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
     //StatusCode status = validGameJson(gameJson);
 
-    if (true) {
-        for (auto& [key, value] : gameJson.items()) {
-            std::string jsonKey = key;
-            auto enumKey = jsonGameSpecification.find(jsonKey);
-            auto test4 = gameJson.at(CONFIGURATION_STRING);
-            switch(enumKey->second) {
-                case RULES:
-                    parseRules(value);
-                    break;
-                case CONFIGURATION:
-                    parseConfiguration(value);
-                    break;
-                case CONSTANTS:
-                    setConstants(value);
-                    break;
-                case VARIABLES:
-                    setVariables(value);
-                    break;
-                case PER_PLAYER:
-                    setPerPlayer(value);
-                    break;
-                case PER_AUDIENCE:
-                    setPerAudience(value);
-                    break;
-                default:
-                    assert(false);
-            }
+    for (auto& [key, value] : gameJson.items()) {
+        std::string jsonKey = key;
+        auto enumKey = jsonGameSpecification.find(jsonKey);
+        auto test4 = gameJson.at(CONFIGURATION_STRING);
+        switch(enumKey->second) {
+            case RULES:
+                parseRules(value);
+                break;
+            case CONFIGURATION:
+                parseConfiguration(value);
+                break;
+            case CONSTANTS:
+                setConstants(value);
+                break;
+            case VARIABLES:
+                setVariables(value);
+                break;
+            case PER_PLAYER:
+                setPerPlayer(value);
+                break;
+            case PER_AUDIENCE:
+                setPerAudience(value);
+                break;
+            default:
+                assert(false);
         }
     }
+
 
 }
      
