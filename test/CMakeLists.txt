@@ -7,6 +7,7 @@ add_executable(runAllTests
     InvitationTest.cpp
     UserManagerTest.cpp
     GameTest.cpp
+    GameSessionTest.cpp
 )
 
 # Link the appropriate library
@@ -18,8 +19,13 @@ target_link_libraries(runAllTests
         invitation
         userManager
         game
+        gameSession
 )
 
-
+add_custom_command(TARGET runAllTests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/../src/Games
+        ${PROJECT_BINARY_DIR}/../Games
+)
 
 add_test(NAME AllTests COMMAND runAllTests)

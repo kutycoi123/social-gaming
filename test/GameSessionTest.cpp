@@ -1,0 +1,81 @@
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+
+#include "GameSession.h"
+
+
+struct GameSessionTestParams {
+    const std::string gamePath = "../Games/RockPaperScissors.json";
+    const uintptr_t id = 1010;
+};
+
+class GameSessionTest : public testing::Test {
+public:
+    GameSession* gameSession;
+    GameSessionTestParams params;
+
+    GameSessionTest() {
+        std::weak_ptr<User> owner = std::make_shared<User>(User(UserId(params.id)));
+        gameSession = new GameSession(owner, params.gamePath);
+    }
+
+    ~GameSessionTest() {
+        delete gameSession;
+    }
+};
+
+TEST_F(GameSessionTest, getInvitationCode) {
+    Invitation invite = gameSession->getInvitationCode();
+    EXPECT_TRUE(!invite.toString().empty());
+}
+
+TEST_F(GameSessionTest, isGameStarted) {
+    EXPECT_FALSE(gameSession->isGameStarted());
+}
+
+TEST_F(GameSessionTest, startGame) {
+    gameSession->startGame();
+    EXPECT_TRUE(gameSession->isGameStarted());
+}
+
+TEST_F(GameSessionTest, endGame) {
+    gameSession->startGame();
+    gameSession->endGame();
+    EXPECT_FALSE(gameSession->isGameStarted());
+}
+
+TEST_F(GameSessionTest, isOwner) {
+    // TODO: IsOwner is broken
+}
+
+TEST_F(GameSessionTest, addMessages) {
+    std::string message = "TestMessage";
+    gameSession->addMessages(message);
+}
+
+TEST_F(GameSessionTest, addMessagesToGame) {
+    std::string message = "TestMessage";
+    gameSession->addMessagesToGame(message);
+}
+
+TEST_F(GameSessionTest, getAndClearAllMessages) {
+    // TODO: Fix up this test case once parsing is fixed
+    std::string message1 = "TestMessage1";
+    std::string message2 = "TestMessage2";
+    std::string message3 = "TestMessage3";
+
+    gameSession->addMessages(message1);
+    gameSession->addMessages(message2);
+    gameSession->addMessagesToGame(message3);
+    auto message = gameSession->getAndClearAllMessages();
+
+    EXPECT_TRUE(gameSession->getAndClearAllMessages().empty());
+}
+
+TEST_F(GameSessionTest, addPlayer) {
+    gameSession->addPlayer(std::make_shared<User>(User(UserId(1))));
+}
+
+TEST_F(GameSessionTest, removePlayer) {
+    gameSession->removePlayer(std::make_shared<User>(User(UserId(1))));
+}
