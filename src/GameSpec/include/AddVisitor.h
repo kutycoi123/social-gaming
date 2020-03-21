@@ -6,30 +6,30 @@
 // TODO Implement methods and add error handling
 class AddVisitor : public GameStateVisitor {
 public:
-    AddVisitor(){
-
-    }
+    AddVisitor(int num) : valueToAdd(num){};
 
     void visit(StateValueBoolean& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value, cannot add");
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        auto value = stateValue.getValue() + valueToAdd;
     }
 
     void visit(StateValueString& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value, cannot add");
     }
 
     void visit(StateValueList& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value, cannot add");
     }
 
     void visit(StateValueMap& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value, cannot add");
     }
 
+private:
+    int valueToAdd = 0;
 };
 
 #endif //SOCIALGAMING_ADDVISITOR_H
