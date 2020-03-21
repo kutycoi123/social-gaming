@@ -1,7 +1,10 @@
 #include "Discard.h"
+#include "DiscardVisitor.h"
+
 using GameSpecification::Discard;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
+
 Discard::Discard() : BaseRule(RuleType::DiscardType), from(""), count(0){}
 
 Discard::Discard(const json& ruleJson) : BaseRule(RuleType::DiscardType){
@@ -18,6 +21,13 @@ int Discard::getCount() const{
 
 void Discard::process(GameState& gameState) {
 	//TODO: Add code to process discard rule
+    auto gameStateValueFrom = gameState.getVariable(from);
+    
+    if (auto fromList = gameStateValueFrom->lock()) {
+
+        DiscardVisitor visitor(getCount());
+        fromList->accept(visitor);
+    }
 }
 
 void Discard::parseRule(const json& ruleJson){
