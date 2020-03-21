@@ -34,18 +34,17 @@ void Add::process(GameState& gameState){
             if (variableToAdd.has_value()) {
                 auto vValue = variableToAdd->lock();
 
-                std::shared_ptr<StateValueNumber> foo;
-                foo = std::static_pointer_cast<StateValueNumber>(vValue);
-                amount = foo->getValue();
-                
+                std::shared_ptr<StateValueNumber> valueNumber;
+                valueNumber = std::static_pointer_cast<StateValueNumber>(vValue);
+                amount = valueNumber->getValue();
             }
 
             if (constantToAdd.has_value()) {
                 auto cValue = variableToAdd->lock();
 
-                std::shared_ptr<StateValueNumber> foo;
-                foo = std::static_pointer_cast<StateValueNumber>(cValue);
-                amount = foo->getValue();
+                std::shared_ptr<StateValueNumber> valueNumber;
+                valueNumber = std::static_pointer_cast<StateValueNumber>(cValue);
+                amount = valueNumber->getValue();
             }
         }
 

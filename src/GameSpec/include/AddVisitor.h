@@ -13,7 +13,8 @@ public:
     }
 
     void visit(StateValueNumber& stateValue) override {
-        auto value = stateValue.getValue() + valueToAdd;
+        double value = stateValue.getValue();
+        stateValue.getValue() = value + valueToAdd;
     }
 
     void visit(StateValueString& stateValue) override {
