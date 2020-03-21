@@ -28,7 +28,7 @@ void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
     for (auto& [key, value] : gameJson.items()) {
         std::string jsonKey = key;
         auto enumKey = jsonGameSpecification.find(jsonKey);
-        auto test4 = gameJson.at(CONFIGURATION_STRING);
+       
         switch(enumKey->second) {
             case RULES:
                 parseRules(value);
@@ -75,7 +75,7 @@ void GameParser::parseRules(const nlohmann::json& rules) {
         std::string jsonKey = key;
         GameSpecification::RuleType ruleType = GameSpecification::stringToRuleType[jsonKey];
 
-        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType, value);
+        auto baseRulePtr = GameSpecificativalueon::getRulePtrFromRuleType(ruleType, value);
         if(!baseRulePtr){
             switch(ruleType){
 
