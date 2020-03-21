@@ -1,20 +1,14 @@
 #include "GlobalMessage.h"
-#include "../Game/include/Game.h"
-#include "GlobalMessageVisitor.h"
 
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
-GlobalMessage::GlobalMessage(): BaseRule(RuleType::GlobalMessageType), value(""){}
 
-GlobalMessage::GlobalMessage(const json &ruleJson) : BaseRule(RuleType::GlobalMessageType){
-    parseRule(ruleJson);
-}
-
-std::string GlobalMessage::getValue() const{
-    return value;
-}
+GlobalMessage::GlobalMessage(const std::string& value) : 
+    BaseRule({}), 
+    value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
+    /*
     auto variables = gameState.getVariable(value);
     if (auto retrievedValue = variables->lock()) {
         // TODO: Finish global message visitor implementation
@@ -28,12 +22,5 @@ void GlobalMessage::process(GameState& gameState) {
 //            //add message to the game
 //        }
     }
-}
-void GlobalMessage::parseRule(const json &ruleJson){
-    try{
-       value = ruleJson.at("value").get<std::string>(); 
-    }catch(json::exception &e){
-        //TODO: Handle exception more properly
-        std::cout << e.what() << "\n";
-    }
+    */
 }

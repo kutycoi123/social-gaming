@@ -1,4 +1,4 @@
-#include "When.h"
+//#include "When.h"
 using GameSpecification::When;
 using GameSpecification::BaseRule;
 using GameSpecification::Case;
@@ -16,13 +16,3 @@ const std::vector<Case>& When::getCases() const{
 void When::process(GameState&){
 
 }
-
-void When::parseRule(const json &ruleJson){
-    try{
-        //TODO: Add parse code
-    }catch(json::exception& e){
-        //TODO: Handle exception more properly
-        std::cout << e.what() << "\n";
-    }
-}
-

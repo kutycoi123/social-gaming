@@ -2,19 +2,14 @@
 #define INPUTTEXT_H
 
 #include "BaseRule.h"
-#include <nlohmann/json.hpp>
-#include <string>
+
 namespace GameSpecification{
 class InputText : public BaseRule{
     public:
-		InputText();
-		InputText(const nlohmann::json&);
-		std::string getUser() const;
-		std::string getPrompt() const;
-		std::string getResult() const;
-		double getTimeOut() const;
+		InputText(const std::string& user, const std::string& prompt, const std::string& result, const double timeout);
+
 		void process(GameState&) override;
-		void parseRule(const nlohmann::json&);
+
     private:
         std::string user;
         std::string prompt;

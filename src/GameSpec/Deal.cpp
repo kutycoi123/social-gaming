@@ -4,24 +4,13 @@
 using GameSpecification::Deal;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
-using json = nlohmann::json;
-Deal::Deal() : BaseRule(RuleType::DealType), from(""), count(0){}
 
-Deal::Deal(const json& ruleJson) : BaseRule(RuleType::DealType){
-    parseRule(ruleJson);
-}
-
-std::string Deal::getFrom() const{
-    return from;
-}
-
-SpecValue Deal::getTo() const{
-    return to;
-}
-
-int Deal::getCount() const{
-    return count;
-}
+Deal::Deal(const std::string& from, const SpecValue& to, const int count) : 
+    BaseRule({}), 
+    from(from), 
+    to(to), 
+    count(count) 
+    {}
 
 void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule
@@ -33,25 +22,8 @@ void Deal::process(GameState& gameState) {
             std::shared_ptr<StateValueList> valueList;
             valueList = std::static_pointer_cast<StateValueList>(toList);
 
-            DealVisitor visitor(getCount(), *valueList);
+            DealVisitor visitor(count, *valueList);
             fromList->accept(visitor);
         }
-    }
-}
-
-void Deal::parseRule(const json& ruleJson){
-    try{
-        from = ruleJson.at("from").get<std::string>();
-        count = ruleJson.at("count").get<int>();
-        json to = ruleJson.at("to");
-        if(to.is_string()){
-            this->to.value = to.get<std::string>();
-        } else{
-            this->to.value = to.get<std::vector<std::string>>();
-        }
-        
-    }catch(json::exception &e){
-        //TODO: Handle exception more properly
-        std::cout << e.what() << "\n";
     }
 }

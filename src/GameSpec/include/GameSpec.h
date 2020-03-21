@@ -7,35 +7,46 @@
 #include <unordered_map>
 #include <boost/variant.hpp>
 #include <nlohmann/json.hpp>
-#include "AbstractSpec.h"
-#include "BaseRule.h"
 #include <memory>
 
-#include "GameState.h"
+#include "Add.h"
+#include "Deal.h"
+#include "Discard.h"
+#include "Extend.h"
+#include "ForEach.h"
+#include "GlobalMessage.h"
+#include "Inparallel.h"
+#include "InputChoice.h"
+#include "InputText.h"
+#include "InputVote.h"
+#include "Loop.h"
+#include "Message.h"
+#include "Parallelfor.h"
+#include "Reverse.h"
+#include "Scores.h"
+#include "Shuffle.h"
+#include "Sort.h"
+#include "Switch.h"
+#include "Timer.h"
+#include "When.h"
 
-// TODO: Remove when circular dependency between GameState and GameSpec is resolved
-namespace GameSpecification {
-    class BaseRule;
-}
-
-using GameSpecification::AbstractSpec;
 using GameSpecification::BaseRule;
+
 namespace GameSpecification{
-	class GameSpec : public AbstractSpec{
+	class GameSpec{
 		public:
-		    GameSpec() : specFilePath(""){}
-		    explicit GameSpec(const std::string& path) : specFilePath(path) {}
-		    std::vector<std::shared_ptr<BaseRule>> getRules() const;
-		    std::string getSpecFilePath() const;	
-		    void addRule(std::shared_ptr<BaseRule>);
-		    void setSpecFilePath(const std::string&);
-		    void readSpec() override; 
-		    void parseGameSpec(const nlohmann::json&); 
+		    GameSpec(const nlohmann::json&);
+		    std::list<std::shared_ptr<BaseRule>> getRules() const;
+
 		private:
-		    std::vector<std::shared_ptr<BaseRule>> rules; 
-		    std::string specFilePath;
-	};
-	
+		    std::list<std::shared_ptr<BaseRule>> rules; 
+
+		    nlohmann::json readSpec(const nlohmann::json&); 
+		    void processSpec(const nlohmann::json&);
+			std::shared_ptr<BaseRule> recursivelyParseSpec(const nlohmann::json&);
+		    void addRule(std::shared_ptr<BaseRule>); 
+
+	};	
 }
 #endif
 

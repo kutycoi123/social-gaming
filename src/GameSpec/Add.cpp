@@ -3,40 +3,27 @@
 
 using GameSpecification::Add;
 using GameSpecification::SpecValue;
-using json = nlohmann::json;
 
-Add::Add(const json& ruleJson) : BaseRule(RuleType::AddType) {
-    parseRule(ruleJson);
-}
-
-std::string Add::getTo() const{
-    return to;
-}
-SpecValue Add::getValue() const{
-    return value;
-}
+Add::Add(const std::string& to, const SpecValue& value) : 
+    BaseRule({}), 
+    to(to), 
+    value(value) 
+    {}
 
 void Add::process(GameState& gameState){
-    auto gameStateValue = gameState.getVariable(to);
+        auto gameStateValue = gameState.getVariable(to);
     if (auto retrievedValue = gameStateValue->lock()) {
         // TODO: Finish add visitor implementation
-        int amount = determineAmountToAdd(getValue(), gameState);
+        
+        int amount = determineAmountToAdd(value, gameState);
 
         AddVisitor visitor(amount);
         retrievedValue->accept(visitor);
     }
 }
 
-void Add::parseRule(const json& ruleJson){
-    try{
-        to = ruleJson.at("to").get<std::string>();
-    }catch(json::exception &e){
-        std::cout << e.what() << "\n";
-    }
-}
-
 int Add::determineAmountToAdd(const SpecValue& specValue, GameState& gameState) {
-    auto addedValue = getValue().value;
+    auto addedValue = value.value;
     int type = addedValue.which();
     if (type == 1) {
         return boost::get<int>(addedValue);
@@ -63,3 +50,6 @@ int Add::determineAmountToAdd(const SpecValue& specValue, GameState& gameState) 
     
     return 0;
 }
+
+
+

@@ -3,37 +3,36 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <memory>
 #include <unordered_map>
-#include <nlohmann/json.hpp>
 #include <iostream>
 #include "GameState.h"
-#include "AbstractSpec.h"
-
-class GameState;
 
 namespace GameSpecification{
+    struct SpecValue{
+        // TODO: may need to add more types when more details are provided
+        boost::variant<
+            std::string, 
+            int, 
+            bool, 
+            double, 
+            std::vector<std::string>,
+            std::unordered_map<std::string, std::string>> value;
+    };
+
 	class BaseRule : public std::enable_shared_from_this<BaseRule>{
 		public:
-			BaseRule();
-			BaseRule(RuleType);
-			std::string getRuleName() const;
-			RuleType getRuleType() const;
-            std::vector<std::shared_ptr<BaseRule>> getSubRules() const ;
-			std::shared_ptr<BaseRule> getPtr() ;
-			void setNextPtr(const std::shared_ptr<BaseRule>&);
-			std::shared_ptr<BaseRule> getNextPtr() const;
-            void addSubRule(std::shared_ptr<BaseRule> rule);
-			void setParentPtr(const std::shared_ptr<BaseRule>&);
-			std::shared_ptr<BaseRule> getParentPtr() const;
-			virtual void process(GameState& gameState) = 0;
+			explicit BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
+            
+            void setNextPtr(const std::list<std::shared_ptr<BaseRule>>& ptr);
+			std::shared_ptr<BaseRule> getNextPtr() const noexcept;
+
+			virtual void process(GameState& gameState) = 0;           
 
 		protected:
-
-			RuleType ruleType;
-			std::shared_ptr<BaseRule> next;
-			std::shared_ptr<BaseRule> parent;
-            std::vector<std::shared_ptr<BaseRule>> subRules;
-	};
+			std::list<std::shared_ptr<BaseRule>> childRules;
+            std::list<std::shared_ptr<BaseRule>> next;	
+        };
 }
 #endif

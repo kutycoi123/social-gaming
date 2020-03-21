@@ -25,7 +25,7 @@ private:
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
-    std::vector<std::shared_ptr<BaseRule>> gameRules;
+    std::list<std::shared_ptr<BaseRule>> gameRules;
     unsigned int currentRuleIndex;
     std::list<std::weak_ptr<User>> gameSessionUsers;
     std::list<std::string> messages;

@@ -3,29 +3,12 @@
 using GameSpecification::Loop;
 using json = nlohmann::json;
 
-Loop::Loop() : BaseRule(RuleType::LoopType), loopType(""), failCondition(""){}
-
-Loop::Loop(const json &ruleJson) : BaseRule(RuleType::LoopType){
-    parseRule(ruleJson);
-}
-
-std::string Loop::getLoopType() const{
-    return loopType;
-}
-
-std::string Loop::getFailCondition() const{
-    return failCondition;
-}
+Loop::Loop(const std::list<std::shared_ptr<BaseRule>>&, const std::string& loopType, const std::string& failCondition) : 
+    BaseRule(childRules), 
+    loopType(loopType), 
+    failCondition(failCondition)
+    {}
 
 void Loop::process(GameState& gameState){
 	//TODO: add code to process loop rule
-}
-
-void Loop::parseRule(const json &ruleJson){
-    try{
-
-    }catch(json::exception &e){
-        //TODO: Handle exception more properly
-        std::cout << e.what() << "\n";
-    }
 }
