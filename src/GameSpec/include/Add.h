@@ -14,6 +14,7 @@ class Add : public BaseRule{
         SpecValue getValue() const;
 		void process(GameState&) override;
         void parseRule(const nlohmann::json&);
+        int determineAmountToAdd(const SpecValue &, GameState &);
     private:
         std::string to;
         SpecValue value;

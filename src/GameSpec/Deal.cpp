@@ -1,4 +1,5 @@
 #include "Deal.h"
+#include "DealVisitor.h"
 
 using GameSpecification::Deal;
 using GameSpecification::SpecValue;
@@ -24,6 +25,18 @@ int Deal::getCount() const{
 
 void Deal::process(GameState& gameState) {
 	//TODO: Add code to process deal rule
+    auto gameStateValueFrom = gameState.getVariable(from);
+    
+    if (auto fromList = gameStateValueFrom->lock()) {
+        auto gameStateValueTo = gameState.getVariable(boost::get<std::string>(to.value));
+        if (auto toList = gameStateValueTo->lock()) {
+            std::shared_ptr<StateValueList> valueList;
+            valueList = std::static_pointer_cast<StateValueList>(toList);
+
+            DealVisitor visitor(getCount(), *valueList);
+            fromList->accept(visitor);
+        }
+    }
 }
 
 void Deal::parseRule(const json& ruleJson){
@@ -33,7 +46,7 @@ void Deal::parseRule(const json& ruleJson){
         json to = ruleJson.at("to");
         if(to.is_string()){
             this->to.value = to.get<std::string>();
-        }else{
+        } else{
             this->to.value = to.get<std::vector<std::string>>();
         }
         
