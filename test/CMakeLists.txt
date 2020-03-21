@@ -6,6 +6,7 @@ add_executable(runAllTests
     UserTest.cpp
     InvitationTest.cpp
     UserManagerTest.cpp
+    GameTest.cpp
 )
 
 # Link the appropriate library
@@ -16,6 +17,7 @@ target_link_libraries(runAllTests
         user
         invitation
         userManager
+        game
 )
 
 
