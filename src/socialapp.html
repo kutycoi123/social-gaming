@@ -42,13 +42,7 @@
       color: white;
       margin-bottom: 5px;
       overflow-y: scroll;
-  }
-
-  .jumbotron {
-      background-image: linear-gradient(90deg, #242d33, #42a5f5);
-      padding-bottom: 40px;
-      padding-top: 40px;
-      text-shadow: 0px 2px 4px #000000;
+      padding: 4px;
   }
 
   .btn:focus, .btn:active:focus, .btn.active:focus{
@@ -67,6 +61,11 @@
 
   .message {
     margin: 8px;
+    background-color: #343a40;
+    padding: 8px;
+    border-radius: 8px;
+    clear: both;
+    float: left;
   }
   </style>
 
@@ -105,14 +104,20 @@
       let ws = null;
       const uriPieces = window.location.href.split('/');
       const wsLocation = 'ws://' + uriPieces[2];
+      let connected = false;
       $('#uri:text').val(wsLocation);
       
       $('#connect').click(function() {
+        if (connected){
+          return;
+        }
         ws = new WebSocket(uri.value);
         ws.onopen = function(ev) {
+          connected = true;
           appendText("<div class='message'>Connected!\n</div>");
         };
         ws.onclose = function(ev) {
+          connected = false;
           appendText("<div class='message'>Disconnected!\n</div>");
         };
         ws.onmessage = function(ev) {
@@ -152,27 +157,26 @@
 <nav class="navbar navbar-dark bg-dark mb-3">
   <span class="navbar-brand">Social Gaming - Donair</span>
 </nav>
-
-<div class="container-fluid">
-  <div>
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
-      <div class="input-group-append">
-        <button class="btn btn-success" type="button" id="connect">Connect</button>
-        <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
-      </div>
+<div class="container-fluid" id="connectionInput">
+  <div class="input-group input-group-sm mb-3">
+    <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
+    <div class="input-group-append">
+      <button class="btn btn-success" type="button" id="connect">Connect</button>
+      <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
     </div>
-
-    <pre id="messages"></pre>
-
-    <div class="input-group mt-3" id="messageBox">
+  </div>
+</div>
+<div class="container-fluid">
+  <pre id="messages"></pre>
+</div>
+<div class="container-fluid">
+    <div class="input-group mt-3 mb-1" id="messageBox">
       <input type="text" class="form-control" id="sendMessage" placeholder="Enter Message" value="" />
       <div class="input-group-append">
         <button type="button" class="btn btn-primary" id="send">Send</button >
       </div>
     </div>
     <br />
-  </div>
 </div>
 </body>
 </html>
