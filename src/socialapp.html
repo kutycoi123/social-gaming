@@ -5,7 +5,7 @@
   <title>Social Gaming - Donair</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <style>
 
@@ -36,7 +36,7 @@
   }
 
   #messages {
-      width: 80em;
+      width: 100%;
       height: 40em;
       border: solid 1px #ffffff;
       color: white;
@@ -55,6 +55,19 @@
       outline:none;
       box-shadow:none;
   }
+
+  #messageBox {
+    display:flex;
+    flex-direction: row;
+  }
+
+  #sendMessage {
+    flex-grow: 1;
+  }
+
+  .message {
+    margin: 8px;
+  }
   </style>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,11 +80,12 @@
     $(document).ready(function() {
       $(".btn").mouseup(function(){
         $(this).blur();
-      })
+      });
 
       function appendText(text) {
-        $('#messages').append(text);
-        $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        let messages = $('#messages');
+        messages.append(text);
+        messages.scrollTop(messages[0].scrollHeight);
       }
 
       function hashName(name) {
@@ -88,30 +102,30 @@
         return dom;
       }
 
-      var ws = null;
-      var uriPieces = window.location.href.split('/');
-      var wsLocation = 'ws://' + uriPieces[2];
+      let ws = null;
+      const uriPieces = window.location.href.split('/');
+      const wsLocation = 'ws://' + uriPieces[2];
       $('#uri:text').val(wsLocation);
       
       $('#connect').click(function() {
         ws = new WebSocket(uri.value);
         ws.onopen = function(ev) {
-          appendText("<p>Connected!\n</p>");
+          appendText("<div class='message'>Connected!\n</div>");
         };
         ws.onclose = function(ev) {
-          appendText("<p>Disconnected!\n</p>");
+          appendText("<div class='message'>Disconnected!\n</div>");
         };
         ws.onmessage = function(ev) {
           let name = ev.data.substring(0, ev.data.indexOf(":"));
           let message = ev.data.replace(name, "");
 
           let nameDom = getNameColourTag(name);
-          message = nameDom[0].outerHTML + message + "\n";
+          message = "<div class='message'>" + nameDom[0].outerHTML + message + "\n</div>";
 
           appendText(message);
         };
         ws.onerror = function(ev) {
-          appendText("<p>[error]\n</p>");
+          appendText("<div class='message'>[error]\n</div>");
           console.log(ev);
         };
       });
@@ -134,29 +148,31 @@
     });
   </script>
 </head>
+<body>
+<nav class="navbar navbar-dark bg-dark mb-3">
+  <span class="navbar-brand">Social Gaming - Donair</span>
+</nav>
 
-<div class="jumbotron text-center">
-  <h1>Social Gaming - Donair</h1>
-</div>
-
-<div class="container">
-  <body>
-
-    Social Gaming Server IP: <input id="uri" size="40">
-    <button type="button" class="btn btn-success" id="connect">Connect</button>
-    <button type="button" class="btn btn-danger" id="disconnect">Disconnect</button><br /> <br />
+<div class="container-fluid">
+  <div>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
+      <div class="input-group-append">
+        <button class="btn btn-success" type="button" id="connect">Connect</button>
+        <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
+      </div>
+    </div>
 
     <pre id="messages"></pre>
 
-    <div style="margin-bottom: 5px;">
-      Enter Message:<br />
-      <input id="sendMessage" size="80" value="" />
-      <button type="button" class="btn btn-primary" id="send">Send</button >
+    <div class="input-group mt-3" id="messageBox">
+      <input type="text" class="form-control" id="sendMessage" placeholder="Enter Message" value="" />
+      <div class="input-group-append">
+        <button type="button" class="btn btn-primary" id="send">Send</button >
+      </div>
     </div>
-
     <br />
-
-  </body>
+  </div>
 </div>
-
+</body>
 </html>
