@@ -12,24 +12,28 @@ public:
     }
 
     void visit(StateValueBoolean& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot reverse");
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot reverse");
+
     }
 
     void visit(StateValueString& stateValue) override {
-        return;
+        throw std::invalid_argument("Invalid State value cannot reverse");
+
     }
 
     void visit(StateValueList& stateValue) override {
-//        boost::range::reverse(stateValue.getList());
-        return;
+        auto a = stateValue.getList();
+        std::reverse(std::begin(a), std::end(a));
     }
 
     void visit(StateValueMap& stateValue) override {
-        return;
+        auto a = stateValue.getMap();
+        std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
+        std::reverse(std::begin(elems), std::end(elems));
     }
 
 };
