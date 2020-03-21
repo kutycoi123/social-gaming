@@ -67,7 +67,7 @@ void ForEach::parseRule(const json &ruleJson){
                             continue;
                     }
                 }
-                //TODO: investigate CRASHES program. 
+                //TODO: investigate CRASHES program.
                 //baseRulePtr->setParentPtr(this->getPtr());
                 this->subRules.push_back(baseRulePtr);
             }
