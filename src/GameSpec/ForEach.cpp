@@ -76,11 +76,12 @@ void ForEach::parseRule(const json &ruleJson){
         }
         //TODO: investigate setNext-- CRASHES Program
 		//Set next pointer for each subRule
-//		for(auto it = subRules.begin(); it != subRules.end() - 1; ++it){
+
+//		for(auto it = this->subRules.begin(); it != this->subRules.end() - 1; ++it){
 //			(*it)->setNextPtr(*(it+1));
 //		}
-		//Set next pointer for the last rule to point back to the parent Rule
-//		(*subRules.rbegin())->setNextPtr((this->getPtr()));
+//		//Set next pointer for the last rule to point back to the parent Rule
+// 		(*this->subRules.rbegin())->setNextPtr((this->getPtr()));
     }catch(json::exception &e){
         //TODO: Handle exception more properly
         std::cout << e.what() << "\n";
