@@ -1,12 +1,14 @@
 #include "Sort.h"
+#include "SortVisitor.h"
 
 using GameSpecification::Sort;
 using json = nlohmann::json;
 
 Sort::Sort(): BaseRule(RuleType::SortType), list(""), key("") {}
 
-Sort::Sort(const std::string& list, const std::string& key)
-    : BaseRule(RuleType::SortType), list(list), key(key){}
+Sort::Sort(const json &ruleJson) : BaseRule(RuleType::SortType){
+    parseRule(ruleJson);
+}
 
 std::string Sort::getList() const{
     return list;
@@ -17,7 +19,12 @@ std::optional<std::string> Sort::getKey() const{
 }
 
 void Sort::process(GameState& gameState){
-
+    auto variables = gameState.getVariable(list);
+    if (auto retrievedValue = variables->lock()) {
+        // TODO: Finish sort visitor implementation
+        SortVisitor visitor;
+        retrievedValue->accept(visitor);
+    }
 }
 
 void Sort::parseRule(const json &ruleJson){

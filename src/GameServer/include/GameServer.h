@@ -49,6 +49,7 @@ private:
     // Helper methods
     void AddMessageToCorrectSession(const uintptr_t, const std::string&);
     std::deque<networking::Message> getGlobalMessages();
+    std::string formatMessageWithUserName(const std::string& text, const std::string& username);
 
 };
 

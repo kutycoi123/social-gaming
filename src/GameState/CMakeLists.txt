@@ -1,5 +1,10 @@
 add_library(gameState
         GameState.cpp
+        StateValueBoolean.cpp
+        StateValueNumber.cpp
+        StateValueList.cpp
+        StateValueString.cpp
+        StateValueMap.cpp
 )
 
 set_target_properties(gameState

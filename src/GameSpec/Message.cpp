@@ -1,10 +1,18 @@
 #include "Message.h"
+#include "MessageVisitor.h"
 
 
 using GameSpecification::Message;
 using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 using json = nlohmann::json;
+
+Message::Message() : BaseRule(RuleType::MessageType){}
+
+Message::Message(const json &ruleJson) : BaseRule(RuleType::MessageType){
+	parseRule(ruleJson);
+}
+
 SpecValue Message::getTo() const{
 	return to;
 }
@@ -14,8 +22,11 @@ std::string Message::getValue() const{
 }
 
 void Message::process(GameState& gameState){
-	//TODO: Add code to process message rule
-}
+    auto variables = gameState.getVariable(messValue);
+    if (auto retrievedValue = variables->lock()) {
+        MessageVisitor visitor;
+        retrievedValue->accept(visitor);
+    }}
 
 void Message::parseRule(const json &ruleJson){
 	try{

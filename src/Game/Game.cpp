@@ -15,7 +15,10 @@ bool Game::isGameStarted() const {
 void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
     gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
     addMessages(" User has started the game...\n");
-    return gameState.startGame();
+    importGameSpecRules();
+
+    // Once the game has started, gameTick will end up being called.
+    gameState.startGame();
 }
 
 void Game::endGame() {
@@ -26,8 +29,8 @@ void Game::addMessages(const std::string &message) noexcept{
     messages.push_back(message);
 }
 
-std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexcept{
-    auto gameMessages = getGameMessages();
+std::list<std::string> Game::updateAndGetAllMessages() noexcept{
+    auto gameMessages = messages;
     clearMessages();
 
     return gameMessages;
@@ -37,14 +40,27 @@ void Game::clearMessages() noexcept {
     messages = {};
 }
 
-std::list<std::pair<UserId, std::string>> Game::getGameMessages() noexcept{
-    std::list<std::pair<UserId, std::string>> result = {};
+void Game::gameTick() {
+    bool isProgramCounterWithinRange = currentRuleIndex < gameRules.size();
+    if (isProgramCounterWithinRange) {
+        bool isCurrentRuleFullyProcessed = processRule(gameRules.at(currentRuleIndex));
+        if (isCurrentRuleFullyProcessed) currentRuleIndex += 1;
+    } else {
+        endGame();
+    }
+}
 
-    for(auto& message : messages){
-        for(auto& player : gameSessionUsers){
-            result.emplace_back(player.lock()->getUserId(), message);
-        }
+void Game::importGameSpecRules() {
+    gameRules.clear();
+    gameRules = gameSpec.getRules();
+}
+
+bool Game::processRule(std::shared_ptr<BaseRule>& rule) {
+    if (rule != nullptr) {
+        rule->process(gameState);
+        rule = rule->getNextPtr();
+        return false;
     }
 
-    return result;
+    return true;
 }

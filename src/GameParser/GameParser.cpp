@@ -10,10 +10,8 @@ using GameSpecification::RuleType;
 
 ////public methods
 GameParser::GameParser(const std::string& path){
-    std::string addedPath = "/home/jimmyz/Documents/cmpt373Project/parserIntegration/social-gaming/src/Games/RockPaperScissors.json";
-    std::string myPath = "./Games/RockPaperScissors.json";
 
-    nlohmann::json gameJson = fileToJson(addedPath);
+    nlohmann::json gameJson = fileToJson(path);
     parseEntireGameJson(gameJson);
     GameState gameState;
     game = std::make_unique<Game> (Game(getGameSpecifications(), gameState));
@@ -26,7 +24,6 @@ std::unique_ptr<Game> GameParser::getGame() noexcept{
 void GameParser::parseEntireGameJson(const nlohmann::json& gameJson) {
 
     //StatusCode status = validGameJson(gameJson);
-
 
     if (true) {
         for (auto& [key, value] : gameJson.items()) {
@@ -82,27 +79,28 @@ void GameParser::parseRules(const nlohmann::json& rules) {
         std::string jsonKey = key;
         GameSpecification::RuleType ruleType = GameSpecification::stringToRuleType[jsonKey];
 
-        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType);
 
-        if (!baseRulePtr) {
-            switch (ruleType) {
+        auto baseRulePtr = GameSpecification::getRulePtrFromRuleType(ruleType, value);
+        if(!baseRulePtr){
+            switch(ruleType){
+
                 case RuleType::ForEachType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new ForEach());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new ForEach(value));
                     break;
                 case RuleType::InparallelType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Inparallel(value));
                     break;
                 case RuleType::LoopType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Loop());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Loop(value));
                     break;
                 case RuleType::ParallelforType:
-                    baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor());
+                    baseRulePtr = std::shared_ptr<BaseRule>(new Parallelfor(value));
                     break;
                 default:
-                    assert(false);
+                    continue;
             }
         }
-        baseRulePtr->parseRule(value);
+
         this->gameSpecifications.addRule(baseRulePtr);
     }
 

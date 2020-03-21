@@ -1,10 +1,15 @@
 #include "GameSession.h"
 
-GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) : 
+GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) :
     messages({}),
     invitationCode (Invitation::createNewInvitation()),
     owner (owner)
 {
+    auto parser = GameParser(gameFilePath);
+    game = parser.getGame();
+}
+
+void GameSession::setGame(const std::string& gameFilePath){
     auto parser = GameParser(gameFilePath);
     game = parser.getGame();
 }
@@ -40,8 +45,15 @@ void GameSession::addMessagesToGame(const std::string &message) noexcept{
     }
 }
 
-std::list<std::pair<UserId, std::string>> GameSession::getLobbyMessages() noexcept{
+std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages() noexcept{
     std::list<std::pair<UserId, std::string>> result = {};
+
+    if (game->isGameStarted()) {
+        game->gameTick();
+
+        auto gameMessages = game->updateAndGetAllMessages();
+        messages.insert(messages.end(), gameMessages.begin(), gameMessages.end());
+    }
 
     for(auto& message : messages){
         
@@ -59,11 +71,7 @@ void GameSession::clearMessages() noexcept {
 
 std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages() noexcept{
 
-    auto messages = getLobbyMessages();
-    if (game->isGameStarted()) {
-        auto lobbyMessages = game->updateAndGetAllMessages();
-        messages.insert(messages.end(), lobbyMessages.begin(), lobbyMessages.end());
-    }
+    auto messages = getLobbyAndGameMessages();
 
     clearMessages();
 

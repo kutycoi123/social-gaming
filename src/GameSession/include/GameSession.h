@@ -21,6 +21,7 @@ class GameSession {
             return invitationCode == gameSession.invitationCode;
         }
 
+        void setGame(const std::string&);
         Invitation getInvitationCode() const;
         bool isGameStarted() const;
         void startGame();
@@ -44,7 +45,7 @@ class GameSession {
         GameSession::UserList playerList;
 
         void clearMessages() noexcept;
-        std::list<std::pair<UserId, std::string>> getLobbyMessages() noexcept;
+        std::list<std::pair<UserId, std::string>> getLobbyAndGameMessages() noexcept;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "include/Invitation.h"
 #include <random>
-#include <math.h>
+#include <cmath>
 
 unsigned long Invitation::count = 0;
 
