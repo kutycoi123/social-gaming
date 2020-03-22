@@ -42,7 +42,6 @@
         color: white;
         margin-bottom: 5px;
         overflow-y: auto;
-        padding: 4px;
     }
 
     .btn:focus, .btn:active:focus, .btn.active:focus{
@@ -60,7 +59,7 @@
     }
 
     .message {
-      margin: 8px;
+      margin: 8px 8px 8px 0;
       background-color: #343a40;
       padding: 8px;
       border-radius: 8px;
@@ -71,6 +70,10 @@
 
     .nameTag {
       font-weight:bold;
+    }
+
+    .maxWidth {
+      max-width: 1000px;
     }
 
     #flexBody {
@@ -169,29 +172,29 @@
   </script>
 </head>
 <body class="h-100" id="flexBody">
-<nav class="navbar navbar-dark bg-dark mb-3">
-  <span class="navbar-brand">Social Gaming - Donair</span>
-</nav>
-<div class="container-fluid" id="connectionInput">
-  <div class="input-group input-group-sm mb-3">
-    <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
-    <div class="input-group-append">
-      <button class="btn btn-success" type="button" id="connect">Connect</button>
-      <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
-    </div>
-  </div>
-</div>
-<div class="container-fluid" id="messagesContainer">
-  <pre id="messages"></pre>
-</div>
-<div class="container-fluid">
-    <div class="input-group mt-3 mb-1" id="messageBox">
-      <input type="text" class="form-control" id="sendMessage" placeholder="Enter Message" value="" />
+  <nav class="navbar navbar-dark bg-dark mb-3">
+    <span class="navbar-brand">Social Gaming - Donair</span>
+  </nav>
+  <div class="container-fluid maxWidth" id="connectionInput">
+    <div class="input-group input-group-sm mb-3">
+      <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
       <div class="input-group-append">
-        <button type="button" class="btn btn-primary" id="send">Send</button >
+        <button class="btn btn-success" type="button" id="connect">Connect</button>
+        <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
       </div>
     </div>
-    <br />
-</div>
+  </div>
+  <div class="container-fluid maxWidth" id="messagesContainer">
+    <pre id="messages"></pre>
+  </div>
+  <div class="container-fluid maxWidth">
+      <div class="input-group mt-3 mb-1" id="messageBox">
+        <input type="text" class="form-control" id="sendMessage" placeholder="Enter Message" value="" />
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary" id="send">Send</button >
+        </div>
+      </div>
+      <br />
+  </div>
 </body>
 </html>
