@@ -28,20 +28,21 @@
 
   ::-webkit-scrollbar-track {
     background: #242d33;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
     background: #42a5f5;
     border: 1px solid black;
+    border-radius: 4px;
   }
 
   #messages {
       width: 100%;
       height: 40em;
-      border: solid 1px #ffffff;
       color: white;
       margin-bottom: 5px;
-      overflow-y: scroll;
+      overflow-y: auto;
       padding: 4px;
   }
 
@@ -66,7 +67,12 @@
     border-radius: 8px;
     clear: both;
     float: left;
+    font-size: 14px;
   }
+
+    .nameTag {
+      font-weight:bold;
+    }
   </style>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -96,7 +102,7 @@
       }
 
       function getNameColourTag(name) {
-        let dom = $.parseHTML("<span>" + name + "</span>");
+        let dom = $.parseHTML("<span class='nameTag'>" + name + "</span>");
         $(dom).css('color', 'hsl('+ hashName(name) +', 100%, 75%');
         return dom;
       }
