@@ -1,60 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html class="h-100">
 <head>
   <meta charset="utf-8" />
   <title>Social Gaming - Donair</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <style>
+    html * {
+      font-family: 'Roboto', sans-serif;
+      box-sizing: border-box;
+    }
 
-  html * {
-    font-family: 'Roboto' !important;
-  }
-    
-  body, input, select, textarea {
-    background: #161616;
-    color: #ffffff;
-  }
+    body, input, select, textarea {
+      background: #161616;
+      color: #ffffff;
+    }
 
-  body {
-      font-size: 15px;
-  }
+    body {
+        font-size: 15px;
+    }
 
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
 
-  ::-webkit-scrollbar-track {
-    background: #242d33;
-  }
+    ::-webkit-scrollbar-track {
+      background: #242d33;
+      border-radius: 4px;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: #42a5f5;
-    border: 1px solid black;
-  }
+    ::-webkit-scrollbar-thumb {
+      background: #42a5f5;
+      border: 1px solid black;
+      border-radius: 4px;
+    }
 
-  #messages {
-      width: 80em;
-      height: 40em;
-      border: solid 1px #ffffff;
-      color: white;
-      margin-bottom: 5px;
-      overflow-y: scroll;
-  }
+    #messages {
+        width: 100%;
+        color: white;
+        margin-bottom: 5px;
+        overflow-y: auto;
+    }
 
-  .jumbotron {
-      background-image: linear-gradient(90deg, #242d33, #42a5f5);
-      padding-bottom: 40px;
-      padding-top: 40px;
-      text-shadow: 0px 2px 4px #000000;
-  }
+    .btn:focus, .btn:active:focus, .btn.active:focus{
+        outline:none;
+        box-shadow:none;
+    }
 
-  .btn:focus, .btn:active:focus, .btn.active:focus{
-      outline:none;
-      box-shadow:none;
-  }
+    #messageBox {
+      display:flex;
+      flex-direction: row;
+    }
+
+    #sendMessage {
+      flex-grow: 1;
+    }
+
+    .message {
+      margin: 8px 8px 8px 0;
+      background-color: #343a40;
+      padding: 8px;
+      border-radius: 8px;
+      clear: both;
+      float: left;
+      font-size: 14px;
+    }
+
+    .nameTag {
+      font-weight:bold;
+    }
+
+    .maxWidth {
+      max-width: 1000px;
+    }
+
+    #flexBody {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #messagesContainer {
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
   </style>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,11 +97,12 @@
     $(document).ready(function() {
       $(".btn").mouseup(function(){
         $(this).blur();
-      })
+      });
 
       function appendText(text) {
-        $('#messages').append(text);
-        $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        let messages = $('#messages');
+        messages.append(text);
+        messages.scrollTop(messages[0].scrollHeight);
       }
 
       function hashName(name) {
@@ -83,35 +114,41 @@
       }
 
       function getNameColourTag(name) {
-        let dom = $.parseHTML("<span>" + name + "</span>");
+        let dom = $.parseHTML("<span class='nameTag'>" + name + "</span>");
         $(dom).css('color', 'hsl('+ hashName(name) +', 100%, 75%');
         return dom;
       }
 
-      var ws = null;
-      var uriPieces = window.location.href.split('/');
-      var wsLocation = 'ws://' + uriPieces[2];
+      let ws = null;
+      const uriPieces = window.location.href.split('/');
+      const wsLocation = 'ws://' + uriPieces[2];
+      let connected = false;
       $('#uri:text').val(wsLocation);
       
       $('#connect').click(function() {
+        if (connected){
+          return;
+        }
         ws = new WebSocket(uri.value);
         ws.onopen = function(ev) {
-          appendText("<p>Connected!\n</p>");
+          connected = true;
+          appendText("<div class='message'>Connected!\n</div>");
         };
         ws.onclose = function(ev) {
-          appendText("<p>Disconnected!\n</p>");
+          connected = false;
+          appendText("<div class='message'>Disconnected!\n</div>");
         };
         ws.onmessage = function(ev) {
           let name = ev.data.substring(0, ev.data.indexOf(":"));
           let message = ev.data.replace(name, "");
 
           let nameDom = getNameColourTag(name);
-          message = nameDom[0].outerHTML + message + "\n";
+          message = "<div class='message'>" + nameDom[0].outerHTML + message + "\n</div>";
 
           appendText(message);
         };
         ws.onerror = function(ev) {
-          appendText("<p>[error]\n</p>");
+          appendText("<div class='message'>[error]\n</div>");
           console.log(ev);
         };
       });
@@ -134,29 +171,30 @@
     });
   </script>
 </head>
-
-<div class="jumbotron text-center">
-  <h1>Social Gaming - Donair</h1>
-</div>
-
-<div class="container">
-  <body>
-
-    Social Gaming Server IP: <input id="uri" size="40">
-    <button type="button" class="btn btn-success" id="connect">Connect</button>
-    <button type="button" class="btn btn-danger" id="disconnect">Disconnect</button><br /> <br />
-
-    <pre id="messages"></pre>
-
-    <div style="margin-bottom: 5px;">
-      Enter Message:<br />
-      <input id="sendMessage" size="80" value="" />
-      <button type="button" class="btn btn-primary" id="send">Send</button >
+<body class="h-100" id="flexBody">
+  <nav class="navbar navbar-dark bg-dark mb-3">
+    <span class="navbar-brand">Social Gaming - Donair</span>
+  </nav>
+  <div class="container-fluid maxWidth" id="connectionInput">
+    <div class="input-group input-group-sm mb-3">
+      <input type="text" class="form-control" id="uri" placeholder="Social Gaming Server IP">
+      <div class="input-group-append">
+        <button class="btn btn-success" type="button" id="connect">Connect</button>
+        <button class="btn btn-danger" type="button" id="disconnect">Disconnect</button>
+      </div>
     </div>
-
-    <br />
-
-  </body>
-</div>
-
+  </div>
+  <div class="container-fluid maxWidth" id="messagesContainer">
+    <pre id="messages"></pre>
+  </div>
+  <div class="container-fluid maxWidth">
+      <div class="input-group mt-3 mb-1" id="messageBox">
+        <input type="text" class="form-control" id="sendMessage" placeholder="Enter Message" value="" />
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary" id="send">Send</button >
+        </div>
+      </div>
+      <br />
+  </div>
+</body>
 </html>
