@@ -40,6 +40,10 @@ public:
     void addValue(const std::string &key, StateValueString value, const ValueType& valueType);
     void addValue(const std::string &key, StateValueList value, const ValueType& valueType);
     void addValue(const std::string &key, StateValueMap value, const ValueType& valueType);
+
+    void addMessages(const std::string &message) noexcept;
+    void clearMessages() noexcept;
+    std::list<std::string> updateAndGetAllMessages() noexcept;
 private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<const StateValue>> constantsMap;
@@ -48,7 +52,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<StateValue>> perPlayerMap;
     std::unordered_map<std::string, std::shared_ptr<StateValue>> perAudienceMap;
     GameConfig gameConfig;
-
+    std::list<std::string> messages;
     void insertIntoCorrectMap(const GameState::ValueType &valueType,
                               std::pair<std::string, std::shared_ptr<StateValue>>& pair);
 };
