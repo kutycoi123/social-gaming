@@ -2,6 +2,7 @@
 #define GLOBALMESSAGE_H
 
 #include "BaseRule.h"
+#include <string>
 namespace GameSpecification{
 class GlobalMessage : public BaseRule{
     public:
@@ -11,6 +12,7 @@ class GlobalMessage : public BaseRule{
 
     private:
       std::string value;
+      std::string parseValue(const std::string& basicString);
 };
 }
 #endif

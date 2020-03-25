@@ -26,18 +26,11 @@ void Game::endGame() {
 }
 
 void Game::addMessages(const std::string &message) noexcept{
-    messages.push_back(message);
+    gameState.addMessages(message);
 }
 
 std::list<std::string> Game::updateAndGetAllMessages() noexcept{
-    auto gameMessages = messages;
-    clearMessages();
-
-    return gameMessages;
-}
-
-void Game::clearMessages() noexcept {
-    messages = {};
+    return gameState.updateAndGetAllMessages();
 }
 
 void Game::gameTick() {
