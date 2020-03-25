@@ -1,14 +1,15 @@
 #include "Message.h"
+
+#include <utility>
 #include "MessageVisitor.h"
 
 using GameSpecification::Message;
-using GameSpecification::SpecValue;
 using GameSpecification::BaseRule;
 
-Message::Message(const SpecValue& to, const std::string& val) : 
+Message::Message(const std::shared_ptr<StateValue>& to, std::string val) :
     BaseRule({}),
     to(to), 
-    messValue(val)
+    messValue(std::move(val))
     {}
 
 void Message::process(GameState& gameState){

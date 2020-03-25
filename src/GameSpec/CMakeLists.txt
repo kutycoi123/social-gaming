@@ -39,4 +39,5 @@ target_include_directories(gameSpec
 target_link_libraries(gameSpec
 	gameState
 	nlohmann_json::nlohmann_json
+
 )

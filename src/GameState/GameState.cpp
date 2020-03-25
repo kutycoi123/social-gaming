@@ -1,6 +1,5 @@
 #include "GameState.h"
 #include <optional>
-#include <boost/variant.hpp>
 
 GameState::GameState() :
     gameStarted(false)

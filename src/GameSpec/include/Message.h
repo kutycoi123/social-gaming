@@ -7,11 +7,11 @@
 namespace GameSpecification{
 	class Message: public BaseRule{
 		public:
-			Message(const SpecValue&, const std::string&);
+			Message(const std::shared_ptr<StateValue>&, std::string );
 
 			void process(GameState&) override;
 		private:
-			SpecValue to;
+			std::weak_ptr<StateValue> to;
 			std::string	messValue;
 	};
 }

@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <boost/variant.hpp>
 #include <nlohmann/json.hpp>
 #include <memory>
 

@@ -1,12 +1,13 @@
 #include "Extend.h"
 
+#include <utility>
+
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
-using GameSpecification::SpecValue;
 
-Extend::Extend(const std::string& target, const ValueType& list) : 
+Extend::Extend(std::string  target, const std::shared_ptr<StateValue>& list) :
     BaseRule({}), 
-    target(target), 
+    target(std::move(target)),
     list(list)
     {}
     

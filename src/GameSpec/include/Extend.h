@@ -3,17 +3,18 @@
 
 #include "BaseRule.h"
 #include "ExtendVisitor.h"
+#include "GameState.h"
 
 namespace GameSpecification{
     class Extend : public BaseRule{
         public:
-            Extend(const std::string& target, const ValueType& list);
+            Extend(std::string  target, const std::shared_ptr<StateValue>& list);
 
             void process(GameState&) override; 
 
         private:
             std::string target;
-            ValueType list;
+            std::weak_ptr<StateValue> list;
     };
 }
 #endif

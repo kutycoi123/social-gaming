@@ -6,13 +6,13 @@
 namespace GameSpecification{
     class ForEach : public BaseRule{
         public:
-            ForEach(const std::list<std::shared_ptr<BaseRule>>&,const SpecValue& list, const std::string& element);
+            ForEach(const std::list<std::shared_ptr<BaseRule>>& childRules, const std::shared_ptr<StateValue>& list, std::string element);
 
             void process(GameState&) override; 
         
         private:
             //spec value take all value
-            SpecValue list;
+            std::weak_ptr<StateValue> list;
             std::string element;
     };
 }

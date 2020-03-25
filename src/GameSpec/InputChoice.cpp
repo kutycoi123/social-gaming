@@ -1,17 +1,18 @@
 #include "InputChoice.h"
 
+#include <utility>
+
 
 using GameSpecification::BaseRule;
-using GameSpecification::SpecValue;
 using GameSpecification::InputChoice;
 using json = nlohmann::json;
 
-InputChoice::InputChoice(const std::string& to, const std::string& prompt, const SpecValue& choices, const std::string& result, double timeout) : 
+InputChoice::InputChoice(std::string to, std::string prompt, const std::shared_ptr<StateValue>& choices, std::string result, double timeout) :
 	BaseRule({}),
-	to(to), 
-	prompt(prompt), 
+	to(std::move(to)),
+	prompt(std::move(prompt)),
 	choices(choices),
-	result(result), 
+	result(std::move(result)),
 	timeout(timeout) 
 	{}
 
