@@ -1,13 +1,14 @@
 #include "Extend.h"
 
+#include <utility>
+
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
-using GameSpecification::SpecValue;
 
-Extend::Extend(const std::string& target, const ValueType& list) : 
+Extend::Extend(std::string  target, std::unique_ptr<StateValue>& list) :
     BaseRule({}), 
-    target(target), 
-    list(list)
+    target(std::move(target)),
+    list(std::move(list))
     {}
     
 void Extend::process(GameState& gameState){

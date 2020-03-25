@@ -2,17 +2,18 @@
 #define DEAL_H
 
 #include "BaseRule.h"
+#include "GameState.h"
 
 namespace GameSpecification{
     class Deal : public BaseRule{
         public:
-            Deal(const std::string& from, const SpecValue& to, const int count);
+            Deal(std::string  from, std::unique_ptr<StateValue>& to, int count);
 
             void process(GameState&) override;
             
         private:
             std::string from;
-            SpecValue to;
+            std::unique_ptr<StateValue> to;
             int count;
             
     };
