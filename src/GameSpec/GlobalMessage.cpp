@@ -8,13 +8,19 @@ GlobalMessage::GlobalMessage(const std::string& value) :
     value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
-    std::string parsedValue = parseValue(value);
-    gameState.addMessages(parsedValue);
-}
-
-std::string GameSpecification::GlobalMessage::parseValue(const std::string& basicString) {
-    // TODO: Parse value so that every item in {} refers to it's associated variable/constant
-    std::string parsedValue;
-    parsedValue.append(basicString);
-    return parsedValue;
+    /*
+    auto variables = gameState.getVariable(value);
+    if (auto retrievedValue = variables->lock()) {
+        // TODO: Finish global message visitor implementation
+        GlobalMessageVisitor visitor{};
+        retrievedValue->accept(visitor);
+//        auto val = boost::apply_visitor(Visit_Type(), retrievedValue.get()->value);
+//        if(val.i){
+//            //add message to the game
+//        }
+//        if(val.str.size()>0){
+//            //add message to the game
+//        }
+    }
+    */
 }

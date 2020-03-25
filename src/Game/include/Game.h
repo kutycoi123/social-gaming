@@ -17,6 +17,8 @@ public:
 
 
 private:
+    void clearMessages() noexcept;
+
     // Rule Processor Methods
     void importGameSpecRules();
     bool processRule(std::shared_ptr<BaseRule>& rule);

@@ -100,21 +100,6 @@ void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
     }
 }
 
-void GameState::addMessages(const std::string &message) noexcept{
-    messages.push_back(message);
-}
-
-void GameState::clearMessages() noexcept {
-    messages = {};
-}
-
-std::list<std::string> GameState::updateAndGetAllMessages() noexcept{
-    auto gameMessages = messages;
-    clearMessages();
-
-    return gameMessages;
-}
-
 void GameState::addConfig(const GameConfig& gameConfig){
     this->gameConfig = gameConfig;
 }
