@@ -7,11 +7,11 @@ using GameSpecification::BaseRule;
 using GameSpecification::InputChoice;
 using json = nlohmann::json;
 
-InputChoice::InputChoice(std::string to, std::string prompt, const std::shared_ptr<StateValue>& choices, std::string result, double timeout) :
+InputChoice::InputChoice(std::string to, std::string prompt, std::unique_ptr<StateValue>& choices, std::string result, double timeout) :
 	BaseRule({}),
 	to(std::move(to)),
 	prompt(std::move(prompt)),
-	choices(choices),
+	choices(std::move(choices)),
 	result(std::move(result)),
 	timeout(timeout) 
 	{}

@@ -6,9 +6,9 @@
 using GameSpecification::Message;
 using GameSpecification::BaseRule;
 
-Message::Message(const std::shared_ptr<StateValue>& to, std::string val) :
+Message::Message(std::unique_ptr<StateValue>& to, std::string val) :
     BaseRule({}),
-    to(to), 
+    to(std::move(to)),
     messValue(std::move(val))
     {}
 

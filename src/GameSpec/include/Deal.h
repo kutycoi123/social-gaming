@@ -7,13 +7,13 @@
 namespace GameSpecification{
     class Deal : public BaseRule{
         public:
-            Deal(std::string  from, const std::shared_ptr<StateValue>& to, const int count);
+            Deal(std::string  from, std::unique_ptr<StateValue>& to, int count);
 
             void process(GameState&) override;
             
         private:
             std::string from;
-            std::weak_ptr<StateValue> to;
+            std::unique_ptr<StateValue> to;
             int count;
             
     };

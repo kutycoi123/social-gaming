@@ -7,9 +7,9 @@ using GameSpecification::ForEach;
 //using GameSpecification::BaseRule;
 using json = nlohmann::json;
 
-ForEach::ForEach(const std::list<std::shared_ptr<BaseRule>>& childRules, const std::shared_ptr<StateValue>& list, std::string element) :
+ForEach::ForEach(const std::list<std::shared_ptr<BaseRule>>& childRules, std::unique_ptr<StateValue>& list, std::string element) :
 	BaseRule(childRules), 
-	list(list), 
+	list(std::move(list)),
 	element(std::move(element))
 	{}
 

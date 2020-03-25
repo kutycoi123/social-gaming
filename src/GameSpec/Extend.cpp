@@ -5,10 +5,10 @@
 using GameSpecification::BaseRule;
 using GameSpecification::Extend;
 
-Extend::Extend(std::string  target, const std::shared_ptr<StateValue>& list) :
+Extend::Extend(std::string  target, std::unique_ptr<StateValue>& list) :
     BaseRule({}), 
     target(std::move(target)),
-    list(list)
+    list(std::move(list))
     {}
     
 void Extend::process(GameState& gameState){

@@ -2,13 +2,14 @@
 
 #include <utility>
 #include "AddVisitor.h"
+#include <memory>
 
 using GameSpecification::Add;
 
-Add::Add(std::string  to, const std::shared_ptr<StateValue>& value) :
+Add::Add(std::string to, std::unique_ptr<StateValue>& value) :
     BaseRule({}), 
     to(std::move(to)),
-    value(value)
+    value(std::move(value))
     {}
 
 void Add::process(GameState& gameState){

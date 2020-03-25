@@ -6,10 +6,10 @@
 using GameSpecification::Deal;
 using GameSpecification::BaseRule;
 
-Deal::Deal(std::string  from, const std::shared_ptr<StateValue>& to, const int count) :
+Deal::Deal(std::string  from, std::unique_ptr<StateValue>& to, const int count) :
     BaseRule({}), 
     from(std::move(from)),
-    to(to),
+    to(std::move(to)),
     count(count) 
     {}
 

@@ -8,13 +8,13 @@
 namespace GameSpecification{
     class Extend : public BaseRule{
         public:
-            Extend(std::string  target, const std::shared_ptr<StateValue>& list);
+            Extend(std::string  target, std::unique_ptr<StateValue>& list);
 
             void process(GameState&) override; 
 
         private:
             std::string target;
-            std::weak_ptr<StateValue> list;
+            std::unique_ptr<StateValue> list;
     };
 }
 #endif
