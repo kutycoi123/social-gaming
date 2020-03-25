@@ -1,5 +1,4 @@
 #include "GameState.h"
-#include <optional>
 
 GameState::GameState() :
     gameStarted(false)
@@ -17,7 +16,7 @@ bool GameState::isGameStarted() const {
     return gameStarted;
 }
 
-std::optional<std::weak_ptr<StateValue>> GameState::getConstant(const std::string& key) {
+std::optional<std::weak_ptr<const StateValue>> GameState::getConstant(const std::string& key) {
     auto it = constantsMap.find(key);
     return (it != constantsMap.end()) ?
         std::make_optional(std::weak_ptr(it->second)) :
@@ -29,6 +28,14 @@ std::optional<std::weak_ptr<StateValue>> GameState::getVariable(const std::strin
     return (it != variablesMap.end()) ?
            std::make_optional(std::weak_ptr(it->second)) :
            std::nullopt;
+}
+
+std::optional<std::weak_ptr<const StateValue>> GameState::getConstantOrVariable(const std::string &key) {
+    auto constantValue = getConstant(key);
+    if (constantValue.has_value()){
+        return constantValue;
+    }
+    return getVariable(key);
 }
 
 std::optional<std::weak_ptr<StateValue>> GameState::getPerPlayerValue(const std::string& key) {
@@ -45,20 +52,52 @@ std::optional<std::weak_ptr<StateValue>> GameState::getPerAudienceValue(const st
            std::nullopt;
 }
 
-void GameState::addConstant(const std::string &key, const StateValue& value) {
-    // TODO: Implement this method
+void GameState::addValue(const std::string &key, StateValueBoolean value, const ValueType& valueType) {
+    auto valuePtr = std::make_shared<StateValueBoolean>(std::move(value));
+    std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
+    insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addVariable(const std::string &key, const StateValue& value) {
-    // TODO: Implement this method
+void GameState::addValue(const std::string &key, StateValueNumber value, const ValueType& valueType) {
+    auto valuePtr = std::make_shared<StateValueNumber>(std::move(value));
+    std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
+    insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addPerPlayer(const std::string &key, const StateValue& value) {
-    // TODO: Implement this method
+void GameState::addValue(const std::string &key, StateValueString value, const ValueType& valueType) {
+    auto valuePtr = std::make_shared<StateValueString>(std::move(value));
+    std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
+    insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addPerAudience(const std::string &key, const StateValue& value) {
-    // TODO: Implement this method
+void GameState::addValue(const std::string &key, StateValueList value, const ValueType& valueType) {
+    auto valuePtr = std::make_shared<StateValueList>(std::move(value));
+    std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
+    insertIntoCorrectMap(valueType, pair);
+}
+
+void GameState::addValue(const std::string &key, StateValueMap value, const ValueType& valueType) {
+    auto valuePtr = std::make_shared<StateValueMap>(std::move(value));
+    std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
+    insertIntoCorrectMap(valueType, pair);
+}
+
+void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
+                                     std::pair<std::string, std::shared_ptr<StateValue>>& pair) {
+    switch (valueType){
+        case CONSTANT:
+            constantsMap.insert(std::move(pair));
+            break;
+        case VARIABLE:
+            variablesMap.insert(std::move(pair));
+            break;
+        case PER_PLAYER:
+            perPlayerMap.insert(std::move(pair));
+            break;
+        case PER_AUDIENCE:
+            perAudienceMap.insert(std::move(pair));
+            break;
+    }
 }
 
 void GameState::addConfig(const GameConfig& gameConfig){
