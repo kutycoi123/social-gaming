@@ -7,13 +7,13 @@ namespace GameSpecification{
 
 	class InputChoice: public BaseRule{
 		public:
-			InputChoice(const std::string&, const std::string&, const SpecValue&, const std::string&, double);
+			InputChoice(std::string , std::string , std::unique_ptr<StateValue>&, std::string , double);
 			void process(GameState&) override; 
 
 		private:
 			std::string to;	//represents field "to" in input choice rule
 			std::string prompt; 
-			SpecValue choices;
+			std::unique_ptr<StateValue> choices;
 			std::string result; //represents field "result" in input choice rule
 			std::optional<double> timeout;
 			

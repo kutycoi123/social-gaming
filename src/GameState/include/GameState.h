@@ -7,10 +7,6 @@
 #include "GameConfig.h"
 #include "StateValue.h"
 
-using ValueType = boost::make_recursive_variant<std::string, int,
-        bool, double, std::vector<boost::recursive_variant_>,
-        std::unordered_map<std::string, boost::recursive_variant_>>::type;
-
 class GameState {
 public:
     GameState();
