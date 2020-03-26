@@ -28,7 +28,7 @@ bool GameSession::isGameStarted() const {
 }
 
 void GameSession::startGame() {
-    game->startGame(playerList.users);
+    game->startGame(playerList.users, audienceList.users);
 }
 
 void GameSession::endGame() {
@@ -90,5 +90,19 @@ void GameSession::removePlayer(const std::weak_ptr<User>& player) noexcept{
     
     if(playerIterator != playerList.users.end()){
         playerList.users.erase(playerIterator);
+    }
+}
+
+void GameSession::addAudienceMember(const std::weak_ptr<User>& audienceMember) noexcept {
+    audienceList.users.push_back(audienceMember);
+}
+
+void GameSession::removeAudienceMember(const std::weak_ptr<User> &audienceMember) noexcept {
+    auto audienceIterator = std::find_if(audienceList.users.begin(), audienceList.users.end(), [audienceMember](std::weak_ptr<User> listMember){
+        return audienceMember.lock()->getUserId() == listMember.lock()->getUserId();
+    });
+
+    if(audienceIterator != audienceList.users.end()){
+        audienceList.users.erase(audienceIterator);
     }
 }
