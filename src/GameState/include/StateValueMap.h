@@ -9,6 +9,7 @@
 class StateValueMap : public StateValue {
 public:
     StateValueMap();
+    StateValueMap(const std::unordered_map<std::string, std::shared_ptr<StateValue>>&);
     StateValue::ValueType getValueType() override;
     std::unordered_map<std::string, std::shared_ptr<StateValue>>& getMap();
     std::optional<std::weak_ptr<StateValue>> getValue(const std::string&);
@@ -16,8 +17,8 @@ public:
     void accept(GameStateVisitor &visitor) override;
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<StateValue>> stateValueMap;
     StateValue::ValueType valueType;
+    std::unordered_map<std::string, std::shared_ptr<StateValue>> stateValueMap;
 };
 
 #endif //SOCIALGAMING_STATEVALUEMAP_H
