@@ -12,6 +12,8 @@ namespace SpecTags{
 	std::string RULE_FOREACH_ELEMENT = "element";
 	std::string RULE_DISCARD_FROM = "from";
 	std::string RULE_DISCARD_COUNT = "count";
+	std::string RULE_SCORES_SCORE = "score";
+	std::string RULE_SCORES_ASCENDING = "ascending";
 }
 
 namespace RuleTags{
@@ -162,6 +164,16 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 				std::cout << "Discard parse failed: " << e.what() << "\n";
 				assert(false);
 			}
+		}
+		else if(ruleType == RuleTags::Scores){
+			try{
+ 		       	int score = currentRuleJson.at(SpecTags::RULE_SCORES_SCORE).get<int>();
+ 		       	bool ascending = currentRuleJson.at(SpecTags::RULE_SCORES_ASCENDING).get<bool>();
+				result = std::shared_ptr<BaseRule>(new Scores(score, ascending));
+ 		   }catch(json::exception &e){
+ 		       //TODO: Handle exception more properly
+ 		       std::cout << "Scores parse failed: " << e.what() << "\n";
+ 		   }
 		}
 		else{
 			//something horrible happened
