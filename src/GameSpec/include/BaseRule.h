@@ -10,7 +10,7 @@
 #include "GameState.h"
 
 namespace GameSpecification{
-	class BaseRule : public std::enable_shared_from_this<BaseRule>{
+	class BaseRule{
 		public:
 			explicit BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
             
@@ -20,7 +20,7 @@ namespace GameSpecification{
 
 
 			virtual void process(GameState& gameState) = 0;           
-
+			virtual ~BaseRule(){}
 		protected:
 			std::list<std::shared_ptr<BaseRule>> childRules;
             std::list<std::shared_ptr<BaseRule>> next;	

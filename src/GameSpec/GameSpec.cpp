@@ -90,6 +90,16 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
 		if(ruleType == RuleTags::ForEach){
 			//get params and setup rule with the child list, assign to result
+			try{
+				auto element = currentRuleJson.at("element").get<std::string>();
+				auto listJson = currentRuleJson.at("list");
+				if(listJson.is_string()){
+					auto list = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
+					result = std::shared_ptr<BaseRule>(new ForEach(childRules, list, element));
+				}
+			}catch(nlohmann::json::exception& e){
+				std::cout << "ForEach parse failed: " << e.what() << "\n";
+			}
 		}
 		else if(ruleType == RuleTags::Inparallel){
 			//get params and setup rule with the child list, assign to result
