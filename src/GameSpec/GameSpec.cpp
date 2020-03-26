@@ -10,6 +10,8 @@ namespace SpecTags{
 	std::string RULE_NAME = "rule";
 	std::string RULE_FOREACH_LIST = "list";
 	std::string RULE_FOREACH_ELEMENT = "element";
+	std::string RULE_DISCARD_FROM = "from";
+	std::string RULE_DISCARD_COUNT = "count";
 }
 
 namespace RuleTags{
@@ -150,6 +152,16 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		} 
 		else if(ruleType == RuleTags::Deal){
 			//setup rule, assign to result
+		}
+		else if(ruleType == RuleTags::Discard){
+			try{
+				std::string from = currentRuleJson.at(SpecTags::RULE_DISCARD_FROM).get<std::string>();
+				int count = currentRuleJson.at(SpecTags::RULE_DISCARD_COUNT).get<int>();
+				result = std::shared_ptr<BaseRule>(new Discard(from, count));
+			}catch(json::exception& e){
+				std::cout << "Discard parse failed: " << e.what() << "\n";
+				assert(false);
+			}
 		}
 		else{
 			//something horrible happened
