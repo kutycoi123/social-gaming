@@ -14,8 +14,10 @@ namespace GameSpecification{
 		public:
 			explicit BaseRule(const std::list<std::shared_ptr<BaseRule>>&);
             
-            void setNextPtr(const std::list<std::shared_ptr<BaseRule>>& ptr);
-			std::shared_ptr<BaseRule> getNextPtr() const noexcept;
+            void setNextPtr(const std::list<std::shared_ptr<BaseRule>>& ptrList);
+			void addNextPtr(const std::shared_ptr<BaseRule>& ptr);
+			std::list<std::shared_ptr<BaseRule>> getNextPtr() const noexcept;
+
 
 			virtual void process(GameState& gameState) = 0;           
 

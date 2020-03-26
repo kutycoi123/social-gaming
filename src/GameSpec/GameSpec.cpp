@@ -1,4 +1,5 @@
 #include "GameSpec.h"
+#include <iterator>
 #include <fstream>
 
 using GameSpecification::GameSpec;
@@ -72,9 +73,8 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		std::list<std::shared_ptr<BaseRule>> childRules {};
 		
 		//every rule list has an array of rules
-		std::list<nlohmann::json> subrules = currentRuleJson
-			.at(SpecTags::RULE_LIST)
-			.get<std::list<nlohmann::json>>();
+		auto subrules = currentRuleJson
+			.at(SpecTags::RULE_LIST);
 		
 		//recursively parse every rule in the array of rules
 		for (auto& subrule : subrules){
@@ -83,6 +83,10 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		} 
 
 		//configure make each (n)th childRule point to (n+1)th childRule, ignore last one
+		for(auto it = childRules.begin(); it != childRules.end(); ++it){
+			if(it == childRules.end()) break;
+			(*it)->addNextPtr(*(std::next(it, 1)));
+		}
 
 		if(ruleType == RuleTags::ForEach){
 			//get params and setup rule with the child list, assign to result
