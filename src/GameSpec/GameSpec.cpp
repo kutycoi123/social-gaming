@@ -73,12 +73,12 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		std::list<std::shared_ptr<BaseRule>> childRules {};
 		
 		//every rule list has an array of rules
-		auto subrules = currentRuleJson
+		auto subRules = currentRuleJson
 			.at(SpecTags::RULE_LIST);
 		
 		//recursively parse every rule in the array of rules
-		for (auto& subrule : subrules){
-			auto singleChildrule = recursivelyParseSpec(subrule);
+		for (auto& subRule : subRules){
+			auto singleChildrule = recursivelyParseSpec(subRule);
 			childRules.push_back(singleChildrule);
 		} 
 
@@ -100,6 +100,10 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 
 		//make last child point back to us
+		auto lastChild = childRules.rbegin();
+		if(lastChild != childRules.rend()){
+			(*lastChild)->addNextPtr(result);
+		}		
 	}
 	else{
 		//these rules should not have childs, so their processing is quite simple
