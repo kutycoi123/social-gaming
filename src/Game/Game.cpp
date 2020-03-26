@@ -19,7 +19,7 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::l
     importGameSpecRules();
 
     // Once the game has started, gameTick will end up being called.
-    gameState.startGame();
+    gameState.startGame(playerList, audienceList);
 }
 
 void Game::endGame() {
