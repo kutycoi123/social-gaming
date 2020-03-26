@@ -1,12 +1,15 @@
 #include "GameSpec.h"
 #include <iterator>
+#include <algorithm>
 #include <fstream>
 
 using GameSpecification::GameSpec;
-
+using json = nlohmann::json;
 namespace SpecTags{
 	std::string RULE_LIST = "rules";
 	std::string RULE_NAME = "rule";
+	std::string RULE_FOREACH_LIST = "list";
+	std::string RULE_FOREACH_ELEMENT = "element";
 }
 
 namespace RuleTags{
@@ -91,12 +94,35 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		if(ruleType == RuleTags::ForEach){
 			//get params and setup rule with the child list, assign to result
 			try{
-				auto element = currentRuleJson.at("element").get<std::string>();
-				auto listJson = currentRuleJson.at("list");
+				auto element = currentRuleJson.at(SpecTags::RULE_FOREACH_ELEMENT).get<std::string>();
+				auto listJson = currentRuleJson.at(SpecTags::RULE_FOREACH_LIST);
+				std::unique_ptr<StateValue> listPtr;
 				if(listJson.is_string()){
-					auto list = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
-					result = std::shared_ptr<BaseRule>(new ForEach(childRules, list, element));
+					listPtr = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
+				}else if(listJson.is_array()){
+					std::vector<std::shared_ptr<StateValue>> listValue;
+					//Parse all elements inside list
+					std::transform(listJson.begin(), listJson.end(), 
+							std::back_inserter(listValue), 
+							[](const json& listElem){
+								if(listElem.is_number()){
+									int value = listElem.get<int>();
+									return std::shared_ptr<StateValue>(new StateValueNumber(value));
+								}else if(listElem.is_string()){
+									std::string value = listElem.get<std::string>();
+									return std::shared_ptr<StateValue>(new StateValueString(value));
+								}else{
+									std::cout << "Unhandled list element type\n";
+									assert(false);
+								}
+							});
+					listPtr = std::unique_ptr<StateValue>(new StateValueList(listValue));
+				}else{
+					std::cout << "Unhandled ForEach list type\n";
+					assert(false);
 				}
+				result = std::shared_ptr<BaseRule>(new ForEach(childRules, listPtr, element));
+
 			}catch(nlohmann::json::exception& e){
 				std::cout << "ForEach parse failed: " << e.what() << "\n";
 			}
