@@ -4,8 +4,10 @@ GameState::GameState() :
     gameStarted(false)
     {}
 
-void GameState::startGame() {
+void GameState::startGame(const std::list<std::weak_ptr<User>>& playerList, const std::list<std::weak_ptr<User>>& audienceList) {
     gameStarted = true;
+    initializePerPlayerMap(playerList);
+    initializePerAudienceMap(audienceList);
 }
 
 void GameState::endGame() {
@@ -38,17 +40,19 @@ std::optional<std::weak_ptr<const StateValue>> GameState::getConstantOrVariable(
     return getVariable(key);
 }
 
-std::optional<std::weak_ptr<StateValue>> GameState::getPerPlayerValue(const std::string& key) {
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+        GameState::getPerPlayerValue(const std::string& key) {
     auto it = perPlayerMap.find(key);
     return (it != perPlayerMap.end()) ?
-        std::make_optional(std::weak_ptr(it->second)) :
-        std::nullopt;
+           std::make_optional(std::reference_wrapper(it->second)) :
+           std::nullopt;
 }
 
-std::optional<std::weak_ptr<StateValue>> GameState::getPerAudienceValue(const std::string& key) {
-    auto it = perAudienceMap.find(key);
-    return (it != perAudienceMap.end()) ?
-           std::make_optional(std::weak_ptr(it->second)) :
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+        GameState::getPerAudienceValue(const std::string& key) {
+    auto it = perPlayerMap.find(key);
+    return (it != perPlayerMap.end()) ?
+           std::make_optional(std::reference_wrapper(it->second)) :
            std::nullopt;
 }
 
@@ -92,14 +96,36 @@ void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
             variablesMap.insert(std::move(pair));
             break;
         case PER_PLAYER:
-            perPlayerMap.insert(std::move(pair));
+            perPlayerInitialMap.insert(std::move(pair));
             break;
         case PER_AUDIENCE:
-            perAudienceMap.insert(std::move(pair));
+            perAudienceInitialMap.insert(std::move(pair));
             break;
     }
 }
 
 void GameState::addConfig(const GameConfig& gameConfig){
     this->gameConfig = gameConfig;
+}
+
+void GameState::initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList) {
+    for (const auto& value : perPlayerInitialMap){
+        std::string key = value.first;
+        perPlayerMap[key] = std::vector<StateValueUserPair>();
+        for (const auto& user : playerList) {
+            perPlayerMap[key].push_back(StateValueUserPair{user, value.second});
+        }
+        perPlayerInitialMap.erase(key);
+    }
+}
+
+void GameState::initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList) {
+    for (const auto& value : perAudienceInitialMap){
+        std::string key = value.first;
+        perAudienceMap[key] = std::vector<StateValueUserPair>();
+        for (const auto& user : audienceList){
+            perAudienceMap[key].push_back(StateValueUserPair{user, value.second});
+        }
+        perAudienceInitialMap.erase(key);
+    }
 }

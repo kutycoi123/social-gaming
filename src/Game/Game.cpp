@@ -12,13 +12,14 @@ bool Game::isGameStarted() const {
     return gameState.isGameStarted();
 }
 
-void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
-    gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
+void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::list<std::weak_ptr<User>>& audience) {
+    playerList.insert(playerList.end(), players.begin(), players.end());
+    audienceList.insert(audienceList.end(), audience.begin(), audience.end());
     addMessages(" User has started the game...\n");
     importGameSpecRules();
 
     // Once the game has started, gameTick will end up being called.
-    gameState.startGame();
+    gameState.startGame(playerList, audienceList);
 }
 
 void Game::endGame() {
