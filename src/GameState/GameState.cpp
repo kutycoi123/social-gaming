@@ -40,19 +40,19 @@ std::optional<std::weak_ptr<const StateValue>> GameState::getConstantOrVariable(
     return getVariable(key);
 }
 
-std::optional<std::weak_ptr<StateValue>> GameState::getPerPlayerValue(const std::string& key) {
-    // TODO: Return vector from perPlayerMap
-    auto it = perPlayerInitialMap.find(key);
-    return (it != perPlayerInitialMap.end()) ?
-        std::make_optional(std::weak_ptr(it->second)) :
-        std::nullopt;
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+        GameState::getPerPlayerValue(const std::string& key) {
+    auto it = perPlayerMap.find(key);
+    return (it != perPlayerMap.end()) ?
+           std::make_optional(std::reference_wrapper(it->second)) :
+           std::nullopt;
 }
 
-std::optional<std::weak_ptr<StateValue>> GameState::getPerAudienceValue(const std::string& key) {
-    // TODO: Return vector from perAudienceMap
-    auto it = perAudienceInitialMap.find(key);
-    return (it != perAudienceInitialMap.end()) ?
-           std::make_optional(std::weak_ptr(it->second)) :
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+        GameState::getPerAudienceValue(const std::string& key) {
+    auto it = perPlayerMap.find(key);
+    return (it != perPlayerMap.end()) ?
+           std::make_optional(std::reference_wrapper(it->second)) :
            std::nullopt;
 }
 
