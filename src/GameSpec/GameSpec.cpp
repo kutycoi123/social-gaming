@@ -9,26 +9,26 @@ namespace SpecTags{
 }
 
 namespace RuleTags{
-	std::string Add = "add"; 
-	std::string Deal = "deal"; 
-	std::string Discard = "discard"; 
-	std::string Extend = "extend"; 
-	std::string ForEach = "foreach"; //contains child rules
-	std::string GlobalMessage = "global-message"; 
-	std::string Inparallel = "inparallel"; //contains child rules
-	std::string InputChoice = "input-choice"; 
-	std::string InputText = "input-text";
-	std::string InputVote = "input-vote";
-	std::string Loop = "loop"; //contains child rules
-	std::string Message = "message"; //missing cmake target
-	std::string Parallelfor = "parallelfor"; //contains child rules
-	std::string Reverse = "reverse"; 
-	std::string Scores = "scores"; 
-	std::string Shuffle = "shuffle"; 
-	std::string Sort = "sort"; 
-	std::string Switch = "switch"; //contains child rules //missing cmake target
-	std::string Timer = "timer"; //contains child rules
-	std::string When = "when"; //contains child rules //missing cmake target
+	const std::string Add = "add";
+    const std::string Deal = "deal";
+    const std::string Discard = "discard";
+    const std::string Extend = "extend";
+    const std::string ForEach = "foreach"; //contains child rules
+    const std::string GlobalMessage = "global-message";
+    const std::string Inparallel = "inparallel"; //contains child rules
+    const std::string InputChoice = "input-choice";
+    const std::string InputText = "input-text";
+    const std::string InputVote = "input-vote";
+    const std::string Loop = "loop"; //contains child rules
+    const std::string Message = "message"; //missing cmake target
+    const std::string Parallelfor = "parallelfor"; //contains child rules
+    const std::string Reverse = "reverse";
+    const std::string Scores = "scores";
+    const std::string Shuffle = "shuffle";
+    const std::string Sort = "sort";
+    const std::string Switch = "switch"; //contains child rules //missing cmake target
+    const std::string Timer = "timer"; //contains child rules
+    const std::string When = "when"; //contains child rules //missing cmake target
 }
 
 GameSpec::GameSpec(const nlohmann::json& fullFileJson) : rules({}){
@@ -89,28 +89,88 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 		else if(ruleType == RuleTags::Inparallel){
 			//get params and setup rule with the child list, assign to result
-		}
+		} else if(ruleType == RuleTags::Parallelfor){
+            //get params and setup rule with the child list, assign to result
+        }
 		else{
 			//something horrible happened
 			assert(false);
 		}
+		///
+
+		///
 
 		//make last child point back to us
 	}
 	else{
 		//these rules should not have childs, so their processing is quite simple
 		//these are the non-recursive parts
-
+        //1 rules field. only .
 		if(ruleType == RuleTags::Add){
+		    //check each field. crate the right stateValue,
+		    //add into the constructor.
+		    //
 			//setup rule, assign to result
-		} 
-		else if(ruleType == RuleTags::Deal){
-			//setup rule, assign to result
-		}
+
+            std::string to = currentRuleJson.at( "to");
+            int value = currentRuleJson.at("value");
+            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
+            auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+            addRule(toAdd);
+
+		} else if(ruleType == RuleTags::Deal) {
+            std::string to = currentRuleJson.at( "to");
+            int value = currentRuleJson.at("value");
+            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
+            auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+            addRule(toAdd);
+
+            //setup rule, assign to result
+        } else if(ruleType == RuleTags::Discard){
+            std::string from = currentRuleJson.at( "from");
+            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueList>(value);
+            int value = currentRuleJson.at("to");
+
+		} else if(ruleType == RuleTags::Extend){
+
+        } else if(ruleType == RuleTags:: GlobalMessage){
+
+        } else if(ruleType == RuleTags::GlobalMessage){
+
+        } else if(ruleType == RuleTags::InputChoice){
+
+        } else if(ruleType == RuleTags::InputText){
+
+        } else if(ruleType == RuleTags::InputVote){
+
+        } else if(ruleType == RuleTags::Loop){
+
+        } else if(ruleType == RuleTags::Message){
+
+        } else if(ruleType == RuleTags::Reverse){
+
+        } else if(ruleType == RuleTags::Scores){
+
+        } else if(ruleType == RuleTags::Shuffle){
+
+        } else if(ruleType == RuleTags::Sort){
+
+        }else if(ruleType == RuleTags::Switch){
+
+        }else if(ruleType == RuleTags::Timer){
+
+        }else if(ruleType == RuleTags::When){
+
+        }
+
 		else{
 			//something horrible happened
 			assert(false);
 		}
+
+
+        Discard
+
 
 	}
 
