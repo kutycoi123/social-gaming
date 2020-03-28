@@ -24,7 +24,7 @@ bool GameSession::isOwner(const UserId& user) const {
 }
 
 bool GameSession::isGameStarted() const {
-    return game->isGameStarted();
+    return game->isStarted();
 }
 
 void GameSession::startGame() {
@@ -48,7 +48,7 @@ void GameSession::addMessagesToGame(const std::string &message) noexcept{
 std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages() noexcept{
     std::list<std::pair<UserId, std::string>> result = {};
 
-    if (game->isGameStarted()) {
+    if (game->isStarted()) {
         game->gameTick();
 
         auto gameMessages = game->updateAndGetAllMessages();
