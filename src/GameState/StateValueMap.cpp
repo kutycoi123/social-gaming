@@ -23,3 +23,6 @@ std::optional<std::weak_ptr<StateValue>> StateValueMap::getValue(const std::stri
 void StateValueMap::accept(GameStateVisitor &visitor) {
     visitor.visit(*this);
 }
+void StateValueMap::accept(GameStateVisitor &visitor, StateValue* stateValue){
+
+}

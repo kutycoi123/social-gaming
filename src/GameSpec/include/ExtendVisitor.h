@@ -36,6 +36,9 @@ public:
         //auto valueList = stateValue.getMap();
         //valueList.insert(target.begin(), target.end());
     }
+    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
+
+    }
 
 };
 #endif //SOCIALGAMING_EXTENDVISITOR_H

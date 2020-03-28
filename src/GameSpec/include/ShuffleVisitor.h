@@ -38,6 +38,10 @@ public:
         std::shuffle(elems.begin(), elems.end(), std::default_random_engine(seed));
     }
 
+    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
+
+    }
+
 };
 
 #endif //SOCIALGAMING_SHUFFLEVISITOR_H

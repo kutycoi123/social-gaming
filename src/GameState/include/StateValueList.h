@@ -11,6 +11,7 @@ public:
     std::vector<std::shared_ptr<StateValue>>& getList();
 
     void accept(GameStateVisitor &visitor) override;
+    void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
 
 private:
     std::vector<std::shared_ptr<StateValue>> stateValueList;

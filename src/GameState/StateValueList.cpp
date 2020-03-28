@@ -16,3 +16,6 @@ std::vector<std::shared_ptr<StateValue>>& StateValueList::getList() {
 void StateValueList::accept(GameStateVisitor &visitor) {
     visitor.visit(*this);
 }
+void StateValueList::accept(GameStateVisitor &visitor, StateValue* stateValue){
+
+}

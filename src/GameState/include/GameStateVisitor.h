@@ -15,6 +15,7 @@ public:
     virtual void visit(StateValueString& stateValue) = 0;
     virtual void visit(StateValueList& stateValue) = 0;
     virtual void visit(StateValueMap& stateValue) = 0;
+    virtual void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) = 0;
 };
 
 #endif
