@@ -2,11 +2,22 @@
 #include <fstream>
 
 using GameSpecification::GameSpec;
+using json = nlohmann::json;
+
+
+
 
 namespace SpecTags{
-	std::string RULE_LIST = "rules";
-	std::string RULE_NAME = "rule";
+    std::string RULE_LIST = "rules";
+    std::string RULE_NAME = "rule";
+    std::string LIST = "list";
+    std::string ELEMENT = "element";
+    std::string FROM = "from";
+    std::string COUNT = "count";
+    std::string SCORE = "score";
+    std::string ASCENDING = "ascending";
 }
+
 
 namespace RuleTags{
 	const std::string Add = "add";
@@ -92,6 +103,13 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		} else if(ruleType == RuleTags::Parallelfor){
             //get params and setup rule with the child list, assign to result
         }
+        else if(ruleType == RuleTags::Timer){
+            
+
+            //get params and setup rule with the child list, assign to result
+        }else if(ruleType == RuleTags::Loop){
+
+        }
 		else{
 			//something horrible happened
 			assert(false);
@@ -106,12 +124,12 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		//these rules should not have childs, so their processing is quite simple
 		//these are the non-recursive parts
         //1 rules field. only .
+
 		if(ruleType == RuleTags::Add){
 		    //check each field. crate the right stateValue,
 		    //add into the constructor.
 		    //
 			//setup rule, assign to result
-
             std::string to = currentRuleJson.at( "to");
             int value = currentRuleJson.at("value");
             std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
@@ -119,33 +137,51 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             addRule(toAdd);
 
 		} else if(ruleType == RuleTags::Deal) {
-            std::string to = currentRuleJson.at( "to");
-            int value = currentRuleJson.at("value");
-            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
-            auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+
+            std::unique_ptr<StateValue> stateValuePointer = nullptr;
+            std::vector<std::shared_ptr<StateValue>> listInRule;
+            std::string from = currentRuleJson.at( "from");
+            auto to = currentRuleJson.at("to");
+            createStateList(to,stateValuePointer);//changes statevaluePointer to stateList with populated List
+            int count = currentRuleJson.at("count");
+            auto toAdd = std::make_shared<GameSpecification::Deal>(GameSpecification::Deal(from, stateValuePointer,count));
             addRule(toAdd);
+            result = toAdd;
 
             //setup rule, assign to result
-        } else if(ruleType == RuleTags::Discard){
-            std::string from = currentRuleJson.at( "from");
-            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueList>(value);
-            int value = currentRuleJson.at("to");
+        } else if(ruleType == RuleTags::Extend){
+            std::unique_ptr<StateValue> stateValuePointer = nullptr;
+            std::string target = currentRuleJson.at( "target");
+            auto list = currentRuleJson.at( "list");
 
-		} else if(ruleType == RuleTags::Extend){
+            if(list.is_array()) {
+                std::vector<std::shared_ptr<StateValue>> listValue;
+                createStateList(list,stateValuePointer);//ptr is reference
+            } else if(list.is_string()) {
+                stateValuePointer = std::make_unique<StateValueString>(list);
+            }
+
+            if(stateValuePointer) {
+                auto toAdd = std::make_shared<GameSpecification::Extend>(GameSpecification::Extend(target, stateValuePointer));
+                addRule(toAdd);
+                result = toAdd;
+            }
 
         } else if(ruleType == RuleTags:: GlobalMessage){
 
-        } else if(ruleType == RuleTags::GlobalMessage){
+            std::string value = currentRuleJson.at( "value");
+            auto toAdd = std::make_shared<GameSpecification::GlobalMessage>(GameSpecification::GlobalMessage(value));
+            addRule(toAdd);
+            result = toAdd;
 
-        } else if(ruleType == RuleTags::InputChoice){
+        }  else if(ruleType == RuleTags::InputChoice){
+
 
         } else if(ruleType == RuleTags::InputText){
 
         } else if(ruleType == RuleTags::InputVote){
 
-        } else if(ruleType == RuleTags::Loop){
-
-        } else if(ruleType == RuleTags::Message){
+        }  else if(ruleType == RuleTags::Message){
 
         } else if(ruleType == RuleTags::Reverse){
 
@@ -157,8 +193,6 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
         }else if(ruleType == RuleTags::Switch){
 
-        }else if(ruleType == RuleTags::Timer){
-
         }else if(ruleType == RuleTags::When){
 
         }
@@ -169,12 +203,29 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 
 
-        Discard
-
-
 	}
 
 	return result;
+}
+
+void GameSpec::createStateList(json list,std::unique_ptr<StateValue> &ptr) {//TODO: move this inside StateList.
+    std::vector<std::shared_ptr<StateValue>> listValue;
+    std::transform(list.begin(), list.end(),
+       std::back_inserter(listValue),
+       [](const json& listElem){
+                       if(listElem.is_number()){
+                           int value = listElem.get<int>();
+                           return std::shared_ptr<StateValue>(new StateValueNumber(value));
+                       }else if(listElem.is_string()){
+                           std::string value = listElem.get<std::string>();
+                           return std::shared_ptr<StateValue>(new StateValueString(value));
+                       }else{
+                           std::cout << "Unhandled list element type\n";
+                           assert(false);
+                       }
+                   });
+
+    ptr = std::make_unique<StateValueList>(listValue);
 }
 
 
