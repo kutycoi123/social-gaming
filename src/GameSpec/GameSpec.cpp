@@ -19,6 +19,8 @@ namespace SpecTags{
     std::string COUNT = "count";
     std::string SCORE = "score";
     std::string ASCENDING = "ascending";
+    std::string DURATION = "duration";
+    std::string MODE = "mode";
 
 }
 
@@ -111,23 +113,8 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 				if(listJson.is_string()){
 					listPtr = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
 				}else if(listJson.is_array()){
-					std::vector<std::shared_ptr<StateValue>> listValue;
-					//Parse all elements inside list
-					std::transform(listJson.begin(), listJson.end(), 
-							std::back_inserter(listValue), 
-							[](const json& listElem){
-								if(listElem.is_number()){
-									int value = listElem.get<int>();
-									return std::shared_ptr<StateValue>(new StateValueNumber(value));
-								}else if(listElem.is_string()){
-									std::string value = listElem.get<std::string>();
-									return std::shared_ptr<StateValue>(new StateValueString(value));
-								}else{
-									std::cout << "Unhandled list element type\n";
-									assert(false);
-								}
-							});
-					listPtr = std::unique_ptr<StateValue>(new StateValueList(listValue));
+				    createStateList(listJson,listPtr);
+
 				}else{
 					std::cout << "Unhandled ForEach list type\n";
 					assert(false);
@@ -140,23 +127,26 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 		else if(ruleType == RuleTags::Inparallel){
 			//get params and setup rule with the child list, assign to result
-		} else if(ruleType == RuleTags::Parallelfor){
+		}
+		else if(ruleType == RuleTags::Parallelfor){
             //get params and setup rule with the child list, assign to result
         }
         else if(ruleType == RuleTags::Timer){
-            
+
+            double duration = currentRuleJson.at(SpecTags::DURATION).get<std::double_t>();
+            std::string mode = currentRuleJson.at(SpecTags::MODE).get<std::string>();
+            bool flag = (mode == "track");
+            result = std::shared_ptr<BaseRule>(new Timer(childRules, duration, mode,flag));
 
             //get params and setup rule with the child list, assign to result
-        }else if(ruleType == RuleTags::Loop){
+        }
+        else if(ruleType == RuleTags::Loop){
 
         }
 		else{
 			//something horrible happened
 			assert(false);
 		}
-		///
-
-		///
 
 		//make last child point back to us
 		auto lastChild = childRules.rbegin();
@@ -170,10 +160,6 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
         //1 rules field. only .
 
 		if(ruleType == RuleTags::Add){
-		    //check each field. crate the right stateValue,
-		    //add into the constructor.
-		    //
-			//setup rule, assign to result
 
             std::string to = currentRuleJson.at( "to");
             int value = currentRuleJson.at("value");
@@ -181,7 +167,29 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
             addRule(toAdd);
 
-		} else if(ruleType == RuleTags::Deal) {
+		}
+		else if(ruleType == RuleTags::Discard){
+            try{
+                std::string from = currentRuleJson.at(SpecTags::FROM).get<std::string>();
+                int count = currentRuleJson.at(SpecTags::COUNT).get<int>();
+                result = std::shared_ptr<BaseRule>(new Discard(from, count));
+            }catch(json::exception& e){
+                std::cout << "Discard parse failed: " << e.what() << "\n";
+                assert(false);
+            }
+        }
+        else if(ruleType == RuleTags::Scores){
+            try{
+                int score = currentRuleJson.at(SpecTags::SCORE).get<int>();
+                bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
+                result = std::shared_ptr<BaseRule>(new Scores(score, ascending));
+            }catch(json::exception &e){
+                //TODO: Handle exception more properly
+                std::cout << "Scores parse failed: " << e.what() << "\n";
+            }
+        }
+
+		else if(ruleType == RuleTags::Deal) {
 
             std::unique_ptr<StateValue> stateValuePointer = nullptr;
             std::vector<std::shared_ptr<StateValue>> listInRule;
@@ -226,42 +234,21 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
         } else if(ruleType == RuleTags::InputVote){
 
-        }  else if(ruleType == RuleTags::Message){
+        } else if(ruleType == RuleTags::Message){
 
         } else if(ruleType == RuleTags::Reverse){
-
-        } else if(ruleType == RuleTags::Scores){
 
         } else if(ruleType == RuleTags::Shuffle){
 
         } else if(ruleType == RuleTags::Sort){
 
-        }else if(ruleType == RuleTags::Switch){
+        } else if(ruleType == RuleTags::Switch){
 
-        }else if(ruleType == RuleTags::When){
+        } else if(ruleType == RuleTags::When){
 
         }
-		
-		else if(ruleType == RuleTags::Discard){
-			try{
-				std::string from = currentRuleJson.at(SpecTags::FROM).get<std::string>();
-				int count = currentRuleJson.at(SpecTags::COUNT).get<int>();
-				result = std::shared_ptr<BaseRule>(new Discard(from, count));
-			}catch(json::exception& e){
-				std::cout << "Discard parse failed: " << e.what() << "\n";
-				assert(false);
-			}
-		}
-		else if(ruleType == RuleTags::Scores){
-			try{
- 		       	int score = currentRuleJson.at(SpecTags::SCORE).get<int>();
- 		       	bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
-				result = std::shared_ptr<BaseRule>(new Scores(score, ascending));
- 		   }catch(json::exception &e){
- 		       //TODO: Handle exception more properly
- 		       std::cout << "Scores parse failed: " << e.what() << "\n";
- 		   }
-		}
+
+
     	else{
 			//something horrible happened
 			assert(false);
