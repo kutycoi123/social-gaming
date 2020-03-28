@@ -17,6 +17,7 @@ namespace SpecTags{
     std::string ELEMENT = "element";
     std::string FROM = "from";
     std::string TO = "to";
+    std::string TRACK = "track";
     std::string PROMPT = "prompt";
     std::string TARGET = "target";
     std::string CHOICES = "choices";
@@ -48,6 +49,7 @@ namespace RuleTags{
     const std::string Message = "message"; //missing cmake target
     const std::string Parallelfor = "parallelfor"; //contains child rules
     const std::string Reverse = "reverse";
+
     const std::string Scores = "scores";
     const std::string Shuffle = "shuffle";
     const std::string Sort = "sort";
@@ -143,9 +145,8 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
             double duration = currentRuleJson.at(SpecTags::DURATION).get<std::double_t>();
             std::string mode = currentRuleJson.at(SpecTags::MODE).get<std::string>();
-            bool flag = (mode == "track");
+            bool flag = (mode == SpecTags::TRACK);
             result = std::shared_ptr<BaseRule>(new Timer(childRules, duration, mode,flag));
-
             //get params and setup rule with the child list, assign to result
         }
         else if(ruleType == RuleTags::Loop){
@@ -169,9 +170,9 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
 		if(ruleType == RuleTags::Add){
 
-            std::string to = currentRuleJson.at( "to");
-            int value = currentRuleJson.at("value");
-            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
+            std::string to = currentRuleJson.at( SpecTags::TO);
+            std::string value = currentRuleJson.at(SpecTags::VALUE);
+            std::unique_ptr<StateValue> ptr = std::make_unique<StateValueString>(value);
             auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
             addRule(toAdd);
 
