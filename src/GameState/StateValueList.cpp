@@ -5,6 +5,7 @@ StateValueList::StateValueList() :
         valueType(StateValue::LIST)
 {}
 
+
 StateValueList::StateValueList(const std::vector<std::shared_ptr<StateValue>>& valueList)
     : valueType(StateValue::LIST), stateValueList(valueList)
     {}

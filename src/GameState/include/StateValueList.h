@@ -7,8 +7,11 @@
 class StateValueList : public StateValue {
 public:
     StateValueList();
+
     StateValueList(const std::vector<std::shared_ptr<StateValue>>&);
+
     StateValue::ValueType getValueType() override;
+
     std::vector<std::shared_ptr<StateValue>>& getList();
 
     void accept(GameStateVisitor &visitor) override;
