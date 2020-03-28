@@ -170,8 +170,8 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             std::string to = currentRuleJson.at( SpecTags::TO);
             std::string value = currentRuleJson.at(SpecTags::VALUE);
             std::unique_ptr<StateValue> ptr = std::make_unique<StateValueString>(value);
-            auto toAdd = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
-            addRule(toAdd);
+            result = std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+
 
 		}
 		else if(ruleType == RuleTags::Discard){
@@ -197,9 +197,9 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             auto to = currentRuleJson.at(SpecTags::TO);
             createStateList(to,stateValuePointer);//changes statevaluePointer to stateList with populated List
             int count = currentRuleJson.at(SpecTags::COUNT);
-            auto toAdd = std::make_shared<GameSpecification::Deal>(GameSpecification::Deal(from, stateValuePointer,count));
-            addRule(toAdd);
-            result = toAdd;
+            result = std::make_shared<GameSpecification::Deal>(GameSpecification::Deal(from, stateValuePointer,count));
+
+
 
             //setup rule, assign to result
         } else if(ruleType == RuleTags::Extend){
@@ -215,24 +215,23 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             }
 
             if(stateValuePointer) {
-                auto toAdd = std::make_shared<GameSpecification::Extend>(GameSpecification::Extend(target, stateValuePointer));
-                addRule(toAdd);
-                result = toAdd;
+                result = std::make_shared<GameSpecification::Extend>(GameSpecification::Extend(target, stateValuePointer));
+
+
             }
 
         } else if(ruleType == RuleTags:: GlobalMessage){
 
             std::string value = currentRuleJson.at( SpecTags::VALUE);
-            auto toAdd = std::make_shared<GameSpecification::GlobalMessage>(GameSpecification::GlobalMessage(value));
-            addRule(toAdd);
-            result = toAdd;
+            result = std::make_shared<GameSpecification::GlobalMessage>(GameSpecification::GlobalMessage(value));
+
 
         } else if(ruleType == RuleTags::InputChoice){
-		    
+
             std::unique_ptr<StateValue> stateValuePointer ;
             std::string to = currentRuleJson.at( SpecTags::TO).get<std::string>();
             std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
-            std::string result = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
+            std::string res = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
             double timeout = currentRuleJson.at( SpecTags::TIMEOUT).get<std::double_t >();
 
             auto choices = currentRuleJson.at( SpecTags::CHOICES);
@@ -240,16 +239,34 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
             if(choices.is_array()) {
                 std::vector<std::shared_ptr<StateValue>> listValue;
                 createStateList(choices,stateValuePointer);//ptr is reference
-            } else if(choices.is_string()) {
+            } else if (choices.is_string()) {
                 stateValuePointer = std::make_unique<StateValueString>(choices);
             }
-            auto toAdd = std::make_shared<GameSpecification::InputChoice>(GameSpecification::InputChoice(to,prompt,stateValuePointer,result,timeout));
-            addRule(toAdd);
+            auto toAdd = std::make_shared<GameSpecification::InputChoice>(GameSpecification::InputChoice(to,prompt,stateValuePointer,res,timeout));
+            result = toAdd;
 
 
-        } else if(ruleType == RuleTags::InputText){
+        } else if (ruleType == RuleTags::InputText){
+            std::string to = currentRuleJson.at( SpecTags::TO).get<std::string>();
+            std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
+            std::string res = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
+            double timeout = currentRuleJson.at( SpecTags::TIMEOUT).get<std::double_t >();
 
-        } else if(ruleType == RuleTags::InputVote){
+            result = std::make_shared<GameSpecification::InputText>(GameSpecification::InputText(to,prompt,res,timeout));
+
+
+        } else if (ruleType == RuleTags::InputVote){
+            std::unique_ptr<StateValue> stateValuePointer;
+            std::string to = currentRuleJson.at( SpecTags::TO).get<std::string>();
+            std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
+            std::string res = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
+            double timeout = currentRuleJson.at( SpecTags::TIMEOUT).get<std::double_t >();
+            std::string choices = currentRuleJson.at( SpecTags::CHOICES).get<std::string>();
+
+
+                //make choices string value.
+            result = std::make_shared<GameSpecification::InputVote>(GameSpecification::InputVote(to,prompt,choices,res,timeout));
+
 
         } else if(ruleType == RuleTags::Message){
 
