@@ -1,11 +1,19 @@
 #include "GameSpec.h"
+#include <iterator>
+#include <algorithm>
 #include <fstream>
 
 using GameSpecification::GameSpec;
-
+using json = nlohmann::json;
 namespace SpecTags{
 	std::string RULE_LIST = "rules";
 	std::string RULE_NAME = "rule";
+	std::string RULE_FOREACH_LIST = "list";
+	std::string RULE_FOREACH_ELEMENT = "element";
+	std::string RULE_DISCARD_FROM = "from";
+	std::string RULE_DISCARD_COUNT = "count";
+	std::string RULE_SCORES_SCORE = "score";
+	std::string RULE_SCORES_ASCENDING = "ascending";
 }
 
 namespace RuleTags{
@@ -72,20 +80,56 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		std::list<std::shared_ptr<BaseRule>> childRules {};
 		
 		//every rule list has an array of rules
-		std::list<nlohmann::json> subrules = currentRuleJson
-			.at(SpecTags::RULE_LIST)
-			.get<std::list<nlohmann::json>>();
+		auto subRules = currentRuleJson
+			.at(SpecTags::RULE_LIST);
 		
 		//recursively parse every rule in the array of rules
-		for (auto& subrule : subrules){
-			auto singleChildrule = recursivelyParseSpec(subrule);
+		for (auto& subRule : subRules){
+			auto singleChildrule = recursivelyParseSpec(subRule);
 			childRules.push_back(singleChildrule);
 		} 
 
 		//configure make each (n)th childRule point to (n+1)th childRule, ignore last one
+		for(auto it = childRules.begin(); it != childRules.end(); ++it){
+			if(it == childRules.end()) break;
+			(*it)->addNextPtr(*(std::next(it, 1)));
+		}
 
 		if(ruleType == RuleTags::ForEach){
 			//get params and setup rule with the child list, assign to result
+			try{
+				auto element = currentRuleJson.at(SpecTags::RULE_FOREACH_ELEMENT).get<std::string>();
+				auto listJson = currentRuleJson.at(SpecTags::RULE_FOREACH_LIST);
+				std::unique_ptr<StateValue> listPtr;
+				if(listJson.is_string()){
+					listPtr = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
+				}else if(listJson.is_array()){
+					std::vector<std::shared_ptr<StateValue>> listValue;
+					//Parse all elements inside list
+					std::transform(listJson.begin(), listJson.end(), 
+							std::back_inserter(listValue), 
+							[](const json& listElem){
+								if(listElem.is_number()){
+									int value = listElem.get<int>();
+									return std::shared_ptr<StateValue>(new StateValueNumber(value));
+								}else if(listElem.is_string()){
+									std::string value = listElem.get<std::string>();
+									return std::shared_ptr<StateValue>(new StateValueString(value));
+								}else{
+									std::cout << "Unhandled list element type\n";
+									assert(false);
+								}
+							});
+					listPtr = std::unique_ptr<StateValue>(new StateValueList(listValue));
+				}else{
+					std::cout << "Unhandled ForEach list type\n";
+					assert(false);
+				}
+				result = std::shared_ptr<BaseRule>(new ForEach(childRules, listPtr, element));
+
+			}catch(nlohmann::json::exception& e){
+				std::cout << "ForEach parse failed: " << e.what() << "\n";
+			}
 		}
 		else if(ruleType == RuleTags::Inparallel){
 			//get params and setup rule with the child list, assign to result
@@ -96,6 +140,10 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 
 		//make last child point back to us
+		auto lastChild = childRules.rbegin();
+		if(lastChild != childRules.rend()){
+			(*lastChild)->addNextPtr(result);
+		}		
 	}
 	else{
 		//these rules should not have childs, so their processing is quite simple
@@ -106,6 +154,26 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		} 
 		else if(ruleType == RuleTags::Deal){
 			//setup rule, assign to result
+		}
+		else if(ruleType == RuleTags::Discard){
+			try{
+				std::string from = currentRuleJson.at(SpecTags::RULE_DISCARD_FROM).get<std::string>();
+				int count = currentRuleJson.at(SpecTags::RULE_DISCARD_COUNT).get<int>();
+				result = std::shared_ptr<BaseRule>(new Discard(from, count));
+			}catch(json::exception& e){
+				std::cout << "Discard parse failed: " << e.what() << "\n";
+				assert(false);
+			}
+		}
+		else if(ruleType == RuleTags::Scores){
+			try{
+ 		       	int score = currentRuleJson.at(SpecTags::RULE_SCORES_SCORE).get<int>();
+ 		       	bool ascending = currentRuleJson.at(SpecTags::RULE_SCORES_ASCENDING).get<bool>();
+				result = std::shared_ptr<BaseRule>(new Scores(score, ascending));
+ 		   }catch(json::exception &e){
+ 		       //TODO: Handle exception more properly
+ 		       std::cout << "Scores parse failed: " << e.what() << "\n";
+ 		   }
 		}
 		else{
 			//something horrible happened
