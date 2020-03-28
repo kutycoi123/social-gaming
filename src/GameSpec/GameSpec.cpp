@@ -284,7 +284,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 	return result;
 }
 
-void GameSpec::createStateList(json list,std::unique_ptr<StateValue> &ptr) {//TODO: move this inside StateList.
+void GameSpec::createStateList(const json list,std::unique_ptr<StateValue> &ptr) {//TODO: move this inside StateList.
     std::vector<std::shared_ptr<StateValue>> listValue;
     std::transform(list.begin(), list.end(),
        std::back_inserter(listValue),
