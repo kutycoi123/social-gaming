@@ -3,9 +3,9 @@
 using GameSpecification::Parallelfor;
 using json = nlohmann::json;
 
-Parallelfor::Parallelfor(const std::list<std::shared_ptr<BaseRule>>& childRules, std::vector<std::string> list, const std::string& element) : 
+Parallelfor::Parallelfor(const std::list<std::shared_ptr<BaseRule>>& childRules, const std::string& listName, const std::string& element) : 
     BaseRule(childRules), 
-    list(list), 
+    listName(listName), 
     element(element)
     {}
 

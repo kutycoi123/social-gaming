@@ -3,9 +3,8 @@
 using GameSpecification::Loop;
 using json = nlohmann::json;
 
-Loop::Loop(const std::list<std::shared_ptr<BaseRule>>&, const std::string& loopType, const std::string& failCondition) : 
+Loop::Loop(const std::list<std::shared_ptr<BaseRule>>&, const std::string& failCondition) : 
     BaseRule(childRules), 
-    loopType(loopType), 
     failCondition(failCondition)
     {}
 

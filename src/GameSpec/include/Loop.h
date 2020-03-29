@@ -6,12 +6,11 @@
 namespace GameSpecification{
     class Loop : public BaseRule{
         public:
-            Loop(const std::list<std::shared_ptr<BaseRule>>&,const std::string& loopType, const std::string& failCondition);
+            Loop(const std::list<std::shared_ptr<BaseRule>>&, const std::string& failCondition);
 
             void process(GameState&) override;
             
         private:
-            std::string loopType;
             std::string failCondition;
     };
 }
