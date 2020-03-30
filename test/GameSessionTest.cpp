@@ -5,7 +5,7 @@
 
 
 struct GameSessionTestParams {
-    const std::string gamePath = "../Games/RockPaperScissors.json";
+    const std::string gamePath = "../TestGames/Test.json";
     const uintptr_t id = 1010;
 };
 
@@ -51,15 +51,16 @@ TEST_F(GameSessionTest, isOwner) {
 TEST_F(GameSessionTest, addMessages) {
     std::string message = "TestMessage";
     gameSession->addMessages(message);
+    EXPECT_TRUE(true);
 }
 
 TEST_F(GameSessionTest, addMessagesToGame) {
     std::string message = "TestMessage";
     gameSession->addMessagesToGame(message);
+    EXPECT_TRUE(true);
 }
 
 TEST_F(GameSessionTest, getAndClearAllMessages) {
-    // TODO: Fix up this test case once parsing is fixed
     std::string message1 = "TestMessage1";
     std::string message2 = "TestMessage2";
     std::string message3 = "TestMessage3";
@@ -74,8 +75,10 @@ TEST_F(GameSessionTest, getAndClearAllMessages) {
 
 TEST_F(GameSessionTest, addPlayer) {
     gameSession->addPlayer(std::make_shared<User>(User(UserId(1))));
+    EXPECT_TRUE(true);
 }
 
 TEST_F(GameSessionTest, removePlayer) {
     gameSession->removePlayer(std::make_shared<User>(User(UserId(1))));
+    EXPECT_TRUE(true);
 }
