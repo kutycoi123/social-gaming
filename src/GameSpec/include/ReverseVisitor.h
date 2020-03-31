@@ -35,7 +35,7 @@ public:
         std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
         std::reverse(std::begin(elems), std::end(elems));
     }
-    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
     }
 

@@ -28,7 +28,7 @@ public:
     void visit(StateValueMap& stateValue) override {
         throw std::invalid_argument("Invalid State value, cannot discard");
     }
-    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
     }
 

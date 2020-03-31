@@ -34,7 +34,7 @@ public:
         return;
     }
 
-    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
     }
 

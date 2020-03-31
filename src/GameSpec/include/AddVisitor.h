@@ -30,9 +30,8 @@ public:
         throw std::invalid_argument("Invalid State value, cannot add");
     }
 
-    void visit(StateValueNumber& stateValue1, StateValueNumber& stateValue2) override{
-        double value = stateValue1.getValue();
-        stateValue2.getValue() = value + stateValue2.getValue();
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+        valueTobeUpdated.getValue() = value.getValue() + valueTobeUpdated.getValue();
     }
 
 private:
