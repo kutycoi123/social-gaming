@@ -17,3 +17,7 @@ StateValue::ValueType StateValueBoolean::getValueType() {
 void StateValueBoolean::accept(GameStateVisitor &visitor) {
     visitor.visit(*this);
 }
+
+void StateValueBoolean::accept(GameStateVisitor &visitor, StateValue* stateValue){
+
+}

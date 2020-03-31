@@ -16,6 +16,8 @@ void Add::process(GameState& gameState){
         auto gameStateValue = gameState.getVariable(to);
     if (auto retrievedValue = gameStateValue->lock()) {
         // TODO: Finish add visitor implementation
+        AddVisitor visitor;
+        retrievedValue->accept(visitor, value.get());
         
 //        int amount = determineAmountToAdd(value, gameState);
 

@@ -9,6 +9,7 @@ public:
     bool& getValue();
     StateValue::ValueType getValueType() override;
     void accept(GameStateVisitor &visitor) override;
+    void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
 private:
     bool value;
     StateValue::ValueType valueType;

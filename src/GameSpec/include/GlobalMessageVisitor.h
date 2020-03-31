@@ -29,6 +29,9 @@ public:
     void visit(StateValueMap& stateValue) override {
         return;
     }
+	void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
+    }
 
 };
 

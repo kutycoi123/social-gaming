@@ -17,3 +17,6 @@ StateValue::ValueType StateValueString::getValueType() {
 void StateValueString::accept(GameStateVisitor &visitor) {
     visitor.visit(*this);
 }
+void StateValueString::accept(GameStateVisitor &visitor, StateValue* stateValue){
+
+}

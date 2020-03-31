@@ -39,7 +39,9 @@ public:
         std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
         std::sort(elems.begin(), elems.end(), comp);
     }
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
+    } 
 };
 
 #endif //SOCIALGAMING_ADDVISITOR_H

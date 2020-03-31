@@ -34,6 +34,10 @@ public:
         return;
     }
 
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
+    }
+
 };
 
 #endif //SOCIALGAMING_MESSAGEVISITOR_H
