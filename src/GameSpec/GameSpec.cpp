@@ -8,7 +8,9 @@ using json = nlohmann::json;
 
 namespace SpecTags{
     std::string ASCENDING = "ascending";
+    std::string CASES = "cases";
     std::string CHOICES = "choices";
+    std::string CONDITION = "condition";
     std::string COUNT = "count";
     std::string DURATION = "duration";
     std::string ELEMENT = "element";
@@ -23,7 +25,9 @@ namespace SpecTags{
     std::string TARGET = "target";
     std::string TIMEOUT = "timeout";
     std::string TO = "to";
+    std::string UNTIL = "until";
     std::string VALUE = "value";
+    std::string WHILE = "while";
 
     std::string TRACK = "track"; //not a tag?
 }
@@ -40,16 +44,16 @@ namespace RuleTags{
     const std::string InputText = "input-text";
     const std::string InputVote = "input-vote";
     const std::string Loop = "loop"; //contains child rules
-    const std::string Message = "message"; //missing cmake target
+    const std::string Message = "message"; 
     const std::string Parallelfor = "parallelfor"; //contains child rules
     const std::string Reverse = "reverse";
 
     const std::string Scores = "scores";
     const std::string Shuffle = "shuffle";
     const std::string Sort = "sort";
-    const std::string Switch = "switch"; //contains child rules //missing cmake target
+    const std::string Switch = "switch"; //contains case rules 
     const std::string Timer = "timer"; //contains child rules
-    const std::string When = "when"; //contains child rules //missing cmake target
+    const std::string When = "when"; //contains case rules 
 }
 
 GameSpec::GameSpec(const nlohmann::json& fullFileJson) : rules({}){
@@ -105,7 +109,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		//configure make each (n)th childRule point to (n+1)th childRule, ignore last one
 		for(auto it = childRules.begin(); it != childRules.end(); ++it){
 			if(it == childRules.end()) break;
-			(*it)->addNextPtr(*(std::next(it, 1)));
+		    (*it)->addNextPtr(*(std::next(it, 1)));
 		}
 
 		//get params and setup rule with the child list, assign to result
@@ -121,15 +125,9 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		else if(ruleType == RuleTags::Parallelfor){
             result = createParallelFor(currentRuleJson, childRules);
         }
-        else if(ruleType == RuleTags::Switch){
-            result = createSwitch(currentRuleJson, childRules);
-        }
         else if(ruleType == RuleTags::Timer){
             result = createTimer(currentRuleJson, childRules);
         } 
-        else if(ruleType == RuleTags::When){
-            result = createWhen(currentRuleJson, childRules);
-        }
 		else{
 			//something horrible happened
 			assert(false);
@@ -141,6 +139,64 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 			(*lastChild)->addNextPtr(result);
 		}		
 	}
+    else if(currentRuleJson.contains(SpecTags::CASES)){
+        std::vector<nlohmann::json> caseList = currentRuleJson
+            .at(SpecTags::CASES)
+            .get<std::vector<nlohmann::json>>();
+        
+        if(ruleType == RuleTags::Switch){
+            std::vector<GameSpecification::SwitchCase> switchCases {};
+
+            for(auto& singleCase : caseList){
+                std::string value = singleCase
+                    .at(SpecTags::VALUE)
+                    .get<std::string>();
+                
+                std::vector<nlohmann::json> subRules = singleCase
+                    .at(SpecTags::RULE_LIST)
+                    .get<std::vector<nlohmann::json>>();
+
+           		std::list<std::shared_ptr<BaseRule>> childRules {};
+
+                for (auto& subRule : subRules){
+                    auto singleChildrule = recursivelyParseSpec(subRule);
+                    childRules.push_back(singleChildrule);
+                }                   
+                
+                switchCases.push_back(GameSpecification::SwitchCase(value, childRules));
+            }
+
+            result = createSwitch(currentRuleJson, switchCases);
+        } 
+        else if(ruleType == RuleTags::When){
+            std::vector<GameSpecification::WhenCase> whenCases {};
+
+            for(auto& singleCase : caseList){
+                std::string condition = singleCase
+                    .at(SpecTags::CONDITION)
+                    .get<std::string>();
+                
+                std::vector<nlohmann::json> subRules = singleCase
+                    .at(SpecTags::RULE_LIST)
+                    .get<std::vector<nlohmann::json>>();
+
+           		std::list<std::shared_ptr<BaseRule>> childRules {};
+
+                for (auto& subRule : subRules){
+                    auto singleChildrule = recursivelyParseSpec(subRule);
+                    childRules.push_back(singleChildrule);
+                }                   
+                
+                whenCases.push_back(GameSpecification::WhenCase(condition, childRules));
+            }
+
+            result = createWhen(currentRuleJson, whenCases);
+        }
+		else{
+			//something horrible happened
+			assert(false);
+		}
+    }
 	else{
 		//these rules should not have childs, so their processing is quite simple
 		//these are the non-recursive parts
@@ -191,7 +247,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 	}
 
-	return result;
+	return nullptr;
 }
 
 void GameSpec::createStateList(const json list,std::unique_ptr<StateValue> &ptr) {//TODO: move this inside StateList.
@@ -221,45 +277,88 @@ std::shared_ptr<BaseRule> GameSpec::createForEach(const nlohmann::json& currentR
     auto element = currentRuleJson.at(SpecTags::ELEMENT).get<std::string>();
     auto listJson = currentRuleJson.at(SpecTags::LIST);
     std::unique_ptr<StateValue> listPtr;
+    
     if(listJson.is_string()){
         listPtr = std::unique_ptr<StateValue>(new StateValueString(listJson.get<std::string>()));
-    }else if(listJson.is_array()){
+    }
+    else if(listJson.is_array()){
         createStateList(listJson,listPtr);
-
-    }else{
-        std::cout << "Unhandled ForEach list type\n";
-        assert(false);
+    }
+    else{
+        assert(false && "For-Each must be a string or array");
     }
     
     return std::shared_ptr<BaseRule>(new ForEach(childRules, listPtr, element));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createInParallel(const nlohmann::json& currentRuleJson, const std::list<std::shared_ptr<BaseRule>>& childRules){
-    return nullptr;
+    return std::shared_ptr<BaseRule>(new Inparallel(childRules));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createLoop(const nlohmann::json& currentRuleJson, const std::list<std::shared_ptr<BaseRule>>& childRules){
-    return nullptr;
+    std::string condition;
+
+    if(currentRuleJson.contains(SpecTags::WHILE)){
+        condition = currentRuleJson
+            .at(SpecTags::WHILE)
+            .get<std::string>();
+    }
+    else if(currentRuleJson.contains(SpecTags::UNTIL)){
+        condition = currentRuleJson
+            .at(SpecTags::UNTIL)
+            .get<std::string>();
+    }
+    else{
+        assert(false && "No condition detected in Loop");
+    }
+    
+    return std::shared_ptr<BaseRule>(new Loop(childRules, condition));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createParallelFor(const nlohmann::json& currentRuleJson, const std::list<std::shared_ptr<BaseRule>>& childRules){
-    return nullptr;
-}
+    std::string listName = currentRuleJson
+        .at(SpecTags::LIST)
+        .get<std::string>();
 
-std::shared_ptr<BaseRule> GameSpec::createSwitch(const nlohmann::json& currentRuleJson, const std::list<std::shared_ptr<BaseRule>>& childRules){
-    return nullptr;
+    std::string elementName = currentRuleJson
+        .at(SpecTags::ELEMENT)
+        .get<std::string>();
+    
+    return std::shared_ptr<BaseRule>(new Parallelfor(childRules, listName, elementName));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createTimer(const nlohmann::json& currentRuleJson, const std::list<std::shared_ptr<BaseRule>>& childRules){
 
-    double duration = currentRuleJson.at(SpecTags::DURATION).get<std::double_t>();
-    std::string mode = currentRuleJson.at(SpecTags::MODE).get<std::string>();
+    double duration = currentRuleJson
+        .at(SpecTags::DURATION)
+        .get<std::double_t>();
+    
+    std::string mode = currentRuleJson
+        .at(SpecTags::MODE)
+        .get<std::string>();
+
     bool flag = (mode == SpecTags::TRACK);
     return std::shared_ptr<BaseRule>(new Timer(childRules, duration, mode,flag));
 }
 
-std::shared_ptr<BaseRule> GameSpec::createWhen(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>& childRules){
-    return nullptr;
+//------------------------
+//Rules with multple cases
+//------------------------
+
+std::shared_ptr<BaseRule> GameSpec::createSwitch(const nlohmann::json& currentRuleJson, const std::vector<GameSpecification::SwitchCase>& cases){
+    std::string value = currentRuleJson
+        .at(SpecTags::VALUE)
+        .get<std::string>();
+    
+    std::string listName = currentRuleJson
+        .at(SpecTags::LIST)
+        .get<std::string>();
+
+    return std::shared_ptr<BaseRule>(new Switch(value, listName, cases));
+}
+
+std::shared_ptr<BaseRule> GameSpec::createWhen(const nlohmann::json& currentRuleJson, const std::vector<GameSpecification::WhenCase>& cases){   
+    return std::shared_ptr<BaseRule>(new When(cases));
 }
 
 //-----------------------------------
@@ -313,6 +412,7 @@ std::shared_ptr<BaseRule> GameSpec::createGlobalMessage(const nlohmann::json& cu
 } 
 
 std::shared_ptr<BaseRule> GameSpec::createInputChoice(const nlohmann::json& currentRuleJson){
+    
     std::unique_ptr<StateValue> stateValuePointer ;
     std::string to = currentRuleJson.at( SpecTags::TO).get<std::string>();
     std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
@@ -324,8 +424,13 @@ std::shared_ptr<BaseRule> GameSpec::createInputChoice(const nlohmann::json& curr
     if(choices.is_array()) {
         std::vector<std::shared_ptr<StateValue>> listValue;
         createStateList(choices,stateValuePointer);//ptr is reference
-    } else if(choices.is_string()) {
+    } 
+    else if(choices.is_string()) {
         stateValuePointer = std::make_unique<StateValueString>(choices);
+    } 
+    else {
+        //
+        assert(false && "Input-Choice Rule needs to be Array or String");
     }
     
     return std::make_shared<GameSpecification::InputChoice>(
