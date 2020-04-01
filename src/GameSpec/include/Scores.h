@@ -5,10 +5,10 @@
 namespace GameSpecification{
 class Scores : public BaseRule{
     public:
-        Scores(double score, bool ascending);
+        Scores(std::string  scoreValue, bool ascending);
 		void process(GameState&) override;
     private:
-        double score;
+        std::string score;
         bool ascending;
 };
 }

@@ -14,6 +14,7 @@ public:
     virtual void visit(StateValueNumber& stateValue) = 0;
     virtual void visit(StateValueString& stateValue) = 0;
     virtual void visit(StateValueList& stateValue) = 0;
+    virtual void visit(StateValueList& stateValue, StateValueList& list) = 0;
     virtual void visit(StateValueMap& stateValue) = 0;
     virtual void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) = 0;
 };

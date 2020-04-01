@@ -6,7 +6,7 @@ namespace GameSpecification{
     class Discard : public BaseRule{
         public:
 
-            Discard(const std::string& from, const int count);
+            Discard(std::string  from, const int count);
 
             void process(GameState&) override; 
 
