@@ -20,6 +20,9 @@ class GameParser{
         //Unique ptr gets returned and reset so this object should be deleted after because it should be useless
         std::unique_ptr<Game> getGame() noexcept;
 
+        GameState createGameState(nlohmann::json gameJson);
+
+
     private:
         nlohmann::json fileToJson(const std::string& pathName);
 
