@@ -15,7 +15,6 @@ namespace SpecTags{
     std::string DURATION = "duration";
     std::string ELEMENT = "element";
     std::string FROM = "from";
-    std::string KEY = "key";
     std::string LIST = "list";
     std::string MODE = "mode";
     std::string PROMPT = "prompt";
@@ -27,8 +26,6 @@ namespace SpecTags{
     std::string TIMEOUT = "timeout";
     std::string TO = "to";
     std::string UNTIL = "until";
-
-
     std::string VALUE = "value";
     std::string WHILE = "while";
 
@@ -456,90 +453,33 @@ std::shared_ptr<BaseRule> GameSpec::createInputChoice(const nlohmann::json& curr
 }
 
 std::shared_ptr<BaseRule> GameSpec::createInputText(const nlohmann::json& currentRuleJson){
-    std::unique_ptr<StateValue> stateValuePointer ;
-    std::string user = currentRuleJson.at( SpecTags::TO).get<std::string>();
-    std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
-    std::string result = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
-    double timeout = currentRuleJson.at( SpecTags::TIMEOUT).get<std::double_t >();
-
-    return std::make_shared<GameSpecification::InputText>(
-            GameSpecification::InputText(
-                    user,
-                    prompt,
-                    result,
-                    timeout
-            )
-    );
-
+    return nullptr;
 }
 
 std::shared_ptr<BaseRule> GameSpec::createInputVote(const nlohmann::json& currentRuleJson){
-    std::unique_ptr<StateValue> stateValueChoices ;
-    std::string to = currentRuleJson.at( SpecTags::TO).get<std::string>();
-    std::string prompt = currentRuleJson.at( SpecTags::PROMPT).get<std::string>();
-    std::string result = currentRuleJson.at( SpecTags::RESULT).get<std::string>();
-    double timeout = currentRuleJson.at( SpecTags::TIMEOUT).get<std::double_t >();
-
-    auto choices = currentRuleJson.at( SpecTags::CHOICES);
-
-    if(choices.is_array()) {
-        std::vector<std::shared_ptr<StateValue>> listValue;
-        createStateList(choices,stateValueChoices);//ptr is reference
-    }
-    else if(choices.is_string()) {
-        stateValueChoices = std::make_unique<StateValueString>(choices);
-    }
-    else {
-        //
-        assert(false && "Input-Choice Rule needs to be Array or String");
-    }
-    return std::make_shared<GameSpecification::InputChoice>(
-            GameSpecification::InputChoice(
-                    to,
-                    prompt,
-                    stateValueChoices,
-                    result,
-                    timeout
-            )
-    );
-
+    return nullptr;
 }
 
 std::shared_ptr<BaseRule> GameSpec::createMessage(const nlohmann::json& currentRuleJson){
-    auto to = currentRuleJson.at( SpecTags::TO);
-    std::unique_ptr<StateValue> stateValuePointer ;
-    if(to.is_array()) {
-        std::vector<std::shared_ptr<StateValue>> listValue;
-        createStateList(to,stateValuePointer);//ptr is reference
-    }
-    else if(to.is_string()) {
-        stateValuePointer = std::make_unique<StateValueString>(to);
-    }
-
-    std::string value = currentRuleJson.at( SpecTags::VALUE).get<std::string>();
-    return std::make_shared<GameSpecification::Message>(GameSpecification::Message(stateValuePointer,value));
+    return nullptr;
 }
 
 std::shared_ptr<BaseRule> GameSpec::createReverse(const nlohmann::json& currentRuleJson){
-    std::string list = currentRuleJson.at( SpecTags::LIST).get<std::string>();
-    return std::make_shared<GameSpecification::Reverse>(GameSpecification::Reverse(list));
+    return nullptr;
 }
 
 std::shared_ptr<BaseRule> GameSpec::createScores(const nlohmann::json& currentRuleJson){
     auto score = currentRuleJson.at(SpecTags::SCORE).get<std::string>();
     bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
+
     return std::shared_ptr<BaseRule>(new Scores(score, ascending));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createShuffle(const nlohmann::json& currentRuleJson){
-    std::string list = currentRuleJson.at( SpecTags::LIST).get<std::string>();
-    return std::make_shared<GameSpecification::Shuffle>(GameSpecification::Shuffle(list));
-
+    return nullptr;
 }
 
 std::shared_ptr<BaseRule> GameSpec::createSort(const nlohmann::json& currentRuleJson){
-    std::string list = currentRuleJson.at( SpecTags::LIST).get<std::string>();
-    std::string key = currentRuleJson.at( SpecTags::KEY).get<std::string>();
-    return std::make_shared<GameSpecification::Sort>(GameSpecification::Sort(list,key));
+    return nullptr;
 }
 
