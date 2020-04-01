@@ -1,24 +1,28 @@
 add_library(gameSpec
 			GameSpec.cpp
+
+			BaseRule.cpp
+
 			Add.cpp
 			Deal.cpp
 			Discard.cpp
 			Extend.cpp
 			ForEach.cpp
+			GlobalMessage.cpp
 			Inparallel.cpp
+			InputChoice.cpp
+			InputText.cpp
+			InputVote.cpp
 			Loop.cpp
+			Message.cpp
 			Parallelfor.cpp
 			Reverse.cpp
 			Shuffle.cpp
-			BaseRule.cpp
-			InputChoice.cpp
-			Message.cpp
-			Timer.cpp
-			Sort.cpp
 			Scores.cpp
-			InputVote.cpp
-			InputText.cpp
-			GlobalMessage.cpp
+			Sort.cpp
+			Switch.cpp
+			Timer.cpp
+			When.cpp
 )
 
 set_target_properties(gameSpec

@@ -5,24 +5,26 @@
 Game::Game(GameSpecification::GameSpec spec, GameState state) :
     gameSpec{std::move(spec)},
     gameState{std::move(state)},
-    messages{}
+    messages{},
+    isGameStarted(false)
 {}
 
-bool Game::isGameStarted() const {
-    return gameState.isGameStarted();
+bool Game::isStarted() const {
+    return isGameStarted;
 }
 
-void Game::startGame(const std::list<std::weak_ptr<User>>& users) {
-    gameSessionUsers.insert(gameSessionUsers.end(), users.begin(), users.end());
+void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::list<std::weak_ptr<User>>& audience) {
+    playerList.insert(playerList.end(), players.begin(), players.end());
+    audienceList.insert(audienceList.end(), audience.begin(), audience.end());
     addMessages(" User has started the game...\n");
     importGameSpecRules();
 
     // Once the game has started, gameTick will end up being called.
-    gameState.startGame();
+    isGameStarted = true;
 }
 
 void Game::endGame() {
-    return gameState.endGame();
+    isGameStarted = false;
 }
 
 void Game::addMessages(const std::string &message) noexcept{

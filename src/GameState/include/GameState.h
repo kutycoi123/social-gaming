@@ -17,7 +17,7 @@ class GameState {
 public:
     GameState();
     bool isGameStarted() const;
-    void startGame();
+    void startGame(const std::list<std::weak_ptr<User>>& playerList, const std::list<std::weak_ptr<User>>& audienceList);
     void endGame();
     enum ValueType {
         CONSTANT,
@@ -26,11 +26,20 @@ public:
         PER_AUDIENCE
     };
 
+    struct StateValueUserPair{
+        std::weak_ptr<User> user;
+        std::shared_ptr<StateValue> value;
+    };
+
     std::optional<std::weak_ptr<const StateValue>> getConstant(const std::string& key);
     std::optional<std::weak_ptr<const StateValue>> getConstantOrVariable(const std::string& key);
     std::optional<std::weak_ptr<StateValue>> getVariable(const std::string& key);
-    std::optional<std::weak_ptr<StateValue>> getPerPlayerValue(const std::string& key);
-    std::optional<std::weak_ptr<StateValue>> getPerAudienceValue(const std::string& key);
+
+    std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+    getPerPlayerValue(const std::string& key);
+
+    std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+    getPerAudienceValue(const std::string& key);
 
     void addConfig(const GameConfig& config);
 
@@ -48,13 +57,21 @@ private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<const StateValue>> constantsMap;
     std::unordered_map<std::string, std::shared_ptr<StateValue>> variablesMap;
-    // TODO: Change perPlayer/perAudience impl to be different from constantsMap/variablesMap
-    std::unordered_map<std::string, std::shared_ptr<StateValue>> perPlayerMap;
-    std::unordered_map<std::string, std::shared_ptr<StateValue>> perAudienceMap;
+
+    // These maps set up the initial values for the per-player/per-audience maps
+    std::unordered_map<std::string, std::shared_ptr<StateValue>> perPlayerInitialMap;
+    std::unordered_map<std::string, std::shared_ptr<StateValue>> perAudienceInitialMap;
+    
+    std::unordered_map<std::string, std::vector<StateValueUserPair>> perPlayerMap;
+    std::unordered_map<std::string, std::vector<StateValueUserPair>> perAudienceMap;
     GameConfig gameConfig;
     std::list<std::string> messages;
     void insertIntoCorrectMap(const GameState::ValueType &valueType,
                               std::pair<std::string, std::shared_ptr<StateValue>>& pair);
+
+    void initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList);
+
+    void initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList);
 };
 
 #endif

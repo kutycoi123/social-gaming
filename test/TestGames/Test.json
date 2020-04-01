@@ -17,8 +17,7 @@
   },
 
   "variables": {
-    "TestInt1": 11,
-    "TestInt2": 22
+    "TestInt": 11
   },
 
   "per-player": {
@@ -29,18 +28,9 @@
 
   "rules": [
     {
-      "rule": "global-message",
-      "value": "Hello world!"
-    },
-    {
       "rule": "add",
-      "to": "TestInt1",
-      "value": 5
-    },
-    {
-      "rule": "add",
-      "to": "TestInt1",
-      "value": "TestInt2"
+      "to": 2,
+      "value": "TestInt"
     }
   ]
 }

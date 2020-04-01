@@ -1,19 +1,19 @@
 #include "Discard.h"
+
+#include <utility>
 #include "DiscardVisitor.h"
 
 using GameSpecification::Discard;
 using GameSpecification::BaseRule;
 
-Discard::Discard(const std::string& from, const int count) : 
+Discard::Discard(std::string  from, const int count) :
     BaseRule({}), 
-    from(from), 
+    from(std::move(from)),
     count(count)
     {}
 
 void Discard::process(GameState& gameState) {
-	//TODO: Add code to process discard rule
     auto gameStateValueFrom = gameState.getVariable(from);
-    
     if (auto fromList = gameStateValueFrom->lock()) {
 
         DiscardVisitor visitor(count);

@@ -30,10 +30,17 @@ public:
         std::reverse(std::begin(a), std::end(a));
     }
 
+    void visit(StateValueList& stateValue, StateValueList& value) override {
+        throw std::invalid_argument("Invalid State value cannot reverse");
+    }
+
     void visit(StateValueMap& stateValue) override {
         auto a = stateValue.getMap();
         std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
         std::reverse(std::begin(elems), std::end(elems));
+    }
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
     }
 
 };

@@ -1,16 +1,12 @@
-//
-// Created by josh on 2020-03-19.
-//
-
-#ifndef SOCIALGAMING_MESSAGEVISITOR_H
-#define SOCIALGAMING_MESSAGEVISITOR_H
+#ifndef SOCIALGAMING_GLOBALMESSAGEVISITOR_H
+#define SOCIALGAMING_GLOBALMESSAGEVISITOR_H
 
 #include "GameStateVisitor.h"
 
 // TODO Implement methods and add error handling
-class MessageVisitor : public GameStateVisitor {
+class GlobalMessageVisitor : public GameStateVisitor {
 public:
-    MessageVisitor(){
+    GlobalMessageVisitor(){
 
     }
 
@@ -19,7 +15,7 @@ public:
     }
 
     void visit(StateValueNumber& stateValue) override {
-        return;
+        stateValue.getValueType();
     }
 
     void visit(StateValueString& stateValue) override {
@@ -30,18 +26,13 @@ public:
         return;
     }
 
-    void visit(StateValueList& stateValue, StateValueList& value) override {
-        return;
-    }
-
     void visit(StateValueMap& stateValue) override {
         return;
     }
-
-    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+	void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
     }
 
 };
 
-#endif //SOCIALGAMING_MESSAGEVISITOR_H
+#endif //SOCIALGAMING_GLOBALMESSAGEVISITOR_H

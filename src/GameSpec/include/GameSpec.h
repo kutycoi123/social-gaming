@@ -43,9 +43,36 @@ namespace GameSpecification{
 		    nlohmann::json readSpec(const nlohmann::json&); 
 		    void processSpec(const nlohmann::json&);
 			std::shared_ptr<BaseRule> recursivelyParseSpec(const nlohmann::json&);
-		    void addRule(std::shared_ptr<BaseRule>); 
+		    void addRule(std::shared_ptr<BaseRule>);
 
-	};	
+            void createStateList(nlohmann::basic_json<> list, std::unique_ptr<StateValue> &ptr);
+
+			//Rules with other Rules
+			std::shared_ptr<BaseRule> createForEach(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>&);
+			std::shared_ptr<BaseRule> createInParallel(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>&);
+			std::shared_ptr<BaseRule> createLoop(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>&);
+			std::shared_ptr<BaseRule> createParallelFor(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>&);
+			std::shared_ptr<BaseRule> createTimer(const nlohmann::json&, const std::list<std::shared_ptr<BaseRule>>&);
+
+			//Rules with multple cases
+			std::shared_ptr<BaseRule> createSwitch(const nlohmann::json&, const std::vector<GameSpecification::SwitchCase>&);
+			std::shared_ptr<BaseRule> createWhen(const nlohmann::json&, const std::vector<GameSpecification::WhenCase>&);
+
+			//Rules which only adds functionality
+			std::shared_ptr<BaseRule> createAdd(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createDeal(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createDiscard(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createExtend(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createGlobalMessage(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createInputChoice(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createInputText(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createInputVote(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createMessage(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createReverse(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createScores(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createShuffle(const nlohmann::json&);
+			std::shared_ptr<BaseRule> createSort(const nlohmann::json&);
+    };
 }
 #endif
 
