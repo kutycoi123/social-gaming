@@ -6,8 +6,8 @@ GameState::GameState() :
 
 void GameState::startGame(const std::list<std::weak_ptr<User>>& playerList, const std::list<std::weak_ptr<User>>& audienceList) {
     gameStarted = true;
-    initializePerPlayerMap(playerList);
-    initializePerAudienceMap(audienceList);
+    this->playerList = playerList;
+    this->audienceList = audienceList;
 }
 
 void GameState::endGame() {
@@ -56,37 +56,37 @@ std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>
            std::nullopt;
 }
 
-void GameState::addValue(const std::string &key, StateValueBoolean value, const ValueType& valueType) {
+void GameState::addValue(const std::string &key, StateValueBoolean value, const StateMapType& valueType) {
     auto valuePtr = std::make_shared<StateValueBoolean>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
     insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addValue(const std::string &key, StateValueNumber value, const ValueType& valueType) {
+void GameState::addValue(const std::string &key, StateValueNumber value, const StateMapType& valueType) {
     auto valuePtr = std::make_shared<StateValueNumber>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
     insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addValue(const std::string &key, StateValueString value, const ValueType& valueType) {
+void GameState::addValue(const std::string &key, StateValueString value, const StateMapType& valueType) {
     auto valuePtr = std::make_shared<StateValueString>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
     insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addValue(const std::string &key, StateValueList value, const ValueType& valueType) {
+void GameState::addValue(const std::string &key, StateValueList value, const StateMapType& valueType) {
     auto valuePtr = std::make_shared<StateValueList>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
     insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::addValue(const std::string &key, StateValueMap value, const ValueType& valueType) {
+void GameState::addValue(const std::string &key, StateValueMap value, const StateMapType& valueType) {
     auto valuePtr = std::make_shared<StateValueMap>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
     insertIntoCorrectMap(valueType, pair);
 }
 
-void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
+void GameState::insertIntoCorrectMap(const GameState::StateMapType &valueType,
                                      std::pair<std::string, std::shared_ptr<StateValue>>& pair) {
     switch (valueType){
         case CONSTANT:
@@ -123,24 +123,10 @@ void GameState::addConfig(const GameConfig& gameConfig){
     this->gameConfig = gameConfig;
 }
 
-void GameState::initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList) {
-    for (const auto& value : perPlayerInitialMap){
-        std::string key = value.first;
-        perPlayerMap[key] = std::vector<StateValueUserPair>();
-        for (const auto& user : playerList) {
-            perPlayerMap[key].push_back(StateValueUserPair{user, value.second});
-        }
-        perPlayerInitialMap.erase(key);
-    }
+const std::list<std::weak_ptr<User>>& GameState::getPlayerList() const {
+    return playerList;
 }
 
-void GameState::initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList) {
-    for (const auto& value : perAudienceInitialMap){
-        std::string key = value.first;
-        perAudienceMap[key] = std::vector<StateValueUserPair>();
-        for (const auto& user : audienceList){
-            perAudienceMap[key].push_back(StateValueUserPair{user, value.second});
-        }
-        perAudienceInitialMap.erase(key);
-    }
+const std::list<std::weak_ptr<User>>& GameState::getAudienceList() const {
+    return audienceList;
 }

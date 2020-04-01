@@ -19,7 +19,7 @@ public:
     bool isGameStarted() const;
     void startGame(const std::list<std::weak_ptr<User>>& playerList, const std::list<std::weak_ptr<User>>& audienceList);
     void endGame();
-    enum ValueType {
+    enum StateMapType {
         CONSTANT,
         VARIABLE,
         PER_PLAYER,
@@ -44,15 +44,17 @@ public:
     void addConfig(const GameConfig& config);
 
     // These methods should only be called when GameState is begin constructed in the parser
-    void addValue(const std::string& key, StateValueBoolean value, const ValueType& valueType);
-    void addValue(const std::string &key, StateValueNumber value, const ValueType& valueType);
-    void addValue(const std::string &key, StateValueString value, const ValueType& valueType);
-    void addValue(const std::string &key, StateValueList value, const ValueType& valueType);
-    void addValue(const std::string &key, StateValueMap value, const ValueType& valueType);
+    void addValue(const std::string& key, StateValueBoolean value, const StateMapType& valueType);
+    void addValue(const std::string &key, StateValueNumber value, const StateMapType& valueType);
+    void addValue(const std::string &key, StateValueString value, const StateMapType& valueType);
+    void addValue(const std::string &key, StateValueList value, const StateMapType& valueType);
+    void addValue(const std::string &key, StateValueMap value, const StateMapType& valueType);
 
     void addMessages(const std::string &message) noexcept;
     void clearMessages() noexcept;
     std::list<std::string> updateAndGetAllMessages() noexcept;
+    const std::list<std::weak_ptr<User>>& getPlayerList() const;
+    const std::list<std::weak_ptr<User>>& getAudienceList() const;
 private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<const StateValue>> constantsMap;
@@ -66,12 +68,10 @@ private:
     std::unordered_map<std::string, std::vector<StateValueUserPair>> perAudienceMap;
     GameConfig gameConfig;
     std::list<std::string> messages;
-    void insertIntoCorrectMap(const GameState::ValueType &valueType,
+    std::list<std::weak_ptr<User>> playerList;
+    std::list<std::weak_ptr<User>> audienceList;
+    void insertIntoCorrectMap(const GameState::StateMapType &valueType,
                               std::pair<std::string, std::shared_ptr<StateValue>>& pair);
-
-    void initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList);
-
-    void initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList);
 };
 
 #endif
