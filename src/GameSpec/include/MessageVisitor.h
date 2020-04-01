@@ -30,6 +30,10 @@ public:
         return;
     }
 
+    void visit(StateValueList& stateValue, StateValueList& value) override {
+        return;
+    }
+
     void visit(StateValueMap& stateValue) override {
         return;
     }
