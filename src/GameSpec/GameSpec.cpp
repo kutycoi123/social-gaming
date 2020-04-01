@@ -57,6 +57,7 @@ namespace RuleTags{
 }
 
 GameSpec::GameSpec(const nlohmann::json& fullFileJson) : rules({}){
+    std::cout << "Crashing in GameSpec constructor" << std::endl;
 	nlohmann::json rulesJson = readSpec(fullFileJson);
 	processSpec(rulesJson);
 }
@@ -71,10 +72,12 @@ void GameSpec::addRule(std::shared_ptr<BaseRule> rule){
 }
 
 nlohmann::json GameSpec::readSpec(const nlohmann::json& fullFileJson){
+    std::cout << "Crashing in readSpec" << std::endl;
 	return fullFileJson.at(SpecTags::RULE_LIST);
 }
 
 void GameSpec::processSpec(const nlohmann::json& ruleJson){
+    std::cout << "Crashing in processSpec" << std::endl;
 	std::vector<nlohmann::json> ruleList = ruleJson.get<std::vector<nlohmann::json>>();
 
 	for(auto& rule : ruleList){
@@ -84,11 +87,13 @@ void GameSpec::processSpec(const nlohmann::json& ruleJson){
 }
 
 std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& currentRuleJson){
+    std::cout << "Crashing in recursivelyParseSpec" << std::endl;
 	std::string ruleType = currentRuleJson
 		.at(SpecTags::RULE_NAME)
 		.get<std::string>();	
 
 	std::shared_ptr<BaseRule> result;
+    std::cout << "Crashing at: " << currentRuleJson << std::endl;
 
 	if(currentRuleJson.contains(SpecTags::RULE_LIST)){
 		//these rules have child rules so we need to do more complex processing
@@ -365,7 +370,14 @@ std::shared_ptr<BaseRule> GameSpec::createWhen(const nlohmann::json& currentRule
 //Rules which only adds functionality
 //-----------------------------------
 std::shared_ptr<BaseRule> GameSpec::createAdd(const nlohmann::json& currentRuleJson){
-    std::string to = currentRuleJson.at( SpecTags::TO);
+    std::string to = currentRuleJson.at(SpecTags::TO);
+
+    // Determine if value is number literal.
+    if (currentRuleJson.at(SpecTags::VALUE).is_number()) {
+        double value = currentRuleJson.at(SpecTags::VALUE);
+        std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
+        return std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+    }
     std::string value = currentRuleJson.at(SpecTags::VALUE);
     std::unique_ptr<StateValue> ptr = std::make_unique<StateValueString>(value);
     return std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));

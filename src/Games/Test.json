@@ -17,7 +17,8 @@
   },
 
   "variables": {
-    "TestInt": 11
+    "TestInt1": 11,
+    "TestInt2": 22
   },
 
   "per-player": {
@@ -29,8 +30,13 @@
   "rules": [
     {
       "rule": "add",
-      "to": 2,
-      "value": "TestInt"
+      "to": "TestInt1",
+      "value": 5
+    },
+    {
+      "rule": "add",
+      "to": "TestInt1",
+      "value": "TestInt2"
     }
   ]
 }
