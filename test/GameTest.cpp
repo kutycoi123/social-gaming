@@ -8,7 +8,7 @@ public:
     Game* game;
 
     GameTest() {
-        game = new Game(GameSpecification::GameSpec(), GameState());
+        game = new Game(GameSpecification::GameSpec("../TestGames/Test.json"), GameState());
     }
 
     ~GameTest() {
@@ -17,27 +17,27 @@ public:
 };
 
 TEST_F(GameTest, isGameStarted) {
-    EXPECT_FALSE(game->isGameStarted());
+    EXPECT_FALSE(game->isStarted());
 
     std::list<std::weak_ptr<User>> users;
-    game->startGame(users);
+    game->startGame(users, users);
 
-    EXPECT_TRUE(game->isGameStarted());
+    EXPECT_TRUE(game->isStarted());
 }
 
 TEST_F(GameTest, startGame) {
     std::list<std::weak_ptr<User>> users;
-    game->startGame(users);
+    game->startGame(users, users);
 
-    EXPECT_TRUE(game->isGameStarted());
+    EXPECT_TRUE(game->isStarted());
 }
 
 TEST_F(GameTest, endGame) {
     std::list<std::weak_ptr<User>> users;
-    game->startGame(users);
+    game->startGame(users, users);
     game->endGame();
 
-    EXPECT_FALSE(game->isGameStarted());
+    EXPECT_FALSE(game->isStarted());
 }
 
 TEST_F(GameTest, addMessages) {
@@ -70,5 +70,5 @@ TEST_F(GameTest, updateAndGetAllMessages) {
 TEST_F(GameTest, gameTick) {
     // TODO: Update test once able to
     game->gameTick();
-    EXPECT_FALSE(game->isGameStarted());
+    EXPECT_FALSE(game->isStarted());
 }

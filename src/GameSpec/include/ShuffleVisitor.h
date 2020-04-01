@@ -31,11 +31,19 @@ public:
         std::shuffle(stateValue.getList().begin(), stateValue.getList().end(), std::default_random_engine(seed));
     }
 
+    void visit(StateValueList& stateValue, StateValueList& value) override {
+        throw std::invalid_argument("Invalid State value cannot shuffle");
+    }
+
     void visit(StateValueMap& stateValue) override {
         auto a = stateValue.getMap();
         unsigned seed = 0;
         std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
         std::shuffle(elems.begin(), elems.end(), std::default_random_engine(seed));
+    }
+
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
     }
 
 };

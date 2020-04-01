@@ -25,8 +25,15 @@ public:
         listToDiscard.erase(listToDiscard.begin(), listToDiscard.begin() + numberToDiscard);
     }
 
+    void visit(StateValueList& stateValue, StateValueList& list) override {
+        throw std::invalid_argument("Invalid State value, cannot discard");
+    }
+
     void visit(StateValueMap& stateValue) override {
         throw std::invalid_argument("Invalid State value, cannot discard");
+    }
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
     }
 
 private:

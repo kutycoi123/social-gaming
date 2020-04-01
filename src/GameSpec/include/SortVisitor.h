@@ -26,11 +26,15 @@ public:
     }
 
     void visit(StateValueString& stateValue) override {
-        throw std::invalid_argument("Invalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot sort");
     }
 
     void visit(StateValueList& stateValue) override {
         std::sort(stateValue.getList().begin(), stateValue.getList().end());
+    }
+
+    void visit(StateValueList& stateValue, StateValueList& value) override {
+        throw std::invalid_argument("Invalid State value cannot sort");
     }
     
     void visit(StateValueMap& stateValue) override {
@@ -39,7 +43,9 @@ public:
         std::vector<std::pair<std::string, std::shared_ptr<StateValue>>> elems(a.begin(), a.end());
         std::sort(elems.begin(), elems.end(), comp);
     }
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
 
+    } 
 };
 
 #endif //SOCIALGAMING_ADDVISITOR_H

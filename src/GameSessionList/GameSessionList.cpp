@@ -63,7 +63,7 @@ std::list<Message> GameSessionList::updateAndGetAllMessages() noexcept{
     std::list<std::pair<UserId, std::string>> messages {};
 
     for(auto& session : sessionList){
-        auto message = session.updateAndGetAllMessages();
+        auto message = session.getAndClearAllMessages();
         messages.insert(messages.end(), message.begin(), message.end());
     }
     

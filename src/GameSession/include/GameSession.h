@@ -32,7 +32,7 @@ class GameSession {
         void addMessages(const std::string &message) noexcept;
         void addMessagesToGame(const std::string &message) noexcept;
 
-        std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
+        std::list<std::pair<UserId, std::string>> getAndClearAllMessages() noexcept;
 
         void addPlayer(const std::weak_ptr<User>& player) noexcept;
         void removePlayer(const std::weak_ptr<User>& player) noexcept;

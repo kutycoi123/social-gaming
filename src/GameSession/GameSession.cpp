@@ -69,7 +69,7 @@ void GameSession::clearMessages() noexcept {
     messages = {};
 }
 
-std::list<std::pair<UserId, std::string>> GameSession::updateAndGetAllMessages() noexcept{
+std::list<std::pair<UserId, std::string>> GameSession::getAndClearAllMessages() noexcept{
 
     auto messages = getLobbyAndGameMessages();
 

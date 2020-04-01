@@ -4,14 +4,14 @@
 #include "BaseRule.h"
 
 namespace GameSpecification{
-class Parallelfor : public BaseRule{
-    public:
-        Parallelfor(const std::list<std::shared_ptr<BaseRule>>&, std::vector<std::string> list, const std::string& element);
+    class Parallelfor : public BaseRule{
+        public:
+            Parallelfor(const std::list<std::shared_ptr<BaseRule>>&, const std::string&, const std::string&);
 
-        void process(GameState&) override;        
-    private:
-        std::vector<std::string> list;
-        std::string element;
-};
+            void process(GameState&) override;        
+        private:
+            std::string listName;
+            std::string element;
+    };
 }
 #endif

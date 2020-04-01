@@ -15,6 +15,7 @@ public:
     std::optional<std::weak_ptr<StateValue>> getValue(const std::string&);
 
     void accept(GameStateVisitor &visitor) override;
+    void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
 
 private:
     StateValue::ValueType valueType;

@@ -33,6 +33,10 @@ public:
         throw std::invalid_argument("Invalid State value, cannot deal");
     }
 
+    void visit(StateValueNumber& valueTobeUpdated, StateValueNumber& value) override{
+
+    }
+
 private:
     int numberToDeal = 0;
     StateValueList& dealtToList;

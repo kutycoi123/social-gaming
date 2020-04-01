@@ -18,6 +18,7 @@ public:
     };
     virtual ValueType getValueType() = 0;
     virtual void accept(GameStateVisitor& visitor) = 0;
+    virtual void accept(GameStateVisitor& visitor, StateValue* stateValue) = 0;
 };
 
 

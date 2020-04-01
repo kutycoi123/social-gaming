@@ -22,3 +22,7 @@ StateValue::ValueType StateValueNumber::getValueType() {
 void StateValueNumber::accept(GameStateVisitor &visitor) {
     visitor.visit(*this);
 }
+void StateValueNumber::accept(GameStateVisitor &visitor, StateValue* stateValue){
+    StateValueNumber* t = static_cast<StateValueNumber*>(stateValue);
+    visitor.visit(*this, *t);
+}
