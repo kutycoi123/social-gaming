@@ -14,4 +14,6 @@ ForEach::ForEach(const std::list<std::shared_ptr<BaseRule>>& childRules, std::un
 	{}
 
 //TODO: Add code to process foreach rule
-void ForEach::process(GameState& gameState){}
+void ForEach::process(GameState& gameState){
+
+}

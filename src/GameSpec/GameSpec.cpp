@@ -368,7 +368,15 @@ std::shared_ptr<BaseRule> GameSpec::createWhen(const nlohmann::json& currentRule
 //Rules which only adds functionality
 //-----------------------------------
 std::shared_ptr<BaseRule> GameSpec::createAdd(const nlohmann::json& currentRuleJson){
-    std::string to = currentRuleJson.at( SpecTags::TO);
+    std::string to = currentRuleJson.at(SpecTags::TO);
+
+    // Determine if value is number literal.
+    if (currentRuleJson.at(SpecTags::VALUE).is_number()) {
+        double value = currentRuleJson.at(SpecTags::VALUE);
+        std::unique_ptr<StateValue> ptr = std::make_unique<StateValueNumber>(value);
+        return std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
+    }
+
     std::string value = currentRuleJson.at(SpecTags::VALUE);
     std::unique_ptr<StateValue> ptr = std::make_unique<StateValueString>(value);
     return std::make_shared<GameSpecification::Add>(GameSpecification::Add(to, ptr));
@@ -518,7 +526,7 @@ std::shared_ptr<BaseRule> GameSpec::createReverse(const nlohmann::json& currentR
 }
 
 std::shared_ptr<BaseRule> GameSpec::createScores(const nlohmann::json& currentRuleJson){
-    int score = currentRuleJson.at(SpecTags::SCORE).get<int>();
+    auto score = currentRuleJson.at(SpecTags::SCORE).get<std::string>();
     bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
     return std::shared_ptr<BaseRule>(new Scores(score, ascending));
 }

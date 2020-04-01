@@ -26,6 +26,10 @@ public:
         throw std::invalid_argument("Invalid State value, cannot add");
     }
 
+    void visit(StateValueList& stateValue, StateValueList& value) override {
+        throw std::invalid_argument("Invalid State value, cannot add");
+    }
+
     void visit(StateValueMap& stateValue) override {
         throw std::invalid_argument("Invalid State value, cannot add");
     }
