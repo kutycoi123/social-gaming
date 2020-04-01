@@ -25,11 +25,11 @@ void Game::endGame() {
     isGameStarted = false;
 }
 
-void Game::addMessages(const std::string &message) noexcept{
+void Game::addMessages(const std::string &message) noexcept {
     gameState.addMessages(message);
 }
 
-std::list<std::string> Game::updateAndGetAllMessages() noexcept{
+std::list<std::string> Game::updateAndGetAllMessages() noexcept {
     return gameState.updateAndGetAllMessages();
 }
 

@@ -25,8 +25,6 @@ private:
     GameState gameState;
     std::list<std::shared_ptr<BaseRule>> gameRules;
     unsigned int currentRuleIndex;
-    std::list<std::weak_ptr<User>> playerList;
-    std::list<std::weak_ptr<User>> audienceList;
     std::list<std::string> messages;
     bool isGameStarted;
 };
