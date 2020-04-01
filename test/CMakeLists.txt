@@ -8,6 +8,7 @@ add_executable(runAllTests
     UserManagerTest.cpp
     GameTest.cpp
     GameSessionTest.cpp
+    GameSessionListTest.cpp
 )
 
 # Link the appropriate library
@@ -20,6 +21,7 @@ target_link_libraries(runAllTests
         userManager
         game
         gameSession
+        gameSessionList
 )
 
 add_custom_command(TARGET runAllTests POST_BUILD
