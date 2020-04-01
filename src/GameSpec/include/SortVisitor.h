@@ -26,7 +26,7 @@ public:
     }
 
     void visit(StateValueString& stateValue) override {
-        throw std::invalid_argument("Invalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot sort");
     }
 
     void visit(StateValueList& stateValue) override {
@@ -34,7 +34,7 @@ public:
     }
 
     void visit(StateValueList& stateValue, StateValueList& value) override {
-        throw std::invalid_argument("Invalid State value cannot reverse");
+        throw std::invalid_argument("Invalid State value cannot sort");
     }
     
     void visit(StateValueMap& stateValue) override {
