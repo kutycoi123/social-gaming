@@ -102,7 +102,8 @@
       function appendText(text) {
         let messages = $('#messages');
         messages.append(text);
-        messages.scrollTop(messages[0].scrollHeight);
+
+        $("#messagesContainer").scrollTop($("#messagesContainer")[0].scrollHeight);
       }
 
       function hashName(name) {
@@ -149,7 +150,6 @@
         };
         ws.onerror = function(ev) {
           appendText("<div class='message'>[error]\n</div>");
-          console.log(ev);
         };
       });
 
