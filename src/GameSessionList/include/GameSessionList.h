@@ -19,8 +19,8 @@ class GameSessionList {
         bool joinGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         bool leaveGameSession(std::weak_ptr<User>&, const Invitation&) noexcept;
         
-        Invitation commenceGameSession(std::weak_ptr<User>&, const std::string&) noexcept;
-        bool concludeGameSession(const Invitation&) noexcept;
+        Invitation startGameSession(std::weak_ptr<User> &owner, const std::string &gameFilePath) noexcept;
+        bool endGameSession(const Invitation &invitation) noexcept;
 
         bool startGameInGameSession(std::weak_ptr<User>& user, const Invitation&);
         bool endGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation);
@@ -50,8 +50,8 @@ class GameSessionList {
         std::list<GameSession> sessionList;
         std::list<Message> messageBuffer;
 
-        std::unordered_map<UserId, Invitation, UserIdHash> user2InviteCode;
-        std::unordered_map<Invitation, std::vector<UserId>, InvitationHash> inviteCode2User;
+        std::unordered_map<UserId, Invitation, UserIdHash> userToInviteCode;
+        std::unordered_map<Invitation, std::vector<UserId>, InvitationHash> inviteCodeToUser;
 
 
         std::list<GameSession>::iterator findGameSession(const Invitation&) noexcept;

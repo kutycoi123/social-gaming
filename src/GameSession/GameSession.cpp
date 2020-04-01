@@ -1,9 +1,9 @@
 #include "GameSession.h"
 
 GameSession::GameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) :
-    messages({}),
-    invitationCode (Invitation::createNewInvitation()),
-    owner (owner)
+        lobbyMessages({}),
+        invitationCode (Invitation::createNewInvitation()),
+        owner (owner)
 {
     auto parser = GameParser(gameFilePath);
     game = parser.getGame();
@@ -35,30 +35,33 @@ void GameSession::endGame() {
     game->endGame();
 }
 
-void GameSession::addMessages(const std::string &message) noexcept{
-    messages.push_back(message);
+void GameSession::addLobbyMessage(const std::string& message) noexcept{
+    lobbyMessages.push_back(message);
 }
 
-void GameSession::addMessagesToGame(const std::string &message) noexcept{
+void GameSession::addMessageToGame(const UserId& userID, const std::string& message) noexcept{
     if (isGameStarted()) {
-        game->addMessages(message);
+        game->addMessage(userID, message);
     }
 }
 
 std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages() noexcept{
-    std::list<std::pair<UserId, std::string>> result = {};
+    std::list<std::pair<UserId, std::string>> result;
 
     if (game->isStarted()) {
         game->gameTick();
 
         auto gameMessages = game->updateAndGetAllMessages();
-        messages.insert(messages.end(), gameMessages.begin(), gameMessages.end());
+        result.insert(result.end(), gameMessages.begin(), gameMessages.end());
     }
 
-    for(auto& message : messages){
-        
-       for(auto& player : playerList.users){
-            result.emplace_back(player.lock()->getUserId(), message);
+    for(auto& message : lobbyMessages){
+        for(auto& player : playerList.users){
+           result.emplace_back(player.lock()->getUserId(), message);
+        }
+
+        for(auto& audience : audienceList.users){
+            result.emplace_back(audience.lock()->getUserId(), message);
         }
     }    
 
@@ -66,7 +69,7 @@ std::list<std::pair<UserId, std::string>> GameSession::getLobbyAndGameMessages()
 }
 
 void GameSession::clearMessages() noexcept {
-    messages = {};
+    lobbyMessages = {};
 }
 
 std::list<std::pair<UserId, std::string>> GameSession::getAndClearAllMessages() noexcept{

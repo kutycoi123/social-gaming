@@ -106,15 +106,15 @@ void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
     }
 }
 
-void GameState::addMessages(const std::string &message) noexcept{
-    messages.push_back(message);
+void GameState::addMessage(const UserId& userId, const std::string &message) noexcept{
+    messages.push_back(std::make_pair(userId, message));
 }
 
 void GameState::clearMessages() noexcept {
-    messages = {};
+    messages.clear();
 }
 
-std::list<std::string> GameState::updateAndGetAllMessages() noexcept{
+std::list<std::pair<UserId, std::string>> GameState::updateAndGetAllMessages() noexcept{
     auto gameMessages = messages;
     clearMessages();
 
@@ -145,4 +145,25 @@ void GameState::initializePerAudienceMap() {
         }
         perAudienceInitialMap.erase(key);
     }
+}
+
+void GameState::addMessageToAllPlayers(const std::string &message) noexcept {
+    for (const auto& playerPtr : playerList){
+        if (auto player = playerPtr.lock()){
+            messages.emplace_back(player->getUserId(), message);
+        }
+    }
+}
+
+void GameState::addMessageToAllAudience(const std::string &message) noexcept {
+    for (auto audiencePtr : audienceList){
+        if (auto audience = audiencePtr.lock()){
+            messages.emplace_back(audience->getUserId(), message);
+        }
+    }
+}
+
+void GameState::addMessageToEntireSession(const std::string &message) noexcept {
+    addMessageToAllAudience(message);
+    addMessageToAllPlayers(message);
 }

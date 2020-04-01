@@ -9,7 +9,7 @@ GlobalMessage::GlobalMessage(const std::string& value) :
 
 void GlobalMessage::process(GameState& gameState) {
     std::string parsedValue = parseValue(value);
-    gameState.addMessages(parsedValue);
+    gameState.addMessageToEntireSession(parsedValue);
 }
 
 std::string GameSpecification::GlobalMessage::parseValue(const std::string& basicString) {
