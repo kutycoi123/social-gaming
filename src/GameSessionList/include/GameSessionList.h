@@ -25,7 +25,7 @@ class GameSessionList {
         bool startGameInGameSession(std::weak_ptr<User>& user, const Invitation&);
         bool endGameInGameSession(std::weak_ptr<User>& user, const Invitation& invitation);
 
-        void addMessages(const std::list<Message>) noexcept;
+        void addMessages(const std::list<Message>&) noexcept;
         std::list<Message> updateAndGetAllMessages() noexcept;
 
         bool isUserInSession(const std::weak_ptr<User>&) const noexcept;

@@ -30,7 +30,10 @@ class GameSession {
         [[nodiscard]] bool isOwner(const UserId& user) const;
 
         void addLobbyMessage(const std::string &message) noexcept;
-        void addMessageToGame(const UserId& userID, const std::string &message) noexcept;
+        void addGameMessage(const UserId& userID, const std::string& message) noexcept;
+        void addGameMessageToPlayers(const std::string& message) noexcept;
+        void addGameMessageToAudience(const std::string& message) noexcept;
+        void addGameMessageToAllSession(const std::string& message) noexcept;
 
         std::list<std::pair<UserId, std::string>> getAndClearAllMessages() noexcept;
 

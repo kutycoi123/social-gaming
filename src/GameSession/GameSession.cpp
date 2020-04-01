@@ -39,7 +39,7 @@ void GameSession::addLobbyMessage(const std::string& message) noexcept{
     lobbyMessages.push_back(message);
 }
 
-void GameSession::addMessageToGame(const UserId& userID, const std::string& message) noexcept{
+void GameSession::addGameMessage(const UserId& userID, const std::string& message) noexcept{
     if (isGameStarted()) {
         game->addMessage(userID, message);
     }
@@ -86,8 +86,7 @@ void GameSession::addPlayer(const std::weak_ptr<User>& player) noexcept{
 }
 
 void GameSession::removePlayer(const std::weak_ptr<User>& player) noexcept{
-    
-    auto playerIterator = std::find_if(playerList.users.begin(), playerList.users.end(), [player](std::weak_ptr<User> listMember){
+    auto playerIterator = std::find_if(playerList.users.begin(), playerList.users.end(), [player](std::weak_ptr<User>& listMember){
         return player.lock()->getUserId() == listMember.lock()->getUserId();
     });
     
@@ -101,11 +100,29 @@ void GameSession::addAudienceMember(const std::weak_ptr<User>& audienceMember) n
 }
 
 void GameSession::removeAudienceMember(const std::weak_ptr<User> &audienceMember) noexcept {
-    auto audienceIterator = std::find_if(audienceList.users.begin(), audienceList.users.end(), [audienceMember](std::weak_ptr<User> listMember){
+    auto audienceIterator = std::find_if(audienceList.users.begin(), audienceList.users.end(), [audienceMember](std::weak_ptr<User>& listMember){
         return audienceMember.lock()->getUserId() == listMember.lock()->getUserId();
     });
 
     if(audienceIterator != audienceList.users.end()){
         audienceList.users.erase(audienceIterator);
+    }
+}
+
+void GameSession::addGameMessageToPlayers(const std::string &message) noexcept {
+    if (isGameStarted()) {
+        game->addMessageToAllPlayers(message);
+    }
+}
+
+void GameSession::addGameMessageToAudience(const std::string &message) noexcept {
+    if (isGameStarted()) {
+        game->addMessageToAllAudience(message);
+    }
+}
+
+void GameSession::addGameMessageToAllSession(const std::string &message) noexcept {
+    if (isGameStarted()) {
+        game->addMessageToAllSession(message);
     }
 }
