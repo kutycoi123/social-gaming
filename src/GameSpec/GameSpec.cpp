@@ -463,7 +463,6 @@ std::shared_ptr<BaseRule> GameSpec::createInputText(const nlohmann::json& curren
             )
     );
 
-
 }
 
 std::shared_ptr<BaseRule> GameSpec::createInputVote(const nlohmann::json& currentRuleJson){
@@ -521,7 +520,6 @@ std::shared_ptr<BaseRule> GameSpec::createReverse(const nlohmann::json& currentR
 std::shared_ptr<BaseRule> GameSpec::createScores(const nlohmann::json& currentRuleJson){
     int score = currentRuleJson.at(SpecTags::SCORE).get<int>();
     bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
-
     return std::shared_ptr<BaseRule>(new Scores(score, ascending));
 }
 
