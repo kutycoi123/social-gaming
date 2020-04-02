@@ -6,8 +6,10 @@ GameState::GameState() :
 
 void GameState::startGame(const std::list<std::weak_ptr<User>>& playerList, const std::list<std::weak_ptr<User>>& audienceList) {
     gameStarted = true;
-    initializePerPlayerMap(playerList);
-    initializePerAudienceMap(audienceList);
+    this->playerList = playerList;
+    this->audienceList = audienceList;
+    initializePerPlayerMap();
+    initializePerAudienceMap();
 }
 
 void GameState::endGame() {
@@ -104,11 +106,26 @@ void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
     }
 }
 
+void GameState::addMessage(const UserId& userId, const std::string &message) noexcept{
+    messages.emplace_back(userId, message);
+}
+
+void GameState::clearMessages() noexcept {
+    messages.clear();
+}
+
+std::list<std::pair<UserId, std::string>> GameState::updateAndGetAllMessages() noexcept{
+    auto gameMessages = messages;
+    clearMessages();
+
+    return gameMessages;
+}
+
 void GameState::addConfig(const GameConfig& gameConfig){
     this->gameConfig = gameConfig;
 }
 
-void GameState::initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList) {
+void GameState::initializePerPlayerMap() {
     for (const auto& value : perPlayerInitialMap){
         std::string key = value.first;
         perPlayerMap[key] = std::vector<StateValueUserPair>();
@@ -119,7 +136,7 @@ void GameState::initializePerPlayerMap(const std::list<std::weak_ptr<User>>& pla
     }
 }
 
-void GameState::initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList) {
+void GameState::initializePerAudienceMap() {
     for (const auto& value : perAudienceInitialMap){
         std::string key = value.first;
         perAudienceMap[key] = std::vector<StateValueUserPair>();
@@ -128,4 +145,25 @@ void GameState::initializePerAudienceMap(const std::list<std::weak_ptr<User>>& a
         }
         perAudienceInitialMap.erase(key);
     }
+}
+
+void GameState::addMessageToAllPlayers(const std::string &message) noexcept {
+    for (const auto& playerPtr : playerList){
+        if (auto player = playerPtr.lock()){
+            addMessage(player->getUserId(), message);
+        }
+    }
+}
+
+void GameState::addMessageToAllAudience(const std::string &message) noexcept {
+    for (const auto& audiencePtr : audienceList){
+        if (auto audience = audiencePtr.lock()){
+            addMessage(audience->getUserId(), message);
+        }
+    }
+}
+
+void GameState::addMessageToEntireSession(const std::string &message) noexcept {
+    addMessageToAllAudience(message);
+    addMessageToAllPlayers(message);
 }

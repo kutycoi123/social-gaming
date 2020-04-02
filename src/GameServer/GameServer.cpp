@@ -173,7 +173,7 @@ std::string GameServer::commandCREATE_SESSION(const std::vector<std::string>& co
         return "\n Unable to create GameSession: Game " + gameName + " does not exist";
     }
     
-    auto createdSessionInvitation = sessionList.commenceGameSession(user, *gameFileIterator);
+    auto createdSessionInvitation = sessionList.startGameSession(user, *gameFileIterator);
 
     std::string response;
     response.append("\n Created Lobby with Invitation code: ");

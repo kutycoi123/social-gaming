@@ -49,6 +49,13 @@ public:
     void addValue(const std::string &key, StateValueString value, const ValueType& valueType);
     void addValue(const std::string &key, StateValueList value, const ValueType& valueType);
     void addValue(const std::string &key, StateValueMap value, const ValueType& valueType);
+
+    void addMessage(const UserId&, const std::string& message) noexcept;
+    void addMessageToAllPlayers(const std::string& message) noexcept;
+    void addMessageToAllAudience(const std::string& message) noexcept;
+    void addMessageToEntireSession(const std::string& message) noexcept;
+    void clearMessages() noexcept;
+    std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
 private:
     bool gameStarted;
     std::unordered_map<std::string, std::shared_ptr<const StateValue>> constantsMap;
@@ -61,13 +68,13 @@ private:
     std::unordered_map<std::string, std::vector<StateValueUserPair>> perPlayerMap;
     std::unordered_map<std::string, std::vector<StateValueUserPair>> perAudienceMap;
     GameConfig gameConfig;
-
+    std::list<std::pair<UserId, std::string>> messages;
+    std::list<std::weak_ptr<User>> playerList;
+    std::list<std::weak_ptr<User>> audienceList;
     void insertIntoCorrectMap(const GameState::ValueType &valueType,
                               std::pair<std::string, std::shared_ptr<StateValue>>& pair);
-
-    void initializePerPlayerMap(const std::list<std::weak_ptr<User>>& playerList);
-
-    void initializePerAudienceMap(const std::list<std::weak_ptr<User>>& audienceList);
+    void initializePerPlayerMap();
+    void initializePerAudienceMap();
 };
 
 #endif

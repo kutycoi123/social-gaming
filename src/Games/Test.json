@@ -29,6 +29,10 @@
 
   "rules": [
     {
+      "rule": "global-message",
+      "value": "Hello world!"
+    },
+    {
       "rule": "add",
       "to": "TestInt1",
       "value": 5
