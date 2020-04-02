@@ -107,7 +107,7 @@ void GameState::insertIntoCorrectMap(const GameState::ValueType &valueType,
 }
 
 void GameState::addMessage(const UserId& userId, const std::string &message) noexcept{
-    messages.push_back(std::make_pair(userId, message));
+    messages.emplace_back(userId, message);
 }
 
 void GameState::clearMessages() noexcept {
@@ -150,15 +150,15 @@ void GameState::initializePerAudienceMap() {
 void GameState::addMessageToAllPlayers(const std::string &message) noexcept {
     for (const auto& playerPtr : playerList){
         if (auto player = playerPtr.lock()){
-            messages.emplace_back(player->getUserId(), message);
+            addMessage(player->getUserId(), message);
         }
     }
 }
 
 void GameState::addMessageToAllAudience(const std::string &message) noexcept {
-    for (auto audiencePtr : audienceList){
+    for (const auto& audiencePtr : audienceList){
         if (auto audience = audiencePtr.lock()){
-            messages.emplace_back(audience->getUserId(), message);
+            addMessage(audience->getUserId(), message);
         }
     }
 }

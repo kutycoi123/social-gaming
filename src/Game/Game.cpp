@@ -14,7 +14,8 @@ bool Game::isStarted() const {
 }
 
 void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::list<std::weak_ptr<User>>& audience) {
-    addMessageToAllSession(" The game has started...\n");
+    gameState.startGame(players, audience);
+    addMessageToAllSession(" The game has started!");
     importGameSpecRules();
 
     // Once the game has started, gameTick will end up being called.

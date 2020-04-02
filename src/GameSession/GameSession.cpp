@@ -83,6 +83,9 @@ std::list<std::pair<UserId, std::string>> GameSession::getAndClearAllMessages() 
 
 void GameSession::addPlayer(const std::weak_ptr<User>& player) noexcept{
     playerList.users.push_back(player);
+    if (auto playerPtr = player.lock()){
+        addLobbyMessage(playerPtr->getUserNameValue() + " has joined the game session as a player");
+    }
 }
 
 void GameSession::removePlayer(const std::weak_ptr<User>& player) noexcept{
@@ -92,11 +95,17 @@ void GameSession::removePlayer(const std::weak_ptr<User>& player) noexcept{
     
     if(playerIterator != playerList.users.end()){
         playerList.users.erase(playerIterator);
+        if (auto playerPtr = player.lock()){
+            addLobbyMessage(playerPtr->getUserNameValue() + " has left the game session");
+        }
     }
 }
 
 void GameSession::addAudienceMember(const std::weak_ptr<User>& audienceMember) noexcept {
     audienceList.users.push_back(audienceMember);
+    if (auto audiencePtr = audienceMember.lock()){
+        addLobbyMessage(audiencePtr->getUserNameValue() + " has joined the game session as an audience member");
+    }
 }
 
 void GameSession::removeAudienceMember(const std::weak_ptr<User> &audienceMember) noexcept {
@@ -106,6 +115,9 @@ void GameSession::removeAudienceMember(const std::weak_ptr<User> &audienceMember
 
     if(audienceIterator != audienceList.users.end()){
         audienceList.users.erase(audienceIterator);
+        if (auto audiencePtr = audienceMember.lock()){
+            addLobbyMessage(audiencePtr->getUserNameValue() + " has left the game session");
+        }
     }
 }
 

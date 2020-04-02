@@ -104,7 +104,7 @@ bool GameSessionList::startGameInGameSession(std::weak_ptr<User>& user, const In
     auto gameSession = findGameSession(invitation);
 
     //TODO: Check for owner, sessionList.IsOwner currently crashes program.
-    if (gameSession != sessionList.end()){
+    if (gameSession != sessionList.end() && !gameSession->isGameStarted()){
         gameSession->startGame();
         return true;
     }
