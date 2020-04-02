@@ -93,7 +93,6 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
 	std::shared_ptr<BaseRule> result;
 
-	// TODO: Delete this comment
 	if(currentRuleJson.contains(SpecTags::RULE_LIST)){
 		//these rules have child rules so we need to do more complex processing
 		//this part is the recursive part
@@ -255,7 +254,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 		}
 	}
 
-	return nullptr;
+	return result;
 }
 
 void GameSpec::createStateList(const json list,std::unique_ptr<StateValue> &ptr) {//TODO: move this inside StateList.
