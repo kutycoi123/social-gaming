@@ -22,7 +22,5 @@ enum Operator{
 };
 
 static bool evaluate(const GameState& , const std::string& );
-static Operator strToOp(const std::string&);
-static std::string optoStr(Operator);
 
 #endif

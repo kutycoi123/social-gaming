@@ -3,46 +3,25 @@
 using map_pair = std::pair<std::string, std::shared_ptr<StateValue>>;
 using Map = std::unordered_map<std::string, std::shared_ptr<StateValue>>;
 
+static std::unordered_map<std::string, Operator> strToOp({
+	{"==", Operator::EQUAL},
+	{".", Operator::DOT},
+	{"contains", Operator::CONTAINS},
+	{"collects", Operator::COLLECTS},
+	{"!", Operator::NEGATION},
+	{"(", Operator::OPEN_PARENTHESIS},
+	{"}", Operator::CLOSE_PARENTHESIS}
+});
 
-
-static Operator strToOp(const std::string& op){
-	if(op == "==")
-		return Operator::EQUAL;
-	if(op == ".")
-		return Operator::DOT;
-	if(op == "contains")
-		return Operator::CONTAINS;
-	if(op == "collects")
-		return Operator::COLLECTS;
-	if(op == "!")
-		return Operator::NEGATION;
-	if(op == "(")
-		return Operator::OPEN_PARENTHESIS;
-	if(op == ")")
-		return Operator::CLOSE_PARENTHESIS;
-	return Operator::UNKNOWN;
-}
-
-static std::string opToStr(Operator op){
-	switch(op){
-		case Operator::EQUAL:
-			return "==";
-		case Operator::DOT:
-			return ".";
-		case Operator::CONTAINS:
-			return "contains";
-		case Operator::COLLECTS:
-			return "collects";
-		case Operator::NEGATION:
-			return "!";
-		case Operator::OPEN_PARENTHESIS:
-			return "(";
-		case Operator::CLOSE_PARENTHESIS:
-			return ")";
-		default:
-			return "";
-	}
-}
+static std::unordered_map<Operator, std::string> opToStr({
+	{Operator::EQUAL, "=="},
+	{Operator::DOT, "."},
+	{Operator::CONTAINS, "contains"},
+	{Operator::COLLECTS, "collects"},
+	{Operator::NEGATION, "!"},
+	{Operator::OPEN_PARENTHESIS, "("},
+	{Operator::CLOSE_PARENTHESIS, ")"}
+});
 
 int precedence(Operator op){
 	switch(op){
@@ -63,7 +42,7 @@ int precedence(Operator op){
 std::string applyOp(const std::string& a, const std::string& b, Operator op, const GameState& gameState, Map& values){ 
 	StateValue* val1 = nullptr;
 	StateValue* val2 = nullptr;
-	std::string opStr = opToStr(op);
+	std::string opStr = opToStr[op];
 	std::string strResult = a + opStr + b;
 	//Get value for a and b in values
 	if(values.find(a) != values.end()){
@@ -217,9 +196,9 @@ static bool evaluate(const GameState& gameState, const std::string& tokens){
             // precedence to current token, which 
             // is an operator. Apply operator on top  
             // of 'ops' to top two elements in values stack. 
-			Operator currentOp = strToOp("" + tokens[i]);
+			Operator currentOp = strToOp["" + tokens[i]];
 			if(tokens[i] == '='){
-				currentOp = strToOp("==");
+				currentOp = strToOp["=="];
 				i++;
 			}
             while(!ops.empty() && precedence(ops.top()) 
