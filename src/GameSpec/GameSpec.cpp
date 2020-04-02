@@ -93,6 +93,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
 
 	std::shared_ptr<BaseRule> result;
 
+	// TODO: Delete this comment
 	if(currentRuleJson.contains(SpecTags::RULE_LIST)){
 		//these rules have child rules so we need to do more complex processing
 		//this part is the recursive part
