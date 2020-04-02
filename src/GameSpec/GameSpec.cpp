@@ -206,11 +206,13 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
         //1 rules field. only .
 
 		if(ruleType == RuleTags::Add){
+
             result = createAdd(currentRuleJson);
 		}		
         else if(ruleType == RuleTags::Deal) {
             result = createDeal(currentRuleJson);
         }
+
 		else if(ruleType == RuleTags::Discard){
             result = createDiscard(currentRuleJson);
         }
@@ -235,6 +237,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
         else if(ruleType == RuleTags::Reverse){
             result = createReverse(currentRuleJson);
         }
+
         else if(ruleType == RuleTags::Scores){
             result = createScores(currentRuleJson);
         } 
@@ -244,6 +247,7 @@ std::shared_ptr<BaseRule> GameSpec::recursivelyParseSpec(const nlohmann::json& c
         else if(ruleType == RuleTags::Sort){
             result = createSort(currentRuleJson);
         } 
+
     	else{
 			//something horrible happened
 			assert(false);
