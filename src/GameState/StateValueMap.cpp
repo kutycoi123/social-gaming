@@ -30,3 +30,23 @@ void StateValueMap::accept(GameStateVisitor &visitor) {
 void StateValueMap::accept(GameStateVisitor &visitor, StateValue* stateValue){
 
 }
+
+void StateValueMap::addValue(const std::string& key, StateValueBoolean& value) {
+    stateValueMap.insert({key, std::make_shared<StateValueBoolean>(value)});
+}
+
+void StateValueMap::addValue(const std::string& key, StateValueNumber& value) {
+    stateValueMap.insert({key, std::make_shared<StateValueNumber>(value)});
+}
+
+void StateValueMap::addValue(const std::string& key, StateValueString& value) {
+    stateValueMap.insert({key, std::make_shared<StateValueString>(value)});
+}
+
+void StateValueMap::addValue(const std::string& key, StateValueMap& value) {
+    stateValueMap.insert({key, std::make_shared<StateValueMap>(value)});
+}
+
+void StateValueMap::addValue(const std::string& key, StateValueList& value) {
+    stateValueMap.insert({key, std::make_shared<StateValueList>(value)});
+}
