@@ -7,6 +7,7 @@ namespace Tags{
 
 }
 ////public methods
+using json = nlohmann::json;
 GameParser::GameParser(const std::string& path) :
     hasGame(true) 
     {
@@ -52,10 +53,33 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
         }
     }
     auto constants = gameJson.at(CONSTANTS);
+    
+    StateValueMap s;
+    std::unordered_map<std::string, std::shared_ptr<StateValue>>  a;
+    const std::vector<std::shared_ptr<StateValue>> l;
     for(auto constant : constants.items()){
         if(constant.key() == WEAPONS){
-            for(auto constantValue : constant.value()){
-            }
+            std::cout << (constant.value().type() == json::value_t::array) << "\n";
+            std::cout << constant.value() << "\n";
+            gameState.addValue(WEAPONS, StateValueMap(constant.value()), GameState::ValueType::CONSTANT);
+
+
+
+            //s = static_cast<StateValueMap>(constant.value().type());
+            //std::cout<<constant.value().type_name()<<"\n";
+
+//            for(auto constantValue : constant.value()){
+//                //StateValueList(a) = constantValue;
+//                std::cout << constantValue << "\n";
+//                //a.push_back(constantValue.);
+//
+//                //gameState.addValue(WEAPONS, StateValueList(), GameState::ValueType::CONSTANT);
+//                for(auto r : constantValue.items()){
+//                    std::cout << r << "\n";
+//                    //gameState.addValue(WEAPONS, s, GameState::ValueType::CONSTANT);
+//
+//                }
+//            }
         }
     }
 
