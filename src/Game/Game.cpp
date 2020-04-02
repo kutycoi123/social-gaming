@@ -5,6 +5,7 @@
 Game::Game(GameSpecification::GameSpec spec, GameState state) :
     gameSpec{std::move(spec)},
     gameState{std::move(state)},
+    currentRuleIndex(0),
     messages{},
     isGameStarted(false)
 {}
@@ -35,12 +36,19 @@ std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexce
 }
 
 void Game::gameTick() {
-    bool isProgramCounterWithinRange = currentRuleIndex < gameRules.size();
-    if (isProgramCounterWithinRange) {
-        /*
-        bool isCurrentRuleFullyProcessed = processRule(gameRules.at(currentRuleIndex));
-        if (isCurrentRuleFullyProcessed) currentRuleIndex += 1;
-        */
+    if (nextRules.size() > 0 || currentRuleIndex <= gameRules.size()) {
+        if(nextRules.size() == 0){
+            nextRules = {*std::next(gameRules.begin(), currentRuleIndex)};
+        }
+        
+        std::list<std::shared_ptr<BaseRule>> newNextRules {};
+
+        for(auto& rule : nextRules){
+            rule->process(gameState);
+            newNextRules.insert(newNextRules.end(), rule->getNextPtr().begin(), rule->getNextPtr().end());
+        }
+
+        nextRules = newNextRules;        
     } else {
         endGame();
     }
@@ -49,18 +57,6 @@ void Game::gameTick() {
 void Game::importGameSpecRules() {
     gameRules.clear();
     gameRules = gameSpec.getRules();
-}
-
-bool Game::processRule(std::shared_ptr<BaseRule>& rule) {
-    /*
-    if (rule != nullptr) {
-        rule->process(gameState);
-        rule = rule->getNextPtr();
-        return false;
-    }
-    */
-
-    return true;
 }
 
 void Game::addMessageToAllPlayers(const std::string &message) noexcept {

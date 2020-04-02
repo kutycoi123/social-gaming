@@ -13,7 +13,7 @@ void When::process(GameState&){
 
 }
 
-WhenCase::WhenCase(const std::string& condition, const std::list<std::shared_ptr<BaseRule>>& rule) :
+WhenCase::WhenCase(const std::string& condition, const std::list<std::shared_ptr<BaseRule>>& rules) :
     condition(condition),
     rules(rules)
     {}

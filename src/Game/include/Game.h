@@ -22,12 +22,16 @@ public:
 private:
     // Rule Processor Methods
     void importGameSpecRules();
-    bool processRule(std::shared_ptr<BaseRule>& rule);
 
     GameSpecification::GameSpec gameSpec;
     GameState gameState;
     std::list<std::shared_ptr<BaseRule>> gameRules;
     unsigned int currentRuleIndex;
+
+    std::list<std::shared_ptr<BaseRule>> nextRules;
+
+    std::list<std::weak_ptr<User>> playerList;
+    std::list<std::weak_ptr<User>> audienceList;
     std::list<std::string> messages;
     bool isGameStarted;
 };
