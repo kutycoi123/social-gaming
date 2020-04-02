@@ -42,5 +42,6 @@ class GameParser{
         const std::string VARIABLES = "variables";
         const std::string PER_PLAYER = "per-player";
         const std::string PER_AUDIENCE = "per-audience";
+        const std::string CONSTANTS = "constants";
 };
 #endif

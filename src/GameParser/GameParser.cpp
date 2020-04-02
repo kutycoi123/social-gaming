@@ -33,36 +33,34 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
 
     GameState gameState;
     //TODO parse configurations
-    std::vector<std::string> ec_a;
     auto gameConfig = GameConfig();
     auto config = gameJson.at(CONFIGURATION);
-    for(auto a: config){
-        if(a.at(NAME)){
-            gameConfig.setName(a.at(NAME));
-        } else if (a.at(AUDIENCE)) {
-            gameConfig.setAudience(a.at(AUDIENCE));
+
+    for(auto item : config.items()){
+        if(item.key() == NAME){
+            gameConfig.setName(item.value());
         }
-        else if (a.at(PLAYER_COUNT)){
-            auto playerCount = Configuration::PlayerCount{a.at(PLAYER_COUNT).at(MAX), a.at(PLAYER_COUNT).at(MIN)};
+        else if (item.key() == AUDIENCE) {
+            gameConfig.setAudience(item.value());
+        }
+        else if (item.key() == PLAYER_COUNT){
+            auto playerCount = Configuration::PlayerCount{item.value().at(MAX), item.value().at(MIN)};
             gameConfig.setPlayerCount(playerCount);
         }
-        else if(a.at(SETUP)){
+        else if(item == SETUP){
             //using StateValue
         }
     }
-    auto variables = gameJson.at(VARIABLES);
-    for(auto a : variables){
-        if(a.at(WEAPONS)){
-            auto b = a.at(WEAPONS);
-            for(auto c : b){
-                //gameState.addValue(p.at(NAME), p.at(NAME).type());
-                //p.at(BEATS);
+    auto constants = gameJson.at(CONSTANTS);
+    for(auto constant : constants.items()){
+        if(constant.key() == WEAPONS){
+            for(auto constantValue : constant.value()){
             }
         }
     }
 
-    auto perPlayer = gameJson.at(PER_PLAYER).type();
-    auto perAudience = gameJson.at(PER_AUDIENCE).type();
+//    auto perPlayer = gameJson.at(PER_PLAYER).type();
+//    auto perAudience = gameJson.at(PER_AUDIENCE).type();
 
     return gameState;
 
