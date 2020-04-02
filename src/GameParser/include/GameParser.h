@@ -14,7 +14,7 @@
 
 class GameParser{
     public:
-        //The constructor should take in a string which is the filepath of the appropriate Game JSON, create the game, and store the game in a member variable
+    //The constructor should take in a string which is the filepath of the appropriate Game JSON, create the game, and store the game in a member variable
         GameParser(const std::string&);
         //This returns the Game object that was created by the Constructor
         //Unique ptr gets returned and reset so this object should be deleted after because it should be useless
@@ -28,5 +28,19 @@ class GameParser{
 
         std::unique_ptr<Game> game;
         bool hasGame;
+        const std::string CONFIGURATION = "configuration";
+        const std::string PLAYER_COUNT = "player count";
+        const std::string MIN = "min";
+        const std::string MAX = "max";
+        const std::string ROUNDS = "Rounds";
+        const std::string WEAPONS = "weapons";
+        const std::string NAME = "name";
+        const std::string BEATS = "beats";
+        const std::string WINS = "wins";
+        const std::string AUDIENCE = "audience";
+        const std::string SETUP = "setup";
+        const std::string VARIABLES = "variables";
+        const std::string PER_PLAYER = "per-player";
+        const std::string PER_AUDIENCE = "per-audience";
 };
 #endif
