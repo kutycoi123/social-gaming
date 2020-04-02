@@ -3,16 +3,25 @@
 
 #include <memory>
 #include "StateValue.h"
+#include "StateValueString.h"
+#include "StateValueBoolean.h"
+#include "StateValueNumber.h"
+class StateValueMap;
 
 class StateValueList : public StateValue {
 public:
     StateValueList();
 
-    StateValueList(const std::vector<std::shared_ptr<StateValue>>&);
+    explicit StateValueList(const std::vector<std::shared_ptr<StateValue>>&);
 
     StateValue::ValueType getValueType() override;
 
     std::vector<std::shared_ptr<StateValue>>& getList();
+    void addValue(StateValueBoolean&);
+    void addValue(StateValueNumber&);
+    void addValue(StateValueString&);
+    void addValue(StateValueMap&);
+    void addValue(StateValueList&);
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;

@@ -24,3 +24,23 @@ void StateValueList::accept(GameStateVisitor &visitor) {
 void StateValueList::accept(GameStateVisitor &visitor, StateValue* stateValue){
 
 }
+
+void StateValueList::addValue(StateValueBoolean& value) {
+    stateValueList.push_back(std::make_shared<StateValueBoolean>(value));
+}
+
+void StateValueList::addValue(StateValueNumber& value) {
+    stateValueList.push_back(std::make_shared<StateValueNumber>(value));
+}
+
+void StateValueList::addValue(StateValueString& value) {
+    stateValueList.push_back(std::make_shared<StateValueString>(value));
+}
+
+void StateValueList::addValue(StateValueMap& value) {
+    stateValueList.push_back(std::make_shared<StateValueMap>(value));
+}
+
+void StateValueList::addValue(StateValueList& value) {
+    stateValueList.push_back(std::make_shared<StateValueList>(value));
+}
