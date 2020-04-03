@@ -95,9 +95,13 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
         } else{
             auto s = value.value();
             if(s.is_number()){
-                StateValueNumber val((int)s);
+                StateValueNumber val((double)s);
+                gameState.addValue(value.key(), val, GameState::ValueType::VARIABLE);
+            }else if(s.is_string()){
+                StateValueString val(s);
                 gameState.addValue(value.key(), val, GameState::ValueType::VARIABLE);
             }
+            //TODO: Add more code to handle other types
         }
     }
 
