@@ -14,9 +14,8 @@ bool Game::isStarted() const {
 }
 
 void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::list<std::weak_ptr<User>>& audience) {
-    playerList.insert(playerList.end(), players.begin(), players.end());
-    audienceList.insert(audienceList.end(), audience.begin(), audience.end());
-    addMessages(" User has started the game...\n");
+    gameState.startGame(players, audience);
+    addMessageToAllSession(" The game has started!");
     importGameSpecRules();
 
     // Once the game has started, gameTick will end up being called.
@@ -27,19 +26,12 @@ void Game::endGame() {
     isGameStarted = false;
 }
 
-void Game::addMessages(const std::string &message) noexcept{
-    messages.push_back(message);
+void Game::addMessage(const UserId& userId, const std::string &message) noexcept {
+    gameState.addMessage(userId, message);
 }
 
-std::list<std::string> Game::updateAndGetAllMessages() noexcept{
-    auto gameMessages = messages;
-    clearMessages();
-
-    return gameMessages;
-}
-
-void Game::clearMessages() noexcept {
-    messages = {};
+std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexcept {
+    return gameState.updateAndGetAllMessages();
 }
 
 void Game::gameTick() {
@@ -69,4 +61,16 @@ bool Game::processRule(std::shared_ptr<BaseRule>& rule) {
     */
 
     return true;
+}
+
+void Game::addMessageToAllPlayers(const std::string &message) noexcept {
+    gameState.addMessageToAllPlayers(message);
+}
+
+void Game::addMessageToAllAudience(const std::string &message) noexcept {
+    gameState.addMessageToAllAudience(message);
+}
+
+void Game::addMessageToAllSession(const std::string &message) noexcept {
+    gameState.addMessageToEntireSession(message);
 }

@@ -29,8 +29,11 @@ class GameSession {
 
         [[nodiscard]] bool isOwner(const UserId& user) const;
 
-        void addMessages(const std::string &message) noexcept;
-        void addMessagesToGame(const std::string &message) noexcept;
+        void addLobbyMessage(const std::string &message) noexcept;
+        void addGameMessage(const UserId& userID, const std::string& message) noexcept;
+        void addGameMessageToPlayers(const std::string& message) noexcept;
+        void addGameMessageToAudience(const std::string& message) noexcept;
+        void addGameMessageToAllSession(const std::string& message) noexcept;
 
         std::list<std::pair<UserId, std::string>> getAndClearAllMessages() noexcept;
 
@@ -41,7 +44,7 @@ class GameSession {
         void removeAudienceMember(const std::weak_ptr<User>& audienceMember) noexcept;
         
     private:
-        std::list<std::string> messages;
+        std::list<std::string> lobbyMessages;
         Invitation invitationCode;
         std::unique_ptr<Game> game;
         std::weak_ptr<User>& owner;

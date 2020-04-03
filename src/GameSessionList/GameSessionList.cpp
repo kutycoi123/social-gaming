@@ -1,9 +1,9 @@
 #include "GameSessionList.h"
 
-GameSessionList::GameSessionList() : 
-    sessionList({}),
-    user2InviteCode({}),
-    inviteCode2User({}) {}
+GameSessionList::GameSessionList() :
+        sessionList({}),
+        userToInviteCode({}),
+        inviteCodeToUser({}) {}
 
 bool GameSessionList::joinGameSession(std::weak_ptr<User>& userRef, const Invitation& invitation) noexcept{
     auto gameSession = findGameSession(invitation);
@@ -29,14 +29,14 @@ bool GameSessionList::leaveGameSession(std::weak_ptr<User>& userRef, const Invit
     return false;
 }
 
-Invitation GameSessionList::commenceGameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) noexcept{
+Invitation GameSessionList::startGameSession(std::weak_ptr<User>& owner, const std::string& gameFilePath) noexcept{
     GameSession gameSession(owner, gameFilePath);
     auto inviteCode = gameSession.getInvitationCode();
     sessionList.push_back(std::move(gameSession));
     return inviteCode;
 }
 
-bool GameSessionList::concludeGameSession(const Invitation& invitation) noexcept{
+bool GameSessionList::endGameSession(const Invitation& invitation) noexcept{
     auto session = findGameSession(invitation);
     
     if (session != sessionList.end()){
@@ -47,7 +47,7 @@ bool GameSessionList::concludeGameSession(const Invitation& invitation) noexcept
     return false;
 }
 
-void GameSessionList::addMessages(const std::list<Message> messages) noexcept{
+void GameSessionList::addMessages(const std::list<Message>& messages) noexcept{
     messageBuffer.insert(messageBuffer.end(), messages.begin(), messages.end());
 }
 
@@ -77,25 +77,25 @@ std::list<Message> GameSessionList::updateAndGetAllMessages() noexcept{
 }
 
 void GameSessionList::addMessageToCorrectSession(const Message& message) noexcept{
-	auto userIterator =  user2InviteCode.find(message.user.getUserId());
+	auto userIterator = userToInviteCode.find(message.user.getUserId());
 
-	if(userIterator != user2InviteCode.end()) {
+	if(userIterator != userToInviteCode.end()) {
         auto sessionIterator = findGameSession(userIterator->second);
                             
         if(sessionIterator != sessionList.end()) {
-            sessionIterator->addMessages(message.payload);
+            sessionIterator->addLobbyMessage(message.payload);
         }
     }
 }
 
 void GameSessionList::addMessageToCorrectGame(const Message& message) noexcept {
-    auto userIterator =  user2InviteCode.find(message.user.getUserId());
+    auto userIterator =  userToInviteCode.find(message.user.getUserId());
 
-    if(userIterator != user2InviteCode.end()) {
+    if(userIterator != userToInviteCode.end()) {
         auto sessionIterator = findGameSession(userIterator->second);
 
         if(sessionIterator != sessionList.end()) {
-            sessionIterator->addMessagesToGame(message.payload);
+            sessionIterator->addGameMessage(message.user.getUserId(), message.payload);
         }
     }
 }
@@ -104,7 +104,7 @@ bool GameSessionList::startGameInGameSession(std::weak_ptr<User>& user, const In
     auto gameSession = findGameSession(invitation);
 
     //TODO: Check for owner, sessionList.IsOwner currently crashes program.
-    if (gameSession != sessionList.end()){
+    if (gameSession != sessionList.end() && !gameSession->isGameStarted()){
         gameSession->startGame();
         return true;
     }
@@ -134,7 +134,7 @@ std::list<GameSession>::iterator GameSessionList::findGameSession(const Invitati
 
 bool GameSessionList::isUserInSession(const std::weak_ptr<User>& user) const noexcept{
     try{
-        auto invite = user2InviteCode.at(user.lock()->getUserId());
+        auto invite = userToInviteCode.at(user.lock()->getUserId());
         return true;
     }
     catch (std::out_of_range&) {
@@ -144,12 +144,12 @@ bool GameSessionList::isUserInSession(const std::weak_ptr<User>& user) const noe
 
 
 void GameSessionList::addToUserInviteCodeMaps(const UserId& id, const Invitation& invite) noexcept{
-    user2InviteCode.insert(std::make_pair(id, invite));
+    userToInviteCode.insert(std::make_pair(id, invite));
 
-    auto userList = inviteCode2User.find(invite);
+    auto userList = inviteCodeToUser.find(invite);
 
-    if(userList == inviteCode2User.end()){
-        inviteCode2User.insert(std::make_pair(invite, std::vector<UserId>({id})));
+    if(userList == inviteCodeToUser.end()){
+        inviteCodeToUser.insert(std::make_pair(invite, std::vector<UserId>({id})));
     }
     else {
         userList->second.push_back(id);
@@ -157,14 +157,14 @@ void GameSessionList::addToUserInviteCodeMaps(const UserId& id, const Invitation
 }
 
 void GameSessionList::removeFromUserInviteCodeMaps(const UserId& id, const Invitation& invite) noexcept{
-    auto userId = user2InviteCode.find(id);
+    auto userId = userToInviteCode.find(id);
 
-    user2InviteCode.erase(userId);
+    userToInviteCode.erase(userId);
 
-    auto userList = inviteCode2User.find(invite);
+    auto userList = inviteCodeToUser.find(invite);
 
     if(userList->second.size() <= 1){
-        inviteCode2User.erase(userList);
+        inviteCodeToUser.erase(userList);
     }
     else {
         userList->second.erase(std::find(userList->second.begin(), userList->second.end(), id));

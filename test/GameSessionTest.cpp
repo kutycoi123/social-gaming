@@ -50,7 +50,7 @@ TEST_F(GameSessionTest, isOwner) {
 
 TEST_F(GameSessionTest, addMessages) {
     std::string message = "TestMessage";
-    gameSession->addMessages(message);
+    gameSession->addLobbyMessage(message);
     EXPECT_TRUE(true);
 }
 
@@ -65,8 +65,8 @@ TEST_F(GameSessionTest, getAndClearAllMessages) {
     std::string message2 = "TestMessage2";
     std::string message3 = "TestMessage3";
 
-    gameSession->addMessages(message1);
-    gameSession->addMessages(message2);
+    gameSession->addLobbyMessage(message1);
+    gameSession->addLobbyMessage(message2);
     gameSession->addMessagesToGame(message3);
     auto message = gameSession->getAndClearAllMessages();
 
