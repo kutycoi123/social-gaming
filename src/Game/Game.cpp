@@ -36,8 +36,8 @@ std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexce
 }
 
 void Game::gameTick() {
-    if (nextRules.size() > 0 || currentRuleIndex <= gameRules.size()) {
-        if(nextRules.size() == 0){
+    if (!nextRules.empty() || currentRuleIndex <= gameRules.size()) {
+        if(nextRules.empty()){
             nextRules = {*std::next(gameRules.begin(), currentRuleIndex)};
             currentRuleIndex++;
         }
@@ -47,8 +47,9 @@ void Game::gameTick() {
         for(auto& rule : nextRules){
             rule->process(gameState);
 
-            if(rule->getNextPtr().size() != 0){
-                newNextRules.insert(newNextRules.end(), rule->getNextPtr().begin(), rule->getNextPtr().end());
+            //probably can replace with std::insert
+            for (auto& nextRule : rule->getNextPtr()){
+                newNextRules.push_back(nextRule);
             }
         }
 
