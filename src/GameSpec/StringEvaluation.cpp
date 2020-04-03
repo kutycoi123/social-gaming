@@ -130,6 +130,19 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 	return strResult;
 }
 
+void compute(std::stack<Operator>& ops, std::stack<std::string>& literalValues, GameState& gameState,
+					std::unordered_map<std::string, std::shared_ptr<StateValue>>& values){
+		std::string str1 = literalValues.top();
+        literalValues.pop(); 
+
+		std::string str2 = literalValues.top();
+        literalValues.pop(); 
+
+        Operator op = ops.top(); 
+        ops.pop();
+       	literalValues.push(applyOp(str1, str2, op, gameState, values));
+}
+
 static bool evaluate(GameState& gameState, const std::string& tokens){
 
 	std::unordered_map<std::string, std::shared_ptr<StateValue>> values;
@@ -190,17 +203,7 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
         { 
             while(!ops.empty() && ops.top() != Operator::OPEN_PARENTHESIS) 
             { 
-                std::string str1 = literalValues.top();
-                literalValues.pop(); 
-                  
-				std::string str2 = literalValues.top();
-                literalValues.pop(); 
-                  
-                Operator op = ops.top(); 
-                ops.pop(); 
-                  
-                literalValues.push(applyOp(str1, str2, op, gameState, values)); 
-
+				compute(ops, literalValues, gameState, values);
             } 
               
             // pop opening brace. 
@@ -222,16 +225,7 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
 			}
             while(!ops.empty() && precedence(ops.top()) 
                                 >= precedence(currentOp)){ 
-				std::string str2 = literalValues.top();
-                literalValues.pop(); 
-                  
-				std::string str1 = literalValues.top();
-                literalValues.pop(); 
-                  
-                Operator op = ops.top(); 
-                ops.pop(); 
-                  
-                literalValues.push(applyOp(str1, str2, op, gameState, values)); 
+				compute(ops, literalValues, gameState, values);
             } 
               
             // Push current token to 'ops'. 
@@ -243,17 +237,7 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
     // point, apply remaining ops to remaining 
     // values. 
     while(!ops.empty()){ 
-		std::string str2 = literalValues.top();
-        literalValues.pop(); 
-                  
-		std::string str1 = literalValues.top();
-        literalValues.pop(); 
-                  
-        Operator op = ops.top(); 
-        ops.pop(); 
-                  
-        literalValues.push(applyOp(str1, str2, op, gameState, values)); 
-
+		compute(ops, literalValues, gameState, values);
     } 
       
     // Top of 'values' contains result, return it. 
