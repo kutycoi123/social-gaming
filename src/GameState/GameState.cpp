@@ -132,8 +132,8 @@ void GameState::initializePerPlayerMap() {
         for (const auto& user : playerList) {
             perPlayerMap[key].push_back(StateValueUserPair{user, value.second});
         }
-        perPlayerInitialMap.erase(key);
     }
+    perPlayerInitialMap.clear();
 }
 
 void GameState::initializePerAudienceMap() {
@@ -143,8 +143,8 @@ void GameState::initializePerAudienceMap() {
         for (const auto& user : audienceList){
             perAudienceMap[key].push_back(StateValueUserPair{user, value.second});
         }
-        perAudienceInitialMap.erase(key);
     }
+    perAudienceInitialMap.clear();
 }
 
 void GameState::addMessageToAllPlayers(const std::string &message) noexcept {
