@@ -21,6 +21,6 @@ enum Operator{
 	UNKNOWN
 };
 
-static bool evaluate(const GameState& , const std::string& );
+static bool evaluate(GameState& , const std::string& );
 
 #endif
