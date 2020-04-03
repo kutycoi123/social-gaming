@@ -48,8 +48,8 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
             gameConfig.setPlayerCount(playerCount);
         }
         else if(item.key() == SETUP){
-//            Setup setup = item.value();
-//            gameConfig.setSetup(setup);
+            Setup setup = item.value();
+            gameConfig.setSetup(setup);
         }
     }
     auto constants = gameJson.at(CONSTANTS);

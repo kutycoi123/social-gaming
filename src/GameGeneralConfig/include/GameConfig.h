@@ -20,7 +20,7 @@ namespace Configuration {
     };
 };
 
-using Setup = std::unordered_map<std::string, Configuration::SetupValue>;
+using Setup = std::unordered_map<std::string, int>;
 
 
 class GameConfig {
