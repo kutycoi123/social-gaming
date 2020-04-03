@@ -92,6 +92,12 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
             auto s = value.value();
             list1.addValue(map4);
             gameState.addValue(WINNERS, list1, GameState::ValueType::VARIABLE);
+        } else{
+            auto s = value.value();
+            if(s.is_number()){
+                StateValueNumber val((int)s);
+                gameState.addValue(value.key(), val, GameState::ValueType::VARIABLE);
+            }
         }
     }
 
