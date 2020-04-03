@@ -1,6 +1,5 @@
 #include "GameParser.h"
 #include "GameConfig.h"
-#include <algorithm>
 
 namespace Tags{
 
@@ -32,7 +31,7 @@ nlohmann::json GameParser::fileToJson(const std::string& pathName) {
 GameState  GameParser::createGameState(nlohmann::json gameJson) {
 
     GameState gameState;
-    //TODO parse configurations
+    //TODO make it more generic to support more games
     auto gameConfig = GameConfig();
     auto config = gameJson.at(CONFIGURATION);
 
@@ -63,8 +62,6 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
     for(const auto& constant : constants.items()){
         if(constant.key() == WEAPONS){
             for(auto constantValue : constant.value()){
-                std::cout << constantValue << "\n";
-
                 for(const auto r : constantValue.items()){
 
                     auto e = StateValueString(r.value());
