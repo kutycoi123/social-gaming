@@ -39,21 +39,40 @@ int precedence(Operator op){
 
 
 
-std::string applyOp(const std::string& a, const std::string& b, Operator op, const GameState& gameState, Map& values){ 
-	StateValue* val1 = nullptr;
-	StateValue* val2 = nullptr;
+std::string applyOp(const std::string& a, const std::string& b, Operator op, GameState& gameState, Map& values){ 
+	std::shared_ptr<StateValue> val1 = nullptr;
+	std::shared_ptr<StateValue> val2 = nullptr;
 	std::string opStr = opToStr[op];
 	std::string strResult = a + opStr + b;
 	//Get value for a and b in values
 	if(values.find(a) != values.end()){
-		val1 = values[a].get();	
+		val1 = values[a];	
 	}else{
 		//TODO: Add code to get value for a in gameState
+		auto gameStateVariable = gameState.getVariable(a);
+		if(!gameStateVariable.has_value()){
+			return strResult;
+		}
+		val1 = gameStateVariable->lock();
 	}
+
+	if(b == "size"){
+		auto result = static_cast<StateValueList*>(val1.get())->getList().size();
+		values.insert(map_pair(strResult, std::shared_ptr<StateValue>(new StateValueNumber((int)result))));
+		return strResult;
+	}
+
 	if(values.find(b) != values.end()){
-		val2 = values[a].get();
+		val2 = values[a];
 	}else{
 		//TODO: Add code to get value for b in gameState
+		auto gameStateVariable = gameState.getVariable(a);
+		if(gameStateVariable.has_value()){
+			val2 = gameStateVariable->lock();
+		}else{ //b is just a key string of a
+			val2 = std::shared_ptr<StateValue>(new StateValueString(b));
+		}
+
 	}
 	
 	switch(op){
@@ -75,8 +94,8 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, con
 			{
 				//TODO: Find value with key as val2 inside val1. 
 				//val1 should be StateValueMap, val2 should be a string field
-				auto val1Casted = static_cast<StateValueMap*>(val1);
-				auto val2Casted = static_cast<StateValueString*>(val2);
+				auto val1Casted = static_cast<StateValueMap*>(val1.get());
+				auto val2Casted = static_cast<StateValueString*>(val2.get());
 				
 				auto result = val1Casted->getValue(val2Casted->getValue()).value();
 
@@ -111,7 +130,7 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, con
 	return strResult;
 }
 
-static bool evaluate(const GameState& gameState, const std::string& tokens){
+static bool evaluate(GameState& gameState, const std::string& tokens){
 
 	std::unordered_map<std::string, std::shared_ptr<StateValue>> values;
 	//std::vector<std::string> tokens;
