@@ -1,7 +1,6 @@
 #include "include/GameConfig.h"
 
 using Configuration::PlayerCount;
-using Setup = std::unordered_map<std::string, Configuration::SetupValue>;
 
 GameConfig::GameConfig()
     : name(""),
