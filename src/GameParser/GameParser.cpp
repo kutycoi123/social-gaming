@@ -37,7 +37,7 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
     auto gameConfig = GameConfig();
     auto config = gameJson.at(CONFIGURATION);
 
-    for(auto item : config.items()){
+    for(const auto item : config.items()){
         if(item.key() == NAME){
             gameConfig.setName(item.value());
         }
@@ -56,13 +56,15 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
     StateValueMap s1;
     StateValueMap s2;
     StateValueMap s3;
+    StateValueMap s4;
     StateValueList l;
+    StateValueList l1;
     for(const auto& constant : constants.items()){
         if(constant.key() == WEAPONS){
             for(auto constantValue : constant.value()){
                 std::cout << constantValue << "\n";
 
-                for(auto r : constantValue.items()){
+                for(const auto r : constantValue.items()){
 
                     auto e = StateValueString(r.value());
 
@@ -84,44 +86,28 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
     l.addValue(s2);
 
     gameState.addValue(WEAPONS, l, GameState::ValueType::CONSTANT);
-    for (auto value: s1.getMap()) {
-        std::cout << value.first << " : " << value.second.get() << "\n";
-    }
-    for (auto value: s2.getMap()) {
-        std::cout << value.first << " : " << value.second.get() << "\n";
-    }
-
-    for (auto value: s3.getMap()) {
-        std::cout << value.first << " : " << value.second.get() << "\n";
-    }
-
 
     auto variable = gameJson.at(VARIABLES);
-    for(auto value: variable.items()){
+    for(const auto& value: variable.items()){
         if(value.key() == WINNERS){
-
-
+            auto s = value.value();
+            l1.addValue(s4);
+            gameState.addValue(WINNERS, l1, GameState::ValueType::VARIABLE);
         }
     }
 
     auto perPlayer = gameJson.at(PER_PLAYER);
-    for(auto pPlayer : perPlayer.items()){
+    for(const auto pPlayer : perPlayer.items()){
         if(pPlayer.key() == WINS){
-
-
-
+            StateValueNumber j = StateValueNumber(pPlayer.value().is_number_integer());
+            gameState.addValue(WINS, StateValueNumber(pPlayer.value().is_number_integer()), GameState::ValueType::PER_PLAYER);
         }
     }
 
     auto perAudience = gameJson.at(PER_AUDIENCE);
-    for(auto pPlayer : perPlayer.items()){
-        //gameState.addValue(PER_AUDIENCE, static_cast<StateValueMap>(pPlayer.value()), GameState::ValueType::CONSTANT);
-
+    for(auto pAudience : perPlayer.items()){
 
     }
-
-//    auto perPlayer = gameJson.at(PER_PLAYER).type();
-//    auto perAudience = gameJson.at(PER_AUDIENCE).type();
 
     return gameState;
 
