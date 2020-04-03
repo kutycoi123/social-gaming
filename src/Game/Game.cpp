@@ -39,13 +39,17 @@ void Game::gameTick() {
     if (nextRules.size() > 0 || currentRuleIndex <= gameRules.size()) {
         if(nextRules.size() == 0){
             nextRules = {*std::next(gameRules.begin(), currentRuleIndex)};
+            currentRuleIndex++;
         }
         
         std::list<std::shared_ptr<BaseRule>> newNextRules {};
 
         for(auto& rule : nextRules){
             rule->process(gameState);
-            newNextRules.insert(newNextRules.end(), rule->getNextPtr().begin(), rule->getNextPtr().end());
+
+            if(rule->getNextPtr().size() != 0){
+                newNextRules.insert(newNextRules.end(), rule->getNextPtr().begin(), rule->getNextPtr().end());
+            }
         }
 
         nextRules = newNextRules;        
