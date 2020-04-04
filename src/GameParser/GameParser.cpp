@@ -77,7 +77,24 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                     }
                 }
             }
-        }
+        }else{
+			auto constantType = GameState::ValueType::CONSTANT;
+			auto s = constant.value();
+			if(s.is_number_integer()){
+                StateValueNumber val(s.get<int>());
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_number_float()){
+                StateValueNumber val((double)s);
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_string()){
+                StateValueString val(s.get<std::string>());
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_boolean()){
+                StateValueBoolean val(s.get<bool>());
+                gameState.addValue(constant.key(), val, constantType);
+            }
+		}
+		//TODO: Add code to handle other types
     }
     list1.addValue(map1);
     list1.addValue(map2);
@@ -101,10 +118,10 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                 StateValueNumber val((double)s);
                 gameState.addValue(value.key(), val, variableType);
             }else if(s.is_string()){
-                StateValueString val(s);
+                StateValueString val(s.get<std::string>());
                 gameState.addValue(value.key(), val, variableType);
             }else if(s.is_boolean()){
-                StateValueBoolean val(s);
+                StateValueBoolean val(s.get<bool>());
                 gameState.addValue(value.key(), val, variableType);
             }
             //TODO: Add more code to handle other types
