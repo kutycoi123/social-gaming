@@ -77,7 +77,24 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                     }
                 }
             }
-        }
+        }else{
+			auto constantType = GameState::ValueType::CONSTANT;
+			auto s = constant.value();
+			if(s.is_number_integer()){
+                StateValueNumber val(s.get<int>());
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_number_float()){
+                StateValueNumber val(s.get<double>());
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_string()){
+                StateValueString val(s.get<std::string>());
+                gameState.addValue(constant.key(), val, constantType);
+            }else if(s.is_boolean()){
+                StateValueBoolean val(s.get<bool>());
+                gameState.addValue(constant.key(), val, constantType);
+            }
+		}
+		//TODO: Add code to handle other types
     }
     list1.addValue(map1);
     list1.addValue(map2);
@@ -88,10 +105,26 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
 
     auto variable = gameJson.at(VARIABLES);
     for(const auto& value: variable.items()){
+        GameState::ValueType variableType = GameState::ValueType::VARIABLE;
+        auto s = value.value();
         if(value.key() == WINNERS){
-            auto s = value.value();
             list1.addValue(map4);
-            gameState.addValue(WINNERS, list1, GameState::ValueType::VARIABLE);
+            gameState.addValue(WINNERS, list1, variableType);
+        } else{
+            if(s.is_number_integer()){
+                StateValueNumber val(s.get<int>());
+                gameState.addValue(value.key(), val, variableType);
+            }else if(s.is_number_float()){
+                StateValueNumber val(s.get<double>());
+                gameState.addValue(value.key(), val, variableType);
+            }else if(s.is_string()){
+                StateValueString val(s.get<std::string>());
+                gameState.addValue(value.key(), val, variableType);
+            }else if(s.is_boolean()){
+                StateValueBoolean val(s.get<bool>());
+                gameState.addValue(value.key(), val, variableType);
+            }
+            //TODO: Add more code to handle other types
         }
     }
 
