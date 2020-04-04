@@ -84,7 +84,7 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                 StateValueNumber val(s.get<int>());
                 gameState.addValue(constant.key(), val, constantType);
             }else if(s.is_number_float()){
-                StateValueNumber val((double)s);
+                StateValueNumber val(s.get<double>());
                 gameState.addValue(constant.key(), val, constantType);
             }else if(s.is_string()){
                 StateValueString val(s.get<std::string>());
@@ -115,7 +115,7 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                 StateValueNumber val(s.get<int>());
                 gameState.addValue(value.key(), val, variableType);
             }else if(s.is_number_float()){
-                StateValueNumber val((double)s);
+                StateValueNumber val(s.get<double>());
                 gameState.addValue(value.key(), val, variableType);
             }else if(s.is_string()){
                 StateValueString val(s.get<std::string>());
