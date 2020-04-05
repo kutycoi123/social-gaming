@@ -148,18 +148,3 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
     return gameState;
 
 }
-
-//void GameParser::createStateValueString(const std::string& key, const std::string& value, const GameState::ValueType& type, GameState& gameState) {
-//    StateValueString stringValue(value);
-//    gameState.addValue(key, stringValue, type);
-//}
-//
-//void GameParser::createStateValueNumber(const std::string& key, const int& value, const GameState::ValueType& type, GameState& gameState) {
-//    StateValueNumber numberValue(value);
-//    gameState.addValue(key, numberValue, type);
-//}
-//
-//void GameParser::createStateValueBoolean(const std::string& key, const bool& value, const GameState::ValueType& type, GameState& gameState) {
-//    StateValueBoolean boolValue(value);
-//    gameState.addValue(key, boolValue, type);
-//}
