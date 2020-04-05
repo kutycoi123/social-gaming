@@ -56,7 +56,7 @@ TEST_F(GameSessionTest, addMessages) {
 
 TEST_F(GameSessionTest, addMessagesToGame) {
     std::string message = "TestMessage";
-    gameSession->addMessagesToGame(message);
+    gameSession->addGameMessage(UserId(1), message);
     EXPECT_TRUE(true);
 }
 
@@ -67,7 +67,7 @@ TEST_F(GameSessionTest, getAndClearAllMessages) {
 
     gameSession->addLobbyMessage(message1);
     gameSession->addLobbyMessage(message2);
-    gameSession->addMessagesToGame(message3);
+    gameSession->addGameMessage(UserId(1), message3);
     auto message = gameSession->getAndClearAllMessages();
 
     EXPECT_TRUE(gameSession->getAndClearAllMessages().empty());
