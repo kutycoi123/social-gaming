@@ -26,6 +26,10 @@ class GameParser{
     private:
         nlohmann::json fileToJson(const std::string& pathName);
 
+//        void createStateValueString(const std::string& key, const std::string& value, const GameState::ValueType& type, GameState& gameState);
+//        void createStateValueNumber(const std::string& key, const int& value, const GameState::ValueType& type, GameState& gameState);
+//        void createStateValueBoolean(const std::string& key, const bool& value, const GameState::ValueType& type, GameState& gameState);
+
         std::unique_ptr<Game> game;
         bool hasGame;
         const std::string CONFIGURATION = "configuration";
@@ -37,6 +41,7 @@ class GameParser{
         const std::string NAME = "name";
         const std::string BEATS = "beats";
         const std::string WINS = "wins";
+        const std::string WEAPON = "weapon";
         const std::string AUDIENCE = "audience";
         const std::string SETUP = "setup";
         const std::string VARIABLES = "variables";
