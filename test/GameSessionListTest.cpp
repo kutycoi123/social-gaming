@@ -29,7 +29,7 @@ TEST_F(GameSessionListTest, joinGameSession) {
     gameSessionList->joinGameSession(params.owner, params.invite);
     EXPECT_FALSE(gameSessionList->isUserInSession(params.owner));
 
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     EXPECT_TRUE(gameSessionList->isUserInSession(params.owner));
 }
 
@@ -37,25 +37,25 @@ TEST_F(GameSessionListTest, leaveGameSession) {
     gameSessionList->joinGameSession(params.owner, params.invite);
     EXPECT_FALSE(gameSessionList->isUserInSession(params.owner));
 
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     gameSessionList->leaveGameSession(params.owner, params.invite);
     EXPECT_FALSE(gameSessionList->isUserInSession(params.owner));
 }
 
 TEST_F(GameSessionListTest, commenceGameSession) {
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     EXPECT_TRUE(gameSessionList->isUserInSession(params.owner));
 }
 
 TEST_F(GameSessionListTest, startGameInGameSession) {
     EXPECT_FALSE(gameSessionList->startGameInGameSession(params.owner, params.invite));
 
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     EXPECT_TRUE(gameSessionList->startGameInGameSession(params.owner, params.invite));
 }
 
 TEST_F(GameSessionListTest, endGameInGameSession) {
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     gameSessionList->startGameInGameSession(params.owner, params.invite);
 
     EXPECT_TRUE(gameSessionList->endGameInGameSession(params.owner, params.invite));
@@ -79,6 +79,6 @@ TEST_F(GameSessionListTest, updateAndGetAllMessages) {
 TEST_F(GameSessionListTest, isUserInSession) {
     EXPECT_FALSE(gameSessionList->isUserInSession(params.owner));
 
-    gameSessionList->commenceGameSession(params.owner, params.gamePath);
+    gameSessionList->startGameSession(params.owner, params.gamePath);
     EXPECT_TRUE(gameSessionList->isUserInSession(params.owner));
 }

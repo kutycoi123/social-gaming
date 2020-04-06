@@ -40,11 +40,12 @@ TEST_F(GameTest, endGame) {
     EXPECT_FALSE(game->isStarted());
 }
 
-TEST_F(GameTest, addMessages) {
+TEST_F(GameTest, addMessage) {
     std::string message = "TestMessage";
-    game->addMessages(message);
-    std::list<std::string> messages = game->updateAndGetAllMessages();
-    EXPECT_EQ(messages.front(), message);
+    game->addMessage(UserId(1), message);
+    std::list<std::pair<UserId, std::string>> messages = game->updateAndGetAllMessages();
+    EXPECT_EQ(messages.front().second, message);
+    EXPECT_EQ(messages.front().first, UserId(1));
 }
 
 TEST_F(GameTest, updateAndGetAllMessages) {
@@ -52,19 +53,21 @@ TEST_F(GameTest, updateAndGetAllMessages) {
     std::string message2 = "TestMessage2";
     std::string message3 = "TestMessage3";
 
-    game->addMessages(message1);
-    game->addMessages(message2);
+    game->addMessage(UserId(1), message1);
+    game->addMessage(UserId(2), message2);
 
-    std::list<std::string> messages = game->updateAndGetAllMessages();
+    std::list<std::pair<UserId, std::string>> messages = game->updateAndGetAllMessages();
     EXPECT_EQ(messages.size(), 2);
-    EXPECT_EQ(messages.front(), message1);
-    EXPECT_EQ(messages.back(), message2);
+    EXPECT_EQ(messages.front().second, message1);
+    EXPECT_EQ(messages.front().first, UserId(1));
+    EXPECT_EQ(messages.back().second, message2);
+    EXPECT_EQ(messages.back().first, UserId(2));
 
-    game->addMessages(message3);
+    game->addMessage(UserId(3), message3);
 
     messages = game->updateAndGetAllMessages();
     EXPECT_EQ(messages.size(), 1);
-    EXPECT_EQ(messages.front(), message3);
+    EXPECT_EQ(messages.front().second, message3);
 }
 
 TEST_F(GameTest, gameTick) {
