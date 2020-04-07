@@ -23,6 +23,7 @@ add_library(gameSpec
 			Switch.cpp
 			Timer.cpp
 			When.cpp
+			StringEvaluation.cpp
 )
 
 set_target_properties(gameSpec
