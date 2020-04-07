@@ -24,6 +24,7 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::l
 }
 
 void Game::endGame() {
+    addMessageToAllSession(" The game has ended!");
     isGameStarted = false;
 }
 
