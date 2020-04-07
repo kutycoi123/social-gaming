@@ -24,6 +24,7 @@ void Game::startGame(const std::list<std::weak_ptr<User>>& players, const std::l
 }
 
 void Game::endGame() {
+    addMessageToAllSession(" The game has ended!");
     isGameStarted = false;
 }
 
@@ -36,7 +37,7 @@ std::list<std::pair<UserId, std::string>> Game::updateAndGetAllMessages() noexce
 }
 
 void Game::gameTick() {
-    if (!nextRules.empty() || currentRuleIndex <= gameRules.size()) {
+    if (!nextRules.empty() || currentRuleIndex < gameRules.size()) {
         if(nextRules.empty()){
             nextRules = {*std::next(gameRules.begin(), currentRuleIndex)};
             currentRuleIndex++;
