@@ -148,7 +148,7 @@ void GameParser::insertGameStateValue(GameState& gameState, const nlohmann::json
 
     } else if (value.is_object()){
         StateValueMap val;
-//        populateValueMap(val, value.begin(), value.end());
+        populateValueMap(val, value);
         gameState.addValue(key, val, valueType);
     }
 }
