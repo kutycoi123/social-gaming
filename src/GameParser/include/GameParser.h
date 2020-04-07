@@ -33,18 +33,13 @@ private:
     const std::string MIN = "min";
     const std::string MAX = "max";
     const std::string ROUNDS = "Rounds";
-    const std::string WEAPONS = "weapons";
     const std::string NAME = "name";
-    const std::string BEATS = "beats";
-    const std::string WINS = "wins";
-    const std::string WEAPON = "weapon";
     const std::string AUDIENCE = "audience";
     const std::string SETUP = "setup";
     const std::string VARIABLES = "variables";
     const std::string PER_PLAYER = "per-player";
     const std::string PER_AUDIENCE = "per-audience";
     const std::string CONSTANTS = "constants";
-    const std::string WINNERS = "winners";
 
     void insertGameStateValue(GameState &gameState, const nlohmann::json& key, const nlohmann::json& value,
                               const GameState::ValueType& valueType) const;
