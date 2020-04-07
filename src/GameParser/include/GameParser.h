@@ -37,6 +37,7 @@ class GameParser{
         const std::string NAME = "name";
         const std::string BEATS = "beats";
         const std::string WINS = "wins";
+        const std::string WEAPON = "weapon";
         const std::string AUDIENCE = "audience";
         const std::string SETUP = "setup";
         const std::string VARIABLES = "variables";

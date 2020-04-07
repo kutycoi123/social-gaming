@@ -1,5 +1,6 @@
 #include "GameParser.h"
 #include "GameConfig.h"
+#include <vector>
 
 namespace Tags{
 
@@ -10,8 +11,8 @@ GameParser::GameParser(const std::string& path) :
     hasGame(true) 
     {
     nlohmann::json gameJson = fileToJson(path);
+    GameState gameState = createGameState(gameJson);
     GameSpecification::GameSpec gameSpec(gameJson);
-    GameState gameState = createGameState(gameJson); //GameState(gameJson)
 
     game = std::make_unique<Game> (gameSpec, gameState);
 }
@@ -51,7 +52,9 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
             gameConfig.setSetup(setup);
         }
     }
+
     auto constants = gameJson.at(CONSTANTS);
+
     StateValueMap map1;
     StateValueMap map2;
     StateValueMap map3;
@@ -94,7 +97,6 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
                 gameState.addValue(constant.key(), val, constantType);
             }
 		}
-		//TODO: Add code to handle other types
     }
     list1.addValue(map1);
     list1.addValue(map2);
@@ -133,6 +135,8 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
         if(pPlayer.key() == WINS){
             auto num = static_cast<int>(pPlayer.value());
             gameState.addValue(WINS, StateValueNumber(num), GameState::ValueType::PER_PLAYER);
+        } else if (pPlayer.key() == WEAPON) {
+            gameState.addValue(WEAPON, StateValueString(""), GameState::ValueType::PER_PLAYER);
         }
     }
 

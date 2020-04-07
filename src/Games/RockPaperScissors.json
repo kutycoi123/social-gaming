@@ -21,7 +21,8 @@
   },
 
   "per-player": {
-    "wins": 0
+    "wins": 0,
+    "weapon": ""
   },
 
   "per-audience": {},
@@ -64,12 +65,12 @@
 
             { "rule": "when",
               "cases": [
-                { "condition": "!players.elements.weapon.contains(weapon.name)",
+                { "condition": "!players.weapon.contains(weapon.name)",
                   "rules": [
 
                     { "rule": "extend",
                       "target": "winners",
-                      "list": "players.elements.collect(player, player.weapon == weapon.beats)"
+                      "list": "players.collect(player, player.weapon == weapon.beats)"
                     }
 
                   ]
