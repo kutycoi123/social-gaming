@@ -11,16 +11,14 @@
 #include <memory>
 
 enum Operator{
-	EQUAL,
-	DOT,
-	CONTAINS,
-	COLLECTS,
-	NEGATION,
-	OPEN_PARENTHESIS,
-	CLOSE_PARENTHESIS,
-	UNKNOWN
+    EQUAL,
+    DOT,
+    CONTAINS,
+    COLLECTS,
+    NEGATION,
+    OPEN_PARENTHESIS,
+    CLOSE_PARENTHESIS,
+    UNKNOWN
 };
-
-static bool evaluate(GameState& , const std::string& );
 
 #endif
