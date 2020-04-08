@@ -32,7 +32,6 @@ nlohmann::json GameParser::fileToJson(const std::string& pathName) {
 GameState  GameParser::createGameState(nlohmann::json gameJson) {
 
     GameState gameState;
-    //TODO make it more generic to support more games
     auto gameConfig = GameConfig();
     auto config = gameJson.at(CONFIGURATION);
 
@@ -55,13 +54,6 @@ GameState  GameParser::createGameState(nlohmann::json gameJson) {
 
     auto constants = gameJson.at(CONSTANTS);
 
-//    StateValueMap map1;
-//    StateValueMap map2;
-//    StateValueMap map3;
-//    StateValueMap map4;
-//    StateValueMap map5;
-//    StateValueList list1;
-//    StateValueList list2;
     for(const auto& constant : constants.items()){
         auto constantType = GameState::ValueType::CONSTANT;
         insertGameStateValue(gameState, constant.key(), constant.value(), constantType);
