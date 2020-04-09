@@ -16,7 +16,7 @@ public:
     explicit StateValueMap(const std::unordered_map<std::string, std::shared_ptr<StateValue>>&);
     StateValue::ValueType getValueType() override;
     std::unordered_map<std::string, std::shared_ptr<StateValue>>& getMap();
-    std::optional<std::weak_ptr<StateValue>> getValue(const std::string&);
+    std::optional<std::weak_ptr<StateValue>> getValue(const std::string&) const;
     void addValue(const std::string&, StateValueBoolean&);
     void addValue(const std::string&, StateValueNumber&);
     void addValue(const std::string&, StateValueString&);
