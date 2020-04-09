@@ -12,6 +12,7 @@ class GlobalMessage : public BaseRule{
 
     private:
       std::string value;
+      std::string parseValue(const std::string& basicString);
 };
 }
 #endif
