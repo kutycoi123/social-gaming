@@ -1,4 +1,8 @@
 #include "GlobalMessage.h"
+#include "GlobalMessageVisitor.h"
+#include "MessageParser.h"
+#include "StateValueParser.h"
+#include <iostream>
 
 using GameSpecification::GlobalMessage;
 using json = nlohmann::json;
@@ -8,14 +12,20 @@ GlobalMessage::GlobalMessage(const std::string& value) :
     value(value){}
 
 void GlobalMessage::process(GameState& gameState) {
-    std::string parsedValue = parseValue(value);
-    // TODO: This will have to become a for-loop once custom strings can be parsed
-    gameState.addMessageToEntireSession(parsedValue);
-}
-
-std::string GameSpecification::GlobalMessage::parseValue(const std::string& basicString) {
-    // TODO: Parse value so that every item in {} refers to it's associated variable/constant
-    std::string parsedValue;
-    parsedValue.append(basicString);
-    return parsedValue;
+    auto messageParser = MessageParser(gameState, value);
+    if (messageParser.hasVariable()){
+        StateValueParser variable(gameState, messageParser.getVariableString().value());
+        if (variable.isPerUserValue()){
+            auto perUserValue = variable.getPerPlayerAudienceValue(messageParser.getVariableString().value());
+            if (perUserValue.has_value()){
+                // TODO: Implement per-player/user
+            }
+        } else {
+            GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, variable);
+            auto stateValuePtr = variable.getStateValue(messageParser.getVariableString().value())->lock();
+            if (stateValuePtr){
+                stateValuePtr->accept(globalMessageVisitor);
+            }
+        }
+    }
 }
