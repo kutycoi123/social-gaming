@@ -14,7 +14,7 @@ class StateValueMap : public StateValue {
 public:
     StateValueMap();
     explicit StateValueMap(const std::unordered_map<std::string, std::shared_ptr<StateValue>>&);
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
     std::unordered_map<std::string, std::shared_ptr<StateValue>>& getMap();
     std::optional<std::weak_ptr<StateValue>> getValue(const std::string&) const;
     void addValue(const std::string&, StateValueBoolean&);
@@ -25,6 +25,8 @@ public:
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
 
 private:
     StateValue::ValueType valueType;

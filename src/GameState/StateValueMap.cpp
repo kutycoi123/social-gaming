@@ -5,11 +5,15 @@ StateValueMap::StateValueMap() :
         valueType(StateValue::MAP)
 {}
 
+std::string StateValueMap::toString() const {
+    return "<map>";
+}
+
 StateValueMap::StateValueMap(const std::unordered_map<std::string, std::shared_ptr<StateValue>>& valueMap)
     : valueType(StateValue::MAP), stateValueMap(valueMap)
     {}
 
-StateValue::ValueType StateValueMap::getValueType() {
+StateValue::ValueType StateValueMap::getValueType() const {
     return valueType;
 }
 

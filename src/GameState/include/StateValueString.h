@@ -9,10 +9,12 @@ class StateValueString : public StateValue {
 public:
     explicit StateValueString(std::string val);
     std::string& getValue();
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
 
 private:
     std::string value;

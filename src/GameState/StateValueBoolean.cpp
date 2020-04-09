@@ -10,7 +10,7 @@ bool& StateValueBoolean::getValue() {
     return value;
 }
 
-StateValue::ValueType StateValueBoolean::getValueType() {
+StateValue::ValueType StateValueBoolean::getValueType() const {
     return valueType;
 }
 
@@ -20,4 +20,8 @@ void StateValueBoolean::accept(GameStateVisitor &visitor) {
 
 void StateValueBoolean::accept(GameStateVisitor &visitor, StateValue* stateValue){
 
+}
+
+std::string StateValueBoolean::toString() const {
+    return std::to_string(value);
 }

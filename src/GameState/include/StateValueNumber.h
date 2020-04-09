@@ -12,10 +12,12 @@ public:
     explicit StateValueNumber(int val);
     explicit StateValueNumber(double val);
     int& getValue();
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
 
 private:
     int value;

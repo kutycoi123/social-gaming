@@ -15,7 +15,7 @@ int& StateValueNumber::getValue() {
     return value;
 }
 
-StateValue::ValueType StateValueNumber::getValueType() {
+StateValue::ValueType StateValueNumber::getValueType() const {
     return valueType;
 }
 
@@ -25,4 +25,8 @@ void StateValueNumber::accept(GameStateVisitor &visitor) {
 void StateValueNumber::accept(GameStateVisitor &visitor, StateValue* stateValue){
     StateValueNumber* t = static_cast<StateValueNumber*>(stateValue);
     visitor.visit(*this, *t);
+}
+
+std::string StateValueNumber::toString() const {
+    return std::to_string(value);
 }

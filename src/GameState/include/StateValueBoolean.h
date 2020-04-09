@@ -7,9 +7,12 @@ class StateValueBoolean : public StateValue {
 public:
     explicit StateValueBoolean(bool val);
     bool& getValue();
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
+
 private:
     bool value;
     StateValue::ValueType valueType;
