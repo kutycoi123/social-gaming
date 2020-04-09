@@ -19,8 +19,12 @@ std::optional<std::weak_ptr<StateValue>> StateValueParser::getStateValue() {
             return std::nullopt;
         }
         if (auto v = currVariable.value().lock()){
-            auto variable = static_cast<const StateValueMap*>(v.get());
-            currVariable = variable->getValue(*i);
+            if (v->getValueType() == StateValue::MAP){
+                auto variable = static_cast<const StateValueMap*>(v.get());
+                currVariable = variable->getValue(*i);
+            } else {
+                return std::nullopt;
+            }
         } else {
             return std::nullopt;
         }

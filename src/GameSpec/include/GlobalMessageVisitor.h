@@ -28,7 +28,9 @@ public:
     }
 
     void visit(StateValueList& stateValue) override {
-        throw std::invalid_argument("Invalid parameter");
+        for (auto& value : stateValue.getList()){
+            value->accept(*this);
+        }
     }
 
     void visit(StateValueMap& stateValue) override {
