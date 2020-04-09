@@ -29,6 +29,11 @@
 
   "rules": [
     {
+      "rule": "scores",
+      "score": "wins",
+      "ascending": "false"
+    },
+    {
       "rule": "global-message",
       "value": "Hello world!"
     },
