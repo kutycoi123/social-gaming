@@ -59,7 +59,7 @@ std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>
 }
 
 std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
-GameState::getPerPlayerOrPerAudienceValue(const std::string& key) {
+GameState::getPerUserValue(const std::string& key) {
     auto perPlayerValue = getPerPlayerValue(key);
     if (perPlayerValue.has_value()){
         return perPlayerValue;

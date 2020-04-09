@@ -16,14 +16,22 @@ void GlobalMessage::process(GameState& gameState) {
     if (messageParser.hasVariable()){
         StateValueParser variable(gameState, messageParser.getVariableString().value());
         if (variable.isPerUserValue()){
-            auto perUserValue = variable.getPerPlayerAudienceValue(messageParser.getVariableString().value());
+            auto perUserValue = variable.getPerUserValue();
             if (perUserValue.has_value()){
-                // TODO: Implement per-player/user
+                auto userValuePairList = perUserValue.value().get();
+                for (const auto& userValuePair : userValuePairList){
+                    GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, userValuePair.user.lock());
+                    userValuePair.value->accept(globalMessageVisitor);
+                }
             }
         } else {
-            GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, variable);
-            auto stateValuePtr = variable.getStateValue(messageParser.getVariableString().value())->lock();
-            if (stateValuePtr){
+            auto stateValuePtr = variable.getStateValue()->lock();
+            for (const auto& user : gameState.getPlayerList()){
+                GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, user.lock());
+                stateValuePtr->accept(globalMessageVisitor);
+            }
+            for (const auto& user : gameState.getAudienceList()){
+                GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, user.lock());
                 stateValuePtr->accept(globalMessageVisitor);
             }
         }

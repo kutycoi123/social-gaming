@@ -42,7 +42,7 @@ public:
     getPerAudienceValue(const std::string& key);
 
     std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
-    getPerPlayerOrPerAudienceValue(const std::string& key);
+    getPerUserValue(const std::string& key);
 
     void addConfig(const GameConfig& config);
 

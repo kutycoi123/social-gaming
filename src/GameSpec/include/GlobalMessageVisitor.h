@@ -5,27 +5,26 @@
 #include "MessageParser.h"
 #include "StateValueParser.h"
 
-// TODO Implement methods and add error handling
 class GlobalMessageVisitor : public GameStateVisitor {
 public:
-    GlobalMessageVisitor(GameState& state, MessageParser& parser, StateValueParser& valueParser) :
+    GlobalMessageVisitor(GameState& state, MessageParser& parser, const std::shared_ptr<User>& user) :
     gameState(state),
     messageParser(parser),
-    stateValueParser(valueParser)
+    user(user)
 {}
-    void sendMessageToEveryone(const std::string& message){
-        gameState.addMessageToEntireSession(messageParser.replaceVariableString(message));
+    void sendMessageToUser(const std::string& message){
+        gameState.addMessage(user->getUserId(), messageParser.replaceVariableString(message));
     }
     void visit(StateValueBoolean& stateValue) override {
-        sendMessageToEveryone(std::to_string(stateValue.getValue()));
+        sendMessageToUser(std::to_string(stateValue.getValue()));
     }
 
     void visit(StateValueNumber& stateValue) override {
-        sendMessageToEveryone(std::to_string(stateValue.getValue()));
+        sendMessageToUser(std::to_string(stateValue.getValue()));
     }
 
     void visit(StateValueString& stateValue) override {
-         gameState.addMessageToEntireSession(messageParser.replaceVariableString(stateValue.getValue()));
+        sendMessageToUser(stateValue.getValue());
     }
 
     void visit(StateValueList& stateValue) override {
@@ -45,7 +44,7 @@ public:
 private:
     GameState& gameState;
     MessageParser& messageParser;
-    StateValueParser& stateValueParser;
+    std::shared_ptr<User> user;
 };
 
 #endif //SOCIALGAMING_GLOBALMESSAGEVISITOR_H

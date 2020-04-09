@@ -13,8 +13,8 @@ static const std::string SIZE = "size";
 class StateValueParser {
 public:
     StateValueParser(GameState&, const std::string&);
-    std::optional<std::weak_ptr<StateValue>> getStateValue(const std::string&);
-    std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>> getPerPlayerAudienceValue(const std::string&);
+    std::optional<std::weak_ptr<StateValue>> getStateValue();
+    std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>> getPerUserValue();
     bool isPerUserValue();
 private:
     GameState& gameState;

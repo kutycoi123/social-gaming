@@ -9,11 +9,11 @@ StateValueParser::StateValueParser(GameState& gameState, const std::string& stri
      boost::algorithm::split(splitString, string, boost::is_any_of("."));
 }
 
-std::optional<std::weak_ptr<StateValue>> StateValueParser::getStateValue(const std::string& value) {
+std::optional<std::weak_ptr<StateValue>> StateValueParser::getStateValue() {
     if (isPerUserValue()){
         return std::nullopt;
     }
-    auto currVariable = gameState.getVariable(value);
+    auto currVariable = gameState.getVariable(splitString[0]);
     for (auto i = splitString.begin()+1; i < splitString.end(); ++i){
         if (!currVariable.has_value()){
             return std::nullopt;
@@ -21,6 +21,8 @@ std::optional<std::weak_ptr<StateValue>> StateValueParser::getStateValue(const s
         if (auto v = currVariable.value().lock()){
             auto variable = static_cast<const StateValueMap*>(v.get());
             currVariable = variable->getValue(*i);
+        } else {
+            return std::nullopt;
         }
     }
     return currVariable;
@@ -34,9 +36,25 @@ bool StateValueParser::isPerUserValue(){
 }
 
 
-std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>> StateValueParser::getPerPlayerAudienceValue(const std::string& value) {
-    if (!isPerUserValue()){
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>> StateValueParser::getPerUserValue() {
+    if (!isPerUserValue() || splitString.size() < 2){
         return std::nullopt;
     }
-    return gameState.getPerPlayerOrPerAudienceValue(value);
+    auto currVariable = gameState.getPerUserValue(splitString[1]);
+    for (auto i = splitString.begin()+2; i < splitString.end(); ++i){
+        if (!currVariable.has_value()){
+            return std::nullopt;
+        }
+        auto v = currVariable.value().get();
+        std::transform(v.begin(), v.end(), v.begin(), [&i](const GameState::StateValueUserPair& pair){
+            auto stateValueMap = static_cast<const StateValueMap*>(pair.value.get());
+            auto nextValue = stateValueMap->getValue(*i);
+            if (nextValue.has_value()){
+                return pair;
+            }
+            GameState::StateValueUserPair newPair{pair.user, nextValue->lock()};
+            return newPair;
+        });
+    }
+    return currVariable;
 }
