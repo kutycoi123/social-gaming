@@ -11,7 +11,7 @@ StateValueNumber::StateValueNumber(double val) :
         valueType(NUMBER)
 {}
 
-int& StateValueNumber::getValue() {
+double& StateValueNumber::getValue() {
     return value;
 }
 

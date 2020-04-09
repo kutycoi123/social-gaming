@@ -11,14 +11,14 @@ class StateValueNumber : public StateValue {
 public:
     explicit StateValueNumber(int val);
     explicit StateValueNumber(double val);
-    int& getValue();
+    double& getValue();
     StateValue::ValueType getValueType() override;
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
 
 private:
-    int value;
+    double value;
     StateValue::ValueType valueType;
 };
 
