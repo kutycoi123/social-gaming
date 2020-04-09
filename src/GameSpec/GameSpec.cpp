@@ -532,8 +532,7 @@ std::shared_ptr<BaseRule> GameSpec::createReverse(const nlohmann::json& currentR
 std::shared_ptr<BaseRule> GameSpec::createScores(const nlohmann::json& currentRuleJson){
     auto score = currentRuleJson.at(SpecTags::SCORE).get<std::string>();
     auto ascending = currentRuleJson.at(SpecTags::ASCENDING).get<std::string>();
-    bool ascendingBool = false;
-    if (ascending == "true") { ascendingBool = true; }
+    bool ascendingBool = (ascending == "true");
     return std::shared_ptr<BaseRule>(new Scores(score, ascendingBool));
 }
 

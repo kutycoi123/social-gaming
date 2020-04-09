@@ -20,8 +20,7 @@ void Scores::process(GameState& gameState){
         for (const auto& valuePair : listOfValuePairs) {
             auto username = valuePair.user.lock()->getUserNameValue();
             auto valuePtr = static_cast<StateValueNumber*>(valuePair.value.get());
-            double value = -1;
-            if (valuePtr != nullptr) { value = valuePtr->getValue(); }
+            double value = (valuePtr != nullptr) ? valuePtr->getValue() : -1;
             nameAndValues.emplace_back(std::make_pair<>(username, value));
         }
 
