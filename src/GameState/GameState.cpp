@@ -58,6 +58,15 @@ std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>
            std::nullopt;
 }
 
+std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+GameState::getPerPlayerOrPerAudienceValue(const std::string& key) {
+    auto perPlayerValue = getPerPlayerValue(key);
+    if (perPlayerValue.has_value()){
+        return perPlayerValue;
+    }
+    return getPerAudienceValue(key);
+}
+
 void GameState::addValue(const std::string &key, StateValueBoolean value, const ValueType& valueType) {
     auto valuePtr = std::make_shared<StateValueBoolean>(std::move(value));
     std::pair<std::string, std::shared_ptr<StateValue>> pair = std::make_pair(key, valuePtr);
@@ -166,4 +175,12 @@ void GameState::addMessageToAllAudience(const std::string &message) noexcept {
 void GameState::addMessageToEntireSession(const std::string &message) noexcept {
     addMessageToAllAudience(message);
     addMessageToAllPlayers(message);
+}
+
+std::list<std::weak_ptr<User>> &GameState::getPlayerList() {
+    return playerList;
+}
+
+std::list<std::weak_ptr<User>> &GameState::getAudienceList() {
+    return audienceList;
 }

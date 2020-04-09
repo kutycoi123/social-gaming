@@ -1,8 +1,6 @@
 add_library(gameSpec
 			GameSpec.cpp
-
 			BaseRule.cpp
-
 			Add.cpp
 			Deal.cpp
 			Discard.cpp
@@ -15,6 +13,8 @@ add_library(gameSpec
 			InputVote.cpp
 			Loop.cpp
 			Message.cpp
+			MessageParser.cpp
+			StateValueParser.cpp
 			Parallelfor.cpp
 			Reverse.cpp
 			Shuffle.cpp
