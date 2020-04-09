@@ -30,7 +30,7 @@ std::optional<std::weak_ptr<StateValue>> StateValueParser::getStateValue() {
 
 bool StateValueParser::isPerUserValue(){
     if (!splitString.empty()){
-        return splitString[0] == PLAYER || splitString[0] == AUDIENCE;
+        return splitString[0] == PLAYERS || splitString[0] == AUDIENCE;
     }
     return false;
 }

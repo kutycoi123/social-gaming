@@ -6,7 +6,7 @@
 
 static const std::string AUDIENCE = "audience";
 
-static const std::string PLAYER = "player";
+static const std::string PLAYERS = "players";
 
 static const std::string SIZE = "size";
 
