@@ -142,6 +142,12 @@ void GameState::initializePerPlayerMap() {
             perPlayerMap[key].push_back(StateValueUserPair{user, value.second});
         }
     }
+    // Input names into perPlayer map
+    perPlayerMap["name"] = std::vector<StateValueUserPair>();
+    for (const auto& value : playerList){
+        const auto& user = value.lock();
+        perPlayerMap["name"].push_back(StateValueUserPair{user,std::make_shared<StateValueString>(StateValueString{user->getUserNameValue()})});
+    }
     perPlayerInitialMap.clear();
 }
 
@@ -152,6 +158,12 @@ void GameState::initializePerAudienceMap() {
         for (const auto& user : audienceList){
             perAudienceMap[key].push_back(StateValueUserPair{user, value.second});
         }
+    }
+    // Input names into perAudience map
+    perAudienceMap["name"] = std::vector<StateValueUserPair>();
+    for (const auto& value : audienceList){
+        const auto& user = value.lock();
+        perAudienceMap["name"].push_back(StateValueUserPair{user,std::make_shared<StateValueString>(StateValueString{user->getUserNameValue()})});
     }
     perAudienceInitialMap.clear();
 }

@@ -23,5 +23,5 @@ void StateValueBoolean::accept(GameStateVisitor &visitor, StateValue* stateValue
 }
 
 std::string StateValueBoolean::toString() const {
-    return std::to_string(value);
+    return value ? "true" : "false";
 }
