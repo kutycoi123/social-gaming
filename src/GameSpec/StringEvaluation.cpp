@@ -99,7 +99,6 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 		}
 
 	}
-	
 	switch(op){
 		case Operator::EQUAL:
 			{
@@ -143,7 +142,9 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 			{
 				bool result;
 				if(val1 == nullptr)
-					result = false;
+					result = !(static_cast<const StateValueBoolean*>(val2.get())->getValueConst());
+				else
+					result = !(static_cast<const StateValueBoolean*>(val1.get())->getValueConst());
 				//Add getNegationValue method for StateValueBoolean
 				//result = static_cast<StateValueBoolean*>(val1)->getNegationValue();
 				values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueBoolean(result))));
@@ -162,11 +163,21 @@ void compute(std::stack<Operator>& ops, std::stack<std::string>& literalValues, 
 		std::string str2 = literalValues.top();
         literalValues.pop(); 
 
-		std::string str1 = literalValues.top();
-        literalValues.pop(); 
+        std::string str1 = "";
+        if(!literalValues.empty()){
+			str1 = literalValues.top();
+        	literalValues.pop(); 
+        }else{
+        	str1 = str2; //str1 must always be an expression, eg: !a -> (str1 = a, str2 = "", op = !)
+        	str2 = "";
+        }
 
-        Operator op = ops.top(); 
-        ops.pop();
+        Operator op = Operator::UNKNOWN;
+        if(!ops.empty()){
+        	op = ops.top(); 
+        	ops.pop();
+        }
+
        	literalValues.push(applyOp(str1, str2, op, gameState, values));
 }
 
