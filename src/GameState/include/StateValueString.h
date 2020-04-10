@@ -12,10 +12,12 @@ public:
     std::string getValueConst() const{
     	return value;
     }
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
 
 private:
     std::string value;

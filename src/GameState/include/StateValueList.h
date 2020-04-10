@@ -14,7 +14,7 @@ public:
 
     explicit StateValueList(const std::vector<std::shared_ptr<StateValue>>&);
 
-    StateValue::ValueType getValueType() override;
+    StateValue::ValueType getValueType() const override;
 
     std::vector<std::shared_ptr<StateValue>>& getList();
     std::vector<std::shared_ptr<StateValue>> getListConst() const{
@@ -28,6 +28,8 @@ public:
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
+
+    std::string toString() const override;
 
 private:
     StateValue::ValueType valueType;

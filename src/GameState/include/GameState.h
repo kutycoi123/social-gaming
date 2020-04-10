@@ -12,7 +12,7 @@
 #include "StateValueList.h"
 #include "StateValueMap.h"
 #include <optional>
-#include <iostream>
+
 class GameState {
 public:
     GameState();
@@ -45,6 +45,9 @@ public:
         return playerList.size();
     }
 
+    std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
+    getPerUserValue(const std::string& key);
+
     void addConfig(const GameConfig& config);
 
     // These methods should only be called when GameState is begin constructed in the parser
@@ -59,6 +62,8 @@ public:
     void addMessageToAllAudience(const std::string& message) noexcept;
     void addMessageToEntireSession(const std::string& message) noexcept;
     void clearMessages() noexcept;
+    std::list<std::weak_ptr<User>>& getPlayerList();
+    std::list<std::weak_ptr<User>>& getAudienceList();
     std::list<std::pair<UserId, std::string>> updateAndGetAllMessages() noexcept;
 private:
     bool gameStarted;

@@ -16,7 +16,8 @@ public:
         LIST,
         MAP
     };
-    virtual ValueType getValueType() = 0;
+    virtual ValueType getValueType() const = 0;
+    virtual std::string toString() const = 0;
     virtual void accept(GameStateVisitor& visitor) = 0;
     virtual void accept(GameStateVisitor& visitor, StateValue* stateValue) = 0;
 };

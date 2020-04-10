@@ -10,7 +10,7 @@ StateValueList::StateValueList(const std::vector<std::shared_ptr<StateValue>>& v
     : valueType(StateValue::LIST), stateValueList(valueList)
     {}
 
-StateValue::ValueType StateValueList::getValueType() {
+StateValue::ValueType StateValueList::getValueType() const {
     return valueType;
 }
 
@@ -43,4 +43,13 @@ void StateValueList::addValue(StateValueMap& value) {
 
 void StateValueList::addValue(StateValueList& value) {
     stateValueList.push_back(std::make_shared<StateValueList>(value));
+}
+
+std::string StateValueList::toString() const {
+    std::string str;
+    for (auto& items : stateValueList){
+        str.append(items->toString());
+        str.append(" ");
+    }
+    return str;
 }

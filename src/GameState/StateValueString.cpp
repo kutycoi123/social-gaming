@@ -10,7 +10,7 @@ std::string& StateValueString::getValue() {
     return value;
 }
 
-StateValue::ValueType StateValueString::getValueType() {
+StateValue::ValueType StateValueString::getValueType() const {
     return valueType;
 }
 
@@ -19,4 +19,8 @@ void StateValueString::accept(GameStateVisitor &visitor) {
 }
 void StateValueString::accept(GameStateVisitor &visitor, StateValue* stateValue){
 
+}
+
+std::string StateValueString::toString() const {
+    return value;
 }

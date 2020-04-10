@@ -11,17 +11,19 @@ class StateValueNumber : public StateValue {
 public:
     explicit StateValueNumber(int val);
     explicit StateValueNumber(double val);
-    double& getValue();
-    double getValueConst() const{
+    int& getValue();
+    StateValue::ValueType getValueType() const override;
+    int getValueConst() const{
     	return value;
     }
-    StateValue::ValueType getValueType() override;
 
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
 
+    std::string toString() const override;
+
 private:
-    double value;
+    int value;
     StateValue::ValueType valueType;
 };
 
