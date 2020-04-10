@@ -531,8 +531,9 @@ std::shared_ptr<BaseRule> GameSpec::createReverse(const nlohmann::json& currentR
 
 std::shared_ptr<BaseRule> GameSpec::createScores(const nlohmann::json& currentRuleJson){
     auto score = currentRuleJson.at(SpecTags::SCORE).get<std::string>();
-    bool ascending = currentRuleJson.at(SpecTags::ASCENDING).get<bool>();
-    return std::shared_ptr<BaseRule>(new Scores(score, ascending));
+    auto ascending = currentRuleJson.at(SpecTags::ASCENDING).get<std::string>();
+    bool ascendingBool = (ascending == "true");
+    return std::shared_ptr<BaseRule>(new Scores(score, ascendingBool));
 }
 
 std::shared_ptr<BaseRule> GameSpec::createShuffle(const nlohmann::json& currentRuleJson){
