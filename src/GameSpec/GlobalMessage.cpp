@@ -1,5 +1,4 @@
 #include "GlobalMessage.h"
-#include "GlobalMessageVisitor.h"
 #include "MessageParser.h"
 #include "StateValueParser.h"
 #include <iostream>
@@ -19,21 +18,20 @@ void GlobalMessage::process(GameState& gameState) {
             auto perUserValue = variable.getPerUserValue();
             if (perUserValue.has_value()){
                 auto userValuePairList = perUserValue.value().get();
+                std::string perUserString;
                 for (const auto& userValuePair : userValuePairList){
-                    GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, userValuePair.user.lock());
-                    userValuePair.value->accept(globalMessageVisitor);
+                    perUserString.append(userValuePair.value->toString());
+                    perUserString.append(" ");
                 }
+                gameState.addMessageToEntireSession(messageParser.replaceVariableString(perUserString));
             }
         } else {
-            auto stateValuePtr = variable.getStateValue()->lock();
-            for (const auto& user : gameState.getPlayerList()){
-                GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, user.lock());
-                stateValuePtr->accept(globalMessageVisitor);
+            auto stateValueWeakPtr = variable.getStateValue();
+            if (!stateValueWeakPtr.has_value()){
+                return;
             }
-            for (const auto& user : gameState.getAudienceList()){
-                GlobalMessageVisitor globalMessageVisitor(gameState, messageParser, user.lock());
-                stateValuePtr->accept(globalMessageVisitor);
-            }
+            auto stateValuePtr = stateValueWeakPtr->lock();
+            gameState.addMessageToEntireSession(messageParser.replaceVariableString(stateValuePtr->toString()));
         }
     }
 }
