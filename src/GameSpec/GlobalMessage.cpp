@@ -33,5 +33,7 @@ void GlobalMessage::process(GameState& gameState) {
             auto stateValuePtr = stateValueWeakPtr->lock();
             gameState.addMessageToEntireSession(messageParser.replaceVariableString(stateValuePtr->toString()));
         }
+    } else {
+        gameState.addMessageToEntireSession(messageParser.getMessage());
     }
 }

@@ -1,6 +1,6 @@
 {
   "configuration": {
-    "name": "Test",
+    "name": "GlobalMessageTest",
     "player count": {"min": 2, "max": 4},
     "audience": false,
     "setup": {
@@ -57,10 +57,6 @@
     {
       "rule": "global-message",
       "value": "Players in game: {players.name}"
-    },
-    {
-      "rule": "global-message",
-      "value": "Weapons: {weapons.name}"
     },
     {
       "rule": "add",
