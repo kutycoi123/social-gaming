@@ -1,7 +1,7 @@
 #include "StringEvaluation.h"
-
-using map_pair = std::pair<std::string, std::shared_ptr<StateValue>>;
-using Map = std::unordered_map<std::string, std::shared_ptr<StateValue>>;
+#include <iostream>
+using map_pair = std::pair<std::string, std::shared_ptr<const StateValue>>;
+using Map = std::unordered_map<std::string, std::shared_ptr<const StateValue>>;
 
 static std::unordered_map<std::string, Operator> strToOp({
 	{"==", Operator::EQUAL},
@@ -40,8 +40,8 @@ int precedence(Operator op){
 
 
 std::string applyOp(const std::string& a, const std::string& b, Operator op, GameState& gameState, Map& values){ 
-	std::shared_ptr<StateValue> val1 = nullptr;
-	std::shared_ptr<StateValue> val2 = nullptr;
+	std::shared_ptr<const StateValue> val1 = nullptr;
+	std::shared_ptr<const StateValue> val2 = nullptr;
 	std::string opStr = opToStr[op];
 	std::string strResult = a + opStr + b;
 	//Get value for a and b in values
@@ -49,32 +49,56 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 		val1 = values[a];	
 	}else{
 		//TODO: Add code to get value for a in gameState
-		auto gameStateVariable = gameState.getVariable(a);
-		if(!gameStateVariable.has_value()){
-			return strResult;
-		}
-		val1 = gameStateVariable->lock();
-	}
+		if(a == "players"){
+			if(op == Operator::DOT){
+				if(b == "size"){
+					values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueNumber(gameState.getPlayerListSize()))));
+					return strResult;
+				}else{
+					//TODO: Add code to handle the case when b is actually a field of perPlayerMap
+				}
+			}
+		}else{
+			auto gameStateVariable = gameState.getVariable(a);
+			if(!gameStateVariable.has_value()){
+				auto constantStateVar = gameState.getConstant(a);
+				if(constantStateVar.has_value()){
+					val1 = constantStateVar->lock();
+				}else{//a is constant value
+					try{
+						//TODO: for now just assume the constant value will be integer
+						int parsedInt = stoi(a);
+						val1 = std::shared_ptr<const StateValue>(new StateValueNumber(parsedInt));
 
+					}catch(std::invalid_argument& e){
+						val1 = std::shared_ptr<const StateValue>(new StateValueString(a));
+					}
+					return strResult;
+				}
+			}else{
+				val1 = gameStateVariable->lock();
+			}
+			
+		}
+	}
 	if(b == "size"){
-		auto result = static_cast<StateValueList*>(val1.get())->getList().size();
-		values.insert(map_pair(strResult, std::shared_ptr<StateValue>(new StateValueNumber((int)result))));
+		auto result = static_cast<const StateValueList*>(val1.get())->getListConst().size();
+		values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueNumber((int)result))));
 		return strResult;
 	}
 
 	if(values.find(b) != values.end()){
-		val2 = values[a];
+		val2 = values[b];
 	}else{
 		//TODO: Add code to get value for b in gameState
 		auto gameStateVariable = gameState.getVariable(a);
 		if(gameStateVariable.has_value()){
 			val2 = gameStateVariable->lock();
 		}else{ //b is just a key string of a
-			val2 = std::shared_ptr<StateValue>(new StateValueString(b));
+			val2 = std::shared_ptr<const StateValue>(new StateValueString(b));
 		}
 
 	}
-	
 	switch(op){
 		case Operator::EQUAL:
 			{
@@ -85,22 +109,24 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 					/*
 					result = val1->compare(val2);
 					*/
+					auto val1Casted = static_cast<const StateValueNumber*>(val1.get());
+					auto val2Casted = static_cast<const StateValueNumber*>(val2.get());
+					result = val1Casted->getValueConst() == val2Casted->getValueConst();
 				}
 				//Cache the result
-				values.insert(map_pair(strResult, std::shared_ptr<StateValue>(new StateValueBoolean(result))));
-			break;
+				values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueBoolean(result))));
+				break;
 			}
 		case Operator::DOT:
 			{
 				//TODO: Find value with key as val2 inside val1. 
 				//val1 should be StateValueMap, val2 should be a string field
-				auto val1Casted = static_cast<StateValueMap*>(val1.get());
-				auto val2Casted = static_cast<StateValueString*>(val2.get());
-				
-				auto result = val1Casted->getValue(val2Casted->getValue()).value();
+				auto val1Casted = static_cast<const StateValueMap*>(val1.get());
+				auto val2Casted = static_cast<const StateValueString*>(val2.get());
+				auto result = val1Casted->getValueConst(val2Casted->getValueConst()).value();
 
 				//Cache the result in map: 
-				values.insert(map_pair(strResult, std::shared_ptr<StateValue>(result.lock())));
+				values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(result.lock())));
 				break;
 			}
 		case Operator::CONTAINS:
@@ -109,17 +135,19 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 				if(val1 == nullptr || val2 == nullptr)
 					result = false;
 				//TODO: Add code here to handle "contains"
-				values.insert(map_pair(strResult, std::shared_ptr<StateValue>(new StateValueBoolean(result))));
+				values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueBoolean(result))));
 				break;
 			}
 		case Operator::NEGATION:
 			{
 				bool result;
 				if(val1 == nullptr)
-					result = false;
+					result = !(static_cast<const StateValueBoolean*>(val2.get())->getValueConst());
+				else
+					result = !(static_cast<const StateValueBoolean*>(val1.get())->getValueConst());
 				//Add getNegationValue method for StateValueBoolean
 				//result = static_cast<StateValueBoolean*>(val1)->getNegationValue();
-				values.insert(map_pair(strResult, std::shared_ptr<StateValue>(new StateValueBoolean(result))));
+				values.insert(map_pair(strResult, std::shared_ptr<const StateValue>(new StateValueBoolean(result))));
 				break;
 			}
 		case Operator::COLLECTS:
@@ -131,21 +159,31 @@ std::string applyOp(const std::string& a, const std::string& b, Operator op, Gam
 }
 
 void compute(std::stack<Operator>& ops, std::stack<std::string>& literalValues, GameState& gameState,
-					std::unordered_map<std::string, std::shared_ptr<StateValue>>& values){
-		std::string str1 = literalValues.top();
-        literalValues.pop(); 
-
+					std::unordered_map<std::string, std::shared_ptr<const StateValue>>& values){
 		std::string str2 = literalValues.top();
         literalValues.pop(); 
 
-        Operator op = ops.top(); 
-        ops.pop();
+        std::string str1 = "";
+        if(!literalValues.empty()){
+			str1 = literalValues.top();
+        	literalValues.pop(); 
+        }else{
+        	str1 = str2; //str1 must always be an expression, eg: !a -> (str1 = a, str2 = "", op = !)
+        	str2 = "";
+        }
+
+        Operator op = Operator::UNKNOWN;
+        if(!ops.empty()){
+        	op = ops.top(); 
+        	ops.pop();
+        }
+
        	literalValues.push(applyOp(str1, str2, op, gameState, values));
 }
 
-static bool evaluate(GameState& gameState, const std::string& tokens){
+bool evaluate(GameState& gameState, const std::string& tokens){
 
-	std::unordered_map<std::string, std::shared_ptr<StateValue>> values;
+	std::unordered_map<std::string, std::shared_ptr<const StateValue>> values;
 	//std::vector<std::string> tokens;
 	unsigned int i; 
       
@@ -155,7 +193,6 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
       
     // stack to store operators. 
     std::stack<Operator> ops; 
-      
     for(i = 0; i < tokens.length(); i++){ 
           
         // Current token is a whitespace, 
@@ -180,10 +217,11 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
 				val += tokens[i];
                 i++; 
             } 
+            i--;
 			//In case of literal number, cache the value
 			try{
 				int numVal = stoi(val);
-				values.insert(map_pair(val, std::shared_ptr<StateValue>(new StateValueNumber(numVal))));
+				values.insert(map_pair(val, std::shared_ptr<const StateValue>(new StateValueNumber(numVal))));
 			}catch(std::invalid_argument& e){
 
 			}
@@ -217,11 +255,12 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
             // While top of 'ops' has same or greater  
             // precedence to current token, which 
             // is an operator. Apply operator on top  
-            // of 'ops' to top two elements in values stack. 
-			Operator currentOp = strToOp["" + tokens[i]];
+            // of 'ops' to top two elements in values stack.
+            std::string opStr(1, tokens[i]); 
+			Operator currentOp = strToOp[opStr];
 			if(tokens[i] == '='){
 				currentOp = strToOp["=="];
-				i++;
+				i+=2;
 			}
             while(!ops.empty() && precedence(ops.top()) 
                                 >= precedence(currentOp)){ 
@@ -241,7 +280,7 @@ static bool evaluate(GameState& gameState, const std::string& tokens){
     } 
       
     // Top of 'values' contains result, return it. 
-    return static_cast<StateValueBoolean*>(values[literalValues.top()].get())->getValue(); 	
+    return static_cast<const StateValueBoolean*>(values[literalValues.top()].get())->getValueConst(); 	
 
 }
 

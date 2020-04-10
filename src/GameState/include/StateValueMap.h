@@ -17,6 +17,12 @@ public:
     StateValue::ValueType getValueType() override;
     std::unordered_map<std::string, std::shared_ptr<StateValue>>& getMap();
     std::optional<std::weak_ptr<StateValue>> getValue(const std::string&);
+    std::optional<std::weak_ptr<StateValue>> getValueConst(const std::string& key) const{
+        auto it = stateValueMap.find(key);
+        return (it != stateValueMap.end()) ?
+               std::make_optional(std::weak_ptr(it->second)) :
+               std::nullopt;
+    }
     void addValue(const std::string&, StateValueBoolean&);
     void addValue(const std::string&, StateValueNumber&);
     void addValue(const std::string&, StateValueString&);

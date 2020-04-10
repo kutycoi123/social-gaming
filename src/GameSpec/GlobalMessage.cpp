@@ -17,5 +17,7 @@ std::string GameSpecification::GlobalMessage::parseValue(const std::string& basi
     // TODO: Parse value so that every item in {} refers to it's associated variable/constant
     std::string parsedValue;
     parsedValue.append(basicString);
+
+
     return parsedValue;
 }

@@ -12,7 +12,7 @@
 #include "StateValueList.h"
 #include "StateValueMap.h"
 #include <optional>
-
+#include <iostream>
 class GameState {
 public:
     GameState();
@@ -40,6 +40,10 @@ public:
 
     std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>>
     getPerAudienceValue(const std::string& key);
+
+    int getPlayerListSize() const {
+        return playerList.size();
+    }
 
     void addConfig(const GameConfig& config);
 

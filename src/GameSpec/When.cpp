@@ -2,7 +2,6 @@
 #include "StringEvaluation.cpp"
 
 #include <utility>
-
 using GameSpecification::When;
 using GameSpecification::BaseRule;
 using GameSpecification::WhenCase;
