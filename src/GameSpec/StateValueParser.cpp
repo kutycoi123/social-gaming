@@ -21,7 +21,7 @@ std::optional<std::weak_ptr<const StateValue>> StateValueParser::getStateValue()
         if (auto v = currVariable.value().lock()){
             if (v->getValueType() == StateValue::MAP){
                 auto variable = static_cast<const StateValueMap*>(v.get());
-                currVariable = variable->getValue(*i);
+                currVariable = variable->getValueConst(*i);
             } else {
                 return std::nullopt;
             }
@@ -52,7 +52,7 @@ std::optional<std::reference_wrapper<std::vector<GameState::StateValueUserPair>>
         auto v = currVariable.value().get();
         std::transform(v.begin(), v.end(), v.begin(), [&i](const GameState::StateValueUserPair& pair){
             auto stateValueMap = static_cast<const StateValueMap*>(pair.value.get());
-            auto nextValue = stateValueMap->getValue(*i);
+            auto nextValue = stateValueMap->getValueConst(*i);
             if (nextValue.has_value()){
                 return pair;
             }

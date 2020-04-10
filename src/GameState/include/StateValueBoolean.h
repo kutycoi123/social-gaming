@@ -10,7 +10,6 @@ public:
     bool getValueConst() const{
     	return value;
     }
-    StateValue::ValueType getValueType() override;
     StateValue::ValueType getValueType() const override;
     void accept(GameStateVisitor &visitor) override;
     void accept(GameStateVisitor &visitor, StateValue* stateValue) override;
