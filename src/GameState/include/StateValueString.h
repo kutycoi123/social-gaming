@@ -9,6 +9,9 @@ class StateValueString : public StateValue {
 public:
     explicit StateValueString(std::string val);
     std::string& getValue();
+    std::string getValueConst() const{
+    	return value;
+    }
     StateValue::ValueType getValueType() override;
 
     void accept(GameStateVisitor &visitor) override;

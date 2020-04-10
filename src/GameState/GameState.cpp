@@ -1,5 +1,4 @@
 #include "GameState.h"
-
 GameState::GameState() :
     gameStarted(false)
     {}

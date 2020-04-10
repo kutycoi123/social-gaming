@@ -17,6 +17,9 @@ public:
     StateValue::ValueType getValueType() override;
 
     std::vector<std::shared_ptr<StateValue>>& getList();
+    std::vector<std::shared_ptr<StateValue>> getListConst() const{
+        return stateValueList;
+    }
     void addValue(StateValueBoolean&);
     void addValue(StateValueNumber&);
     void addValue(StateValueString&);
