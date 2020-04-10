@@ -59,6 +59,10 @@
       "value": "Players in game: {players.name}"
     },
     {
+      "rule": "global-message",
+      "value": "Weapons: {weapons.name}"
+    },
+    {
       "rule": "add",
       "to": "TestInt1",
       "value": 5

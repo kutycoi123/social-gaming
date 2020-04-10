@@ -16,24 +16,16 @@ std::optional<std::weak_ptr<const StateValue>> StateValueParser::getStateValue()
     auto currVariable = gameState.getConstantOrVariable(splitString[0]);
     for (auto i = splitString.begin()+1; i < splitString.end(); i++){
         if (!currVariable.has_value()){
-            std::cout << "Empty curr variable" << std::endl;
-            std::cout << *i << std::endl;
             return std::nullopt;
         }
         if (auto v = currVariable.value().lock()){
             if (v->getValueType() == StateValue::MAP){
-                std::cout << "Conversion works" << std::endl;
-                std::cout << *i << std::endl;
                 auto variable = static_cast<const StateValueMap*>(v.get());
                 currVariable = variable->getValue(*i);
             } else {
-                std::cout << "Not map" << std::endl;
-                std::cout << *i << std::endl;
                 return std::nullopt;
             }
         } else {
-            std::cout << "Can't lock" << std::endl;
-            std::cout << *i << std::endl;
             return std::nullopt;
         }
     }
