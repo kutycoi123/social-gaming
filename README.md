@@ -2,6 +2,7 @@
 
 Discord Invite: https://discord.gg/UnsuDv
 
+
 ## How to build and use project
 - ## Prerequisites
 
@@ -63,6 +64,18 @@ Discord Invite: https://discord.gg/UnsuDv
 - ## test/
 
   - Unit testing
+  
+## Usage
+1. Create a .json "game" inside of /src/Games/...
+2. Build and launch the server with the instructions above
+3. Open the "socialapp.html" web client to connect into the server
+4. Type in the IP address and click "connect"
+5. You can type "/help" for the commands available
+6. "/createsession Game.json" where "Game" is the name of your .json file
+7. You should see an invite code be generated, type "/join invitecode"
+8. Once in a gamesession, you can chat with other users, or start the game
+9. Start the game by typing "/startgame invitecode"
+10. The game will now run!
 
 ## Team Members
 - Phan Bui
