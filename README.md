@@ -1,7 +1,5 @@
 # CMPT373 - Team Donair
 
-Discord Invite: https://discord.gg/UnsuDv
-
 
 ## How to build and use project
 - ## Prerequisites
